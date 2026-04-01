@@ -42,8 +42,8 @@ Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 turkish.AppIsRunning=Uygulama calisiyor. Lutfen kapatip tekrar deneyin.
 
 [Tasks]
-Name: "desktopicon"; Description: "Masaustu kisayolu olustur"; GroupDescription: "Ek gorevler:"; Flags: checked
-Name: "startmenuicon"; Description: "Baslat menusu kisayolu olustur"; GroupDescription: "Ek gorevler:"; Flags: checked
+Name: "desktopicon"; Description: "Masaustu kisayolu olustur"; GroupDescription: "Ek gorevler:"
+Name: "startmenuicon"; Description: "Baslat menusu kisayolu olustur"; GroupDescription: "Ek gorevler:"
 
 [Files]
 Source: "dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
