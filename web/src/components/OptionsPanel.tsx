@@ -34,7 +34,9 @@ export function OptionsPanel({
         <legend className="mb-1.5 text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
           {t.dpiLabel}
         </legend>
-        <div role="radiogroup" className="grid grid-cols-4 overflow-hidden rounded-s border">
+        {/* Flexible-width segments: the "Recommended" label (and its longer TR
+            translation) must never clip — widths follow content. */}
+        <div role="radiogroup" className="flex overflow-hidden rounded-s border">
           {DPI_PRESETS.map((preset) => (
             <button
               key={preset}
@@ -42,7 +44,7 @@ export function OptionsPanel({
               role="radio"
               aria-checked={dpi === preset}
               onClick={() => onDpi(preset)}
-              className={`min-h-11 border-r px-2 text-xs last:border-r-0 transition-colors duration-[120ms] ${
+              className={`min-h-11 flex-auto whitespace-nowrap border-r px-3 text-xs last:border-r-0 transition-colors duration-[120ms] ${
                 dpi === preset
                   ? 'bg-accent font-medium text-white'
                   : 'bg-surface text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark'
