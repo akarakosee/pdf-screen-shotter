@@ -32,7 +32,16 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   editorial "why private" paragraph + mono proof line (3-column icon block banned);
   about/privacy/terms/contact pages pending (increment 5). Build passes; pages ship
   zero JS (no islands yet).
-- [ ] Increment 2 — engine/ + workers/ + golden-file harness
+- [x] **Increment 2 — Engine + worker + golden harness** (done 2026-07-21):
+  `core/types.ts` + `core/config.ts` (contracts exactly per SISTEM_TASARIMI §3.1);
+  `engine/PdfEngine.ts` interface + `EncryptedError`; `engine/MuPdfEngine.ts`
+  (mupdf 1.28.0, dynamic import, pixmap/page destroy after each render);
+  `workers/render.worker.ts` implementing the full §3.3 protocol (cooperative
+  cancel, page-error/file-error taxonomy, partial ZIP on cancel, fatal→respawn
+  contract); `workers/zipStream.ts` (fflate streaming, STORED entries, ≤1 page
+  buffered); `app/pageRange.ts` parser with clamp+flag; `app/naming.ts` (R6
+  naming, Turkish-safe). Tests: 15 passing, incl. golden-file pixel comparison —
+  **0 differing bytes vs PyMuPDF golden @150 DPI and vs 300 DPI reference**.
 - [ ] Increment 3 — ToolShell state machine + component set
 - [ ] Increment 4 — PRD R1–R9 one by one (checklist below when started)
 - [ ] Increment 5 — remaining pages, i18n, SEO, legal, ad slots

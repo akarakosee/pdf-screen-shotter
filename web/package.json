@@ -20,15 +20,19 @@
     "@fontsource/jetbrains-mono": "^5.2.5",
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^5.7.0",
+    "fflate": "^0.8.3",
     "lucide-react": "^0.510.0",
+    "mupdf": "^1.28.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.8.0"
   },
   "devDependencies": {
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "pngjs": "^7.0.0",
     "vitest": "^3.1.0"
   }
 }
