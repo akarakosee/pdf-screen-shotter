@@ -1,0 +1,42 @@
+---
+interface Props {
+  lang: 'en' | 'tr';
+}
+const { lang } = Astro.props;
+const p = lang === 'tr' ? '/tr' : '';
+const t = {
+  en: {
+    about: 'About',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    contact: 'Contact',
+    source: 'Source code',
+    note: 'Every tool on this site runs entirely in your browser. Files are never uploaded.',
+  },
+  tr: {
+    about: 'Hakkında',
+    privacy: 'Gizlilik',
+    terms: 'Koşullar',
+    contact: 'İletişim',
+    source: 'Kaynak kodu',
+    note: 'Bu sitedeki her araç tamamen tarayıcınızda çalışır. Dosyalar asla yüklenmez.',
+  },
+}[lang];
+---
+
+<footer class="w-full border-t">
+  <div class="mx-auto max-w-[1100px] px-4 py-8">
+    <nav class="flex flex-wrap gap-x-6 gap-y-2 text-xs text-ink-muted dark:text-ink-muted-dark">
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/about`}>{t.about}</a>
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/privacy`}>{t.privacy}</a>
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/terms`}>{t.terms}</a>
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/contact`}>{t.contact}</a>
+      <a
+        class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark"
+        href="https://github.com/ayberkkarakose/PDF_Screen_Shotter"
+        rel="noopener">{t.source}</a
+      >
+    </nav>
+    <p class="mt-2 text-xs text-ink-muted dark:text-ink-muted-dark">{t.note}</p>
+  </div>
+</footer>

@@ -1,0 +1,44 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/newsreader';
+import '@fontsource/jetbrains-mono';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'en' | 'tr';
+}
+const { title, description, lang = 'en' } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+    <script is:inline>
+      // Theme: system-detected with manual override persisted in localStorage.
+      // Inline and blocking to avoid a flash of the wrong theme.
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const dark =
+          stored === 'dark' ||
+          (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col bg-bg text-ink dark:bg-bg-dark dark:text-ink-dark">
+    <Header lang={lang} />
+    <main class="flex-1 w-full">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

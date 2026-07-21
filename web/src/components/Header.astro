@@ -1,0 +1,67 @@
+---
+interface Props {
+  lang: 'en' | 'tr';
+}
+const { lang } = Astro.props;
+const t = {
+  en: { theme: 'Toggle dark mode', otherLang: 'Türkçe', otherHref: '/tr/' },
+  tr: { theme: 'Koyu modu değiştir', otherLang: 'English', otherHref: '/' },
+}[lang];
+---
+
+<header
+  class="w-full border-b bg-surface dark:bg-surface-dark"
+>
+  <div class="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-4">
+    <a
+      href={lang === 'tr' ? '/tr/' : '/'}
+      class="text-md font-medium tracking-tight text-ink dark:text-ink-dark"
+    >
+      localpdf
+    </a>
+    <nav class="flex items-center gap-1">
+      <a
+        href={t.otherHref}
+        class="flex h-11 min-w-11 items-center justify-center rounded-s px-3 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+        >{t.otherLang}</a
+      >
+      <button
+        id="theme-toggle"
+        type="button"
+        aria-label={t.theme}
+        class="flex h-11 w-11 items-center justify-center rounded-s text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+      >
+        <svg
+          class="hidden h-4 w-4 dark:block"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          ><circle cx="12" cy="12" r="4"></circle><path
+            d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+          ></path></svg
+        >
+        <svg
+          class="h-4 w-4 dark:hidden"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg
+        >
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  });
+</script>

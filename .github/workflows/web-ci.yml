@@ -1,0 +1,31 @@
+name: web-ci
+
+on:
+  push:
+    branches: [master]
+    paths: ['web/**', '.github/workflows/web-ci.yml']
+  pull_request:
+    paths: ['web/**', '.github/workflows/web-ci.yml']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - name: WASM size budget (ADR-001)
+        run: node scripts/check-wasm-budget.mjs
+
+  # Lighthouse CI and Playwright e2e jobs are added in later increments once the
+  # tool pages exist; quality gates are defined in AI_BUILD_PROMPT §3.
