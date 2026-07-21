@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "astro check",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -30,6 +31,7 @@
     "typescript": "^5.8.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
     "@types/pngjs": "^6.0.5",
     "@types/react": "^19.1.0",

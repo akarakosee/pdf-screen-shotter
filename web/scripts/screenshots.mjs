@@ -15,14 +15,20 @@ mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
 
-for (const scheme of ['light', 'dark']) {
+// Optional responsive pass: `node scripts/screenshots.mjs --responsive` also
+// captures 360px and 768px widths for the review checklist (increment 6).
+const widths = process.argv.includes('--responsive') ? [360, 768, 1280] : [1280];
+
+for (const scheme of ['light', 'dark'])
+for (const width of widths) {
+  const suffix = width === 1280 ? '' : `-${width}`;
   const ctx = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
+    viewport: { width, height: 900 },
     colorScheme: scheme,
   });
   const page = await ctx.newPage();
   const shot = (name, opts = {}) =>
-    page.screenshot({ path: path.join(OUT, `${name}-${scheme}.png`), ...opts });
+    page.screenshot({ path: path.join(OUT, `${name}${suffix}-${scheme}.png`), ...opts });
 
   await page.goto(`${BASE}/`);
   await shot('home', { fullPage: true });

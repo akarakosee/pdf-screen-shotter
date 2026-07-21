@@ -44,4 +44,18 @@ jobs:
       - run: npm run build
       - run: npm run e2e
 
-  # Lighthouse CI job is added in increment 6 (quality gates: AI_BUILD_PROMPT §3).
+  lighthouse:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lhci # asserts ≥95 all categories + CLS ≤0.02 on / and /pdf-to-png

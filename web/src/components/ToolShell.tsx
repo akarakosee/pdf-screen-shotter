@@ -46,6 +46,11 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
   const [cancelling, setCancelling] = useState(false);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  // §4.1: scroll must never jump between states. The options state is usually
+  // the tallest; when it unmounts for processing/done we pin the region to the
+  // height it had at Convert time.
+  const regionRef = useRef<HTMLDivElement>(null);
+  const [regionMinHeight, setRegionMinHeight] = useState<number | null>(null);
   const pageErrorsRef = useRef<PageError[]>([]);
   const fileErrorsRef = useRef<Map<string, string>>(new Map());
 
@@ -194,7 +199,12 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
     pageErrorsRef.current = [];
     fileErrorsRef.current = new Map();
     setProgress(null);
+    if (regionRef.current) setRegionMinHeight(regionRef.current.offsetHeight);
     setPhase('processing');
+    // On small screens the Convert button sits below the fold; the panel that
+    // replaces it renders at the region top. Bring it into view once —
+    // otherwise the user is left looking at reserved blank space.
+    regionRef.current?.scrollIntoView({ block: 'nearest' });
     const options: ExportOptions = {
       dpi,
       format,
@@ -222,6 +232,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       if (old) URL.revokeObjectURL(old);
       return null;
     });
+    setRegionMinHeight(null);
     setPhase('upload');
   }, []);
 
@@ -258,7 +269,11 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
   const invalidChips = chips.filter((c) => c.status === 'invalid');
 
   return (
-    <div className="flex min-h-[420px] flex-col gap-5">
+    <div
+      ref={regionRef}
+      className="flex min-h-[420px] flex-col gap-5"
+      style={regionMinHeight != null ? { minHeight: regionMinHeight } : undefined}
+    >
       {phase !== 'processing' && phase !== 'done' && (
         <div>
           <DropZone t={t} hasFiles={chips.length > 0} onFiles={addFiles} onPreload={preload} />
