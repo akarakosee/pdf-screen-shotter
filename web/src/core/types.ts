@@ -59,6 +59,7 @@ export type UiToWorkerMessage =
 export type WorkerToUiMessage =
   | { type: 'ready' }
   | { type: 'preview-done'; blob: Blob }
+  | { type: 'preview-error'; message: string } // a single bad preview never tears down the worker
   | { type: 'inspect-done'; fileId: string; pageCount: number } // ADR-003; errors reuse file-error
   | { type: 'progress'; data: ProgressData }
   | { type: 'page-error'; error: PageError } // page skipped, run continues

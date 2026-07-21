@@ -124,6 +124,35 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
         without crashing — not the memory ceiling. Proper verification would
         need CDP `Performance.getMetrics` scoped to the worker target; not
         done here.
+- [x] **Post-increment-6 bug fix** (done 2026-07-21, found via real-world PDF,
+  not a fixture): `preview()` in `render.worker.ts` had no catch around
+  `engine.open()`, unlike `inspect()`/`run()`. When a real PDF failed to open
+  for preview (but not necessarily for inspect/run — MuPDF's preview path can
+  hit edge cases a full open doesn't), the throw fell through to the worker's
+  top-level handler and posted `fatal`. `JobController.handleFatal()` then
+  terminated and respawned the worker, **silently dropping any other message
+  still queued behind it** — specifically the `inspect` call queued for the
+  same file (both fire back-to-back from `ToolShell.addFiles()`). Net effect:
+  the FileChip never got a page count or a failed status, and the preview
+  card was stuck on "Rendering preview…" forever, even after the fatal toast
+  fired, because `onFatal` never reset `previewState`. Fixed: `preview()` now
+  catches both `open()` and `renderPage()` failures and posts a new
+  `preview-error` message (scoped to the one operation, doesn't kill the
+  worker); `onFatal` and the new `onPreviewError` both reset `previewState` to
+  `'unavailable'`. Real MuPDF error messages are now `console.error`'d in the
+  worker (inspect/preview/run) instead of being fully collapsed into the
+  generic file-error taxonomy, so a genuine corrupt file vs. a MuPDF parsing
+  edge case on a valid PDF can be told apart from devtools. Regression test:
+  `e2e/pdf-to-png.spec.ts` — "an unpreviewable file does not crash the worker
+  or lose its inspect result" (uses `encrypted.pdf`, whose `open()` fails for
+  both preview and inspect, reproducing the exact race).
+  **Open general gap (not fixed, flagging per user request):** any time
+  `fatal` fires, whatever other messages were queued behind the failing one
+  are lost with no user-facing signal — this bug was one instance of that
+  pattern, not the only possible one. A full fix would need the worker to
+  track in-flight request IDs and have `JobController` re-deliver or report
+  failure for anything still queued at respawn time. Not done; revisit if
+  another symptom of the same root cause shows up.
 
 ## Implementation decisions (one-line rationale each)
 

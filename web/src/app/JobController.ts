@@ -16,6 +16,7 @@ import { PREVIEW_DPI } from '../core/config';
 export interface JobEvents {
   onReady?: () => void;
   onPreview?: (blob: Blob) => void;
+  onPreviewError?: (message: string) => void;
   onInspect?: (fileId: string, pageCount: number) => void;
   onProgress?: (data: ProgressData) => void;
   onPageError?: (error: PageError) => void;
@@ -89,6 +90,9 @@ export class JobController {
         break;
       case 'preview-done':
         this.events.onPreview?.(msg.blob);
+        break;
+      case 'preview-error':
+        this.events.onPreviewError?.(msg.message);
         break;
       case 'inspect-done':
         this.events.onInspect?.(msg.fileId, msg.pageCount);

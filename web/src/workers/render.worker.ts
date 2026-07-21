@@ -62,6 +62,10 @@ async function inspect(fileId: string, file: ArrayBuffer): Promise<void> {
   try {
     doc = await engine.open(file);
   } catch (e) {
+    // The UI only ever sees the coarse taxonomy below; the real MuPDF message
+    // (a genuine corrupt file vs. an edge case in a valid PDF) is only visible
+    // here, so it's not lost entirely.
+    console.error('[worker] inspect: engine.open failed:', e);
     post({
       type: 'file-error',
       fileId,
@@ -78,14 +82,30 @@ async function inspect(fileId: string, file: ArrayBuffer): Promise<void> {
   }
 }
 
+// A bad preview must never take the whole worker down with it — unlike
+// inspect()/run(), this used to have no catch around open()/renderPage(),
+// so a single unpreviewable file fell through to the outer 'fatal' handler,
+// which terminates and respawns the worker (silently dropping any other
+// queued message for the same file, e.g. its 'inspect'). preview-error is
+// scoped to this one operation instead.
 async function preview(file: ArrayBuffer, dpi: number): Promise<void> {
-  const doc = await engine.open(file);
+  let doc;
+  try {
+    doc = await engine.open(file);
+  } catch (e) {
+    console.error('[worker] preview: engine.open failed:', e);
+    post({ type: 'preview-error', message: e instanceof Error ? e.message : String(e) });
+    return;
+  }
   try {
     const out = await engine.renderPage(doc, 1, dpi, 'png');
     post({
       type: 'preview-done',
       blob: new Blob([out.data as BlobPart], { type: 'image/png' }),
     });
+  } catch (e) {
+    console.error('[worker] preview: renderPage failed:', e);
+    post({ type: 'preview-error', message: e instanceof Error ? e.message : String(e) });
   } finally {
     engine.close(doc);
   }
@@ -107,6 +127,7 @@ async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOption
     try {
       doc = await engine.open(files[i]!);
     } catch (e) {
+      console.error('[worker] run: engine.open failed:', e);
       post({
         type: 'file-error',
         fileId,

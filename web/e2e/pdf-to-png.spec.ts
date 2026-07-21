@@ -70,6 +70,34 @@ test('encrypted and corrupt files fail per-file, batch continues (R5)', async ({
   await expect(page.getByText('2 pages converted.')).toBeVisible({ timeout: 30_000 });
 });
 
+test('an unpreviewable file does not crash the worker or lose its inspect result', async ({
+  page,
+}) => {
+  // Regression: dropping a single file whose engine.open() fails (here,
+  // encrypted.pdf) triggers preview() and inspect() back-to-back. preview()
+  // used to have no catch around open(), so its throw fell through to the
+  // worker's top-level handler, which posted 'fatal' — JobController then
+  // terminated and respawned the worker, silently dropping the still-queued
+  // inspect response. The chip was left with no page count and no failed
+  // status, and the preview card was stuck on "Rendering preview..." forever.
+  await page.goto('/pdf-to-png/');
+  await addFiles(page, [f('broken', 'encrypted.pdf')]);
+
+  // The file-error from inspect() must still arrive (worker wasn't killed).
+  await expect(
+    page.getByText("This PDF is password-protected. We can't open it (yet)."),
+  ).toBeVisible({ timeout: 15_000 });
+
+  // The preview card must resolve to 'unavailable', not hang on 'loading'.
+  await expect(page.getByText('Preview unavailable for this file.')).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByText('Rendering preview…')).toHaveCount(0);
+
+  // No fatal toast, no worker restart signal.
+  await expect(page.getByRole('alert')).toHaveCount(0);
+});
+
 test('fake .pdf extension is rejected client-side (R1)', async ({ page }) => {
   await page.goto('/pdf-to-png/');
   await addFiles(page, [f('broken', 'fake-extension.pdf'), f('sample-20p.pdf')]);

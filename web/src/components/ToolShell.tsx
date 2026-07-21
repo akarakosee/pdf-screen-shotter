@@ -68,6 +68,12 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           });
           setPreviewState('ready');
         },
+        onPreviewError: () => {
+          // The worker survives this (see render.worker.ts's preview()) —
+          // only the preview card needs to leave 'loading'. inspect() runs
+          // independently and still reports the file's real status/pageCount.
+          setPreviewState('unavailable');
+        },
         onProgress: (data) => setProgress(data),
         onPageError: (error) => {
           pageErrorsRef.current.push(error);
@@ -89,6 +95,10 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           setCancelling(false);
           setToast({ kind: 'error', message: t.corruptFile });
           setPhase((p) => (p === 'processing' ? 'options' : p));
+          // Whatever the preview card was doing when the worker died is gone
+          // with it — leaving it on 'loading' forever was the bug. The
+          // worker respawns, but nothing re-requests the preview for us.
+          setPreviewState((s) => (s === 'loading' ? 'unavailable' : s));
         },
       });
     }
