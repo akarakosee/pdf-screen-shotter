@@ -1,0 +1,37 @@
+---
+import Prose from '../layouts/Prose.astro';
+---
+
+<Prose
+  title="About — PDF tools that never see your files"
+  description="Why this site exists, how it works, and why your files never leave your device."
+  h1="About"
+>
+  <p>
+    This site is a set of PDF tools with one defining property: every tool runs entirely in
+    your browser. There is no upload step, no processing server, and no account. The same
+    engine that powers professional PDF software runs on your own device through
+    WebAssembly.
+  </p>
+  <p>
+    It began as a small desktop application for converting PDFs to images. The desktop app
+    is still available and uses the same rendering engine, so the output you get here is
+    identical to it — this is tested automatically, pixel by pixel, on every change.
+  </p>
+  <h2>Why local processing matters</h2>
+  <p>
+    Most online PDF tools send your document to a server, process it there, and send the
+    result back. That model requires you to trust a company with contracts, invoices,
+    medical records — whatever you happen to convert. Local processing removes the question
+    entirely: nothing is transmitted, so there is nothing to trust anyone with.
+  </p>
+  <p>
+    The entire site is open source. If you want to check the claim rather than take our
+    word for it, read the code or watch the network tab of your browser while converting —
+    both are welcome.
+  </p>
+  <h2>Contact</h2>
+  <p>
+    Questions and bug reports are welcome — see the <a href="/contact">contact page</a>.
+  </p>
+</Prose>

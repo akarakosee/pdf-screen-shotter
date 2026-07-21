@@ -3,31 +3,62 @@ interface Props {
   lang: 'en' | 'tr';
 }
 const { lang } = Astro.props;
+const path = Astro.url.pathname;
+const enPath = path.replace(/^\/tr(\/|$)/, '/') || '/';
+const trPath = enPath === '/' ? '/tr/' : `/tr${enPath}`;
+const p = lang === 'tr' ? '/tr' : '';
 const t = {
-  en: { theme: 'Toggle dark mode', otherLang: 'Türkçe', otherHref: '/tr/' },
-  tr: { theme: 'Koyu modu değiştir', otherLang: 'English', otherHref: '/' },
+  en: {
+    theme: 'Toggle dark mode',
+    otherLang: 'Türkçe',
+    otherHref: trPath,
+    tools: [
+      { href: '/pdf-to-png', name: 'PDF to PNG' },
+      { href: '/pdf-to-jpg', name: 'PDF to JPG' },
+    ],
+    more: 'Menu',
+  },
+  tr: {
+    theme: 'Koyu modu değiştir',
+    otherLang: 'English',
+    otherHref: enPath,
+    tools: [
+      { href: '/tr/pdf-to-png', name: "PDF'ten PNG'ye" },
+      { href: '/tr/pdf-to-jpg', name: "PDF'ten JPG'ye" },
+    ],
+    more: 'Menü',
+  },
 }[lang];
 ---
 
-<header
-  class="w-full border-b bg-surface dark:bg-surface-dark"
->
+<header class="w-full border-b bg-surface dark:bg-surface-dark">
   <div class="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-4">
-    <a
-      href={lang === 'tr' ? '/tr/' : '/'}
-      class="text-md font-medium tracking-tight text-ink dark:text-ink-dark"
-    >
-      localpdf
-    </a>
-    <nav class="flex items-center gap-1">
+    <div class="flex items-center gap-5">
+      <a href={p === '' ? '/' : '/tr/'} class="text-md font-medium tracking-tight">localpdf</a>
+      <nav class="flex items-center gap-1">
+        {
+          t.tools.map((tool) => (
+            <a
+              href={tool.href}
+              class="flex h-11 items-center rounded-s px-2 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+            >
+              {tool.name}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+
+    <!-- Desktop: language + theme inline. -->
+    <nav class="hidden items-center gap-1 sm:flex">
       <a
         href={t.otherHref}
         class="flex h-11 min-w-11 items-center justify-center rounded-s px-3 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
         >{t.otherLang}</a
       >
       <button
-        id="theme-toggle"
         type="button"
+        data-theme-toggle
         aria-label={t.theme}
         class="flex h-11 w-11 items-center justify-center rounded-s text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
       >
@@ -56,12 +87,52 @@ const t = {
         >
       </button>
     </nav>
+
+    <!-- Mobile: language + theme collapse into one overflow menu (binding rule). -->
+    <details class="relative sm:hidden">
+      <summary
+        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-s text-ink-muted [&::-webkit-details-marker]:hidden"
+        aria-label={t.more}
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          ><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle
+            cx="12"
+            cy="19"
+            r="1"></circle></svg
+        >
+      </summary>
+      <div
+        class="absolute right-0 z-50 mt-1 flex w-44 flex-col rounded-s border bg-surface p-1 shadow-2 dark:bg-surface-dark"
+      >
+        <a
+          href={t.otherHref}
+          class="flex min-h-11 items-center rounded-s px-3 text-xs hover:bg-bg dark:hover:bg-bg-dark"
+          >{t.otherLang}</a
+        >
+        <button
+          type="button"
+          data-theme-toggle
+          class="flex min-h-11 items-center rounded-s px-3 text-left text-xs hover:bg-bg dark:hover:bg-bg-dark"
+        >
+          {t.theme}
+        </button>
+      </div>
+    </details>
   </div>
 </header>
 
 <script>
-  document.getElementById('theme-toggle')?.addEventListener('click', () => {
-    const dark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-  });
+  for (const el of document.querySelectorAll('[data-theme-toggle]')) {
+    el.addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    });
+  }
 </script>

@@ -87,7 +87,19 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
         reservation (CLS≈0). TR translation of the tool page → increment 5;
         Lighthouse CI job → increment 6.
   CI: e2e job added (playwright chromium).
-- [ ] Increment 5 — remaining pages, i18n, SEO, legal, ad slots
+- [x] **Increment 5 — pages + i18n** (done 2026-07-21): shared ToolPage layout
+  (tool pages = data in `i18n/toolCopy.ts`); /pdf-to-jpg EN+TR on own URLs with
+  cross-links as plain text links; home tool grid (2 cards, icon+name+one line,
+  Lucide via lucide-react SSR, zero client JS); full TR string catalogue
+  (`i18n/tr.ts`, typed against Strings); hreflang en/tr/x-default in Base +
+  language switcher preserves the current page; header tool menu + mobile
+  overflow menu (native <details>) collapsing lang+theme per binding rule;
+  footer gains tool + desktop links; about/privacy/terms/contact EN+TR with
+  final copy (Prose layout, 640px, display serif headings); AGPL-3.0 LICENSE
+  added (ADR-001 action item); jpg encode path unit-tested (JPEG magic bytes).
+  14 pages build; 20 unit tests + 6 e2e green. NOTE: site URL is still the
+  example.pages.dev placeholder in astro.config.mjs — set the real domain
+  before launch (hreflang/canonical URLs derive from it).
 - [ ] Increment 6 — full quality gates + manual 360/768/1440 light+dark pass
 
 ## Implementation decisions (one-line rationale each)

@@ -1,0 +1,22 @@
+---
+// Content/legal page template (UI_UX_TASARIM §4.3): 640px single column,
+// display serif headings, tight typographic rhythm.
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  h1: string;
+  lang?: 'en' | 'tr';
+}
+const { title, description, h1, lang = 'en' } = Astro.props;
+---
+
+<Base title={title} description={description} lang={lang}>
+  <article
+    class="prose-content mx-auto max-w-[640px] px-4 pt-12 pb-16 text-sm [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-[650] [&_h2]:mt-8 [&_h2]:mb-2 [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1 [&_a]:underline [&_a]:underline-offset-2"
+  >
+    <h1 class="font-display text-xl font-[650] tracking-tight">{h1}</h1>
+    <slot />
+  </article>
+</Base>

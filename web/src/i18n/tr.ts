@@ -1,0 +1,43 @@
+// Türkçe UI metinleri — EN ile aynı kayıtta: yardımcı ama ciddi, ünlem yok.
+import type { Strings } from './en';
+
+export const tr: Strings = {
+  dropIdle: 'PDF dosyalarını buraya bırak — veya tıklayıp seç',
+  dropDragover: 'Eklemek için bırak',
+  encryptedFile: 'Bu PDF şifre korumalı. Şimdilik açamıyoruz.',
+  afterCancel: 'Durduruldu. {n} sayfa tamamlanmıştı — yine de indirebilirsin.',
+  noWasm: 'Tarayıcın bu aracı çalıştıramıyor. Ücretsiz masaüstü uygulamayı deneyebilirsin.',
+  partialSuccess:
+    '{total} sayfanın {ok} tanesi dönüştürüldü. {failed} sayfa işlenemedi — ayrıntılara bak.',
+
+  privacyLine: 'Dosyalar cihazında işlenir — hiçbir şey yüklenmez.',
+  privacyVerify: 'doğrula',
+  corruptFile: 'Bu dosya açılamadı. Hasarlı olabilir.',
+  zeroPages: 'Bu PDF hiç sayfa içermiyor.',
+  notPdf: 'Bu bir PDF dosyasına benzemiyor.',
+  emptyFile: 'Bu dosya boş.',
+  dpiLabel: 'Çözünürlük',
+  dpiRecommended: 'Önerilen',
+  pageRangeLabel: 'Sayfalar',
+  pageRangePlaceholder: 'tüm sayfalar — örn. 1-5,8',
+  pageRangeInvalid: '1-5,8,11-13 gibi sayfa numaraları kullan.',
+  pageRangeClamped: 'Aralık son sayfayı aşıyordu ve kırpıldı.',
+  convert: 'Dönüştür',
+  converting: 'Dönüştürülüyor…',
+  cancel: 'İptal',
+  cancelling: 'İptal ediliyor…',
+  previewTitle: 'Önizleme',
+  previewLoading: 'Önizleme hazırlanıyor…',
+  previewUnavailable: 'Bu dosya için önizleme yok.',
+  progressFile: 'Dosya {i} / {n}',
+  progressPage: 'Sayfa {i} / {n}',
+  doneTitle: 'Tamamlandı',
+  allConverted: '{n} sayfa dönüştürüldü.',
+  download: 'İndir',
+  downloadZip: "ZIP'i indir",
+  convertMore: 'Yeni dönüşüm',
+  skippedDetails: 'Atlanan dosyalar',
+  removeFile: '{name} dosyasını kaldır',
+  filePages: '{n} sayfa',
+  desktopAppLink: 'Masaüstü uygulamayı edin',
+};

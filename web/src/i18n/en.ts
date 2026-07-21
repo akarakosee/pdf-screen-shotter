@@ -41,7 +41,7 @@ export const en = {
   desktopAppLink: 'Get the desktop app',
 } as const;
 
-export type Strings = typeof en;
+export type Strings = { [K in keyof typeof en]: string };
 
 export function fmt(template: string, vars: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? `{${k}}`));

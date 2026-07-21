@@ -12,6 +12,12 @@ interface Props {
   lang?: 'en' | 'tr';
 }
 const { title, description, lang = 'en' } = Astro.props;
+
+// hreflang alternates: /x ↔ /tr/x (subdirectory i18n, WEB_PLANI §6).
+const path = Astro.url.pathname;
+const enPath = path.replace(/^\/tr(\/|$)/, '/') || '/';
+const trPath = enPath === '/' ? '/tr/' : `/tr${enPath}`;
+const origin = Astro.site?.origin ?? Astro.url.origin;
 ---
 
 <!doctype html>
@@ -22,6 +28,9 @@ const { title, description, lang = 'en' } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" hreflang="en" href={`${origin}${enPath}`} />
+    <link rel="alternate" hreflang="tr" href={`${origin}${trPath}`} />
+    <link rel="alternate" hreflang="x-default" href={`${origin}${enPath}`} />
     <script is:inline>
       // Theme: system-detected with manual override persisted in localStorage.
       // Inline and blocking to avoid a flash of the wrong theme.

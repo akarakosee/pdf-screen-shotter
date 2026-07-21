@@ -1,0 +1,104 @@
+---
+// Tool page template (UI_UX_TASARIM §4.1): H1 + one-sentence description,
+// ToolShell, then the 640px content section (How it works → FAQ → AdSlot).
+import Base from './Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { ToolShell } from '../components/ToolShell';
+import { en } from '../i18n/en';
+import { tr } from '../i18n/tr';
+
+interface QA {
+  q: string;
+  a: string;
+}
+interface Step {
+  name: string;
+  text: string;
+}
+interface Props {
+  lang: 'en' | 'tr';
+  format: 'png' | 'jpg';
+  title: string;
+  description: string;
+  h1: string;
+  tagline: string;
+  howToName: string;
+  howItWorks: string;
+  faqTitle: string;
+  steps: Step[];
+  faq: QA[];
+  crossLink: { href: string; label: string };
+}
+const p = Astro.props;
+const strings = p.lang === 'tr' ? tr : en;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'HowTo',
+      name: p.howToName,
+      step: p.steps.map((s, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: s.name,
+        text: s.text,
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: p.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<Base title={p.title} description={p.description} lang={p.lang}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
+  <div class="mx-auto max-w-[720px] px-4 pt-10 pb-16">
+    <h1 class="font-display text-xl font-[650] tracking-tight">{p.h1}</h1>
+    <p class="mt-1 mb-6 text-sm text-ink-muted dark:text-ink-muted-dark">{p.tagline}</p>
+    <ToolShell client:load format={p.format} t={strings} crossLink={p.crossLink} />
+  </div>
+
+  <div class="mx-auto max-w-[640px] px-4 pb-16">
+    <section>
+      <h2 class="font-display text-lg font-[650]">{p.howItWorks}</h2>
+      <ol class="mt-3 flex flex-col gap-2 text-sm">
+        {
+          p.steps.map((s, i) => (
+            <li class="flex gap-3">
+              <span class="font-mono text-xs text-ink-muted dark:text-ink-muted-dark">{i + 1}.</span>
+              <span>
+                <span class="font-medium">{s.name}.</span> {s.text}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-display text-lg font-[650]">{p.faqTitle}</h2>
+      <dl class="mt-3 flex flex-col gap-5">
+        {
+          p.faq.map((item) => (
+            <div>
+              <dt class="text-sm font-medium">{item.q}</dt>
+              <dd class="mt-1 text-sm text-ink-muted dark:text-ink-muted-dark">{item.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <div class="mt-10">
+      <AdSlot />
+    </div>
+  </div>
+</Base>

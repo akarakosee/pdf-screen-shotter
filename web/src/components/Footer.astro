@@ -27,6 +27,12 @@ const t = {
 <footer class="w-full border-t">
   <div class="mx-auto max-w-[1100px] px-4 py-8">
     <nav class="flex flex-wrap gap-x-6 gap-y-2 text-xs text-ink-muted dark:text-ink-muted-dark">
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/pdf-to-png`}
+        >{lang === 'tr' ? "PDF'ten PNG'ye" : 'PDF to PNG'}</a
+      >
+      <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/pdf-to-jpg`}
+        >{lang === 'tr' ? "PDF'ten JPG'ye" : 'PDF to JPG'}</a
+      >
       <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/about`}>{t.about}</a>
       <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/privacy`}>{t.privacy}</a>
       <a class="flex min-h-11 items-center hover:text-ink dark:hover:text-ink-dark" href={`${p}/terms`}>{t.terms}</a>
