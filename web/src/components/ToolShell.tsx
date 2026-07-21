@@ -34,6 +34,7 @@ const newId = () => `f${++nextId}`;
 
 export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: Props) {
   const [wasmOk, setWasmOk] = useState(true);
+  const [unavailable, setUnavailable] = useState(false);
   const [phase, setPhase] = useState<Phase>('upload');
   const [chips, setChips] = useState<ChipData[]>([]);
   const filesRef = useRef(new Map<string, File>());
@@ -99,6 +100,13 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           // with it — leaving it on 'loading' forever was the bug. The
           // worker respawns, but nothing re-requests the preview for us.
           setPreviewState((s) => (s === 'loading' ? 'unavailable' : s));
+        },
+        onUnavailable: () => {
+          // JobController gave up respawning — every retry has hit the same
+          // broken worker, so retrying again from here would just repeat it.
+          // This is a permanent, non-dismissing state (unlike the fatal
+          // toast), since there is nothing more this session can do.
+          setUnavailable(true);
         },
       });
     }
@@ -271,6 +279,23 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
             </a>
           </p>
         )}
+      </div>
+    );
+  }
+
+  if (unavailable) {
+    return (
+      <div role="alert" className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+        <p className="text-sm">{t.toolUnavailable}</p>
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="inline-flex min-h-11 items-center justify-center rounded-s border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
+          >
+            {t.reloadPage}
+          </button>
+        </div>
       </div>
     );
   }

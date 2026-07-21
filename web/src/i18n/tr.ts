@@ -7,6 +7,8 @@ export const tr: Strings = {
   encryptedFile: 'Bu PDF şifre korumalı. Şimdilik açamıyoruz.',
   afterCancel: 'Durduruldu. {n} sayfa tamamlanmıştı — yine de indirebilirsin.',
   noWasm: 'Tarayıcın bu aracı çalıştıramıyor. Ücretsiz masaüstü uygulamayı deneyebilirsin.',
+  toolUnavailable: 'Bu araç başlatılırken bir şeyler ters gitti. Sayfayı yenilemeyi dene.',
+  reloadPage: 'Sayfayı yenile',
   partialSuccess:
     '{total} sayfanın {ok} tanesi dönüştürüldü. {failed} sayfa işlenemedi — ayrıntılara bak.',
 

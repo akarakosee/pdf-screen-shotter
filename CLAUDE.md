@@ -146,13 +146,51 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   `e2e/pdf-to-png.spec.ts` — "an unpreviewable file does not crash the worker
   or lose its inspect result" (uses `encrypted.pdf`, whose `open()` fails for
   both preview and inspect, reproducing the exact race).
-  **Open general gap (not fixed, flagging per user request):** any time
+  **General gap noted at the time, now partially addressed below:** any time
   `fatal` fires, whatever other messages were queued behind the failing one
-  are lost with no user-facing signal — this bug was one instance of that
-  pattern, not the only possible one. A full fix would need the worker to
-  track in-flight request IDs and have `JobController` re-deliver or report
-  failure for anything still queued at respawn time. Not done; revisit if
-  another symptom of the same root cause shows up.
+  are lost with no user-facing signal. A full fix (worker tracking in-flight
+  request IDs, JobController re-delivering or reporting failure for anything
+  still queued at respawn) is still not done — but the unbounded-retry half
+  of the risk is closed by the respawn cap below.
+- [x] **Dev-mode infinite-504-loop bug fix** (done 2026-07-21, found live by a
+  real user dropping a real file — reproduced with 2000+ repeated requests in
+  the Network tab). Two independent causes, both fixed:
+  1. **Root cause**: `render.worker.ts` is only reachable via
+     `new Worker(new URL(...))`, created lazily on hover/dragenter — Vite's
+     dep-optimizer scanner never crawls into that graph at server start (confirmed
+     empirically: neither `fflate` nor `mupdf` appeared in
+     `node_modules/.vite/deps/_metadata.json` after a fresh install + server
+     start). `fflate` ships CJS (`main: lib/index.cjs`), so it needs esbuild's
+     pre-bundle/interop step; discovering it on-demand mid-session (the
+     worker's first real request) triggered Vite's "new dep found, reloading"
+     cycle, which re-requested the identical worker graph, which re-triggered
+     the same discovery — an unbounded loop of `fflate.js` 504s. Fixed by
+     adding `optimizeDeps.include: ['fflate']` to `astro.config.mjs` so it's
+     part of the initial pre-bundle. `mupdf` is real ESM (`"type": "module"`)
+     and huge (WASM), loaded via a runtime dynamic `import()` — explicitly
+     `optimizeDeps.exclude: ['mupdf']` so esbuild never tries to pre-bundle
+     its WASM loading logic. **Verified from a genuinely clean state** (`rm
+     -rf node_modules .astro && npm ci`, no stale `.vite` cache) that
+     `fflate.js` is pre-bundled at server start before any file is ever
+     dropped, and that a full drop→preview→convert cycle in dev mode makes
+     exactly one request each for `render.worker.ts?worker_file&type=module`
+     and `fflate.js` (checked via `performance.getEntriesByType('resource')`,
+     not just the request log) — no repeat, no 504.
+  2. **Resilience gap, independent of the cause**: `JobController` respawned
+     the worker unconditionally on every `fatal`, with no cap — so *any*
+     future cause of "the worker fails before it even finishes loading"
+     (not just this fflate issue) would repeat the identical failure forever,
+     since respawning re-fetches the identical broken module graph. Fixed:
+     `JobController` now tracks fatal timestamps and stops respawning after
+     `MAX_FATALS_PER_WINDOW` (3) fatals within `FATAL_WINDOW_MS` (10s),
+     firing a new `onUnavailable` event once instead of `onFatal`. `ToolShell`
+     shows a persistent (non-auto-dismissing, unlike the fatal toast) card:
+     "Something went wrong initializing this tool. Try reloading the page."
+     with a reload button; every `JobController` method becomes a no-op once
+     disabled. Unit-tested with a stubbed global `Worker`
+     (`test/jobControllerRespawn.test.ts`): confirms exactly 4 worker
+     instances are created for 4 rapid fatals (not 5+), `onUnavailable` fires
+     exactly once, and isolated fatals spaced >10s apart never trip the cap.
 
 ## Implementation decisions (one-line rationale each)
 
@@ -169,6 +207,13 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
 - CSP includes `'unsafe-inline'` for script/style — Astro inlines the theme script and
   Tailwind styles; revisit with hashes before launch; AdSense domains added when ads land.
 - vitest `passWithNoTests: true` — CI green before test suites arrive in increment 2.
+- vitest excludes `e2e/**` — Playwright specs use their own `test()`/`expect()`
+  globals and must not be collected by vitest.
+- `astro.config.mjs` vite.optimizeDeps: `include: ['fflate']` (CJS package only
+  reachable through the lazily-created render worker; Vite's scanner doesn't
+  crawl that graph at server start, so undiscovered-until-first-use caused a
+  dev-mode reload loop) / `exclude: ['mupdf']` (real ESM + large WASM, loaded
+  via runtime dynamic import — no pre-bundling needed or wanted).
 - Worker messages are serialized through a promise queue — the mupdf WASM is not
   reentrant; concurrent inspect/preview handlers corrupted state (spurious fatal).
   `cancel` bypasses the queue; the cancelled flag resets on `start` arrival, not

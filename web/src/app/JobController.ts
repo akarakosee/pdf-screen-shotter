@@ -1,6 +1,13 @@
 // JobController — queue, cancel, worker lifecycle (SISTEM_TASARIMI §2.2/§3.3).
 // Owns the single render worker. On `fatal` it terminates and respawns the
 // worker so one bad PDF cannot take down the tab.
+//
+// Respawn is capped: if the worker fails to even initialize (a broken module
+// in its graph, not a runtime crash after loading), every respawn re-fetches
+// the identical broken graph and fails identically — this happened for real
+// with an unbundled worker dependency, producing an unbounded loop of failed
+// requests. After MAX_FATALS_PER_WINDOW fatals within FATAL_WINDOW_MS, stop
+// respawning and surface onUnavailable once instead of retrying forever.
 
 import type {
   ExportOptions,
@@ -23,12 +30,21 @@ export interface JobEvents {
   onFileError?: (fileId: string, message: string) => void;
   onDone?: (result: ExportResult) => void;
   onFatal?: (message: string) => void;
+  /** Fired once, instead of onFatal, when the worker has failed too many
+   * times in a row and JobController has given up respawning it. Every
+   * method becomes a no-op after this until the page is reloaded. */
+  onUnavailable?: (message: string) => void;
 }
 
 export class JobController {
+  private static readonly MAX_FATALS_PER_WINDOW = 3;
+  private static readonly FATAL_WINDOW_MS = 10_000;
+
   private worker: Worker | null = null;
   private events: JobEvents;
   private running = false;
+  private disabled = false;
+  private fatalTimestamps: number[] = [];
 
   constructor(events: JobEvents) {
     this.events = events;
@@ -37,22 +53,25 @@ export class JobController {
   /** Idempotent. Called from preload triggers (hover/dragenter) so the WASM is
    * usually warm before the user drops a file (ADR-001 preload strategy). */
   preload(): void {
+    if (this.disabled) return;
     this.ensureWorker();
   }
 
   /** ADR-003: page count without rendering; errors arrive as file-error. */
   async inspect(fileId: string, file: File): Promise<void> {
+    if (this.disabled) return;
     const buf = await file.arrayBuffer();
     this.post({ type: 'inspect', fileId, file: buf }, [buf]);
   }
 
   async preview(file: File, dpi: number = PREVIEW_DPI): Promise<void> {
+    if (this.disabled) return;
     const buf = await file.arrayBuffer();
     this.post({ type: 'preview', file: buf, dpi }, [buf]);
   }
 
   async start(files: { file: File; fileId: string }[], options: ExportOptions): Promise<void> {
-    if (this.running) return;
+    if (this.disabled || this.running) return;
     this.running = true;
     const buffers = await Promise.all(files.map((f) => f.file.arrayBuffer()));
     const meta: FileMeta[] = files.map((f) => ({ fileId: f.fileId, name: f.file.name }));
@@ -60,6 +79,7 @@ export class JobController {
   }
 
   cancel(): void {
+    if (this.disabled) return;
     this.post({ type: 'cancel' });
   }
 
@@ -69,6 +89,7 @@ export class JobController {
   }
 
   private post(msg: UiToWorkerMessage, transfer: Transferable[] = []): void {
+    if (this.disabled) return;
     this.ensureWorker().postMessage(msg, transfer);
   }
 
@@ -119,7 +140,22 @@ export class JobController {
   private handleFatal(message: string): void {
     this.running = false;
     this.dispose();
-    this.ensureWorker(); // respawn immediately so the tool stays usable
+
+    const now = Date.now();
+    this.fatalTimestamps = [...this.fatalTimestamps, now].filter(
+      (t) => now - t < JobController.FATAL_WINDOW_MS,
+    );
+
+    if (this.fatalTimestamps.length > JobController.MAX_FATALS_PER_WINDOW) {
+      // Respawning has failed repeatedly in a short window — almost
+      // certainly the same broken module graph every time, not independent
+      // one-off crashes. Stop hammering it and surface a single error.
+      this.disabled = true;
+      this.events.onUnavailable?.(message);
+      return;
+    }
+
+    this.ensureWorker(); // respawn — most fatals are a one-off (e.g. WASM OOM)
     this.events.onFatal?.(message);
   }
 }

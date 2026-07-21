@@ -7,6 +7,8 @@ export const en = {
   encryptedFile: "This PDF is password-protected. We can't open it (yet).", // verbatim
   afterCancel: 'Stopped. {n} pages were finished — you can still download them.', // verbatim (n interpolated)
   noWasm: "Your browser can't run this tool. Try the free desktop app instead.", // verbatim
+  toolUnavailable: 'Something went wrong initializing this tool. Try reloading the page.',
+  reloadPage: 'Reload page',
   partialSuccess: '{ok} of {total} pages converted. {failed} pages couldn’t be rendered — see details.', // verbatim pattern
 
   privacyLine: 'Files are processed on your device — nothing is uploaded.',
