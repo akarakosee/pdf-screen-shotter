@@ -100,7 +100,30 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   14 pages build; 20 unit tests + 6 e2e green. NOTE: site URL is still the
   example.pages.dev placeholder in astro.config.mjs — set the real domain
   before launch (hreflang/canonical URLs derive from it).
-- [ ] Increment 6 — full quality gates + manual 360/768/1440 light+dark pass
+- [x] **Increment 6 — quality gates** (done 2026-07-21):
+  - [x] Lighthouse CI job (`lighthouserc.cjs`, asserts ≥95 all categories + CLS
+        ≤0.02 on `/` and `/pdf-to-png`). Local run: 100/100/96/100 (home),
+        99/100/96/100 (tool), **CLS 0.0000** after font preload (was 0.048 —
+        font-swap reflow). best-practices 96 is the known `'unsafe-inline'` CSP
+        gap, already tracked below.
+  - [x] Visual review via real Playwright screenshots (`scripts/screenshots.mjs
+        --responsive`, 360/768/1280 × light/dark × home/home-tr/tool states) —
+        not just markup inspection. Found and fixed: (1) segmented DPI control
+        clipped "150 · Recommended"; (2) mobile scroll jumped on Convert,
+        violating §4.1's "scroll position never jumps" rule — region now pins
+        pre-convert height and scrolls the active panel into view once.
+  - [x] Manual large-file run (`scripts/memory-run.mjs`): 1000-page synthetic
+        PDF (grafted from sample-20p.pdf) @300 DPI converted successfully in
+        163s (~6.1 pages/sec), no crash, no fatal/worker-respawn. **Caveat:**
+        the script's heap sampling via `performance.memory` is NOT valid
+        evidence of the streaming-memory design — it reports a fingerprint-
+        resistant quantized value from the main *frame* only, never the
+        worker where mupdf/fflate actually run (flat 10MB every sample,
+        confirmed as a measurement artifact, not real data). The only
+        validated claim from this run is R4's literal criterion — completes
+        without crashing — not the memory ceiling. Proper verification would
+        need CDP `Performance.getMetrics` scoped to the worker target; not
+        done here.
 
 ## Implementation decisions (one-line rationale each)
 
