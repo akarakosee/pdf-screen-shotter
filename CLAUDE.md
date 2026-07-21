@@ -42,7 +42,23 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   buffered); `app/pageRange.ts` parser with clamp+flag; `app/naming.ts` (R6
   naming, Turkish-safe). Tests: 15 passing, incl. golden-file pixel comparison —
   **0 differing bytes vs PyMuPDF golden @150 DPI and vs 300 DPI reference**.
-- [ ] Increment 3 — ToolShell state machine + component set
+- [x] **Increment 3 — ToolShell + components** (done 2026-07-21): JobController
+  (worker lifecycle, fatal→terminate+respawn, transferable buffers), validators
+  (extension + %PDF- magic bytes in first 1024B), download helper; components
+  per UI_UX_TASARIM §3: Button (4 variants + loading), DropZone (whole-viewport
+  drop target + overlay + Esc exit, Enter/Space opens picker), FileChip,
+  OptionsPanel (segmented DPI with "150 · Recommended", mono range input, inline
+  validation), Preview, ProgressPanel (aria-live, secondary non-red Cancel),
+  ResultPanel (single primary download, ghost Convert more, plain-link cross
+  suggestion), PrivacyLine, Toast; ToolShell upload→options→processing→done
+  with fixed min-height region. /pdf-to-png page mounts it (content/FAQ section
+  comes in increments 4–5). Vite `worker.format: 'es'` needed for the worker's
+  dynamic mupdf import. Browser-verified: drop → preview → range convert →
+  partial-range ZIP download, dark mode. WASM ships at 4.54 MB gzip (budget 6).
+  Known gap for increment 4: UI never learns per-file pageCount (protocol §3.3
+  has no inspect message) → FileChip shows size only, and range clamp feedback
+  (R2) happens silently in the worker; resolve in increment 4 (likely via
+  preview/open metadata — needs a small ADR if the protocol is extended).
 - [ ] Increment 4 — PRD R1–R9 one by one (checklist below when started)
 - [ ] Increment 5 — remaining pages, i18n, SEO, legal, ad slots
 - [ ] Increment 6 — full quality gates + manual 360/768/1440 light+dark pass

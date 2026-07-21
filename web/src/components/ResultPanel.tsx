@@ -1,0 +1,88 @@
+// ResultPanel: success · partial · failed. Exactly ONE primary action (the
+// download button). "Convert more" is ghost; cross-tool suggestion is a plain
+// text link — never a button (hierarchy rule, design-critique).
+
+import type { ExportResult } from '../core/types';
+import type { Strings } from '../i18n/en';
+import { fmt } from '../i18n/en';
+import { Button } from './ui/Button';
+
+interface SkippedRow {
+  fileName: string;
+  detail: string;
+}
+
+interface Props {
+  t: Strings;
+  result: ExportResult;
+  skipped: SkippedRow[]; // file-level + page-level failures, resolved to names
+  crossLink: { href: string; label: string } | null;
+  onDownload: () => void;
+  onConvertMore: () => void;
+}
+
+export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConvertMore }: Props) {
+  const failedPages = result.failed.length;
+  let headline: string;
+  if (result.cancelled) {
+    headline = fmt(t.afterCancel, { n: result.succeeded });
+  } else if (failedPages > 0 || skipped.length > 0) {
+    headline = fmt(t.partialSuccess, {
+      ok: result.succeeded,
+      total: result.totalPages,
+      failed: result.totalPages - result.succeeded,
+    });
+  } else {
+    headline = fmt(t.allConverted, { n: result.succeeded });
+  }
+
+  const isZip = result.outputName.endsWith('.zip');
+
+  return (
+    <div role="status" className="flex flex-col gap-4">
+      <p className="text-sm">{headline}</p>
+
+      {skipped.length > 0 && (
+        <div className="overflow-x-auto rounded-s border">
+          <table className="w-full text-xs">
+            <caption className="sr-only">{t.skippedDetails}</caption>
+            <tbody>
+              {skipped.map((row, i) => (
+                <tr key={i} className="border-b last:border-b-0">
+                  <td className="px-3 py-2 font-mono">{row.fileName}</td>
+                  <td className="px-3 py-2 text-ink-muted dark:text-ink-muted-dark">
+                    {row.detail}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {result.succeeded > 0 && (
+        <div className="flex items-center gap-2">
+          <Button onClick={onDownload}>{isZip ? t.downloadZip : t.download}</Button>
+          <Button variant="ghost" onClick={onConvertMore}>
+            {t.convertMore}
+          </Button>
+        </div>
+      )}
+      {result.succeeded === 0 && (
+        <div>
+          <Button variant="secondary" onClick={onConvertMore}>
+            {t.convertMore}
+          </Button>
+        </div>
+      )}
+
+      {crossLink && (
+        <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
+          <a href={crossLink.href} className="underline underline-offset-2 hover:text-ink dark:hover:text-ink-dark">
+            {crossLink.label}
+          </a>
+        </p>
+      )}
+    </div>
+  );
+}

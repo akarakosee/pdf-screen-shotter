@@ -8,6 +8,9 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
+    // The render worker dynamically imports the mupdf WASM module; the default
+    // iife worker format can't code-split, so build workers as ES modules.
+    worker: { format: 'es' },
   },
   i18n: {
     defaultLocale: 'en',

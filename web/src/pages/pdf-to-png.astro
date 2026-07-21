@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { ToolShell } from '../components/ToolShell';
+---
+
+<Base
+  title="PDF to PNG — convert in your browser, files never uploaded"
+  description="Convert PDF pages to PNG images, free and without limits. Everything runs in your browser — your files never leave your device."
+>
+  <div class="mx-auto max-w-[720px] px-4 pt-10 pb-16">
+    <h1 class="font-display text-xl font-[650] tracking-tight">PDF to PNG</h1>
+    <p class="mt-1 mb-6 text-sm text-ink-muted dark:text-ink-muted-dark">
+      Convert PDF pages to PNG images — free, no limits, and your files stay on your device.
+    </p>
+    <ToolShell client:load format="png" />
+  </div>
+</Base>
