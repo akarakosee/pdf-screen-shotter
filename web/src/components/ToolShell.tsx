@@ -53,6 +53,9 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
   const controller = useCallback((): JobController => {
     if (!controllerRef.current) {
       controllerRef.current = new JobController({
+        onInspect: (fileId, pageCount) => {
+          setChips((cs) => cs.map((c) => (c.id === fileId ? { ...c, pageCount } : c)));
+        },
         onPreview: (blob) => {
           setPreviewUrl((old) => {
             if (old) URL.revokeObjectURL(old);
@@ -117,6 +120,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
         } else {
           filesRef.current.set(id, file);
           added.push({ id, name: file.name, size: file.size, pageCount: null, status: 'valid' });
+          void controller().inspect(id, file); // ADR-003: fills pageCount / flags bad files early
         }
       }
       setChips((cs) => {
@@ -162,17 +166,27 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
   const onRangeChange = useCallback((value: string) => {
     setPageRange(value);
-    if (value.trim() === '') {
+  }, []);
+
+  // Validate syntax and detect clamping (R2) against known page counts (ADR-003).
+  const [rangeNotice, setRangeNotice] = useState<string | null>(null);
+  useEffect(() => {
+    if (pageRange.trim() === '') {
       setRangeError(null);
+      setRangeNotice(null);
       return;
     }
+    const known = chips.filter((c) => c.status === 'valid' && c.pageCount != null);
+    const maxPages = known.length > 0 ? Math.max(...known.map((c) => c.pageCount!)) : null;
     try {
-      parsePageRange(value, Number.MAX_SAFE_INTEGER);
+      const parsed = parsePageRange(pageRange, maxPages ?? Number.MAX_SAFE_INTEGER);
       setRangeError(null);
+      setRangeNotice(maxPages != null && parsed.clamped ? t.pageRangeClamped : null);
     } catch (e) {
-      setRangeError(e instanceof PageRangeError ? en.pageRangeInvalid : String(e));
+      setRangeNotice(null);
+      setRangeError(e instanceof PageRangeError ? t.pageRangeInvalid : String(e));
     }
-  }, []);
+  }, [pageRange, chips, t]);
 
   const convert = useCallback(() => {
     const valid = chips.filter((c) => c.status === 'valid');
@@ -275,6 +289,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
               pageRange={pageRange}
               onPageRange={onRangeChange}
               rangeError={rangeError}
+              rangeNotice={rangeNotice}
             />
             <Preview t={t} state={previewState} url={previewUrl} />
           </div>

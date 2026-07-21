@@ -14,9 +14,18 @@ interface Props {
   pageRange: string;
   onPageRange: (value: string) => void;
   rangeError: string | null;
+  rangeNotice?: string | null; // non-blocking, e.g. clamp warning (R2)
 }
 
-export function OptionsPanel({ t, dpi, onDpi, pageRange, onPageRange, rangeError }: Props) {
+export function OptionsPanel({
+  t,
+  dpi,
+  onDpi,
+  pageRange,
+  onPageRange,
+  rangeError,
+  rangeNotice = null,
+}: Props) {
   const rangeId = useId();
   const errorId = useId();
   return (
@@ -68,6 +77,11 @@ export function OptionsPanel({ t, dpi, onDpi, pageRange, onPageRange, rangeError
         {rangeError && (
           <p id={errorId} className="mt-1 text-xs text-danger">
             {rangeError}
+          </p>
+        )}
+        {!rangeError && rangeNotice && (
+          <p className="mt-1 text-xs text-warning" role="status">
+            {rangeNotice}
           </p>
         )}
       </div>

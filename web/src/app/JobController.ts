@@ -16,6 +16,7 @@ import { PREVIEW_DPI } from '../core/config';
 export interface JobEvents {
   onReady?: () => void;
   onPreview?: (blob: Blob) => void;
+  onInspect?: (fileId: string, pageCount: number) => void;
   onProgress?: (data: ProgressData) => void;
   onPageError?: (error: PageError) => void;
   onFileError?: (fileId: string, message: string) => void;
@@ -36,6 +37,12 @@ export class JobController {
    * usually warm before the user drops a file (ADR-001 preload strategy). */
   preload(): void {
     this.ensureWorker();
+  }
+
+  /** ADR-003: page count without rendering; errors arrive as file-error. */
+  async inspect(fileId: string, file: File): Promise<void> {
+    const buf = await file.arrayBuffer();
+    this.post({ type: 'inspect', fileId, file: buf }, [buf]);
   }
 
   async preview(file: File, dpi: number = PREVIEW_DPI): Promise<void> {
@@ -82,6 +89,9 @@ export class JobController {
         break;
       case 'preview-done':
         this.events.onPreview?.(msg.blob);
+        break;
+      case 'inspect-done':
+        this.events.onInspect?.(msg.fileId, msg.pageCount);
         break;
       case 'progress':
         this.events.onProgress?.(msg.data);

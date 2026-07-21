@@ -1,0 +1,18 @@
+---
+// AdSlot: fixed-height reservation so ads can never cause layout shift
+// (CLS ≈ 0 is a hard requirement, PRD R9). States: reserved · filled.
+// Until AdSense is integrated the slot stays reserved and empty — it must
+// never collapse.
+interface Props {
+  height?: number;
+}
+const { height = 280 } = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  data-ad-slot="reserved"
+  style={`height:${height}px`}
+  class="w-full rounded-s border border-dashed bg-surface dark:bg-surface-dark"
+>
+</div>

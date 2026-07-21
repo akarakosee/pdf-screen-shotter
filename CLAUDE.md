@@ -59,7 +59,34 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   has no inspect message) → FileChip shows size only, and range clamp feedback
   (R2) happens silently in the worker; resolve in increment 4 (likely via
   preview/open metadata — needs a small ADR if the protocol is extended).
-- [ ] Increment 4 — PRD R1–R9 one by one (checklist below when started)
+- [x] **Increment 4 — PRD R1–R9** (done 2026-07-21). ADR-003 written (worker
+  `inspect` message; SISTEM_TASARIMI §3.3 updated). P0 checklist:
+  - [x] R1 intake: drag-drop + picker, multi-file, magic-bytes validation;
+        fake-extension rejected client-side, valid files unaffected (e2e).
+  - [x] R2 options: DPI segmented control (150 Recommended default), range
+        parser; invalid range → inline error + Convert disabled (e2e); range
+        past last page → trimmed + warning notice (e2e, via ADR-003 inspect).
+  - [x] R3 preview: first page, follows DPI changes. (<3s p75 measurement is a
+        launch metric, not CI-assertable — verified fast locally.)
+  - [x] R4 conversion: worker page-by-page, progress file x/y page n/m, cancel
+        ≤1s (per-page macrotask yield), partial ZIP downloadable after cancel
+        (e2e). 1000p@300DPI memory ceiling: by construction (streaming ZIP,
+        ≤1 page buffered) + manual large-file run pending in increment 6.
+  - [x] R5 resilience: page errors counted + skipped; encrypted/corrupt/
+        zero-page files skip per-file, batch continues, no fatal (e2e); result
+        panel shows per-file skipped table with reasons.
+  - [x] R6 output: single page → direct PNG; multi → `<name>_pages.zip` with
+        `<name>_page_001.png`; Turkish-safe sanitization (unit tests).
+  - [x] R7 privacy proof: PrivacyLine permanent under DropZone; **e2e asserts
+        zero requests with a body and zero off-origin requests during
+        conversion** — CI-enforced.
+  - [x] R8 graceful degradation: WASM/Worker feature detection → info card +
+        desktop app link (code path; no automated no-WASM browser in CI).
+  - [x] R9 page basis: SEO meta, HowTo+FAQ JSON-LD schema, How-it-works +
+        6-question FAQ (plain list, not accordion), AdSlot with fixed-height
+        reservation (CLS≈0). TR translation of the tool page → increment 5;
+        Lighthouse CI job → increment 6.
+  CI: e2e job added (playwright chromium).
 - [ ] Increment 5 — remaining pages, i18n, SEO, legal, ad slots
 - [ ] Increment 6 — full quality gates + manual 360/768/1440 light+dark pass
 
@@ -78,6 +105,16 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
 - CSP includes `'unsafe-inline'` for script/style — Astro inlines the theme script and
   Tailwind styles; revisit with hashes before launch; AdSense domains added when ads land.
 - vitest `passWithNoTests: true` — CI green before test suites arrive in increment 2.
+- Worker messages are serialized through a promise queue — the mupdf WASM is not
+  reentrant; concurrent inspect/preview handlers corrupted state (spurious fatal).
+  `cancel` bypasses the queue; the cancelled flag resets on `start` arrival, not
+  when the queued run begins (prevents lost cancels).
+- Per-page `setTimeout(0)` yield in the render loop — synchronous WASM renders
+  otherwise starve the worker event loop, so `cancel` could never be delivered
+  mid-run (R4's ≤1s cancel).
+- MuPDF repair tolerance (measured): truncated PDFs open and render blanks
+  instead of throwing → per-page render errors are rare; worker page-error branch
+  is covered by try/catch, not a reproducible fixture.
 
 ## Known deviations from planning docs
 
@@ -95,6 +132,19 @@ JobController terminates and respawns worker.
 ## Fixtures
 
 `test/fixtures/`: sample-20p.pdf + golden-sample-20p-p1-150dpi.png (PyMuPDF ref) +
-mupdf-sample-20p-p1-300dpi.png. Never regenerate. Broken fixtures (encrypted, corrupt,
-zero-page, fake-extension) to be added in increment 4 — list failure types covered here
-when done, for cross-check against the desktop edge-case matrix.
+mupdf-sample-20p-p1-300dpi.png. Never regenerate.
+
+Broken fixtures (`test/fixtures/broken/`, generated increment 4) — failure types
+covered, for cross-check against the desktop edge-case matrix:
+1. **Password-protected** — `encrypted.pdf` (AES-256, pw "secret") → EncryptedError
+   → file-error "encrypted" → verbatim microcopy on chip.
+2. **Unrepairable corrupt** — `corrupt-garbage.pdf` (%PDF- header + random bytes)
+   → open throws → file-error "corrupt".
+3. **Truncated/repairable corrupt** — `corrupt-truncated.pdf` (first 40KB of
+   sample) → MuPDF repairs; missing pages render blank (measured — no throw).
+4. **Zero-page PDF** — `zero-pages.pdf` (valid empty /Pages tree) → file-error
+   "zero-pages".
+5. **Fake .pdf extension** — `fake-extension.pdf` (PNG bytes) → rejected by
+   magic-bytes validator before reaching the engine.
+Not covered by fixture (rare with MuPDF): single-page render throw mid-file —
+worker's page-error try/catch branch exists but has no reproducible trigger.

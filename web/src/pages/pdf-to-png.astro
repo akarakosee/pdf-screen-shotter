@@ -1,17 +1,119 @@
 ---
 import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { ToolShell } from '../components/ToolShell';
+
+const faq = [
+  {
+    q: 'Are my PDF files uploaded to a server?',
+    a: 'No. The conversion runs entirely inside your browser using WebAssembly. Your files are read locally and the images are saved back to your device — no copy is transmitted anywhere. The source code is public, so this can be verified.',
+  },
+  {
+    q: 'Which resolution should I choose?',
+    a: '150 DPI is right for most uses — presentations, documents, and screens. Choose 300 DPI for printing, and 100 DPI when you want smaller files for quick sharing.',
+  },
+  {
+    q: 'Can I convert only some pages?',
+    a: 'Yes. Enter a page range like 1-5,8,11-13 in the Pages field. Single pages and ranges can be combined, separated by commas.',
+  },
+  {
+    q: 'Is there a file size or page limit?',
+    a: 'No fixed limits. Because your own device does the work, even documents with hundreds of pages convert page by page without running out of memory. Very large jobs simply take longer.',
+  },
+  {
+    q: 'What happens with password-protected or damaged PDFs?',
+    a: 'They are skipped with a clear message, and the rest of your files continue converting. Password-protected files cannot be opened yet; support for entering a password is planned.',
+  },
+  {
+    q: 'How do I get the results?',
+    a: 'A single converted page downloads directly as a PNG file. Multiple pages are packed into one ZIP archive, named after your document.',
+  },
+];
+
+const steps = [
+  { name: 'Add your PDF', text: 'Drop one or more PDF files on the page, or click to browse.' },
+  {
+    name: 'Choose resolution and pages',
+    text: 'Pick a DPI preset (150 is recommended) and, if you need it, a page range like 1-5,8.',
+  },
+  {
+    name: 'Convert and download',
+    text: 'Press Convert and download your PNG file, or a ZIP when there are several pages.',
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'HowTo',
+      name: 'How to convert PDF to PNG in your browser',
+      step: steps.map((s, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: s.name,
+        text: s.text,
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
 ---
 
 <Base
   title="PDF to PNG — convert in your browser, files never uploaded"
   description="Convert PDF pages to PNG images, free and without limits. Everything runs in your browser — your files never leave your device."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+
   <div class="mx-auto max-w-[720px] px-4 pt-10 pb-16">
     <h1 class="font-display text-xl font-[650] tracking-tight">PDF to PNG</h1>
     <p class="mt-1 mb-6 text-sm text-ink-muted dark:text-ink-muted-dark">
       Convert PDF pages to PNG images — free, no limits, and your files stay on your device.
     </p>
     <ToolShell client:load format="png" />
+  </div>
+
+  <div class="mx-auto max-w-[640px] px-4 pb-16">
+    <section>
+      <h2 class="font-display text-lg font-[650]">How it works</h2>
+      <ol class="mt-3 flex flex-col gap-2 text-sm">
+        {
+          steps.map((s, i) => (
+            <li class="flex gap-3">
+              <span class="font-mono text-xs text-ink-muted dark:text-ink-muted-dark">{i + 1}.</span>
+              <span>
+                <span class="font-medium">{s.name}.</span> {s.text}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-display text-lg font-[650]">Frequently asked questions</h2>
+      <dl class="mt-3 flex flex-col gap-5">
+        {
+          faq.map((item) => (
+            <div>
+              <dt class="text-sm font-medium">{item.q}</dt>
+              <dd class="mt-1 text-sm text-ink-muted dark:text-ink-muted-dark">{item.a}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <div class="mt-10">
+      <AdSlot />
+    </div>
   </div>
 </Base>

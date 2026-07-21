@@ -53,11 +53,13 @@ export interface FileMeta {
 export type UiToWorkerMessage =
   | { type: 'start'; files: ArrayBuffer[]; meta: FileMeta[]; options: ExportOptions }
   | { type: 'preview'; file: ArrayBuffer; dpi: number }
+  | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
   | { type: 'cancel' };
 
 export type WorkerToUiMessage =
   | { type: 'ready' }
   | { type: 'preview-done'; blob: Blob }
+  | { type: 'inspect-done'; fileId: string; pageCount: number } // ADR-003; errors reuse file-error
   | { type: 'progress'; data: ProgressData }
   | { type: 'page-error'; error: PageError } // page skipped, run continues
   | { type: 'file-error'; fileId: string; message: string } // file skipped, next file
