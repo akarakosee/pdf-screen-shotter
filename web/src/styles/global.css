@@ -320,37 +320,31 @@
     );
   }
 
-  /* Developing Tray (ADR-006, revised): the tray is now a purely
-     representative illustration — never a real document render. Showing
-     actual (even blurred/low-res) file content on the homepage risked
-     making a viewer think their own PDF's content gets displayed or
-     published somewhere, undermining the "files never leave your device"
-     claim. Each "page" is drawn from CSS only, using the site's own token
-     palette (amber title bar, ink-muted text-line bars, teal/russet accent
-     block), so there is no content to protect — just a drawing. Lines draw
-     in left-to-right (scaleX reveal), staggered per line and per page, on
-     first scroll-into-view; reduced-motion / no-IntersectionObserver
-     users get every page shown fully drawn immediately (see the
-     DevelopingTray.astro companion script). */
+  /* Developing Tray (ADR-006, revised twice): purely representative
+     illustration — never a real document render (real/blurred/pixelated
+     renders were all rejected: any real file content on the homepage risks
+     a viewer thinking their own PDF is displayed/published somewhere).
+     Perpetual round-robin "typewriter" loop: every element shares one
+     5400ms (6 × 900ms slot) infinite animation; DevelopingTray.astro gives
+     each element its own animation-delay so pages draw in turn, one at a
+     time, forever. The global prefers-reduced-motion rule above
+     (animation-iteration-count:1 !important) collapses this to one static
+     pass — no separate reduced-motion handling needed here. */
   .tray-page {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 5px;
     padding: 8px 7px;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, 0.08);
     background: var(--color-surface);
-    opacity: 0;
-    transform: translateY(6px);
+    overflow: hidden;
   }
   .dark .tray-page {
     background: var(--color-surface-dark);
     border-color: rgba(255, 255, 255, 0.08);
-  }
-  .tray-tray.is-revealed .tray-page {
-    animation: tray-page-in 350ms var(--ease-base) both;
   }
   .tray-page-title {
     height: 5px;
@@ -358,12 +352,14 @@
     border-radius: 1px;
     transform: scaleX(0);
     transform-origin: left;
+    animation: tray-draw var(--tray-cycle) linear infinite;
   }
   .tray-page-line {
     height: 3px;
     border-radius: 1px;
     transform: scaleX(0);
     transform-origin: left;
+    animation: tray-draw var(--tray-cycle) linear infinite;
   }
   .tray-page-accent {
     margin-top: 4px;
@@ -372,11 +368,36 @@
     border-radius: 2px;
     transform: scaleX(0);
     transform-origin: left;
+    animation: tray-draw var(--tray-cycle) linear infinite;
   }
-  .tray-tray.is-revealed .tray-page-title,
-  .tray-tray.is-revealed .tray-page-line,
-  .tray-tray.is-revealed .tray-page-accent {
-    animation: tray-line-in 320ms var(--ease-base) both;
+  /* Scan sweep: a soft amber light passing over the page currently being
+     drawn — echoes "a document being read/converted" without showing any
+     real content. */
+  .tray-page-scan {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 40%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(232, 182, 95, 0.35) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: tray-scan-sweep var(--tray-cycle) linear infinite;
+  }
+  /* Completion sparkle: a brief amber glint once a page finishes drawing. */
+  .tray-page-sparkle {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-amber-dark) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.3);
+    animation: tray-sparkle-burst var(--tray-cycle) linear infinite;
   }
 
   /* Filmstrip (ADR-006): replaces the banned 3-equal-card "How it works"
@@ -464,22 +485,57 @@
   }
 }
 
-@keyframes tray-page-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes tray-line-in {
-  from {
+/* Shared by title/line/accent bars: each element gets its own
+   animation-delay (set inline per element in DevelopingTray.astro) against
+   this same 5400ms clock, so the tiny 0%-3% window below lands at a
+   different real moment for each — that's the entire "typewriter" stagger
+   mechanism, no JS required. */
+@keyframes tray-draw {
+  0% {
     transform: scaleX(0);
   }
-  to {
+  3% {
     transform: scaleX(1);
+  }
+  99% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+@keyframes tray-scan-sweep {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  9% {
+    transform: translateY(220%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tray-sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  1.5% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  4.5% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
   }
 }
 

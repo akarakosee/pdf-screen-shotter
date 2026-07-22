@@ -1,19 +1,30 @@
 ---
-// Homepage hero — Developing Tray (ADR-006, revised). Purely representative:
-// each "page" is a small CSS drawing (title bar + text-line bars + one
-// accent block), never a real document render. An earlier version rendered
-// a real bundled PDF live via the WASM worker — abandoned because even a
-// low-resolution/blurred real render risked a viewer thinking their own
-// file's content was being displayed or published somewhere, contradicting
-// "files never leave your device." Zero client JS framework needed; a tiny
-// inline script only triggers the scroll-reveal, matching the same pattern
-// already used on tool pages (ToolPage.astro).
+// Homepage hero — Developing Tray (ADR-006, revised twice). Purely
+// representative: each "page" is a small CSS drawing (title bar + text-line
+// bars + one accent block), never a real document render — real/blurred/
+// pixelated renders were all rejected because any real file content on the
+// homepage risks a viewer thinking their own PDF is displayed or published
+// somewhere, contradicting "files never leave your device."
+//
+// Motion: a perpetual round-robin "typewriter" loop — one page draws in at a
+// time (title, then each line, then its accent block), gets a brief amber
+// sparkle on completion, then holds while the next page takes its turn. A
+// soft scan-light sweep plays over the page currently drawing, echoing the
+// "document being read/converted" idea without showing any real content.
+// Pure CSS, zero client JS: every element shares one 5400ms (6 × 900ms
+// slots) infinite animation, phase-shifted per element via animation-delay,
+// so the loop never needs a script to drive it and never stops. The
+// existing global prefers-reduced-motion rule (animation-iteration-count:1
+// !important) already collapses this to a single static pass.
 interface Props {
   trayLabel: string;
 }
 const { trayLabel } = Astro.props;
 
 const CELL_COUNT = 6;
+const SLOT_MS = 900; // one page's full turn
+const CYCLE_MS = CELL_COUNT * SLOT_MS; // 5400ms — matches the CSS animation-duration
+
 // Deterministic per-cell variety (not random) so the tray never looks like
 // six identical clones, while staying reproducible for any future test.
 const LINE_PATTERNS = [
@@ -25,18 +36,25 @@ const ACCENTS: (null | 'teal' | 'russet')[] = ['teal', 'russet', null];
 
 const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
   const lines = LINE_PATTERNS[i % LINE_PATTERNS.length]!;
+  // Negative delay puts this cell "already partway through" the shared
+  // 5400ms clock, landing its 900ms turn at the right slot; the small
+  // positive offsets order title → lines → accent → sparkle within it.
+  const slotStart = -(i * SLOT_MS);
   return {
     lines,
     accent: ACCENTS[i % ACCENTS.length],
-    cellDelay: i * 70,
-    lineBaseDelay: i * 70 + 140,
+    scanDelay: slotStart,
+    titleDelay: slotStart,
+    lineDelay: (li: number) => slotStart + 90 * (li + 1),
+    accentDelay: slotStart + 90 * (lines.length + 1),
+    sparkleDelay: slotStart + 480,
   };
 });
 ---
 
 <div
   class="tray-tray overflow-hidden rounded-m border bg-surface dark:border-white/[0.14] dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark"
-  data-tray-reveal
+  style={`--tray-cycle:${CYCLE_MS}ms`}
 >
   <div
     class="flex items-center justify-between border-b px-5 py-3 font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark"
@@ -46,25 +64,25 @@ const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
   <div class="grid grid-cols-3 gap-2.5 p-6 sm:grid-cols-6">
     {
       cells.map((cell) => (
-        <div class="tray-page aspect-[3/4]" style={`animation-delay:${cell.cellDelay}ms`}>
+        <div class="tray-page aspect-[3/4]">
+          <span class="tray-page-scan" style={`animation-delay:${cell.scanDelay}ms`} />
+          <span class="tray-page-sparkle" style={`animation-delay:${cell.sparkleDelay}ms`} />
           <div
             class="tray-page-title bg-amber dark:bg-amber-dark"
-            style={`animation-delay:${cell.lineBaseDelay}ms`}
+            style={`animation-delay:${cell.titleDelay}ms`}
           />
           {cell.lines.map((w, li) => (
             <div
               class="tray-page-line bg-ink-muted/40 dark:bg-ink-muted-dark/40"
-              style={`width:${w}%;animation-delay:${cell.lineBaseDelay + 70 * (li + 1)}ms`}
+              style={`width:${w}%;animation-delay:${cell.lineDelay(li)}ms`}
             />
           ))}
           {cell.accent && (
             <div
               class={`tray-page-accent ${
-                cell.accent === 'teal'
-                  ? 'bg-accent dark:bg-teal-dark'
-                  : 'bg-russet'
+                cell.accent === 'teal' ? 'bg-accent dark:bg-teal-dark' : 'bg-russet'
               }`}
-              style={`animation-delay:${cell.lineBaseDelay + 70 * (cell.lines.length + 1)}ms`}
+              style={`animation-delay:${cell.accentDelay}ms`}
             />
           )}
         </div>
@@ -72,24 +90,3 @@ const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
     }
   </div>
 </div>
-
-<script>
-  const trays = document.querySelectorAll<HTMLElement>('[data-tray-reveal]');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) {
-    for (const el of trays) el.classList.add('is-revealed');
-  } else {
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            io.unobserve(entry.target);
-          }
-        }
-      },
-      { threshold: 0.3 },
-    );
-    for (const el of trays) io.observe(el);
-  }
-</script>
