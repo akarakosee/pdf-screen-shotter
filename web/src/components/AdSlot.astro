@@ -2,17 +2,26 @@
 // AdSlot: fixed-height reservation so ads can never cause layout shift
 // (CLS ≈ 0 is a hard requirement, PRD R9). States: reserved · filled.
 // Until AdSense is integrated the slot stays reserved and empty — it must
-// never collapse.
+// never collapse. The corner-mark + label give it a "negative frame"
+// placeholder look instead of reading as a broken/empty box.
 interface Props {
   height?: number;
+  label: string;
 }
-const { height = 280 } = Astro.props;
+const { height = 280, label } = Astro.props;
 ---
 
 <div
   aria-hidden="true"
   data-ad-slot="reserved"
   style={`height:${height}px`}
-  class="w-full rounded-s border border-dashed bg-surface dark:bg-surface-dark"
+  class="relative flex w-full items-center justify-center overflow-hidden rounded-m bg-surface shadow-1 card-lit dark:bg-surface-dark"
 >
+  <span class="corner-mark corner-mark-tl"></span>
+  <span class="corner-mark corner-mark-tr"></span>
+  <span class="corner-mark corner-mark-bl"></span>
+  <span class="corner-mark corner-mark-br"></span>
+  <span class="font-mono text-[11px] tracking-[0.08em] text-ink-faint uppercase dark:text-ink-faint-dark"
+    >{label}</span
+  >
 </div>
