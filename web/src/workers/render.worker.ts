@@ -17,6 +17,7 @@ import { EncryptedError } from '../engine/PdfEngine';
 import { ZipStream } from './zipStream';
 import { pageFileName, sanitizeBaseName, zipFileName } from '../app/naming';
 import { parsePageRange } from '../app/pageRange';
+import { renderDemoPages } from './demoRender';
 
 const engine = new MuPdfEngine();
 let cancelled = false;
@@ -48,6 +49,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       if (msg.type === 'preview') await preview(msg.file, msg.dpi ?? PREVIEW_DPI);
       else if (msg.type === 'inspect') await inspect(msg.fileId, msg.file);
       else if (msg.type === 'start') await run(msg.files, msg.meta, msg.options);
+      else if (msg.type === 'demo-render') await demoRenderHandler(msg.file, msg.dpi, msg.maxPages);
     } catch (e) {
       // Unrecoverable (e.g. WASM OOM): JobController terminates + respawns us.
       post({ type: 'fatal', message: e instanceof Error ? e.message : String(e) });
@@ -106,6 +108,31 @@ async function preview(file: ArrayBuffer, dpi: number): Promise<void> {
   } catch (e) {
     console.error('[worker] preview: renderPage failed:', e);
     post({ type: 'preview-error', message: e instanceof Error ? e.message : String(e) });
+  } finally {
+    engine.close(doc);
+  }
+}
+
+// ADR-006: renders a bundled sample PDF page-by-page for the homepage's live
+// hero demo. A failure here (bad asset, WASM hiccup) never takes the worker
+// down — same pattern as preview()'s scoped error handling.
+async function demoRenderHandler(file: ArrayBuffer, dpi: number, maxPages: number): Promise<void> {
+  let doc;
+  try {
+    doc = await engine.open(file);
+  } catch (e) {
+    console.error('[worker] demo-render: engine.open failed:', e);
+    post({ type: 'demo-error', message: e instanceof Error ? e.message : String(e) });
+    return;
+  }
+  try {
+    await renderDemoPages(engine, doc, dpi, maxPages, ({ page, data }) => {
+      post({ type: 'demo-page', page, blob: new Blob([data as BlobPart], { type: 'image/png' }) });
+    });
+    post({ type: 'demo-done' });
+  } catch (e) {
+    console.error('[worker] demo-render: renderPage failed:', e);
+    post({ type: 'demo-error', message: e instanceof Error ? e.message : String(e) });
   } finally {
     engine.close(doc);
   }
