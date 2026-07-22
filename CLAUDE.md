@@ -293,6 +293,27 @@ line-numbered violations found and fixed under ADR-006 — do not reintroduce:
 - Lighthouse LCP/CLS for the homepage **must be re-measured** after this ships — the
   WASM load is new weight on a page that used to ship zero JS.
 
+**Post-ship trust fix (2026-07-22, never re-derive/revert):** the demo PDF originally
+bundled (`test/fixtures/sample-20p.pdf`) is a synthetic test fixture whose pages are
+abstract line/circle placeholders — the live tray was rendering correctly (real PNG,
+correct dimensions, no errors) but looked broken since there was no real content to
+show. Replaced `web/public/demo-sample.pdf` / `web/public/demo-fallback.png` with a
+generated 6-page realistic document (title, bullets, a table, prose). **Immediately
+after that**, a second, more serious issue was raised: showing *legible* document text
+on the homepage risks a viewer thinking their own PDF's content is being displayed or
+published somewhere — directly undermining the "files never leave your device" claim,
+even though the render is 100% local and real. Fix: `.tray-cell`'s base rule in
+`global.css` now carries a permanent `filter: blur(6px)`, and every state of the
+`tray-develop` keyframe includes `blur(6px)` in its own `filter` value (a CSS
+`animation` with `fill-mode: both` locks whatever filter the final keyframe specifies,
+so the blur has to be baked into each keyframe step, not just the base rule, or it
+disappears the moment the develop animation finishes). **Binding rule: the
+Developing Tray must never render legible text, at any zoom level, in any state
+(loading/developing/settled/fallback).** Only paper texture/layout may be visible.
+Any future change to tray rendering (DPI, blur radius, new demo asset) must preserve
+this property — verify by zooming into a single rendered cell, not just eyeballing
+the full-page screenshot at drop resolution.
+
 ## Implementation decisions (one-line rationale each)
 
 - Tailwind v4 (@tailwindcss/vite, CSS `@theme` tokens) instead of v3 JS config —
