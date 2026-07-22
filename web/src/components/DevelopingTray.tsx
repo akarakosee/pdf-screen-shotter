@@ -33,7 +33,8 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
     playedRef.current = true;
 
     const supported = typeof WebAssembly !== 'undefined' && typeof Worker !== 'undefined';
-    if (!supported) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!supported || reducedMotion) {
       if (isMountedRef.current) setMode('fallback');
       return;
     }
