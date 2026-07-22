@@ -34,6 +34,12 @@ export interface JobEvents {
    * times in a row and JobController has given up respawning it. Every
    * method becomes a no-op after this until the page is reloaded. */
   onUnavailable?: (message: string) => void;
+  /** ADR-006: one real thumbnail from the homepage live demo arrived. */
+  onDemoPage?: (page: number, blob: Blob) => void;
+  /** ADR-006: the demo finished rendering all its pages. */
+  onDemoDone?: () => void;
+  /** ADR-006: the demo failed — never fatal, caller falls back to a static image. */
+  onDemoError?: (message: string) => void;
 }
 
 export class JobController {
@@ -68,6 +74,15 @@ export class JobController {
     if (this.disabled) return;
     const buf = await file.arrayBuffer();
     this.post({ type: 'preview', file: buf, dpi }, [buf]);
+  }
+
+  /** ADR-006: renders up to maxPages of a bundled sample PDF for the
+   * homepage's live hero demo. Never throws — failures arrive as
+   * onDemoError, same scoped-error pattern as preview(). */
+  async demoRender(file: File, dpi: number, maxPages: number): Promise<void> {
+    if (this.disabled) return;
+    const buf = await file.arrayBuffer();
+    this.post({ type: 'demo-render', file: buf, dpi, maxPages }, [buf]);
   }
 
   async start(files: { file: File; fileId: string }[], options: ExportOptions): Promise<void> {
@@ -133,6 +148,15 @@ export class JobController {
         break;
       case 'fatal':
         this.handleFatal(msg.message);
+        break;
+      case 'demo-page':
+        this.events.onDemoPage?.(msg.page, msg.blob);
+        break;
+      case 'demo-done':
+        this.events.onDemoDone?.();
+        break;
+      case 'demo-error':
+        this.events.onDemoError?.(msg.message);
         break;
     }
   }
