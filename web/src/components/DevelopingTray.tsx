@@ -137,7 +137,7 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
   return (
     <div
       ref={rootRef}
-      className="overflow-hidden rounded-m border dark:border-white/[0.14]"
+      className="overflow-hidden rounded-m border bg-surface dark:border-white/[0.14] dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark"
     >
       <div className="flex items-center justify-between border-b px-5 py-3 font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark">
         <span>{trayLabel}</span>
