@@ -4,22 +4,35 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens — UI_UX_TASARIM.md §2. These are the ONLY palette values.
- * Do not add colors outside this block.
+ * Design tokens — UI_UX_TASARIM.md §2, pivoted to the "darkroom" system by
+ * ADR-004. These are the ONLY palette values. Do not add colors outside this block.
  */
 @theme {
   --color-*: initial;
 
-  --color-bg: #fafaf8;
+  --color-bg: #f4efe4;
+  --color-bg-2: #eae2d2;
   --color-surface: #ffffff;
-  --color-bg-dark: #101012;
-  --color-surface-dark: #1a1a1e;
-  --color-ink: #1a1a1e;
-  --color-ink-muted: #5c5c64;
-  --color-ink-dark: #ececef;
-  --color-ink-muted-dark: #a3a3ab;
-  --color-accent: #0d7377;
-  --color-accent-hover: #0a5d60;
+  --color-surface-2: #f6f1e6;
+  --color-bg-dark: #120e0b;
+  --color-bg-2-dark: #180f0c;
+  --color-surface-dark: #1d1512;
+  --color-surface-2-dark: #251a15;
+  --color-ink: #1c1712;
+  --color-ink-muted: #5b5548;
+  --color-ink-faint: #8b8375;
+  --color-ink-dark: #ede7dc;
+  --color-ink-muted-dark: #a79e8e;
+  --color-ink-faint-dark: #6e655a;
+  --color-accent: #1b5a53;
+  --color-accent-hover: #0f3f3a;
+  --color-amber: #b5822f;
+  --color-amber-dark: #e8b65f;
+  --color-amber-dim-dark: #8a6b36;
+  --color-teal-dark: #2e9186;
+  --color-teal-dim-dark: #1b5a53;
+  --color-russet: #b04b36;
+  --color-russet-dim-dark: #6e2e20;
   --color-success: #1a7f37;
   --color-danger: #b42318;
   --color-warning: #b54708;
@@ -27,7 +40,8 @@
   --color-transparent: transparent;
 
   --font-ui: 'Inter Variable', system-ui, sans-serif;
-  --font-display: 'Newsreader Variable', Georgia, serif;
+  --font-display: 'Sora Variable', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk Variable', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Type scale: 13 / 15 (body) / 17 / 22 / 28 / 40 */
@@ -52,9 +66,12 @@
   --shadow-*: initial;
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.1);
+  /* shadow-3 (ADR-005): drag-overlay + ResultPanel ONLY; dark override below. */
+  --shadow-3: 0 12px 32px rgba(0, 0, 0, 0.14);
 
   --ease-*: initial;
   --ease-base: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.2, 0.9, 0.3, 1.2);
   --duration-fast: 120ms;
   --duration-base: 200ms;
 }
@@ -97,5 +114,293 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
     }
+  }
+
+  /* Darkroom ambient background (ADR-004) — "safelight" glow + film grain,
+     fixed behind content in both themes (dimmer / warmer in light mode). */
+  body {
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(1000px 620px at 50% -8%, rgba(181, 130, 47, 0.08), transparent 60%),
+      radial-gradient(760px 640px at 8% 30%, rgba(27, 90, 83, 0.07), transparent 55%),
+      radial-gradient(760px 640px at 92% 55%, rgba(176, 75, 54, 0.06), transparent 55%),
+      radial-gradient(1400px 900px at 50% 100%, rgba(20, 15, 10, 0.06), transparent 60%);
+  }
+  .dark body::before {
+    background:
+      radial-gradient(1000px 620px at 50% -8%, rgba(232, 182, 95, 0.16), transparent 60%),
+      radial-gradient(760px 640px at 8% 30%, rgba(46, 145, 134, 0.14), transparent 55%),
+      radial-gradient(760px 640px at 92% 55%, rgba(176, 75, 54, 0.12), transparent 55%),
+      radial-gradient(1400px 900px at 50% 100%, rgba(0, 0, 0, 0.55), transparent 60%);
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Signature hero effect (ADR-004): Sora display text with a shimmering,
+   slightly tilting gradient — the one piece of intentional "glow" the
+   darkroom pivot carves out as an exception to the anti-slop bans. */
+@layer components {
+  .contact-card {
+    margin-top: 24px;
+    border-radius: var(--radius-m);
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    background: var(--color-surface);
+    padding: 22px;
+  }
+  .dark .contact-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-surface-dark);
+  }
+  .contact-card a {
+    font-family: var(--font-mono);
+    color: var(--color-amber);
+  }
+  .dark .contact-card a {
+    color: var(--color-amber-dark);
+  }
+
+  .hero-develop {
+    display: inline-block;
+    font-family: var(--font-display);
+    transform-style: preserve-3d;
+    background-image: linear-gradient(
+      110deg,
+      var(--color-amber) 0%,
+      var(--color-russet) 35%,
+      var(--color-accent) 65%,
+      var(--color-amber) 100%
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: hero-shimmer 5s linear infinite, hero-tilt 5.5s ease-in-out infinite;
+  }
+  .dark .hero-develop {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-amber-dark) 0%,
+      var(--color-russet) 35%,
+      var(--color-teal-dark) 65%,
+      var(--color-amber-dark) 100%
+    );
+    text-shadow: 0 0 40px rgba(232, 182, 95, 0.25);
+  }
+}
+
+/* Motion + elevation layer (ADR-005). All animation is transform/opacity only;
+   the global prefers-reduced-motion rule above neutralizes every keyframe. */
+@layer components {
+  /* Buttons: hover lifts 1px while shadow-2 fades in via ::after opacity
+     (box-shadow itself is never animated); active presses back down. */
+  .btn-motion {
+    position: relative;
+    transition:
+      transform var(--duration-fast) var(--ease-base),
+      background-color var(--duration-fast) var(--ease-base),
+      color var(--duration-fast) var(--ease-base);
+  }
+  .btn-motion::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--shadow-2);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-base);
+    pointer-events: none;
+  }
+  .btn-motion:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .btn-motion:hover:not(:disabled)::after {
+    opacity: 1;
+  }
+  .btn-motion:active:not(:disabled) {
+    transform: translateY(0) scale(0.985);
+  }
+
+  /* Card elevation: 1px "lit from above" top-highlight (ADR-005 depth cue). */
+  .card-lit {
+    box-shadow: inset 0 1px 0 rgba(255, 252, 245, 0.65);
+  }
+  .dark .card-lit {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* shadow-3 tier — drag overlay + ResultPanel only; darker against #120E0B. */
+  .elev-3 {
+    box-shadow: var(--shadow-3), inset 0 1px 0 rgba(255, 252, 245, 0.65);
+  }
+  .dark .elev-3 {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* DropZone idle: slow breathing border between the hairline and a 20% teal tint. */
+  .dropzone-breathe {
+    animation: dz-breathe 4s ease-in-out infinite;
+  }
+  .dark .dropzone-breathe {
+    animation-name: dz-breathe-dark;
+  }
+
+  /* Drag overlay: warm darkroom tint fading in over 150ms. */
+  .drag-overlay {
+    background: rgba(234, 226, 210, 0.55);
+    animation: fade-in 150ms var(--ease-base) both;
+  }
+  .dark .drag-overlay {
+    background: rgba(232, 182, 95, 0.08);
+  }
+
+  .pop-in {
+    animation: pop-in var(--duration-base) var(--ease-spring) both;
+  }
+  .chip-enter {
+    animation: rise-in var(--duration-base) var(--ease-base) both;
+  }
+  .phase-enter {
+    animation: rise-in-soft var(--duration-base) var(--ease-base) both;
+  }
+
+  /* Preview's rendered page: paper treatment — resting shadow + a 2px bottom
+     "stack" edge, the print sitting on the darkroom tray's pile of paper. */
+  .paper-page {
+    box-shadow:
+      var(--shadow-1),
+      0 2px 0 rgba(0, 0, 0, 0.08),
+      0 4px 0 rgba(0, 0, 0, 0.04);
+  }
+  .dark .paper-page {
+    box-shadow:
+      var(--shadow-1),
+      0 2px 0 rgba(255, 255, 255, 0.07),
+      0 4px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  /* Progress fill: compositor-friendly scaleX; the completed portion softens
+     from teal into a faint amber tail (element-level fill, not a page gradient). */
+  .progress-fill {
+    transform-origin: left;
+    transition: transform var(--duration-base) var(--ease-base);
+    background: linear-gradient(
+      90deg,
+      var(--color-accent) 0%,
+      var(--color-accent) 78%,
+      color-mix(in srgb, var(--color-amber) 55%, var(--color-accent)) 100%
+    );
+  }
+  .dark .progress-fill {
+    background: linear-gradient(
+      90deg,
+      var(--color-teal-dark) 0%,
+      var(--color-teal-dark) 78%,
+      color-mix(in srgb, var(--color-amber-dark) 55%, var(--color-teal-dark)) 100%
+    );
+  }
+}
+
+@keyframes dz-breathe {
+  0%,
+  100% {
+    border-color: rgba(0, 0, 0, 0.09);
+  }
+  50% {
+    border-color: rgba(27, 90, 83, 0.2);
+  }
+}
+@keyframes dz-breathe-dark {
+  0%,
+  100% {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    border-color: rgba(46, 145, 134, 0.2);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes rise-in-soft {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes result-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
+}
+
+@keyframes hero-tilt {
+  0%,
+  100% {
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px);
+  }
+  25% {
+    transform: perspective(800px) rotateX(5deg) rotateY(-4deg) translateZ(6px);
+  }
+  75% {
+    transform: perspective(800px) rotateX(-4deg) rotateY(4deg) translateZ(6px);
   }
 }
