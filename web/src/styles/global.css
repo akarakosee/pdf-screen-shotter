@@ -324,10 +324,16 @@
      desaturated/dark to full color with a slight settle-bounce, plus a
      scanning wash bar while the transition runs. Motivated by the actual
      render event, not decorative. */
+  /* Blur is permanent and non-negotiable: this is a real live render (not
+     staged), so the content must never be legible — a homepage demo showing
+     readable document text would contradict the product's "files never
+     leave your device" promise by looking like the page is on display
+     somewhere. Only the paper texture/layout should read, never the words. */
   .tray-cell {
     background: var(--color-bg-2-dark);
     position: relative;
     overflow: hidden;
+    filter: blur(6px);
   }
   .tray-cell--develop {
     animation:
@@ -436,18 +442,18 @@
   0% {
     opacity: 0;
     transform: translateY(4px) scale(0.96);
-    filter: brightness(0.15) contrast(1.6) saturate(0.4);
+    filter: brightness(0.15) contrast(1.6) saturate(0.4) blur(6px);
   }
   12% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: brightness(0.15) contrast(1.6) saturate(0.4);
+    filter: brightness(0.15) contrast(1.6) saturate(0.4) blur(6px);
   }
   60% {
-    filter: brightness(1) contrast(1) saturate(1);
+    filter: brightness(1) contrast(1) saturate(1) blur(6px);
   }
   100% {
-    filter: brightness(1) contrast(1) saturate(1);
+    filter: brightness(1) contrast(1) saturate(1) blur(6px);
     transform: scale(1.03);
   }
 }
