@@ -31,13 +31,7 @@ const steps = [
   title="PDF tools that never see your files"
   description="Free PDF tools that run entirely in your browser. No uploads, no limits, no signup — your files never leave your device."
 >
-  <section class="mx-auto max-w-[720px] px-4 pt-16 pb-10 text-center">
-    <span
-      class="mb-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-[11px] tracking-[0.06em] text-amber uppercase dark:border-amber-dim-dark/60 dark:text-amber-dark"
-    >
-      <span class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"></span>
-      No uploads · no signup · free
-    </span>
+  <section class="mx-auto max-w-[720px] px-4 pt-10 pb-6 text-center">
     <h1 class="font-display text-2xl font-semibold tracking-tight sm:text-[40px]">
       PDF tools that <em class="hero-develop not-italic">never see</em> your files.
     </h1>
@@ -46,11 +40,17 @@ const steps = [
     </p>
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-14">
+  <section class="relative mx-auto max-w-[720px] px-4 pt-3 pb-8">
+    <span
+      class="absolute left-1/2 top-3 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full border bg-bg px-3.5 py-1.5 font-mono text-[11px] tracking-[0.06em] whitespace-nowrap text-amber uppercase dark:border-amber-dim-dark/60 dark:bg-bg-dark dark:text-amber-dark"
+    >
+      <span class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"></span>
+      No uploads · no signup · free
+    </span>
     <DevelopingTray trayLabel="DEVELOPING TRAY" />
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-14">
+  <section class="mx-auto max-w-[720px] px-4 pb-8">
     <ul class="grid gap-3 sm:grid-cols-2">
       {
         tools.map((tool) => (
@@ -72,8 +72,8 @@ const steps = [
     </ul>
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-14">
-    <h2 class="mb-5 font-heading text-lg font-semibold">How it works</h2>
+  <section class="mx-auto max-w-[720px] px-4 pb-10">
+    <h2 class="mb-3 font-heading text-lg font-semibold">How it works</h2>
     <div class="filmstrip">
       {
         steps.map((step, i) => (
