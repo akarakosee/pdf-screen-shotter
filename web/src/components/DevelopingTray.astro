@@ -1,0 +1,95 @@
+---
+// Homepage hero — Developing Tray (ADR-006, revised). Purely representative:
+// each "page" is a small CSS drawing (title bar + text-line bars + one
+// accent block), never a real document render. An earlier version rendered
+// a real bundled PDF live via the WASM worker — abandoned because even a
+// low-resolution/blurred real render risked a viewer thinking their own
+// file's content was being displayed or published somewhere, contradicting
+// "files never leave your device." Zero client JS framework needed; a tiny
+// inline script only triggers the scroll-reveal, matching the same pattern
+// already used on tool pages (ToolPage.astro).
+interface Props {
+  trayLabel: string;
+}
+const { trayLabel } = Astro.props;
+
+const CELL_COUNT = 6;
+// Deterministic per-cell variety (not random) so the tray never looks like
+// six identical clones, while staying reproducible for any future test.
+const LINE_PATTERNS = [
+  [72, 45, 58],
+  [60, 80, 40],
+  [50, 65, 70],
+];
+const ACCENTS: (null | 'teal' | 'russet')[] = ['teal', 'russet', null];
+
+const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
+  const lines = LINE_PATTERNS[i % LINE_PATTERNS.length]!;
+  return {
+    lines,
+    accent: ACCENTS[i % ACCENTS.length],
+    cellDelay: i * 70,
+    lineBaseDelay: i * 70 + 140,
+  };
+});
+---
+
+<div
+  class="tray-tray overflow-hidden rounded-m border bg-surface dark:border-white/[0.14] dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark"
+  data-tray-reveal
+>
+  <div
+    class="flex items-center justify-between border-b px-5 py-3 font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark"
+  >
+    <span>{trayLabel}</span>
+  </div>
+  <div class="grid grid-cols-3 gap-2.5 p-6 sm:grid-cols-6">
+    {
+      cells.map((cell) => (
+        <div class="tray-page aspect-[3/4]" style={`animation-delay:${cell.cellDelay}ms`}>
+          <div
+            class="tray-page-title bg-amber dark:bg-amber-dark"
+            style={`animation-delay:${cell.lineBaseDelay}ms`}
+          />
+          {cell.lines.map((w, li) => (
+            <div
+              class="tray-page-line bg-ink-muted/40 dark:bg-ink-muted-dark/40"
+              style={`width:${w}%;animation-delay:${cell.lineBaseDelay + 70 * (li + 1)}ms`}
+            />
+          ))}
+          {cell.accent && (
+            <div
+              class={`tray-page-accent ${
+                cell.accent === 'teal'
+                  ? 'bg-accent dark:bg-teal-dark'
+                  : 'bg-russet'
+              }`}
+              style={`animation-delay:${cell.lineBaseDelay + 70 * (cell.lines.length + 1)}ms`}
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const trays = document.querySelectorAll<HTMLElement>('[data-tray-reveal]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    for (const el of trays) el.classList.add('is-revealed');
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.3 },
+    );
+    for (const el of trays) io.observe(el);
+  }
+</script>

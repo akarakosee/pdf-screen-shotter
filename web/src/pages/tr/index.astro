@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { FileImage, Image } from 'lucide-react';
-import { DevelopingTray } from '../../components/DevelopingTray';
+import DevelopingTray from '../../components/DevelopingTray.astro';
 
 const tools = [
   {
@@ -43,17 +43,12 @@ const steps = [
       Dosyalarınızı <em class="hero-develop not-italic">hiç görmeyen</em> PDF araçları.
     </h1>
     <p class="mx-auto mt-4 max-w-[480px] text-md text-ink-muted dark:text-ink-muted-dark">
-      Aşağıda gerçekleşiyor — bu gerçek bir dosya, bu cihazda, canlı olarak dönüştürülüyor.
+      Her dönüşüm böyle gerçekleşir — tamamen cihazınızda, hiçbir şey cihazınızdan çıkmadan.
     </p>
   </section>
 
   <section class="mx-auto max-w-[720px] px-4 pb-14">
-    <DevelopingTray
-      client:idle
-      trayLabel="GELİŞTİRME TEPSİSİ"
-      processingLabel="İŞLENİYOR"
-      sampleLabel="ÖRNEK"
-    />
+    <DevelopingTray trayLabel="GELİŞTİRME TEPSİSİ" />
   </section>
 
   <section class="mx-auto max-w-[720px] px-4 pb-14">

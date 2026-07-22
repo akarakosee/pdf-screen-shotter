@@ -1,28 +1,25 @@
-// E2E for the homepage live "Developing Tray" hero (ADR-006). Covers: real
-// thumbnails actually render (not placeholder divs), and the demo's own
-// fetch stays same-origin (R7's zero-egress claim extends to the hero too).
+// E2E for the homepage Developing Tray hero (ADR-006, revised). The tray is
+// a purely representative CSS illustration now (no real document render, no
+// WASM/worker involved) — covers: the illustrated pages actually reveal on
+// load, and the page makes zero off-origin requests (nothing to fetch, no
+// engine to load, so this is trivially true but worth asserting as a
+// regression guard).
 
 import { expect, test } from '@playwright/test';
 
-test('Developing Tray renders real page thumbnails on load', async ({ page }) => {
+test('Developing Tray reveals its illustrated pages on load', async ({ page }) => {
   await page.goto('/');
-  // The tray starts as empty dark cells; real <img> thumbnails replace them
-  // once the idle-loaded demo finishes rendering pages via the WASM worker.
-  const firstThumb = page.locator('.tray-cell--develop').first();
-  await expect(firstThumb).toBeVisible({ timeout: 15_000 });
-  const src = await firstThumb.getAttribute('src');
-  expect(src).toMatch(/^blob:/);
+  const tray = page.locator('[data-tray-reveal]');
+  await expect(tray).toHaveClass(/is-revealed/, { timeout: 5_000 });
+  await expect(page.locator('.tray-page')).toHaveCount(6);
 });
 
-test('the demo fetch never leaves the origin', async ({ page }) => {
+test('the homepage makes zero off-origin requests', async ({ page }) => {
   const offenders: string[] = [];
   page.on('request', (req) => {
-    const local =
-      req.url().startsWith('http://localhost:4321') ||
-      req.url().startsWith('blob:http://localhost:4321');
-    if (!local) offenders.push(req.url());
+    if (!req.url().startsWith('http://localhost:4321')) offenders.push(req.url());
   });
   await page.goto('/');
-  await expect(page.locator('.tray-cell--develop').first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('[data-tray-reveal]')).toHaveClass(/is-revealed/, { timeout: 5_000 });
   expect(offenders, `off-origin requests: ${offenders.join(', ')}`).toEqual([]);
 });

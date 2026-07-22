@@ -320,37 +320,63 @@
     );
   }
 
-  /* Developing Tray (ADR-006): each real thumbnail "develops" as it arrives —
-     desaturated/dark to full color with a slight settle-bounce, plus a
-     scanning wash bar while the transition runs. Motivated by the actual
-     render event, not decorative. */
-  /* Blur is permanent and non-negotiable: this is a real live render (not
-     staged), so the content must never be legible — a homepage demo showing
-     readable document text would contradict the product's "files never
-     leave your device" promise by looking like the page is on display
-     somewhere. Only the paper texture/layout should read, never the words. */
-  .tray-cell {
-    background: var(--color-bg-2-dark);
+  /* Developing Tray (ADR-006, revised): the tray is now a purely
+     representative illustration — never a real document render. Showing
+     actual (even blurred/low-res) file content on the homepage risked
+     making a viewer think their own PDF's content gets displayed or
+     published somewhere, undermining the "files never leave your device"
+     claim. Each "page" is drawn from CSS only, using the site's own token
+     palette (amber title bar, ink-muted text-line bars, teal/russet accent
+     block), so there is no content to protect — just a drawing. Lines draw
+     in left-to-right (scaleX reveal), staggered per line and per page, on
+     first scroll-into-view; reduced-motion / no-IntersectionObserver
+     users get every page shown fully drawn immediately (see the
+     DevelopingTray.astro companion script). */
+  .tray-page {
     position: relative;
-    overflow: hidden;
-    filter: blur(6px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 8px 7px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--color-surface);
+    opacity: 0;
+    transform: translateY(6px);
   }
-  .tray-cell--develop {
-    animation:
-      tray-develop 700ms ease-out both,
-      tray-settle 260ms var(--ease-spring) 700ms both;
+  .dark .tray-page {
+    background: var(--color-surface-dark);
+    border-color: rgba(255, 255, 255, 0.08);
   }
-  .tray-cell--develop::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(232, 182, 95, 0.5) 45%,
-      transparent 100%
-    );
-    animation: tray-scan 700ms ease-out both;
+  .tray-tray.is-revealed .tray-page {
+    animation: tray-page-in 350ms var(--ease-base) both;
+  }
+  .tray-page-title {
+    height: 5px;
+    width: 55%;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .tray-page-line {
+    height: 3px;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .tray-page-accent {
+    margin-top: 4px;
+    height: 14px;
+    width: 60%;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .tray-tray.is-revealed .tray-page-title,
+  .tray-tray.is-revealed .tray-page-line,
+  .tray-tray.is-revealed .tray-page-accent {
+    animation: tray-line-in 320ms var(--ease-base) both;
   }
 
   /* Filmstrip (ADR-006): replaces the banned 3-equal-card "How it works"
@@ -438,44 +464,22 @@
   }
 }
 
-@keyframes tray-develop {
-  0% {
+@keyframes tray-page-in {
+  from {
     opacity: 0;
-    transform: translateY(4px) scale(0.96);
-    filter: brightness(0.15) contrast(1.6) saturate(0.4) blur(6px);
+    transform: translateY(6px);
   }
-  12% {
+  to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: brightness(0.15) contrast(1.6) saturate(0.4) blur(6px);
-  }
-  60% {
-    filter: brightness(1) contrast(1) saturate(1) blur(6px);
-  }
-  100% {
-    filter: brightness(1) contrast(1) saturate(1) blur(6px);
-    transform: scale(1.03);
+    transform: translateY(0);
   }
 }
-@keyframes tray-settle {
-  0% {
-    transform: scale(1.03);
+@keyframes tray-line-in {
+  from {
+    transform: scaleX(0);
   }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes tray-scan {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0;
+  to {
+    transform: scaleX(1);
   }
 }
 
