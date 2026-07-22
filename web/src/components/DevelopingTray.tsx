@@ -25,6 +25,7 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
   const [mode, setMode] = useState<Mode>('loading');
   const controllerRef = useRef<JobController | null>(null);
   const playedRef = useRef(false);
+  const isMountedRef = useRef(true);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const play = useCallback(async () => {
@@ -33,7 +34,7 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
 
     const supported = typeof WebAssembly !== 'undefined' && typeof Worker !== 'undefined';
     if (!supported) {
-      setMode('fallback');
+      if (isMountedRef.current) setMode('fallback');
       return;
     }
 
@@ -43,23 +44,36 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
       if (!res.ok) throw new Error(`fetch failed: ${res.status}`);
       buf = await res.arrayBuffer();
     } catch {
-      setMode('fallback');
+      if (isMountedRef.current) setMode('fallback');
       return;
     }
+
+    if (!isMountedRef.current) return;
 
     const file = new File([buf], 'demo-sample.pdf', { type: 'application/pdf' });
     const controller = new JobController({
       onDemoPage: (page, blob) => {
+        if (!isMountedRef.current) return;
         setUrls((cur) => {
           const next = [...cur];
           next[page - 1] = URL.createObjectURL(blob);
           return next;
         });
       },
-      onDemoDone: () => setMode('live'),
-      onDemoError: () => setMode('fallback'),
-      onFatal: () => setMode('fallback'),
+      onDemoDone: () => {
+        if (isMountedRef.current) setMode('live');
+      },
+      onDemoError: () => {
+        if (isMountedRef.current) setMode('fallback');
+      },
+      onFatal: () => {
+        if (isMountedRef.current) setMode('fallback');
+      },
     });
+
+    // Dispose whatever controller (and its worker) is still around from a
+    // previous replay cycle before this one takes over.
+    controllerRef.current?.dispose();
     controllerRef.current = controller;
     setMode('live');
     await controller.demoRender(file, DEMO_DPI, DEMO_PAGES);
@@ -75,6 +89,7 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
     const cancelIdle = w.cancelIdleCallback ?? window.clearTimeout;
     const id = idle(() => void play());
     return () => {
+      isMountedRef.current = false;
       cancelIdle(id as number);
       controllerRef.current?.dispose();
       setUrls((cur) => {
@@ -89,15 +104,29 @@ export function DevelopingTray({ trayLabel, processingLabel, sampleLabel }: Prop
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined' || !rootRef.current) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let wasVisible = true;
+    let wasVisible = false;
+    let hasSeenFirstCallback = false;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry!.isIntersecting && !wasVisible && mode === 'live') {
+        const isIntersecting = entry!.isIntersecting;
+        if (!hasSeenFirstCallback) {
+          // Establish the baseline visibility only — the very first callback
+          // reflects the tray's state at observe() time, not a real
+          // visible→invisible→visible transition, so it must never trigger
+          // a replay.
+          hasSeenFirstCallback = true;
+          wasVisible = isIntersecting;
+          return;
+        }
+        if (isIntersecting && !wasVisible && mode === 'live') {
           playedRef.current = false;
-          setUrls(Array(DEMO_PAGES).fill(null));
+          setUrls((cur) => {
+            for (const u of cur) if (u) URL.revokeObjectURL(u);
+            return Array(DEMO_PAGES).fill(null);
+          });
           void play();
         }
-        wasVisible = entry!.isIntersecting;
+        wasVisible = isIntersecting;
       },
       { threshold: 0.4 },
     );
