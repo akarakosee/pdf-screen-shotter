@@ -47,8 +47,9 @@ net tercih), ardından başlığın tepsinin üstünde olmasını istedi, ardın
 Tepsi artık küçük bir kart değil, **hero'nun kendisi**, tam genişlikte. Başlık
 tepsinin üstünde (ilk göze çarpan şey mesaj, tepsi onu kanıtlayan görsel). Sayfa ilk
 boyandıktan sonra (`requestIdleCallback`, LCP'yi bloklamadan — hero metni zaten
-server-render, WASM'a bağlı değil), gömülü küçük bir örnek PDF (4-6 sayfa, repo'ya
-eklenecek gerçek/üretilmiş bir belge) gerçek MuPDF WASM motoruyla (increment 2'nin
+server-render, WASM'a bağlı değil), gömülü küçük bir örnek PDF (`test/fixtures/
+sample-20p.pdf`'in ilk 4-6 sayfası — mevcut, gerçek, zaten repo'da olan fixture;
+yeni bir belge üretmeye gerek yok) gerçek MuPDF WASM motoruyla (increment 2'nin
 `PdfEngine` sözleşmesi: `init/open/renderPage/close`) taranır. Her sayfa gerçekten
 render edildikçe tepsiye gerçek küçük-resim olarak eklenir — düz renk blokları değil.
 
