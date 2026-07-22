@@ -1,6 +1,6 @@
 # UI/UX Tasarım Planı
 
-> Sürüm 1.2 · 2026-07-22 · Bağlam: WEB_PLANI §5, SISTEM_TASARIMI, PRD-pdf-to-png, ADR-001/002/004/005
+> Sürüm 1.3 · 2026-07-22 · Bağlam: WEB_PLANI §5, SISTEM_TASARIMI, PRD-pdf-to-png, ADR-001/002/004/005/006
 > Amaç: kodlama ajanına verilecek AI_BUILD_PROMPT.md'nin tasarım referansı. Buradaki her değer bağlayıcıdır; ajan "yorumlamaz", uygular.
 > **ADR-004 ile pivot:** §2 renk/tipografi token'ları "karanlık oda" (darkroom) paletine
 > güncellendi; §1'deki gradyan/glow/3D yasağına **tek, isimlendirilmiş istisna** tanındı
@@ -9,6 +9,10 @@
 > (elevation) katmanı eklendi — `--ease-spring`, `--shadow-3` (3. gölge seviyesi),
 > bileşen hareket envanteri. Yeni renk token'ı YOK; brief'in marigold/indigo önerisi
 > reddedildi (bkz. ADR-005 §Context).
+> **ADR-006 amendment'ı:** `leonxlnx/taste-skill` denetimiyle bulunan somut AI-slop
+> kalıpları (3'lü eşit kart, dekoratif nokta, satır-başı çizgi, tam simetri)
+> kaldırılıyor; ana sayfa hero'su gerçek/canlı "Developing Tray" demosuna dönüşüyor.
+> §3 ve §4.2'deki ilgili maddeler bu ADR'a atıfla işaretlendi.
 
 ---
 
@@ -81,6 +85,13 @@ Beş ilke:
 
 Yasaklar (anti-slop sözleşmesi): gradyan arkaplan, glassmorphism/backdrop-blur, neon/glow, emoji (UI metinlerinde), stok illüstrasyon/3D blob, otomatik oynayan carousel, "AI" kelimesinin süs olarak kullanımı, cookie banner dışında hiçbir popup/modal-üzeri-modal, sahte sosyal kanıt ("10M+ happy users"), **jenerik "3 kolon ikon+başlık+tek cümle" özellik bloğu** (design-critique bulgusu — bu kalıbın kendisi en yaygın AI-slop template imzasıdır, bkz. §4.2 düzeltmesi).
 
+**ADR-006 düzeltmeleri (taste-skill denetimi):** ~~"How it works" 3 eşit kart~~ artık
+filmstrip (kontakt tabakası) sunumu — 3'lü eşit kutu şablonu tüm sitede yasaklı, sadece
+"How is this private" için değil. ~~Hero pill'i ve PROCESSING şeridindeki dekoratif
+noktalar~~ artık gerçek bir olaya bağlı (Developing Tray canlı demo) veya kaldırıldı.
+Tamamen simetrik/ortalanmış tek-kolon layout tool sayfalarında asimetrik hale getirildi
+(bkz. §3 ve §4.1 güncellemeleri).
+
 **ADR-004 istisnası (tek, isimlendirilmiş):** ana sayfa h1'indeki iki-üç kelimelik vurgu
 öbeği (`.hero-develop`, `global.css`) — Sora fontu + amber→russet→teal shimmer + hafif 3D
 tilt + (yalnız koyu modda) glow. Bu istisna genel yasağı geçersiz kılmaz; başka hiçbir
@@ -96,7 +107,7 @@ bileşende gradyan arkaplan/glow/3D tekrarlanmaz — yeni bir istisna yeni bir A
 | Button (primary/secondary/ghost/danger) | idle·hover·active·disabled·loading | loading'de spinner + metin kalır ("Converting…") |
 | DropZone | idle·dragover·has-files·error | dragover'da tüm viewport hedef olur (PRD R13); kesikli çerçeve yerine dolgun yüzey + ikon; **Esc ile dragover iptali** ve sürükleme sırasında görünür sınır/overlay şart (design-critique: çıkış yolu olmadan tanımlanmıştı) |
 | FileChip | queued·valid·invalid·processing·done·failed | dosya adı mono fontla; boyut + sayfa sayısı; kaldır (×) |
-| OptionsPanel | — | DPI = 4'lü segmented control ("150 · Recommended" işaretli); sayfa aralığı = mono input + inline doğrulama; format = PNG/JPG sekmesi değil ayrı sayfa (SEO kararı, PRD açık sorusu → karar: ayrı URL) |
+| OptionsPanel | — | DPI = 4'lü segmented control ("150 · Recommended" işaretli); sayfa aralığı = mono input + inline doğrulama; format = PNG/JPG sekmesi değil ayrı sayfa (SEO kararı, PRD açık sorusu → karar: ayrı URL). ~~OptionsPanel/Preview 3fr/2fr~~ ADR-006 ile options fazında 2fr/3fr — Preview kartı geniş ekranda daha baskın, tam simetri kırılıyor. |
 | Preview kartı | loading·ready·unavailable | gerçek boy oranıyla; DPI değişiminde çapraz solma (120ms) |
 | ProgressPanel | running·cancelling | dosya x/y + sayfa n/m + ince progress bar; Cancel = secondary, asla kırmızı (yıkıcı değil) |
 | ResultPanel | success·partial·failed | **tek primary eylem** = büyük indirme butonu; kısmi başarıda atlanan dosyalar tablosu; "Convert more" = ghost (ikincil); çapraz araç önerisi düz metin link (buton görünümü yasak — üç eylem birbiriyle yarışmasın, design-critique bulgusu) |
@@ -114,16 +125,25 @@ Dikey akış, tek kolon, max-width 720px (araç bölgesi):
 3. [dosya var] FileChip listesi + OptionsPanel + Preview (masaüstünde yan yana 60/40, mobilde alt alta) + primary "Convert" 
 4. [çalışıyor] ProgressPanel (aynı bölgede, layout zıplamaz — bölge min-height sabit)
 5. [bitti] ResultPanel
-6. İçerik bölümü (max-width 640px, ayrı arkaplan tonu): "How it works" 3 adım → FAQ (5-6 soru, accordion değil düz liste — SEO + erişilebilirlik) → AdSlot
+6. İçerik bölümü (max-width 640px, ayrı arkaplan tonu): "How it works" 3 adım → FAQ (5-6 soru, accordion değil düz liste — SEO + erişilebilirlik; ADR-006: satır-başı `border-b` yerine 2-3'lük gruplarda tek ayraç) → AdSlot; ADR-006: bu bölümler artık `IntersectionObserver` ile scroll'da fade+drift beliriyor (statik değil)
 7. Diğer araçlar ızgarası (kart başına ikon + ad + tek satır)
 
 Durum makinesi UI kuralı: upload→options→processing→done geçişlerinde scroll pozisyonu korunur, hiçbir eleman kaybolup yeri kaymaz; her adımda geri dönüş yolu var (processing hariç — orada Cancel var).
 
 ### 4.2 Ana sayfa (/)
-1. H1: "PDF tools that never see your files." + alt satır: works in your browser · no uploads · no signup · free — bu dört ifade süs değil, dört gerçek özellik
+1. **Hero (ADR-006 ile değişti):** H1 artık tepside DEĞİL, tepsinin ÜSTÜNDE — ilk göze
+   çarpan şey mesaj, tepsi onu kanıtlayan gerçek/canlı görsel. "PDF tools that never
+   see your files." + tek satır alt metin. ~~Küçük statik Developing Tray kartı~~
+   artık tam genişlikte, gerçek WASM motoruyla gömülü örnek PDF'i canlı tarayan hero'nun
+   kendisi (bkz. ADR-006 §Decision.1-2 — mimari, perf korkuluğu, reduced-motion/no-WASM
+   fallback orada).
 2. Araç ızgarası (Faz'lara göre büyür; gelmemiş araçlar gösterilmez — "coming soon" kartı yasak)
-3. **"How is this private?" bölümü — düzeltilmiş format (design-critique):** ~~3 kolonlu ikon+başlık+cümle~~ bu kalıp reddedildi (§2 Yasaklar'a eklendi — en yaygın AI-slop template imzası). Yerine: tek editoryal paragraf (display serif değil, gövde fontuyla, 640px) + altında mono-font bir "teknik kanıt" satırı — ör. `network requests during conversion: 0` görünümünde statik bir kod-stili blok. Süs değil, gerçek bir iddia; ikon yok.
-4. Footer
+3. **"How it works" (ADR-006 ile değişti):** ~~3 eşit kutu grid~~ artık filmstrip
+   (kontakt tabakası) sunumu — sprocket-hole kenarlı, tek yatay şeritte bağlı 3 kare;
+   `01/02/03` numaralandırma kalıyor (gerçek sıra olduğu için meşru) ama "3 eşit kutu"
+   şablonu olarak okunmuyor.
+4. **"How is this private?" bölümü — düzeltilmiş format (design-critique):** ~~3 kolonlu ikon+başlık+cümle~~ bu kalıp reddedildi (§2 Yasaklar'a eklendi — en yaygın AI-slop template imzası). Yerine: tek editoryal paragraf (display serif değil, gövde fontuyla, 640px) + altında mono-font bir "teknik kanıt" satırı — ör. `network requests during conversion: 0` görünümünde statik bir kod-stili blok. Süs değil, gerçek bir iddia; ikon yok.
+5. Footer
 
 ### 4.3 İçerik/yasal sayfalar
 Blog + about/privacy/terms/contact: 640px tek kolon, display serif başlıklar, sıkı tipografik ritim. AdSense onayının gerektirdiği ciddiyette, dolgu metinsiz.

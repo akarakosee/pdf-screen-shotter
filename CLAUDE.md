@@ -222,6 +222,32 @@ the warm-accent role). No new color tokens exist.
 - All motion transform/opacity only; reduced-motion killed by the existing global rule;
   Lighthouse ≥95 / CLS ≤0.02 gates unchanged.
 
+## Taste-skill audit + signature hero facts (ADR-006 — never re-derive)
+
+Installed `leonxlnx/taste-skill` (anti-slop frontend skill) at
+`~/.claude/skills/taste-skill/SKILL.md` on 2026-07-22, used for a redesign audit
+(skill §11: audit-first) after Ayberk called the live site "AI slop." Concrete,
+line-numbered violations found and fixed under ADR-006 — do not reintroduce:
+- **No 3-equal-card sections anywhere** (not just the home privacy section — the
+  "How it works" 3-box grid was the same banned pattern sneaking back in). Home's
+  "How it works" is now a filmstrip (sprocket-hole 3-frame strip), not a card grid.
+- **No decorative status dots** unless bound to a real event. The hero pill/PROCESSING
+  dots are legitimate now because the Developing Tray runs a real conversion.
+- **No `border-b` on every row of a list.** FAQ `<dl>` grouped into 2-3-item clusters
+  with one hairline per cluster instead.
+- **Break full symmetry somewhere per page.** Tool page options-phase grid flipped
+  `3fr/2fr` → `2fr/3fr` (Preview more dominant); pure centered single-column is not
+  the only allowed shape.
+- **Home hero is no longer JS-free.** The Developing Tray became a real, live WASM
+  demo (bundled sample PDF, idle-loaded, real per-page thumbnails) instead of a small
+  static/symbolic card — this is ADR-006's central decision, not a side effect.
+  Perf/CLS/reduced-motion/no-WASM fallback rules for it live in ADR-006 §Decision.1.
+  This is a genuinely new worker protocol surface (`demo-render`-style message) —
+  treat it like ADR-003's inspect message: protocol changes need their own ADR
+  (ADR-006 flags a follow-up ADR-007 for the SISTEM_TASARIMI §3.3 update).
+- Lighthouse LCP/CLS for the homepage **must be re-measured** after this ships — the
+  WASM load is new weight on a page that used to ship zero JS.
+
 ## Implementation decisions (one-line rationale each)
 
 - Tailwind v4 (@tailwindcss/vite, CSS `@theme` tokens) instead of v3 JS config —
