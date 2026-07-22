@@ -401,9 +401,13 @@
   }
 
   /* Filmstrip (ADR-006): replaces the banned 3-equal-card "How it works"
-     pattern with a single connected object — sprocket-hole dividers, a
-     slightly raised middle frame — read as one physical film strip, not
-     three interchangeable boxes. */
+     pattern with a single connected object — sprocket-hole dividers read
+     as one physical film strip, not three interchangeable boxes. (The
+     middle frame previously also had a -6px translateY "raised" offset;
+     removed — since grid cells stretch to equal height but the transform
+     doesn't change box height, it left a visible 6px gap under the middle
+     frame instead of reading as intentional, and all three frames now
+     share the same bottom edge.) */
   .filmstrip {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -427,9 +431,6 @@
   }
   .dark .filmstrip-frame + .filmstrip-frame {
     border-left-color: rgba(255, 255, 255, 0.14);
-  }
-  .filmstrip-frame--mid {
-    transform: translateY(-6px);
   }
   .filmstrip-sprockets {
     position: absolute;
@@ -462,9 +463,6 @@
     }
     .dark .filmstrip-frame + .filmstrip-frame {
       border-top-color: rgba(255, 255, 255, 0.14);
-    }
-    .filmstrip-frame--mid {
-      transform: none;
     }
   }
 
