@@ -10,22 +10,32 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const base =
   'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-s px-4 text-sm font-medium ' +
-  'transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] disabled:opacity-50 disabled:pointer-events-none';
+  'disabled:opacity-50 disabled:pointer-events-none';
 
+// ADR-005 motion: surfaced variants get .btn-motion (hover lift + pseudo-shadow
+// fade, active press); ghost has no surface to lift, keeps a color transition.
 const variants: Record<Variant, string> = {
-  primary: 'bg-accent text-white hover:bg-accent-hover',
+  primary:
+    'btn-motion bg-gradient-to-r from-amber to-[#F0C778] text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778]',
   secondary:
-    'border bg-surface text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark',
+    'btn-motion border bg-surface text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark',
   ghost:
-    'text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark',
-  danger: 'bg-danger text-white hover:opacity-90',
+    'transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark',
+  danger: 'btn-motion bg-danger text-white hover:opacity-90',
 };
 
-export function Button({ variant = 'primary', loading = false, children, disabled, ...rest }: Props) {
+export function Button({
+  variant = 'primary',
+  loading = false,
+  children,
+  disabled,
+  className = '',
+  ...rest
+}: Props) {
   return (
     <button
       type="button"
-      className={`${base} ${variants[variant]}`}
+      className={`${base} ${variants[variant]} ${className}`}
       disabled={disabled || loading}
       {...rest}
     >

@@ -5,16 +5,24 @@ import { FileImage, Image } from 'lucide-react';
 const tools = [
   {
     href: '/pdf-to-png',
+    idx: 'FILM · LOSSLESS',
     name: 'PDF to PNG',
     line: 'Lossless images for text and diagrams',
     Icon: FileImage,
   },
   {
     href: '/pdf-to-jpg',
+    idx: 'FILM · COMPRESSED',
     name: 'PDF to JPG',
     line: 'Smaller files for photos and scans',
     Icon: Image,
   },
+];
+
+const steps = [
+  { n: '01', h: 'Load the file', p: "Drop a PDF or pick one — it's read straight into memory, never sent anywhere." },
+  { n: '02', h: 'Set the exposure', p: 'Choose resolution and page range. 150 DPI is right for most documents.' },
+  { n: '03', h: 'Pull the pages', p: 'Pages render one by one and download straight to your device.' },
 ];
 ---
 
@@ -22,29 +30,53 @@ const tools = [
   title="PDF tools that never see your files"
   description="Free PDF tools that run entirely in your browser. No uploads, no limits, no signup — your files never leave your device."
 >
-  <section class="mx-auto max-w-[720px] px-4 pt-16 pb-12">
-    <h1 class="font-display text-2xl font-[650] tracking-tight">
-      PDF tools that never see your files.
+  <section class="mx-auto max-w-[720px] px-4 pt-16 pb-10 text-center">
+    <span
+      class="mb-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-[11px] tracking-[0.06em] text-amber uppercase dark:border-amber-dim-dark/60 dark:text-amber-dark"
+    >
+      <span class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"></span>
+      No uploads · no signup · free
+    </span>
+    <h1 class="font-display text-2xl font-semibold tracking-tight sm:text-[40px]">
+      PDF tools that <em class="hero-develop not-italic">never see</em> your files.
     </h1>
-    <p class="mt-3 text-md text-ink-muted dark:text-ink-muted-dark">
-      Works in your browser · no uploads · no signup · free
+    <p class="mx-auto mt-4 max-w-[480px] text-md text-ink-muted dark:text-ink-muted-dark">
+      Works entirely in your browser, the way a darkroom makes prints — nothing ever leaves the tray.
     </p>
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-12">
+  <section class="mx-auto max-w-[720px] px-4 pb-14">
+    <div
+      class="overflow-hidden rounded-m border shadow-2 dark:border-white/[0.14] dark:bg-gradient-to-b dark:from-surface-dark dark:to-bg-dark"
+    >
+      <div
+        class="flex items-center justify-between border-b px-5 py-3 font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark"
+      >
+        <span>DEVELOPING TRAY</span>
+        <span class="flex items-center gap-1.5 text-accent dark:text-teal-dark">
+          <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-accent dark:bg-teal-dark"></span>
+          PROCESSING
+        </span>
+      </div>
+      <div class="grid grid-cols-4 gap-2.5 p-6 sm:grid-cols-6" id="devTray"></div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[720px] px-4 pb-14">
     <ul class="grid gap-3 sm:grid-cols-2">
       {
         tools.map((tool) => (
           <li>
             <a
               href={tool.href}
-              class="flex min-h-11 items-center gap-3 rounded-m border bg-surface p-4 shadow-1 transition-colors duration-[120ms] hover:border-accent dark:bg-surface-dark"
+              class="group flex min-h-11 flex-col gap-2 rounded-m border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
             >
-              <tool.Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.75} />
-              <span>
-                <span class="block text-sm font-medium">{tool.name}</span>
-                <span class="block text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
+              <span class="font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark">{tool.idx}</span>
+              <span class="flex items-center gap-2 font-heading text-md font-semibold">
+                <tool.Icon aria-hidden="true" className="h-4.5 w-4.5 shrink-0 text-accent dark:text-teal-dark" strokeWidth={1.75} />
+                {tool.name}
               </span>
+              <span class="text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
             </a>
           </li>
         ))
@@ -52,15 +84,56 @@ const tools = [
     </ul>
   </section>
 
+  <section class="mx-auto max-w-[720px] px-4 pb-14">
+    <div class="grid gap-3 sm:grid-cols-3">
+      {
+        steps.map((step) => (
+          <div class="rounded-m border bg-surface p-5 dark:bg-surface-dark">
+            <div class="font-heading text-lg font-semibold text-accent dark:text-amber-dark">{step.n}</div>
+            <h3 class="mt-3 text-sm font-semibold">{step.h}</h3>
+            <p class="mt-1.5 text-xs text-ink-muted dark:text-ink-muted-dark">{step.p}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
   <section class="mx-auto max-w-[640px] px-4 pb-16">
-    <p class="text-sm">
-      Every tool on this site does its work inside your browser, using WebAssembly. When you
-      convert a PDF, the file is read locally by your own device and the result is saved back
-      to it — no copy is ever transmitted to us or to anyone else. There is no server that
-      could store, scan, or lose your documents, because no server is involved in processing
-      them. The code is open source, so this claim can be checked rather than trusted.
-    </p>
-    <pre
-      class="mt-4 overflow-x-auto rounded-s border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-surface-dark dark:text-ink-muted-dark">network requests carrying file data during conversion: 0</pre>
+    <div
+      class="rounded-m border p-6 sm:p-8 dark:bg-gradient-to-br dark:from-teal-dim-dark/10 dark:via-amber-dim-dark/10 dark:to-russet-dim-dark/10"
+    >
+      <p class="text-sm">
+        Every tool on this site does its work inside your browser, using WebAssembly. When you
+        convert a PDF, the file is read locally by your own device and the result is saved back
+        to it — no copy is ever transmitted to us or to anyone else. There is no server that
+        could store, scan, or lose your documents, because no server is involved in processing
+        them. The code is open source, so this claim can be checked rather than trusted.
+      </p>
+      <pre
+        class="mt-4 overflow-x-auto rounded-s border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-bg-dark dark:text-ink-muted-dark">network requests carrying file data during conversion: 0</pre>
+    </div>
   </section>
 </Base>
+
+<script>
+  const grid = document.getElementById('devTray');
+  if (grid) {
+    for (let i = 1; i <= 12; i++) {
+      const face = document.createElement('div');
+      face.setAttribute(
+        'style',
+        'aspect-ratio:4/5;border-radius:3px;background:#EDE7DC;opacity:0;animation:devAppear 6s ease-in-out infinite;animation-delay:' +
+          (i - 1) * 0.35 +
+          's',
+      );
+      grid.appendChild(face);
+    }
+    if (!document.getElementById('devAppearKeyframes')) {
+      const style = document.createElement('style');
+      style.id = 'devAppearKeyframes';
+      style.textContent =
+        '@keyframes devAppear{0%{opacity:0;transform:translateY(6px) scale(.92);filter:brightness(.15) contrast(1.6) saturate(.4);}9%{opacity:1;transform:translateY(0) scale(1);filter:brightness(.15) contrast(1.6) saturate(.4);}26%{filter:brightness(1) contrast(1) saturate(1);}84%{opacity:1;filter:brightness(1) contrast(1) saturate(1);}93%,100%{opacity:0;}}';
+      document.head.appendChild(style);
+    }
+  }
+</script>

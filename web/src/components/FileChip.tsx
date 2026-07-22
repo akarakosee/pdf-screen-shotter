@@ -24,15 +24,18 @@ export function FileChip({
   t,
   data,
   onRemove,
+  enterDelay = 0,
 }: {
   t: Strings;
   data: ChipData;
   onRemove?: (id: string) => void;
+  enterDelay?: number; // ms — 40ms per-chip stagger when a multi-file drop lands (ADR-005)
 }) {
   const bad = data.status === 'invalid' || data.status === 'failed';
   return (
     <li
-      className={`flex items-center gap-3 rounded-s border bg-surface px-3 py-2 dark:bg-surface-dark ${
+      style={enterDelay > 0 ? { animationDelay: `${enterDelay}ms` } : undefined}
+      className={`chip-enter card-lit flex items-center gap-3 rounded-s border bg-surface px-3 py-2 dark:bg-surface-dark ${
         bad ? 'border-danger/40' : ''
       }`}
     >

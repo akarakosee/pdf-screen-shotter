@@ -11,7 +11,7 @@ interface Props {
 
 export function Preview({ t, state, url }: Props) {
   return (
-    <figure className="flex min-h-40 flex-col rounded-s border bg-surface p-3 dark:bg-surface-dark">
+    <figure className="card-lit flex min-h-40 flex-col rounded-s border bg-surface p-3 dark:bg-surface-dark">
       <figcaption className="mb-2 text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
         {t.previewTitle}
       </figcaption>
@@ -21,7 +21,7 @@ export function Preview({ t, state, url }: Props) {
             key={url}
             src={url}
             alt=""
-            className="max-h-72 w-auto max-w-full border transition-opacity duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)]"
+            className="paper-page max-h-72 w-auto max-w-full border transition-opacity duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)]"
           />
         ) : (
           <p className="text-xs text-ink-muted dark:text-ink-muted-dark" aria-live="polite">

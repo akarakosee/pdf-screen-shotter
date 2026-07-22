@@ -38,8 +38,14 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
 
   const isZip = result.outputName.endsWith('.zip');
 
+  // ADR-005: the done state sits on a shadow-3 card (one of shadow-3's two
+  // permitted homes); the download button springs in 0.97→1. No shimmer here —
+  // the hero keeps the sole signature treatment (ADR-005 §Decision.2.7).
   return (
-    <div role="status" className="flex flex-col gap-4">
+    <div
+      role="status"
+      className="phase-enter elev-3 flex flex-col gap-4 rounded-m border bg-surface p-5 dark:bg-surface-dark"
+    >
       <p className="text-sm">{headline}</p>
 
       {skipped.length > 0 && (
@@ -62,7 +68,9 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
 
       {result.succeeded > 0 && (
         <div className="flex items-center gap-2">
-          <Button onClick={onDownload}>{isZip ? t.downloadZip : t.download}</Button>
+          <Button className="result-pop" onClick={onDownload}>
+            {isZip ? t.downloadZip : t.download}
+          </Button>
           <Button variant="ghost" onClick={onConvertMore}>
             {t.convertMore}
           </Button>

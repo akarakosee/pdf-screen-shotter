@@ -87,12 +87,18 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
         onMouseEnter={onPreload}
         className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-m border p-10 text-center transition-colors duration-[200ms] ease-[cubic-bezier(0.2,0,0,1)] ${
           dragover
-            ? 'border-accent bg-surface dark:bg-surface-dark'
-            : 'bg-surface hover:border-accent dark:bg-surface-dark'
+            ? 'border-amber bg-surface shadow-[0_0_0_3px_rgba(232,182,95,0.15)] dark:border-amber-dark dark:bg-surface-dark'
+            : 'dropzone-breathe card-lit bg-surface hover:border-amber dark:bg-surface-dark dark:hover:border-amber-dim-dark'
         } ${hasFiles ? 'py-6' : 'py-14'}`}
       >
-        <FileUp aria-hidden="true" className="h-6 w-6 text-accent" strokeWidth={1.75} />
-        <span className="text-sm text-ink dark:text-ink-dark">
+        <span className="flex h-11 w-11 items-center justify-center rounded-[9px] bg-gradient-to-br from-amber to-russet text-[#1D1108] dark:from-amber-dark dark:to-russet">
+          <FileUp aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
+        </span>
+        {/* key remount pops the dragover label in with the spring ease (ADR-005) */}
+        <span
+          key={dragover ? 'over' : 'idle'}
+          className={`text-sm text-ink dark:text-ink-dark ${dragover ? 'pop-in' : ''}`}
+        >
           {dragover ? t.dropDragover : t.dropIdle}
         </span>
         <input
@@ -111,7 +117,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
       {dragover && (
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-2 z-50 rounded-m border-2 border-accent"
+          className="drag-overlay elev-3 pointer-events-none fixed inset-2 z-50 rounded-m border-2 border-amber dark:border-amber-dark"
         />
       )}
     </>

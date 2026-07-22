@@ -318,11 +318,12 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
       {(validChips.length > 0 || invalidChips.length > 0) && phase !== 'done' && (
         <ul className="flex flex-col gap-2">
-          {[...validChips, ...invalidChips].map((c) => (
+          {[...validChips, ...invalidChips].map((c, i) => (
             <FileChip
               key={c.id}
               t={t}
               data={c}
+              enterDelay={i * 40}
               onRemove={phase === 'processing' ? undefined : removeFile}
             />
           ))}
@@ -330,7 +331,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       )}
 
       {phase === 'options' && validChips.length > 0 && (
-        <>
+        <div className="phase-enter flex flex-col gap-5">
           <div className="grid gap-5 md:grid-cols-[3fr_2fr]">
             <OptionsPanel
               t={t}
@@ -348,16 +349,18 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
               type="button"
               onClick={convert}
               disabled={rangeError != null}
-              className="inline-flex min-h-11 items-center justify-center rounded-s bg-accent px-6 text-sm font-medium text-white transition-colors duration-[120ms] hover:bg-accent-hover disabled:pointer-events-none disabled:opacity-50"
+              className="btn-motion inline-flex min-h-11 items-center justify-center rounded-s bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
             >
               {t.convert}
             </button>
           </div>
-        </>
+        </div>
       )}
 
       {phase === 'processing' && (
-        <ProgressPanel t={t} progress={progress} cancelling={cancelling} onCancel={cancel} />
+        <div className="phase-enter">
+          <ProgressPanel t={t} progress={progress} cancelling={cancelling} onCancel={cancel} />
+        </div>
       )}
 
       {phase === 'done' && result && (

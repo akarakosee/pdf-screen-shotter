@@ -38,9 +38,11 @@ export function ProgressPanel({ t, progress, cancelling, onCancel }: Props) {
         aria-valuemax={100}
         className="h-1 overflow-hidden rounded-s bg-surface dark:bg-surface-dark border"
       >
+        {/* scaleX keeps the fill on the compositor (ADR-005); the fill color
+            softens into a faint amber tail at its leading edge. */}
         <div
-          className="h-full bg-accent transition-[width] duration-[200ms] ease-[cubic-bezier(0.2,0,0,1)]"
-          style={{ width: `${pct}%` }}
+          className="progress-fill h-full w-full"
+          style={{ transform: `scaleX(${pct / 100})` }}
         />
       </div>
       <div>

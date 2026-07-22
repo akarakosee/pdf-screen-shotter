@@ -4,6 +4,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const path = Astro.url.pathname;
+const normalizedPath = path.replace(/\/$/, '') || '/';
 const enPath = path.replace(/^\/tr(\/|$)/, '/') || '/';
 const trPath = enPath === '/' ? '/tr/' : `/tr${enPath}`;
 const p = lang === 'tr' ? '/tr' : '';
@@ -34,13 +35,30 @@ const t = {
 <header class="w-full border-b bg-surface dark:bg-surface-dark">
   <div class="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-4">
     <div class="flex items-center gap-5">
-      <a href={p === '' ? '/' : '/tr/'} class="text-md font-medium tracking-tight">localpdf</a>
-      <nav class="flex items-center gap-1">
+      <a
+        href={p === '' ? '/' : '/tr/'}
+        class="flex items-center gap-2.5 font-heading text-md font-semibold tracking-tight"
+      >
+        <span
+          class="relative flex h-[22px] w-[22px] items-center justify-center rounded-[3px] border-[1.5px] border-amber dark:border-amber-dark"
+        >
+          <span
+            class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"
+          ></span>
+        </span>
+        localpdf
+      </a>
+      <nav class="flex items-center gap-1 font-mono">
         {
           t.tools.map((tool) => (
             <a
               href={tool.href}
-              class="flex h-11 items-center rounded-s px-2 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+              aria-current={normalizedPath === tool.href ? 'page' : undefined}
+              class={`flex h-11 items-center rounded-s px-2 text-xs hover:text-ink dark:hover:text-ink-dark ${
+                normalizedPath === tool.href
+                  ? 'text-amber dark:text-amber-dark'
+                  : 'text-ink-muted dark:text-ink-muted-dark'
+              }`}
             >
               {tool.name}
             </a>
@@ -50,7 +68,7 @@ const t = {
     </div>
 
     <!-- Desktop: language + theme inline. -->
-    <nav class="hidden items-center gap-1 sm:flex">
+    <nav class="hidden items-center gap-1 font-mono sm:flex">
       <a
         href={t.otherHref}
         class="flex h-11 min-w-11 items-center justify-center rounded-s px-3 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"

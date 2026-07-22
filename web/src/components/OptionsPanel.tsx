@@ -46,7 +46,7 @@ export function OptionsPanel({
               onClick={() => onDpi(preset)}
               className={`min-h-11 flex-auto whitespace-nowrap border-r px-3 text-xs last:border-r-0 transition-colors duration-[120ms] ${
                 dpi === preset
-                  ? 'bg-accent font-medium text-white'
+                  ? 'bg-amber font-medium text-[#1D1108] dark:bg-amber-dark'
                   : 'bg-surface text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark'
               }`}
             >

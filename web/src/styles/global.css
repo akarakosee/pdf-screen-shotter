@@ -278,6 +278,9 @@
   .phase-enter {
     animation: rise-in-soft var(--duration-base) var(--ease-base) both;
   }
+  .result-pop {
+    animation: result-pop var(--duration-base) var(--ease-spring) both;
+  }
 
   /* Preview's rendered page: paper treatment — resting shadow + a 2px bottom
      "stack" edge, the print sitting on the darkroom tray's pile of paper. */

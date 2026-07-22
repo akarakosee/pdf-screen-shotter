@@ -1,10 +1,12 @@
 ---
 import '@fontsource-variable/inter';
-import '@fontsource-variable/newsreader';
+import '@fontsource-variable/sora';
+import '@fontsource-variable/space-grotesk';
 import '@fontsource/jetbrains-mono';
 // Preload the latin subsets so text doesn't reflow on font swap (CLS ≈ 0 gate).
 import interWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import soraWoff2 from '@fontsource-variable/sora/files/sora-latin-wght-normal.woff2?url';
+import spaceGroteskWoff2 from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 import monoWoff2 from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
@@ -32,7 +34,8 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={newsreaderWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={soraWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={monoWoff2} crossorigin />
     <link rel="canonical" href={Astro.url.href} />
     <link rel="alternate" hreflang="en" href={`${origin}${enPath}`} />
