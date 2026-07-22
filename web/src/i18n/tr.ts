@@ -42,4 +42,5 @@ export const tr: Strings = {
   removeFile: '{name} dosyasını kaldır',
   filePages: '{n} sayfa',
   desktopAppLink: 'Masaüstü uygulamayı edin',
+  adSpace: 'Reklam alanı',
 };

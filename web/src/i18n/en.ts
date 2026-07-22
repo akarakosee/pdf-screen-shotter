@@ -41,6 +41,7 @@ export const en = {
   removeFile: 'Remove {name}',
   filePages: '{n} pages',
   desktopAppLink: 'Get the desktop app',
+  adSpace: 'Ad space',
 } as const;
 
 export type Strings = { [K in keyof typeof en]: string };
