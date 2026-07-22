@@ -4,14 +4,27 @@
 // CI-enforced assertion that ZERO network requests carry file bytes.
 
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { unzipSync } from 'fflate';
 
 const FIXTURES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../test/fixtures');
 const f = (...p: string[]) => path.join(FIXTURES, ...p);
 
 async function addFiles(page: Page, files: string[]) {
   await page.locator('input[type=file]').setInputFiles(files);
+}
+
+/** Uploads sample-20p.pdf's real bytes under an arbitrary display name, so
+ * naming edge cases (Turkish/special characters, spaces) can be tested
+ * without committing extra binary fixtures. */
+async function addFileAs(page: Page, name: string) {
+  await page.locator('input[type=file]').setInputFiles({
+    name,
+    mimeType: 'application/pdf',
+    buffer: readFileSync(f('sample-20p.pdf')),
+  });
 }
 
 test('full flow: upload → options → convert → ZIP download (R1/R2/R3/R4/R6)', async ({
@@ -37,6 +50,69 @@ test('full flow: upload → options → convert → ZIP download (R1/R2/R3/R4/R6
   await page.getByRole('button', { name: 'Download ZIP' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe('sample-20p_pages.zip');
+});
+
+test('downloaded ZIP is a real file containing the expected page entries, with Turkish/special-character naming (R4/R6)', async ({
+  page,
+}) => {
+  // Regression: a prior report claimed Convert produced no downloadable
+  // result. Earlier tests only checked the download event's suggestedFilename
+  // — never that a real file lands on disk with real, valid contents. This
+  // saves the download and unzips it.
+  await page.goto('/pdf-to-png/');
+  await addFileAs(page, 'Özgeçmiş Taslağı (v2).pdf');
+  await expect(page.getByText('20 pages')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('textbox').fill('1-3');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Convert', exact: true }).click();
+  await expect(page.getByText('3 pages converted.')).toBeVisible({ timeout: 30_000 });
+  await page.getByRole('button', { name: 'Download ZIP' }).click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toBe('Özgeçmiş Taslağı (v2)_pages.zip');
+  const zipPath = await download.path();
+  expect(zipPath, 'download must actually save a file to disk').toBeTruthy();
+
+  const entries = unzipSync(readFileSync(zipPath!));
+  expect(Object.keys(entries).sort()).toEqual([
+    'Özgeçmiş Taslağı (v2)_page_001.png',
+    'Özgeçmiş Taslağı (v2)_page_002.png',
+    'Özgeçmiş Taslağı (v2)_page_003.png',
+  ]);
+  for (const bytes of Object.values(entries)) {
+    expect(bytes.length).toBeGreaterThan(1000); // not an empty/placeholder entry
+    // PNG magic bytes: 89 50 4E 47 0D 0A 1A 0A
+    expect([...bytes.slice(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  }
+});
+
+test('a single converted page downloads directly as an image, not a ZIP (R6)', async ({
+  page,
+}) => {
+  // PRD R6's single-page branch is a common off-by-one spot: confirm it's
+  // reachable and produces a real, valid image file.
+  await page.goto('/pdf-to-png/');
+  await addFileAs(page, 'tek sayfa.pdf');
+  await expect(page.getByText('20 pages')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('textbox').fill('1');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Convert', exact: true }).click();
+  await expect(page.getByText('1 pages converted.')).toBeVisible({ timeout: 30_000 });
+
+  const downloadButton = page.getByRole('button', { name: 'Download' });
+  await expect(downloadButton).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Download ZIP' })).toHaveCount(0);
+  await downloadButton.click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toBe('tek sayfa_page_001.png');
+  const filePath = await download.path();
+  expect(filePath, 'download must actually save a file to disk').toBeTruthy();
+  const bytes = readFileSync(filePath!);
+  expect(bytes.length).toBeGreaterThan(1000);
+  expect([...bytes.slice(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 });
 
 test('invalid range blocks convert (R2)', async ({ page }) => {

@@ -238,7 +238,50 @@ start/preview/cancel; worker→UI ready/preview-done/progress/page-error/file-er
 done/fatal. ArrayBuffers transferred, not copied. Cancel cooperative per page; fatal →
 JobController terminates and respawns worker.
 
-## Fixtures
+## Investigated-and-not-reproduced: "Convert produces no downloadable result"
+
+Reported 2026-07-22 as a live bug against R4/R6. Full rigorous trace performed
+(fresh `npm ci`, both `astro dev` and built `astro preview`, Chromium + Firefox
++ WebKit, single-page and 8-page real PDFs, Turkish/special-character/space
+filenames, DPI changed before Convert, explicit page ranges) — **could not
+reproduce in any tested configuration.** Every stage of the pipeline was
+directly confirmed working, not just assumed:
+- worker reaches `done` reliably; `zip.toBlob()` and the single-vs-multi
+  branch (`succeeded === 1 && lastSingle`) both verified correct, including
+  the exact single-page-download-not-zip case the report called out as a
+  likely off-by-one spot.
+- `ResultPanel`'s download button is genuinely wired to `triggerDownload()`;
+  real `download` events fire in all three engines with correct
+  `suggestedFilename()`.
+- naming end-to-end confirmed correct for `Özgeçmiş Taslağı (v2).pdf`-style
+  input: the sanitized name is correct both as the top-level browser download
+  filename AND as ZIP entry names, with the UTF-8 flag bit correctly set
+  (verified with Python's `zipfile`, which respects it — a plain `unzip` CLI
+  on macOS ignores the flag and shows mojibake, which is that tool's
+  limitation, not a bug here).
+- new permanent regression coverage added in `e2e/pdf-to-png.spec.ts` per this
+  investigation (the previous suite only checked `suggestedFilename()`, never
+  that a real file lands on disk with real contents): one test saves the
+  downloaded ZIP and unzips it, asserting the exact page-entry names and PNG
+  magic bytes; another does the same for the single-page direct-download
+  branch.
+
+Two false alarms hit along the way, both artifacts of the diagnostic scripts,
+not the app: (1) a `Blob` embedded in a debug log object silently broke
+Playwright's `page.evaluate()` return-value serialization, briefly looking
+like a page reload; (2) Astro dev mode injects a hidden `<code>` block with
+the island's full serialized props (including every i18n string) for its dev
+toolbar, which coincidentally text-matched loose `getByText()` regexes in
+scratch scripts (never an issue in the actual committed e2e suite, which
+already scoped its locators correctly).
+
+**Leading hypothesis, unconfirmed:** the report likely came from a browser
+tab left open since before the two immediately-preceding hotfixes (preview()
+gaining a catch around `engine.open()`, and `JobController`'s respawn cap) —
+i.e., the same class of stale-session bug as those two reports, not a new
+regression. If this recurs, get: exact browser + version, the actual PDF (not
+a fixture), and whether the tab/dev-server had been open since before commits
+`8f7e8b7`/`3f7efd1`.
 
 `test/fixtures/`: sample-20p.pdf + golden-sample-20p-p1-150dpi.png (PyMuPDF ref) +
 mupdf-sample-20p-p1-300dpi.png. Never regenerate.
