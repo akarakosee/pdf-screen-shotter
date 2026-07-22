@@ -319,6 +319,158 @@
       color-mix(in srgb, var(--color-amber-dark) 55%, var(--color-teal-dark)) 100%
     );
   }
+
+  /* Developing Tray (ADR-006): each real thumbnail "develops" as it arrives —
+     desaturated/dark to full color with a slight settle-bounce, plus a
+     scanning wash bar while the transition runs. Motivated by the actual
+     render event, not decorative. */
+  .tray-cell {
+    background: var(--color-bg-2-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .tray-cell--develop {
+    animation:
+      tray-develop 700ms ease-out both,
+      tray-settle 260ms var(--ease-spring) 700ms both;
+  }
+  .tray-cell--develop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(232, 182, 95, 0.5) 45%,
+      transparent 100%
+    );
+    animation: tray-scan 700ms ease-out both;
+  }
+
+  /* Filmstrip (ADR-006): replaces the banned 3-equal-card "How it works"
+     pattern with a single connected object — sprocket-hole dividers, a
+     slightly raised middle frame — read as one physical film strip, not
+     three interchangeable boxes. */
+  .filmstrip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+  }
+  .dark .filmstrip {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .filmstrip-frame {
+    position: relative;
+    padding: 22px 18px 18px;
+    background: var(--color-surface);
+  }
+  .dark .filmstrip-frame {
+    background: var(--color-surface-dark);
+  }
+  .filmstrip-frame + .filmstrip-frame {
+    border-left: 1px dashed rgba(0, 0, 0, 0.14);
+  }
+  .dark .filmstrip-frame + .filmstrip-frame {
+    border-left-color: rgba(255, 255, 255, 0.14);
+  }
+  .filmstrip-frame--mid {
+    transform: translateY(-6px);
+  }
+  .filmstrip-sprockets {
+    position: absolute;
+    top: 7px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+  .filmstrip-sprockets::before,
+  .filmstrip-sprockets::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 1px;
+    background: rgba(0, 0, 0, 0.12);
+  }
+  .dark .filmstrip-sprockets::before,
+  .dark .filmstrip-sprockets::after {
+    background: rgba(255, 255, 255, 0.14);
+  }
+  @media (max-width: 640px) {
+    .filmstrip {
+      grid-template-columns: 1fr;
+    }
+    .filmstrip-frame + .filmstrip-frame {
+      border-left: none;
+      border-top: 1px dashed rgba(0, 0, 0, 0.14);
+    }
+    .dark .filmstrip-frame + .filmstrip-frame {
+      border-top-color: rgba(255, 255, 255, 0.14);
+    }
+    .filmstrip-frame--mid {
+      transform: none;
+    }
+  }
+
+  /* Scroll-reveal (ADR-006, tool pages): "How it works"/FAQ fade+drift in
+     once, on first intersection. JS toggles .reveal-in; reduced-motion users
+     get it added immediately (see ToolPage.astro's script) and the global
+     reduced-motion rule also collapses the transition to 0. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  .reveal.reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity var(--duration-base) var(--ease-base),
+      transform var(--duration-base) var(--ease-base);
+  }
+}
+
+@keyframes tray-develop {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+    filter: brightness(0.15) contrast(1.6) saturate(0.4);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(0.15) contrast(1.6) saturate(0.4);
+  }
+  60% {
+    filter: brightness(1) contrast(1) saturate(1);
+  }
+  100% {
+    filter: brightness(1) contrast(1) saturate(1);
+    transform: scale(1.03);
+  }
+}
+@keyframes tray-settle {
+  0% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes tray-scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
 
 @keyframes dz-breathe {
@@ -327,7 +479,7 @@
     border-color: rgba(0, 0, 0, 0.09);
   }
   50% {
-    border-color: rgba(27, 90, 83, 0.2);
+    border-color: rgba(27, 90, 83, 0.32);
   }
 }
 @keyframes dz-breathe-dark {
@@ -336,7 +488,7 @@
     border-color: rgba(255, 255, 255, 0.1);
   }
   50% {
-    border-color: rgba(46, 145, 134, 0.2);
+    border-color: rgba(46, 145, 134, 0.32);
   }
 }
 @keyframes fade-in {
