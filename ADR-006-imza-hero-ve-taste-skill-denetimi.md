@@ -155,16 +155,27 @@ Saf CSS/HTML, yeni JS gerekmez.
    görsel olarak doğrulandı.)
 6. [x] Lighthouse CI yeniden çalıştırılır (özellikle ana sayfa LCP/CLS — yeni WASM
    yükü nedeniyle), 22 unit + 9 e2e yeşil kalmalı, screenshot turu yenilenir.
-   (done 2026-07-22, **kısmi bulgu içeriyor** — bkz. CLAUDE.md "ADR-006 signature hero"
-   faz kaydı için tam detay: CLS hedefi tutuyor (0.0000, her iki sayfada), ama ana sayfa
-   `accessibility` kategorisi 0.93 ile ≥0.95 eşiğinin altında kaldı — iki kez ölçüldü, iki
-   kez aynı sonuç (deterministik, flake değil): (a) tepsi başlığındaki "DEVELOPING TRAY"
-   etiketinin renk kontrastı 3.35:1 (gerekli 4.5:1), (b) filmstrip'in `<h3>` başlıkları
-   sayfada önce bir `<h2>` gelmeden kullanılıyor (heading-order ihlali). Bu regresyon bu
-   ADR'ın kapsamında bırakıldı — düzeltme ayrı bir görev/oturumda yapılmalı, kod bu görev
-   kapsamında değiştirilmedi. Diğer tüm gate'ler yeşil: 26 unit + 11 e2e, build + WASM
-   bütçesi 4.54 MB gzip (bütçe 6 MB), `/pdf-to-png` Lighthouse tam yeşil (98/100/96/100,
-   CLS 0). best-practices 96 her iki sayfada da bilinen `'unsafe-inline'` CSP boşluğu.)
+   (done 2026-07-22; first measurement found two deterministic accessibility
+   regressions on `/`, fixed the same day in a follow-up task — see CLAUDE.md
+   "ADR-006 signature hero" faz kaydı için tam detay: the initial run found ana sayfa
+   `accessibility` kategorisi 0.93 ile ≥0.95 eşiğinin altında kaldı — iki kez ölçüldü,
+   iki kez aynı sonuç (deterministik, flake değil): (a) tepsi başlığındaki
+   "DEVELOPING TRAY" etiketinin renk kontrastı 3.35:1 (gerekli 4.5:1), (b) filmstrip'in
+   `<h3>` başlıkları sayfada önce bir `<h2>` gelmeden kullanılıyor (heading-order
+   ihlali). Her ikisi de düzeltildi: `DevelopingTray.tsx`'in kök `<div>`'ine
+   `bg-surface dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark`
+   eklendi (diğer kartlarla aynı yüzey deseni — etiket artık ham sayfa arka planı
+   yerine yüzey tokenı üzerinde, kontrast ≥4.5:1), ve hem `index.astro` hem
+   `tr/index.astro`'da filmstrip'ten hemen önce `<h2 class="font-heading text-lg
+   font-semibold">How it works</h2>` / `Nasıl çalışır` eklendi (tool sayfalarının
+   `howItWorks` başlığıyla aynı kopya ve sınıf konvansiyonu). Düzeltme sonrası
+   yeniden ölçüm: ana sayfa **accessibility 1.00** (tüm kategoriler ≥0.95: perf 0.95,
+   accessibility 1.00, best-practices 0.96, SEO 1.00), CLS 0.0000 — hiç regresyon yok.
+   Diğer tüm gate'ler yeşil: 26 unit + 11 e2e, build 14 sayfa, `astro check` 0 hata,
+   WASM bütçesi 4.54 MB gzip (bütçe 6 MB, değişmedi), `/pdf-to-png` Lighthouse tam
+   yeşil (perf 0.98, accessibility 1.00, best-practices 0.96, SEO 1.00, CLS 0.0000).
+   best-practices 0.96 her iki sayfada da bilinen `'unsafe-inline'` CSP boşluğu,
+   yeni regresyon değil.)
 7. [x] Worker protokolü değişikliği SISTEM_TASARIMI §3.3'e işlenir (ADR-007 veya bu
    ADR'ın genişletilmesiyle).
    (done 2026-07-22: bu ADR'ın kendi metninde (§Decision.1) kayıtlı bırakıldı, ayrı bir

@@ -221,16 +221,24 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   loading the WASM engine): **CLS is 0.0000 on both `/` and `/pdf-to-png`** — the tray's
   empty and developed cells share the same reserved size, so no reflow. `/pdf-to-png`
   is fully green (98 performance / 100 accessibility / 96 best-practices / 100 SEO).
-  **`/` home page's `accessibility` score is 0.93, below the ≥0.95 gate** — measured
-  twice, identical result both times (deterministic audits, not the project's known CLS
-  timing flake): (1) the "DEVELOPING TRAY" label has a color-contrast ratio of 3.35:1
-  against its dark background (needs 4.5:1), and (2) the filmstrip's `<h3>` step
-  headings appear before any `<h2>` on the page (heading-order violation, since the
-  page's only heading before them is the `<h1>`). Both are real, code-level regressions
-  introduced by this plan's new homepage markup — not fixed here per this task's scope
-  (docs-only closeout; a code fix needs its own review cycle). performance 95/100,
-  best-practices 96/100 (the known `'unsafe-inline'` CSP gap, unchanged from prior
-  increments), SEO 100/100 on home. Screenshot pass re-run (360/768/1280 × light/dark):
+  The first re-measure found `/` home page's `accessibility` score at 0.93, below the
+  ≥0.95 gate — measured twice, identical result both times (deterministic audits, not
+  the project's known CLS timing flake): (1) the "DEVELOPING TRAY" label had a
+  color-contrast ratio of 3.35:1 against its dark background (needs 4.5:1), because the
+  tray's root `<div>` had no background class and the label sat directly on the page's
+  dark background instead of a card surface; (2) the filmstrip's `<h3>` step headings
+  appeared before any `<h2>` on the page (heading-order violation — the page's only
+  heading before them was the `<h1>`). Both were fixed same-day in a follow-up task:
+  `DevelopingTray.tsx`'s root element gained `bg-surface dark:bg-gradient-to-br
+  dark:from-surface-dark dark:to-bg-dark` (same surface-card pattern already used by
+  the tool-grid cards below it), and both `index.astro` and `tr/index.astro` gained a
+  real `<h2>` ("How it works" / "Nasıl çalışır", matching the tool pages' `howItWorks`
+  string and `font-heading text-lg font-semibold` class) directly above the filmstrip.
+  Re-measured after the fix: **home page accessibility is 1.00**, all four categories
+  ≥0.95 on both pages (home: 95 performance / 100 accessibility / 96 best-practices /
+  100 SEO; /pdf-to-png: 98 / 100 / 96 / 100), **CLS still 0.0000 on both** — no
+  regression from the added background/heading. best-practices 96/100 on both pages is
+  the known `'unsafe-inline'` CSP gap, unchanged from prior increments. Screenshot pass re-run (360/768/1280 × light/dark):
   confirmed filmstrip is single-column with a top border (not left) at mobile width,
   options-phase asymmetric grid renders correctly, FAQ clusters show one hairline per
   group not per row, and the tray's idle/developed cells never visibly reflow. Note:
