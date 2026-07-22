@@ -27,3 +27,5 @@ Output/
 .vscode/
 *.swp
 *.zip
+
+.worktrees/
