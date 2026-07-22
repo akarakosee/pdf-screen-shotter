@@ -192,6 +192,25 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
      instances are created for 4 rapid fatals (not 5+), `onUnavailable` fires
      exactly once, and isolated fatals spaced >10s apart never trip the cap.
 
+## Motion + elevation facts (ADR-005 — never re-derive)
+
+Base stays the ADR-004 darkroom palette/fonts; ADR-005 amends (does not revert).
+The second brief's marigold #D89000 / indigo #242448 / dot-wave hero background were
+REJECTED (written against a stale pre-darkroom doc snapshot; amber/russet already own
+the warm-accent role). No new color tokens exist.
+- Tokens: `--ease-spring: cubic-bezier(0.2, 0.9, 0.3, 1.2)`; `--shadow-3: 0 12px 32px
+  rgba(0,0,0,.14)` (dark override rgba(0,0,0,.5)) — shadow-3 ONLY on drag-overlay +
+  ResultPanel. Card top-highlight: inset 0 1px 0 rgba(255,252,245,.65) light /
+  rgba(255,255,255,.05) dark.
+- Motion inventory (binding; anything outside it = silent drift): button hover -1px +
+  pseudo-element shadow fade 120ms, active scale(0.985); DropZone idle 4s breathing
+  border (20% teal); dragover overlay warm tint 150ms + label 0.96→1 spring; FileChip
+  8px slide-up, 40ms stagger; phase crossfade + 6px drift 200ms; progress `scaleX`
+  fill with amber tail; ResultPanel spring entrance — shimmer reuse on ResultPanel was
+  explicitly rejected (hero's shimmer stays the single signature, ADR-004 clause).
+- All motion transform/opacity only; reduced-motion killed by the existing global rule;
+  Lighthouse ≥95 / CLS ≤0.02 gates unchanged.
+
 ## Implementation decisions (one-line rationale each)
 
 - Tailwind v4 (@tailwindcss/vite, CSS `@theme` tokens) instead of v3 JS config —
