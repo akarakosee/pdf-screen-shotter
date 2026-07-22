@@ -106,10 +106,20 @@ animasyon kaybeder.
 
 ## Action Items
 
-1. [ ] global.css: `--ease-spring`, `--shadow-3`, breathing/pop/chip/phase
+1. [x] global.css: `--ease-spring`, `--shadow-3`, breathing/pop/chip/phase
    keyframe'leri, kart üst-highlight ve kağıt-deste sınıfları.
-2. [ ] Bileşen hareketi: Button, DropZone (idle + dragover overlay), FileChip
+2. [x] Bileşen hareketi: Button, DropZone (idle + dragover overlay), FileChip
    stagger, ToolShell faz geçişleri, ProgressPanel scaleX + amber kuyruk,
-   ResultPanel kart + spring giriş.
-3. [ ] Gate koşusu: unit + e2e + build + wasm bütçesi + Lighthouse (ADR-004 item 4
-   burada kapanır) + screenshot turu (360/768/1280 × açık/koyu, hover/drag dahil).
+   ResultPanel kart + spring giriş. Görsel turda bulunan tek düzeltme: açık mod
+   drag-overlay tint'i %55 parşömen olarak çok ağırdı (beyaz kartları grileştirip
+   çamurlaştırıyordu) → `rgba(216, 186, 130, 0.12)`'ye çekildi, koyu modun
+   inceliğiyle eşleşiyor.
+3. [x] Gate koşusu (2026-07-22): 22 unit + 9 e2e yeşil (suite 8 değil 9 test
+   içeriyordu; R7 testi ayrıca güncellendi — Chromium artık blob: yüklemelerini
+   request olarak raporluyor, same-origin blob: URL'leri cihaz-içi bellek okuması
+   olduğundan offender sayılmaz); build + wasm bütçesi (4.54 MB gzip / 6) OK;
+   Lighthouse CI assertion'ları geçti (ADR-004 action item 4 kapandı) — 5 koşunun
+   1'inde ana sayfada CLS 0.10 flake'i görüldü (font-zamanlama varyansı; fontlar
+   preload'lu, bu geçiş ana sayfaya yük-anı animasyonu eklemedi, hareket katmanı
+   suçlu değil); screenshot turu 360/768/1280 × açık/koyu + drag state'leri
+   yeniden çekildi ve incelendi.

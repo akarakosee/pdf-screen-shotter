@@ -192,6 +192,17 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
      instances are created for 4 rapid fatals (not 5+), `onUnavailable` fires
      exactly once, and isolated fatals spaced >10s apart never trip the cap.
 
+- [x] **ADR-005 motion + elevation pass** (done 2026-07-22): tokens/keyframes in
+  global.css, component wiring (Button/DropZone/FileChip/ToolShell/Progress/
+  Result/Preview). Gate run: 22 unit + **9** e2e green (suite is 9 tests, not the
+  8 recorded earlier), build + wasm budget OK, Lighthouse CI assertions pass
+  (ADR-004 items 4–5 closed; one CLS 0.10 flake in 1 of 5 home runs — font
+  timing, fonts are preloaded, motion layer not implicated). R7 e2e updated:
+  Chromium now reports blob: loads as requests; same-origin blob: URLs are
+  allowed (local memory reads, no egress). Screenshot pass re-run (360/768/1280
+  × light/dark + drag states); one fix from it: light-mode drag overlay tint
+  reduced from 55% parchment (greyed the white cards) to rgba(216,186,130,.12).
+
 ## Motion + elevation facts (ADR-005 — never re-derive)
 
 Base stays the ADR-004 darkroom palette/fonts; ADR-005 amends (does not revert).

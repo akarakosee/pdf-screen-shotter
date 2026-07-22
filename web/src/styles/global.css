@@ -262,7 +262,9 @@
 
   /* Drag overlay: warm darkroom tint fading in over 150ms. */
   .drag-overlay {
-    background: rgba(234, 226, 210, 0.55);
+    /* Warm parchment-amber haze — kept as subtle as the dark tint; heavier
+       washes grey the white card surfaces underneath. */
+    background: rgba(216, 186, 130, 0.12);
     animation: fade-in 150ms var(--ease-base) both;
   }
   .dark .drag-overlay {
