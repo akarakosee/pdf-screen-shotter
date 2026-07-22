@@ -205,8 +205,14 @@ test('R7: zero network requests carry file bytes during conversion', async ({ pa
   const offenders: string[] = [];
   page.on('request', (req) => {
     // Any request with a body, or any non-local request after load, is suspect.
+    // Same-origin blob: object URLs (preview image, download output) are local
+    // memory reads — Chromium reports them as requests, but no bytes can leave
+    // the device through them, so they are not offenders.
     if (req.postData() && req.postData()!.length > 0) offenders.push(`${req.method()} ${req.url()}`);
-    if (!req.url().startsWith('http://localhost:4321')) offenders.push(req.url());
+    const local =
+      req.url().startsWith('http://localhost:4321') ||
+      req.url().startsWith('blob:http://localhost:4321');
+    if (!local) offenders.push(req.url());
   });
   await page.goto('/pdf-to-png/');
   await addFiles(page, [f('sample-20p.pdf')]);
