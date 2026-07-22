@@ -54,6 +54,7 @@ export type UiToWorkerMessage =
   | { type: 'start'; files: ArrayBuffer[]; meta: FileMeta[]; options: ExportOptions }
   | { type: 'preview'; file: ArrayBuffer; dpi: number }
   | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
+  | { type: 'demo-render'; file: ArrayBuffer; dpi: number; maxPages: number } // ADR-006: homepage live hero demo
   | { type: 'cancel' };
 
 export type WorkerToUiMessage =
@@ -65,4 +66,7 @@ export type WorkerToUiMessage =
   | { type: 'page-error'; error: PageError } // page skipped, run continues
   | { type: 'file-error'; fileId: string; message: string } // file skipped, next file
   | { type: 'done'; result: ExportResult }
+  | { type: 'demo-page'; page: number; blob: Blob } // ADR-006: one real thumbnail arrived
+  | { type: 'demo-done' } // ADR-006: demo finished
+  | { type: 'demo-error'; message: string } // ADR-006: demo failed, never fatal
   | { type: 'fatal'; message: string }; // JobController terminates + respawns worker
