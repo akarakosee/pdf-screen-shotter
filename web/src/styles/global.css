@@ -156,22 +156,25 @@
    slightly tilting gradient — the one piece of intentional "glow" the
    darkroom pivot carves out as an exception to the anti-slop bans. */
 @layer components {
-  .contact-card {
+  /* Selective card accent for Prose-template pages (About/Contact/Privacy/
+     Terms) — body copy stays plain editorial text; only call-out blocks like
+     contact links or a "verify it yourself" note use this. */
+  .prose-accent {
     margin-top: 24px;
     border-radius: var(--radius-m);
     border: 1px solid rgba(0, 0, 0, 0.09);
     background: var(--color-surface);
     padding: 22px;
   }
-  .dark .contact-card {
+  .dark .prose-accent {
     border-color: rgba(255, 255, 255, 0.1);
     background: var(--color-surface-dark);
   }
-  .contact-card a {
+  .prose-accent a {
     font-family: var(--font-mono);
     color: var(--color-amber);
   }
-  .dark .contact-card a {
+  .dark .prose-accent a {
     color: var(--color-amber-dark);
   }
 
@@ -464,6 +467,43 @@
     .dark .filmstrip-frame + .filmstrip-frame {
       border-top-color: rgba(255, 255, 255, 0.14);
     }
+  }
+
+  /* AdSlot "negative frame" corner marks (taste upgrade, secondary pages) —
+     purely decorative, the slot itself carries aria-hidden. */
+  .corner-mark {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--color-amber);
+    opacity: 0.5;
+  }
+  .dark .corner-mark {
+    border-color: var(--color-amber-dark);
+  }
+  .corner-mark-tl {
+    top: 10px;
+    left: 10px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+  }
+  .corner-mark-tr {
+    top: 10px;
+    right: 10px;
+    border-top: 2px solid;
+    border-right: 2px solid;
+  }
+  .corner-mark-bl {
+    bottom: 10px;
+    left: 10px;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+  }
+  .corner-mark-br {
+    bottom: 10px;
+    right: 10px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
   }
 
   /* Scroll-reveal (ADR-006, tool pages): "How it works"/FAQ fade+drift in
