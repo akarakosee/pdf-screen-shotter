@@ -128,6 +128,9 @@ function chunk<T>(items: T[], size: number): T[][] {
   if (reduce || !('IntersectionObserver' in window)) {
     for (const el of targets) el.classList.add('reveal-in');
   } else {
+    // rootMargin extends the trigger zone 200px past the real viewport edge,
+    // so sections just past the fold (like FAQ, below "How it works") reveal
+    // as the user approaches rather than only once fully in view.
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -137,8 +140,19 @@ function chunk<T>(items: T[], size: number): T[][] {
           }
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.15, rootMargin: '200px 0px' },
     );
     for (const el of targets) io.observe(el);
+
+    // Fallback: guarantee no [data-reveal] section stays permanently
+    // invisible for visitors who never trigger a real intersection —
+    // screen readers, print, automated tooling, or a page tall enough that
+    // rootMargin alone doesn't reach it. Whatever hasn't revealed within
+    // 500ms gets it directly; the normal scroll-triggered fade-in is
+    // unaffected for anything that already revealed before the timer fires.
+    setTimeout(() => {
+      for (const el of targets) el.classList.add('reveal-in');
+      io.disconnect();
+    }, 500);
   }
 </script>
