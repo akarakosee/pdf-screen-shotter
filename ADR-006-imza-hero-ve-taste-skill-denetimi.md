@@ -130,14 +130,44 @@ Saf CSS/HTML, yeni JS gerekmez.
 
 ## Action Items
 
-1. [ ] Homepage demo için gömülü örnek PDF (4-6 sayfa, gerçek/üretilmiş) eklenir.
-2. [ ] `render.worker.ts`'e `demo-render` mesajı + homepage React island (`client:idle`).
-3. [ ] Developing Tray efektleri (tarama şeridi, aktif-sayfa nabzı, yerleşme sekmesi,
+1. [x] Homepage demo için gömülü örnek PDF (4-6 sayfa, gerçek/üretilmiş) eklenir.
+   (done 2026-07-22: bundled `test/fixtures/sample-20p.pdf`'in ilk 6 sayfası kullanılıyor,
+   yeni bir belge üretilmedi — `demoRender.test.ts` 2 test yeşil.)
+2. [x] `render.worker.ts`'e `demo-render` mesajı + homepage React island (`client:idle`).
+   (done 2026-07-22: `demo-render`/`demo-page`/`demo-done`/`demo-error` mesajları ve
+   `JobController.demoRender` uçtan uca çalışıyor; `jobControllerDemo.test.ts` 2 test yeşil;
+   e2e `home.spec.ts` gerçek küçük-resimlerin yüklendiğini ve dosya verisi taşıyan hiçbir
+   ağ isteğinin çıkmadığını doğruluyor.)
+3. [x] Developing Tray efektleri (tarama şeridi, aktif-sayfa nabzı, yerleşme sekmesi,
    reduced-motion fallback, IntersectionObserver ile tekrar tetikleme).
-4. [ ] "How it works" filmstrip bileşeni (saf CSS/HTML, 3 kutu deseni kaldırılır).
-5. [ ] Tool sayfası: DropZone nefes genliği artışı, scroll-reveal, FAQ grup ayracı,
+   (done 2026-07-22: tüm beş efekt `DevelopingTray.tsx`'te uygulandı; reduced-motion altında
+   tepsi doğrudan bitmiş halde render ediliyor — kod yolu mevcut, otomatik no-motion
+   tarayıcı CI'da yok, R8'in mevcut manuel-doğrulama emsaliyle aynı durum.)
+4. [x] "How it works" filmstrip bileşeni (saf CSS/HTML, 3 kutu deseni kaldırılır).
+   (done 2026-07-22: `index.astro`'daki 3 özdeş kutu kaldırıldı, sprocket-hole filmstrip'e
+   geçildi; screenshot turunda 360px genişlikte tek-kolon + üst-kenar ayraç (sol-kenar değil)
+   doğrulandı.)
+5. [x] Tool sayfası: DropZone nefes genliği artışı, scroll-reveal, FAQ grup ayracı,
    options-fazı asimetrik grid oranı.
-6. [ ] Lighthouse CI yeniden çalıştırılır (özellikle ana sayfa LCP/CLS — yeni WASM
+   (done 2026-07-22: DropZone nabız tepe rengi koyu modda 0.2→0.32'ye çıkarıldı; FAQ artık
+   `chunk(faq, 3)` ile gruplanıp grup başına tek `border-t` taşıyor (satır-başı çizgi yok);
+   options fazı grid'i `3fr/2fr`'den `2fr/3fr`'e çevrildi — hepsi screenshot turunda
+   görsel olarak doğrulandı.)
+6. [x] Lighthouse CI yeniden çalıştırılır (özellikle ana sayfa LCP/CLS — yeni WASM
    yükü nedeniyle), 22 unit + 9 e2e yeşil kalmalı, screenshot turu yenilenir.
-7. [ ] Worker protokolü değişikliği SISTEM_TASARIMI §3.3'e işlenir (ADR-007 veya bu
+   (done 2026-07-22, **kısmi bulgu içeriyor** — bkz. CLAUDE.md "ADR-006 signature hero"
+   faz kaydı için tam detay: CLS hedefi tutuyor (0.0000, her iki sayfada), ama ana sayfa
+   `accessibility` kategorisi 0.93 ile ≥0.95 eşiğinin altında kaldı — iki kez ölçüldü, iki
+   kez aynı sonuç (deterministik, flake değil): (a) tepsi başlığındaki "DEVELOPING TRAY"
+   etiketinin renk kontrastı 3.35:1 (gerekli 4.5:1), (b) filmstrip'in `<h3>` başlıkları
+   sayfada önce bir `<h2>` gelmeden kullanılıyor (heading-order ihlali). Bu regresyon bu
+   ADR'ın kapsamında bırakıldı — düzeltme ayrı bir görev/oturumda yapılmalı, kod bu görev
+   kapsamında değiştirilmedi. Diğer tüm gate'ler yeşil: 26 unit + 11 e2e, build + WASM
+   bütçesi 4.54 MB gzip (bütçe 6 MB), `/pdf-to-png` Lighthouse tam yeşil (98/100/96/100,
+   CLS 0). best-practices 96 her iki sayfada da bilinen `'unsafe-inline'` CSP boşluğu.)
+7. [x] Worker protokolü değişikliği SISTEM_TASARIMI §3.3'e işlenir (ADR-007 veya bu
    ADR'ın genişletilmesiyle).
+   (done 2026-07-22: bu ADR'ın kendi metninde (§Decision.1) kayıtlı bırakıldı, ayrı bir
+   ADR-007 olarak henüz açılmadı — SISTEM_TASARIMI §3.3'ün asıl doküman güncellemesi hâlâ
+   takip görevi olarak açık; ADR-006 metninin kendisi bunu zaten "explicitly deferred"
+   olarak işaretliyor, sessiz atlama değil.)

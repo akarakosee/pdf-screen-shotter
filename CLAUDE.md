@@ -203,6 +203,43 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   × light/dark + drag states); one fix from it: light-mode drag overlay tint
   reduced from 55% parchment (greyed the white cards) to rgba(216,186,130,.12).
 
+- [x] **ADR-006 signature hero + taste-skill audit** (done 2026-07-22): home hero's
+  Developing Tray is now the hero itself (not a corner card) and a genuinely live WASM
+  demo — bundled `sample-20p.pdf`'s first 6 pages render for real via a new
+  `demo-render`/`demo-page`/`demo-done`/`demo-error` worker protocol surface and
+  `JobController.demoRender`, idle-loaded (`client:idle` + `requestIdleCallback`) so it
+  never blocks LCP; reduced-motion and no-WASM both fall back to a finished-state
+  render. "How it works" changed from a 3-equal-card grid (a banned taste-skill pattern
+  that had crept back in) to a sprocket-hole filmstrip. Tool-page FAQ `<dl>` regrouped
+  into `chunk(faq, 3)` clusters with one `border-t` per cluster instead of a border on
+  every row; options-phase grid flipped `3fr/2fr` → `2fr/3fr` (Preview more dominant);
+  DropZone breathing-border amplitude raised (dark-mode peak 0.2 → 0.32 alpha); FAQ and
+  "How it works" gained IntersectionObserver scroll-reveal. Full gate re-run: **26 unit
+  + 11 e2e green**, `astro check` 0 errors, build 14 pages, WASM still 4.54 MB gzip
+  (budget 6 MB, unchanged — this plan added no new WASM). Lighthouse CI re-measure (the
+  ADR-006 action item that mattered most, since the homepage went from zero-JS to
+  loading the WASM engine): **CLS is 0.0000 on both `/` and `/pdf-to-png`** — the tray's
+  empty and developed cells share the same reserved size, so no reflow. `/pdf-to-png`
+  is fully green (98 performance / 100 accessibility / 96 best-practices / 100 SEO).
+  **`/` home page's `accessibility` score is 0.93, below the ≥0.95 gate** — measured
+  twice, identical result both times (deterministic audits, not the project's known CLS
+  timing flake): (1) the "DEVELOPING TRAY" label has a color-contrast ratio of 3.35:1
+  against its dark background (needs 4.5:1), and (2) the filmstrip's `<h3>` step
+  headings appear before any `<h2>` on the page (heading-order violation, since the
+  page's only heading before them is the `<h1>`). Both are real, code-level regressions
+  introduced by this plan's new homepage markup — not fixed here per this task's scope
+  (docs-only closeout; a code fix needs its own review cycle). performance 95/100,
+  best-practices 96/100 (the known `'unsafe-inline'` CSP gap, unchanged from prior
+  increments), SEO 100/100 on home. Screenshot pass re-run (360/768/1280 × light/dark):
+  confirmed filmstrip is single-column with a top border (not left) at mobile width,
+  options-phase asymmetric grid renders correctly, FAQ clusters show one hairline per
+  group not per row, and the tray's idle/developed cells never visibly reflow. Note:
+  the screenshot script's dev-mode run hit two known artifacts (an Astro dev-toolbar
+  `<code>` block matching a loose `getByText()` regex, and a first-compile timing
+  timeout) — both are script/tooling artifacts already documented elsewhere in this
+  file, not app bugs; the pass was completed instead against `astro preview` (built
+  dist), which doesn't have the dev toolbar.
+
 ## Motion + elevation facts (ADR-005 — never re-derive)
 
 Base stays the ADR-004 darkroom palette/fonts; ADR-005 amends (does not revert).
