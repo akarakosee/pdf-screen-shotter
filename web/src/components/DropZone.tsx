@@ -71,8 +71,21 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
     };
   }, [accept, onPreload]);
 
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".pdf,application/pdf"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          accept(e.currentTarget.files);
+          e.currentTarget.value = '';
+        }}
+      />
       <div
         role="button"
         tabIndex={0}
@@ -84,42 +97,55 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
             inputRef.current?.click();
           }
         }}
-        onMouseEnter={onPreload}
-        className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-m border p-10 text-center transition-colors duration-[200ms] ease-[cubic-bezier(0.2,0,0,1)] ${
+        onMouseEnter={() => {
+          setIsHovered(true);
+          onPreload();
+        }}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`group relative flex cursor-pointer flex-col items-center justify-center gap-5 rounded-xl border-2 border-dashed p-10 py-[140px] text-center transition-all duration-300 ease-out ${
           dragover
-            ? 'border-amber bg-surface shadow-[0_0_0_3px_rgba(232,182,95,0.15)] dark:border-amber-dark dark:bg-surface-dark'
-            : 'dropzone-breathe card-lit bg-surface hover:border-amber dark:bg-surface-dark dark:hover:border-amber-dim-dark'
-        } ${hasFiles ? 'py-6' : 'py-14'}`}
+            ? 'border-amber bg-gradient-to-b from-amber/10 to-[#F0C778]/5 shadow-[0_0_40px_rgba(232,182,95,0.15)] dark:border-amber-dark dark:from-amber-dark/20 dark:to-transparent'
+            : 'border-ink-muted/20 bg-surface/50 hover:border-amber/50 hover:bg-surface dark:border-ink-muted-dark/20 dark:bg-surface-dark/50 dark:hover:border-amber-dark/50 dark:hover:bg-surface-dark'
+        }`}
       >
-        <span className="flex h-11 w-11 items-center justify-center rounded-[9px] bg-gradient-to-br from-amber to-russet text-[#1D1108] dark:from-amber-dark dark:to-russet">
-          <FileUp aria-hidden="true" className="h-5 w-5" strokeWidth={1.75} />
-        </span>
+        {(isHovered || dragover) && <div className="glow-border-beam" />}
+        {isHovered && !dragover && (
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 animate-dropzone-ping rounded-xl border-2 border-amber/60 dark:border-amber-dark/60" style={{ animationDelay: '0s' }} />
+            <div className="absolute inset-0 animate-dropzone-ping rounded-xl border-2 border-amber/60 dark:border-amber-dark/60" style={{ animationDelay: '0.4s' }} />
+            <div className="absolute inset-0 animate-dropzone-ping rounded-xl border-2 border-amber/60 dark:border-amber-dark/60" style={{ animationDelay: '0.8s' }} />
+            <div className="absolute inset-0 animate-dropzone-ping rounded-xl border-2 border-amber/60 dark:border-amber-dark/60" style={{ animationDelay: '1.2s' }} />
+          </div>
+        )}
+        <div className="relative flex items-center justify-center z-10">
+          {isHovered && !dragover && (
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute inset-0 animate-custom-ping rounded-2xl border-[3px] border-amber/60 blur-[2px] dark:border-amber-dark/60" style={{ animationDelay: '0s' }} />
+              <div className="absolute inset-0 animate-custom-ping rounded-2xl border-[3px] border-amber/60 blur-[2px] dark:border-amber-dark/60" style={{ animationDelay: '0.3s' }} />
+              <div className="absolute inset-0 animate-custom-ping rounded-2xl border-[3px] border-amber/60 blur-[2px] dark:border-amber-dark/60" style={{ animationDelay: '0.6s' }} />
+              <div className="absolute inset-0 animate-custom-ping rounded-2xl border-[3px] border-amber/60 blur-[2px] dark:border-amber-dark/60" style={{ animationDelay: '0.9s' }} />
+            </div>
+          )}
+          {dragover && (
+            <div className="absolute inset-0 animate-ping rounded-2xl bg-amber/30 dark:bg-amber-dark/30" />
+          )}
+          <span className={`relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber to-russet text-[#1D1108] shadow-lg transition-transform duration-300 dark:from-amber-dark dark:to-russet ${dragover ? 'scale-110' : 'group-hover:scale-105'}`}>
+            <FileUp aria-hidden="true" className="h-8 w-8" strokeWidth={1.75} />
+          </span>
+        </div>
         {/* key remount pops the dragover label in with the spring ease (ADR-005) */}
-        <span
-          key={dragover ? 'over' : 'idle'}
-          className={`text-sm text-ink dark:text-ink-dark ${dragover ? 'pop-in' : ''}`}
-        >
-          {dragover ? t.dropDragover : t.dropIdle}
-        </span>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            accept(e.currentTarget.files);
-            e.currentTarget.value = '';
-          }}
-        />
+        <div className="relative z-10 flex flex-col gap-1">
+          <span
+            key={dragover ? 'over' : 'idle'}
+            className={`text-lg font-medium text-ink dark:text-ink-dark ${dragover ? 'pop-in text-amber dark:text-amber-dark' : ''}`}
+          >
+            {dragover ? t.dropDragover : t.dropIdle}
+          </span>
+          <span className={`text-sm text-ink-muted transition-opacity duration-300 dark:text-ink-muted-dark ${dragover ? 'opacity-0' : 'opacity-100'}`}>
+            or click here to browse files
+          </span>
+        </div>
       </div>
-
-      {dragover && (
-        <div
-          aria-hidden="true"
-          className="drag-overlay elev-3 pointer-events-none fixed inset-2 z-50 rounded-m border-2 border-amber dark:border-amber-dark"
-        />
-      )}
     </>
   );
 }

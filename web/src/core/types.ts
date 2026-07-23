@@ -10,6 +10,19 @@ export interface ExportOptions {
   format: 'png' | 'jpg';
   jpgQuality?: number; // default 0.8
   pageRange?: string; // "1-5,8,11-13" — parsed to number[] by the range parser
+  backgroundColor?: 'white' | 'black' | 'transparent'; // default 'white'
+  deliveryMethod?: 'zip' | 'individual'; // default 'zip'; single-page results are always a direct download regardless
+}
+
+// Per-file render settings (dpi/pageRange/backgroundColor) — each file in a
+// batch renders with its own. deliveryMethod stays batch-level: it decides
+// how the ONE final ExportResult is packaged, not how any single page
+// renders, so mixing it per-file would mean one result trying to be both a
+// ZIP and a loose-files list at once.
+export interface PerFileExportOptions {
+  dpi: 100 | 150 | 200 | 300;
+  pageRange?: string;
+  backgroundColor?: 'white' | 'black' | 'transparent';
 }
 
 export interface JobFile {
@@ -38,8 +51,12 @@ export interface ExportResult {
   succeeded: number;
   failed: PageError[];
   durationMs: number;
-  output: Blob;
-  outputName: string;
+  /** Present unless deliveryMethod: 'individual' produced multiple files —
+   * in that case `pages` is set instead and `output`/`outputName` are omitted. */
+  output?: Blob;
+  outputName?: string;
+  /** deliveryMethod: 'individual' with >1 successful page: one entry per file. */
+  pages?: { name: string; blob: Blob }[];
   cancelled: boolean;
 }
 
@@ -51,16 +68,24 @@ export interface FileMeta {
 }
 
 export type UiToWorkerMessage =
-  | { type: 'start'; files: ArrayBuffer[]; meta: FileMeta[]; options: ExportOptions }
-  | { type: 'preview'; file: ArrayBuffer; dpi: number }
+  | {
+      type: 'start';
+      files: ArrayBuffer[];
+      meta: FileMeta[];
+      perFileOptions: PerFileExportOptions[]; // aligned by index with files/meta
+      format: 'png' | 'jpg';
+      jpgQuality?: number;
+      deliveryMethod?: 'zip' | 'individual';
+    }
+  | { type: 'preview-page'; file: ArrayBuffer; dpi: number; page: number; requestId: string } // ADR-007: filmstrip thumbnails
   | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
   | { type: 'demo-render'; file: ArrayBuffer; dpi: number; maxPages: number } // ADR-006: homepage live hero demo
   | { type: 'cancel' };
 
 export type WorkerToUiMessage =
   | { type: 'ready' }
-  | { type: 'preview-done'; blob: Blob }
-  | { type: 'preview-error'; message: string } // a single bad preview never tears down the worker
+  | { type: 'preview-page-done'; requestId: string; page: number; blob: Blob } // ADR-007
+  | { type: 'preview-page-error'; requestId: string; page: number; message: string } // ADR-007: a single bad thumbnail never tears down the worker
   | { type: 'inspect-done'; fileId: string; pageCount: number } // ADR-003; errors reuse file-error
   | { type: 'progress'; data: ProgressData }
   | { type: 'page-error'; error: PageError } // page skipped, run continues

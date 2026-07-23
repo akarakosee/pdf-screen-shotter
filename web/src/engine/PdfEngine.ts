@@ -34,6 +34,7 @@ export interface PdfEngine {
     dpi: number,
     format: 'png' | 'jpg',
     jpgQuality?: number,
+    backgroundColor?: 'white' | 'black' | 'transparent', // default 'white'
   ): Promise<RenderOutput>;
   /** Release WASM memory for the document. */
   close(doc: PdfDoc): void;

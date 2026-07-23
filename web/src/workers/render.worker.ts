@@ -4,10 +4,10 @@
 // ZIP stream are preserved so a partial ZIP stays downloadable.
 
 import type {
-  ExportOptions,
   ExportResult,
   FileMeta,
   PageError,
+  PerFileExportOptions,
   UiToWorkerMessage,
   WorkerToUiMessage,
 } from '../core/types';
@@ -46,9 +46,18 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   queue = queue.then(async () => {
     try {
       await ready;
-      if (msg.type === 'preview') await preview(msg.file, msg.dpi ?? PREVIEW_DPI);
+      if (msg.type === 'preview-page')
+        await previewPage(msg.file, msg.dpi ?? PREVIEW_DPI, msg.page, msg.requestId);
       else if (msg.type === 'inspect') await inspect(msg.fileId, msg.file);
-      else if (msg.type === 'start') await run(msg.files, msg.meta, msg.options);
+      else if (msg.type === 'start')
+        await run(
+          msg.files,
+          msg.meta,
+          msg.perFileOptions,
+          msg.format,
+          msg.jpgQuality ?? DEFAULT_JPG_QUALITY,
+          msg.deliveryMethod,
+        );
       else if (msg.type === 'demo-render') await demoRenderHandler(msg.file, msg.dpi, msg.maxPages);
     } catch (e) {
       // Unrecoverable (e.g. WASM OOM): JobController terminates + respawns us.
@@ -84,30 +93,50 @@ async function inspect(fileId: string, file: ArrayBuffer): Promise<void> {
   }
 }
 
-// A bad preview must never take the whole worker down with it — unlike
-// inspect()/run(), this used to have no catch around open()/renderPage(),
-// so a single unpreviewable file fell through to the outer 'fatal' handler,
-// which terminates and respawns the worker (silently dropping any other
-// queued message for the same file, e.g. its 'inspect'). preview-error is
-// scoped to this one operation instead.
-async function preview(file: ArrayBuffer, dpi: number): Promise<void> {
+// A bad thumbnail must never take the whole worker down with it — unlike
+// inspect()/run(), this used to have no catch around open()/renderPage()
+// (back when this was the single-page preview() handler), so an
+// unpreviewable file fell through to the outer 'fatal' handler, which
+// terminates and respawns the worker (silently dropping any other queued
+// message for the same file, e.g. its 'inspect'). preview-page-error is
+// scoped to this one page/request instead. ADR-007: filmstrip thumbnails,
+// one request per page, correlated by requestId (multiple pages/files can
+// be in flight from the UI at once).
+async function previewPage(
+  file: ArrayBuffer,
+  dpi: number,
+  page: number,
+  requestId: string,
+): Promise<void> {
   let doc;
   try {
     doc = await engine.open(file);
   } catch (e) {
-    console.error('[worker] preview: engine.open failed:', e);
-    post({ type: 'preview-error', message: e instanceof Error ? e.message : String(e) });
+    console.error('[worker] previewPage: engine.open failed:', e);
+    post({
+      type: 'preview-page-error',
+      requestId,
+      page,
+      message: e instanceof Error ? e.message : String(e),
+    });
     return;
   }
   try {
-    const out = await engine.renderPage(doc, 1, dpi, 'png');
+    const out = await engine.renderPage(doc, page, dpi, 'png');
     post({
-      type: 'preview-done',
+      type: 'preview-page-done',
+      requestId,
+      page,
       blob: new Blob([out.data as BlobPart], { type: 'image/png' }),
     });
   } catch (e) {
-    console.error('[worker] preview: renderPage failed:', e);
-    post({ type: 'preview-error', message: e instanceof Error ? e.message : String(e) });
+    console.error('[worker] previewPage: renderPage failed:', e);
+    post({
+      type: 'preview-page-error',
+      requestId,
+      page,
+      message: e instanceof Error ? e.message : String(e),
+    });
   } finally {
     engine.close(doc);
   }
@@ -138,17 +167,27 @@ async function demoRenderHandler(file: ArrayBuffer, dpi: number, maxPages: numbe
   }
 }
 
-async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOptions): Promise<void> {
+async function run(
+  files: ArrayBuffer[],
+  meta: FileMeta[],
+  perFileOptions: PerFileExportOptions[],
+  format: 'png' | 'jpg',
+  jpgQuality: number,
+  deliveryMethod: 'zip' | 'individual' | undefined,
+): Promise<void> {
   const started = Date.now();
   const zip = new ZipStream();
   const failed: PageError[] = [];
-  const mime = options.format === 'png' ? 'image/png' : 'image/jpeg';
+  const mime = format === 'png' ? 'image/png' : 'image/jpeg';
+  const individual = deliveryMethod === 'individual';
   let totalPages = 0;
   let succeeded = 0;
   let lastSingle: { data: Uint8Array; name: string } | null = null;
+  const individualFiles: { data: Uint8Array; name: string }[] = [];
 
   outer: for (let i = 0; i < files.length; i++) {
     const { fileId, name } = meta[i]!;
+    const fileOpts = perFileOptions[i]!;
     const base = sanitizeBaseName(name);
     let doc;
     try {
@@ -168,7 +207,9 @@ async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOption
         post({ type: 'file-error', fileId, message: 'zero-pages' });
         continue;
       }
-      const pages = options.pageRange ? parsePageRange(options.pageRange, count).pages : range(count);
+      const pages = fileOpts.pageRange
+        ? parsePageRange(fileOpts.pageRange, count).pages
+        : range(count);
       totalPages += pages.length;
       for (const [idx, page] of pages.entries()) {
         // Yield a macrotask so a pending 'cancel' message can be delivered —
@@ -190,12 +231,15 @@ async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOption
           const out = await engine.renderPage(
             doc,
             page,
-            options.dpi,
-            options.format,
-            options.jpgQuality ?? DEFAULT_JPG_QUALITY,
+            fileOpts.dpi,
+            format,
+            jpgQuality,
+            fileOpts.backgroundColor ?? 'white',
           );
-          const entryName = pageFileName(base, page, options.format);
-          zip.add(entryName, out.data);
+          const entryName = pageFileName(base, page, format);
+          const zipEntryPath = meta.length > 1 ? `${base}/${entryName}` : entryName;
+          if (individual) individualFiles.push({ data: out.data, name: entryName });
+          else zip.add(zipEntryPath, out.data);
           lastSingle = { data: out.data, name: entryName };
           succeeded++;
         } catch (e) {
@@ -213,13 +257,21 @@ async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOption
     }
   }
 
-  // Single successful page → direct image download; otherwise ZIP (PRD R6).
+  // Single successful page → always a direct image download, regardless of
+  // delivery mode (PRD R6). Multiple pages: either the individual files
+  // list, or the existing ZIP behavior — unchanged when delivery is 'zip'.
   const singleBase = meta.length === 1 ? sanitizeBaseName(meta[0]!.name) : 'converted';
-  let output: Blob;
-  let outputName: string;
+  let output: Blob | undefined;
+  let outputName: string | undefined;
+  let pages: { name: string; blob: Blob }[] | undefined;
   if (succeeded === 1 && lastSingle) {
     output = new Blob([lastSingle.data as BlobPart], { type: mime });
     outputName = lastSingle.name;
+  } else if (individual) {
+    pages = individualFiles.map((f) => ({
+      name: f.name,
+      blob: new Blob([f.data as BlobPart], { type: mime }),
+    }));
   } else {
     output = await zip.toBlob();
     outputName = zipFileName(singleBase);
@@ -232,6 +284,7 @@ async function run(files: ArrayBuffer[], meta: FileMeta[], options: ExportOption
     durationMs: Date.now() - started,
     output,
     outputName,
+    pages,
     cancelled,
   };
   post({ type: 'done', result });

@@ -39,7 +39,12 @@ const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
   // Negative delay puts this cell "already partway through" the shared
   // 5400ms clock, landing its 900ms turn at the right slot; the small
   // positive offsets order title → lines → accent → sparkle within it.
-  const slotStart = -(i * SLOT_MS);
+  // The mapping is inverted (CELL_COUNT - i) so turns play left-to-right:
+  // with a plain -(i*SLOT_MS) delay, cell 0 draws first but the *next*
+  // turn jumps to the last cell and counts backward (right-to-left) before
+  // wrapping — this offset makes cell i's turn land at absolute time
+  // i*SLOT_MS instead, i.e. strictly ascending, left to right.
+  const slotStart = -(((CELL_COUNT - i) % CELL_COUNT) * SLOT_MS);
   return {
     lines,
     accent: ACCENTS[i % ACCENTS.length],

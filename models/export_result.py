@@ -18,8 +18,8 @@ class ExportResult:
         total_pages:       Number of pages detected in the PDF.
         success_count:     Pages that were rendered and saved successfully.
         failed_pages:      List of ``(page_number, error_message)`` tuples.
-        output_folder:     The created output directory (may be ``None`` if
-                           the run failed before folder creation).
+        output_folder:     The folder the UI should open for the user.
+        created_folders:   Concrete export folders created during the run.
         duration_seconds:  Wall-clock time for the entire export.
         cancelled:         ``True`` if the user cancelled mid-export.
     """
@@ -28,6 +28,7 @@ class ExportResult:
     success_count: int = 0
     failed_pages: list[tuple[int, str]] = field(default_factory=list)
     output_folder: Path | None = None
+    created_folders: list[Path] = field(default_factory=list)
     duration_seconds: float = 0.0
     cancelled: bool = False
 

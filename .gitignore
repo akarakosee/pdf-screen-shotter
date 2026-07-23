@@ -29,3 +29,11 @@ Output/
 *.zip
 
 .worktrees/
+
+# Local agent/tool state — not project source
+.agents/
+.claude/
+.planning/
+.superpowers/
+.tmp/
+graphify-out/

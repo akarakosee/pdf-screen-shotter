@@ -34,5 +34,5 @@ OUTPUT_FOLDER_SUFFIX: str = "_pages"
 # ---------------------------------------------------------------------------
 # UI constants
 # ---------------------------------------------------------------------------
-WINDOW_MIN_WIDTH: int = 720
-WINDOW_MIN_HEIGHT: int = 620
+WINDOW_MIN_WIDTH: int = 1180
+WINDOW_MIN_HEIGHT: int = 760

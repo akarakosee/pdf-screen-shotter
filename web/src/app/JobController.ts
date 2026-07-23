@@ -14,6 +14,7 @@ import type {
   ExportResult,
   FileMeta,
   PageError,
+  PerFileExportOptions,
   ProgressData,
   UiToWorkerMessage,
   WorkerToUiMessage,
@@ -22,8 +23,6 @@ import { PREVIEW_DPI } from '../core/config';
 
 export interface JobEvents {
   onReady?: () => void;
-  onPreview?: (blob: Blob) => void;
-  onPreviewError?: (message: string) => void;
   onInspect?: (fileId: string, pageCount: number) => void;
   onProgress?: (data: ProgressData) => void;
   onPageError?: (error: PageError) => void;
@@ -45,12 +44,17 @@ export interface JobEvents {
 export class JobController {
   private static readonly MAX_FATALS_PER_WINDOW = 3;
   private static readonly FATAL_WINDOW_MS = 10_000;
+  private static nextRequestId = 0;
 
   private worker: Worker | null = null;
   private events: JobEvents;
   private running = false;
   private disabled = false;
   private fatalTimestamps: number[] = [];
+  private pendingPreviewPages = new Map<
+    string,
+    { resolve: (blob: Blob) => void; reject: (err: Error) => void }
+  >();
 
   constructor(events: JobEvents) {
     this.events = events;
@@ -70,27 +74,48 @@ export class JobController {
     this.post({ type: 'inspect', fileId, file: buf }, [buf]);
   }
 
-  async preview(file: File, dpi: number = PREVIEW_DPI): Promise<void> {
-    if (this.disabled) return;
-    const buf = await file.arrayBuffer();
-    this.post({ type: 'preview', file: buf, dpi }, [buf]);
+  /** ADR-007: one filmstrip thumbnail. Always renders at the fixed
+   * PREVIEW_DPI (72), independent of the user's chosen export DPI — thumbnails
+   * stay small and fast regardless of what resolution will actually be
+   * exported. Correlated by requestId so many concurrent page requests
+   * (scrolling the filmstrip, multiple queued files) resolve independently. */
+  previewPage(file: File, page: number): Promise<Blob> {
+    if (this.disabled) return Promise.reject(new Error('disabled'));
+    const requestId = `p${++JobController.nextRequestId}`;
+    const result = new Promise<Blob>((resolve, reject) => {
+      this.pendingPreviewPages.set(requestId, { resolve, reject });
+    });
+    void file.arrayBuffer().then((buf) => {
+      this.post({ type: 'preview-page', file: buf, dpi: PREVIEW_DPI, page, requestId }, [buf]);
+    });
+    return result;
   }
 
   /** ADR-006: renders up to maxPages of a bundled sample PDF for the
    * homepage's live hero demo. Never throws — failures arrive as
-   * onDemoError, same scoped-error pattern as preview(). */
+   * onDemoError, same scoped-error pattern as previewPage(). */
   async demoRender(file: File, dpi: number, maxPages: number): Promise<void> {
     if (this.disabled) return;
     const buf = await file.arrayBuffer();
     this.post({ type: 'demo-render', file: buf, dpi, maxPages }, [buf]);
   }
 
-  async start(files: { file: File; fileId: string }[], options: ExportOptions): Promise<void> {
+  /** Each file carries its own render settings (dpi/pageRange/backgroundColor);
+   * `shared` is the batch-level format and delivery packaging (ADR-008). */
+  async start(
+    files: (PerFileExportOptions & { file: File; fileId: string })[],
+    shared: { format: ExportOptions['format']; jpgQuality?: number; deliveryMethod?: ExportOptions['deliveryMethod'] },
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buffers = await Promise.all(files.map((f) => f.file.arrayBuffer()));
     const meta: FileMeta[] = files.map((f) => ({ fileId: f.fileId, name: f.file.name }));
-    this.post({ type: 'start', files: buffers, meta, options }, buffers);
+    const perFileOptions: PerFileExportOptions[] = files.map((f) => ({
+      dpi: f.dpi,
+      pageRange: f.pageRange,
+      backgroundColor: f.backgroundColor,
+    }));
+    this.post({ type: 'start', files: buffers, meta, perFileOptions, ...shared }, buffers);
   }
 
   cancel(): void {
@@ -124,11 +149,13 @@ export class JobController {
       case 'ready':
         this.events.onReady?.();
         break;
-      case 'preview-done':
-        this.events.onPreview?.(msg.blob);
+      case 'preview-page-done':
+        this.pendingPreviewPages.get(msg.requestId)?.resolve(msg.blob);
+        this.pendingPreviewPages.delete(msg.requestId);
         break;
-      case 'preview-error':
-        this.events.onPreviewError?.(msg.message);
+      case 'preview-page-error':
+        this.pendingPreviewPages.get(msg.requestId)?.reject(new Error(msg.message));
+        this.pendingPreviewPages.delete(msg.requestId);
         break;
       case 'inspect-done':
         this.events.onInspect?.(msg.fileId, msg.pageCount);
@@ -164,6 +191,8 @@ export class JobController {
   private handleFatal(message: string): void {
     this.running = false;
     this.dispose();
+    for (const { reject } of this.pendingPreviewPages.values()) reject(new Error(message));
+    this.pendingPreviewPages.clear();
 
     const now = Date.now();
     this.fatalTimestamps = [...this.fatalTimestamps, now].filter(

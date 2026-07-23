@@ -1,5 +1,16 @@
 # CLAUDE.md — persistent working memory (web build)
 
+## Code exploration policy (binding, every session)
+
+For any file inspection, file reading, architecture reading, or planning task in
+this repo, use the `codebase-memory` MCP tools FIRST, before Read/Grep/Glob:
+`search_graph` / `trace_path` / `get_code_snippet` / `query_graph` /
+`get_architecture` / `detect_changes` / `search_code`. Project is pre-indexed as
+`Users-ayberk-Desktop-PDF_Screen_Shotter` — check `index_status` and only fall
+back to `index_repository` if it reports stale/missing. Plain Read/Grep/Glob stays
+fine for non-code files (docs, configs, images) and for a single already-known
+path. See `~/.claude/skills/codebase-memory/SKILL.md` for the decision matrix.
+
 Repo layout: Python desktop app at root (untouched); web product lives in `web/`.
 Source of truth, in order: WEB_PLANI.md → SISTEM_TASARIMI.md → ADR-001 / ADR-002
 (ADR-002 supersedes SISTEM_TASARIMI §3.5 COOP/COEP line) → PRD-pdf-to-png.md →

@@ -34,11 +34,12 @@ test('full flow: upload → options → convert → ZIP download (R1/R2/R3/R4/R6
   await addFiles(page, [f('sample-20p.pdf')]);
 
   // FileChip shows name (mono) and page count via the inspect message (ADR-003).
-  await expect(page.getByText('sample-20p.pdf')).toBeVisible();
+  // (The new file-info card also shows the name, so scope to the chip list.)
+  await expect(page.getByRole('listitem').getByText('sample-20p.pdf')).toBeVisible();
   await expect(page.getByText('20 pages')).toBeVisible();
 
-  // Preview renders (R3).
-  await expect(page.locator('figure img')).toBeVisible({ timeout: 15_000 });
+  // PagePreview renders the first page (R3, ADR-007).
+  await expect(page.getByRole('img', { name: 'Page 1' })).toBeVisible({ timeout: 15_000 });
 
   // Page range with clamping feedback (R2).
   await page.getByRole('textbox').fill('1-3,18-25');
@@ -115,6 +116,52 @@ test('a single converted page downloads directly as an image, not a ZIP (R6)', a
   expect([...bytes.slice(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 });
 
+test('background color selector produces a valid PNG on a non-default choice', async ({
+  page,
+}) => {
+  await page.goto('/pdf-to-png/');
+  await addFiles(page, [f('sample-20p.pdf')]);
+  await expect(page.getByText('20 pages')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('radio', { name: /Black/ }).click();
+  await page.getByRole('textbox').fill('1');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Convert', exact: true }).click();
+  await expect(page.getByText('1 pages converted.')).toBeVisible({ timeout: 30_000 });
+  await page.getByRole('button', { name: 'Download' }).click();
+  const download = await downloadPromise;
+
+  const filePath = await download.path();
+  expect(filePath, 'download must actually save a file to disk').toBeTruthy();
+  const bytes = readFileSync(filePath!);
+  expect([...bytes.slice(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+});
+
+test('individual delivery mode downloads separate files instead of a ZIP', async ({ page }) => {
+  await page.goto('/pdf-to-png/');
+  await addFiles(page, [f('sample-20p.pdf')]);
+  await expect(page.getByText('20 pages')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('radio', { name: 'Individual Images' }).click();
+  await page.getByRole('textbox').fill('1-3');
+  await page.getByRole('button', { name: 'Convert', exact: true }).click();
+  await expect(page.getByText('3 pages converted.')).toBeVisible({ timeout: 30_000 });
+
+  const downloadButton = page.getByRole('button', { name: 'Download all (3 files)' });
+  await expect(downloadButton).toBeVisible();
+  // Concurrent waitForEvent('download') calls all race to the same first
+  // occurrence rather than each claiming one sequential event — a persistent
+  // listener is the correct way to collect all three staggered downloads.
+  const files: string[] = [];
+  page.on('download', (d) => files.push(d.suggestedFilename()));
+  await downloadButton.click();
+  await expect.poll(() => files.length, { timeout: 10_000 }).toBe(3);
+  expect(files.sort()).toEqual([
+    'sample-20p_page_001.png',
+    'sample-20p_page_002.png',
+    'sample-20p_page_003.png',
+  ]);
+});
+
 test('invalid range blocks convert (R2)', async ({ page }) => {
   await page.goto('/pdf-to-png/');
   await addFiles(page, [f('sample-20p.pdf')]);
@@ -150,28 +197,32 @@ test('an unpreviewable file does not crash the worker or lose its inspect result
   page,
 }) => {
   // Regression: dropping a single file whose engine.open() fails (here,
-  // encrypted.pdf) triggers preview() and inspect() back-to-back. preview()
-  // used to have no catch around open(), so its throw fell through to the
-  // worker's top-level handler, which posted 'fatal' — JobController then
-  // terminated and respawned the worker, silently dropping the still-queued
-  // inspect response. The chip was left with no page count and no failed
-  // status, and the preview card was stuck on "Rendering preview..." forever.
+  // encrypted.pdf) triggers previewPage() (page-1 thumbnail) and inspect()
+  // back-to-back. previewPage() scopes its error to preview-page-error —
+  // it must never fall through to the worker's top-level 'fatal' handler,
+  // which would terminate + respawn the worker and silently drop the
+  // still-queued inspect response (the chip would then be left with no page
+  // count and no failed status).
+  // Both files drop together (the file input only exists during the
+  // 'upload' phase, so a second sequential drop isn't possible once any
+  // file has landed) — this still reproduces the original race, since both
+  // files' inspect()/previewPage() calls queue back-to-back regardless.
   await page.goto('/pdf-to-png/');
-  await addFiles(page, [f('broken', 'encrypted.pdf')]);
+  await addFiles(page, [f('broken', 'encrypted.pdf'), f('sample-20p.pdf')]);
 
   // The file-error from inspect() must still arrive (worker wasn't killed).
   await expect(
     page.getByText("This PDF is password-protected. We can't open it (yet)."),
   ).toBeVisible({ timeout: 15_000 });
 
-  // The preview card must resolve to 'unavailable', not hang on 'loading'.
-  await expect(page.getByText('Preview unavailable for this file.')).toBeVisible({
-    timeout: 15_000,
-  });
-  await expect(page.getByText('Rendering preview…')).toHaveCount(0);
-
   // No fatal toast, no worker restart signal.
   await expect(page.getByRole('alert')).toHaveCount(0);
+
+  // The worker is still alive and usable: the valid file in the same batch
+  // still gets its page count and converts normally.
+  await expect(page.getByText('20 pages')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Convert', exact: true }).click();
+  await expect(page.getByText('20 pages converted.')).toBeVisible({ timeout: 30_000 });
 });
 
 test('fake .pdf extension is rejected client-side (R1)', async ({ page }) => {

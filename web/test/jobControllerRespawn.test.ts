@@ -74,7 +74,7 @@ describe('JobController respawn cap', () => {
     // Every public method becomes a no-op afterward — no further respawn
     // attempts, no matter what the UI tries next.
     controller.preload();
-    void controller.preview(new File(['x'], 'a.pdf'));
+    void controller.previewPage(new File(['x'], 'a.pdf'), 1).catch(() => {});
     void controller.inspect('id', new File(['x'], 'a.pdf'));
     expect(FakeWorker.instances).toHaveLength(4);
   });

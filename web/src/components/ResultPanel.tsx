@@ -36,7 +36,8 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
     headline = fmt(t.allConverted, { n: result.succeeded });
   }
 
-  const isZip = result.outputName.endsWith('.zip');
+  const isZip = result.outputName?.endsWith('.zip') ?? false;
+  const fileCount = result.pages?.length ?? 0;
 
   // ADR-005: the done state sits on a shadow-3 card (one of shadow-3's two
   // permitted homes); the download button springs in 0.97→1. No shimmer here —
@@ -69,7 +70,7 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
       {result.succeeded > 0 && (
         <div className="flex items-center gap-2">
           <Button className="result-pop" onClick={onDownload}>
-            {isZip ? t.downloadZip : t.download}
+            {fileCount > 0 ? fmt(t.downloadAllCount, { n: fileCount }) : isZip ? t.downloadZip : t.download}
           </Button>
           <Button variant="ghost" onClick={onConvertMore}>
             {t.convertMore}

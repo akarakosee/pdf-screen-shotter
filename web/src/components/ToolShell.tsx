@@ -2,19 +2,20 @@
 // (SISTEM_TASARIMI §2.2), wired to the render worker via JobController.
 // The tool region keeps a fixed min-height so no state change moves scroll.
 
+import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
 import { parsePageRange, PageRangeError } from '../app/pageRange';
 import { validatePdfFile } from '../app/validators';
-import { DEFAULT_DPI } from '../core/config';
+import { DEFAULT_DPI, PREVIEW_DPI } from '../core/config';
 import type { ExportOptions, ExportResult, PageError, ProgressData } from '../core/types';
 import type { Strings } from '../i18n/en';
-import { en } from '../i18n/en';
+import { en, fmt } from '../i18n/en';
 import { DropZone } from './DropZone';
-import { FileChip, type ChipData } from './FileChip';
+import { FileChip, formatSize, type ChipData } from './FileChip';
 import { OptionsPanel } from './OptionsPanel';
-import { Preview } from './Preview';
+import { PagePreview } from './PagePreview';
 import { PrivacyLine } from './PrivacyLine';
 import { ProgressPanel } from './ProgressPanel';
 import { ResultPanel } from './ResultPanel';
@@ -32,17 +33,31 @@ interface Props {
 let nextId = 0;
 const newId = () => `f${++nextId}`;
 
+// Per-file render settings (dpi/pageRange/backgroundColor). deliveryMethod
+// stays batch-level (see PerFileExportOptions in core/types.ts).
+interface FileConfig {
+  dpi: ExportOptions['dpi'];
+  pageRange: string;
+  backgroundColor: NonNullable<ExportOptions['backgroundColor']>;
+}
+
+const defaultFileConfig = (): FileConfig => ({
+  dpi: DEFAULT_DPI,
+  pageRange: '',
+  backgroundColor: 'white',
+});
+
 export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: Props) {
   const [wasmOk, setWasmOk] = useState(true);
   const [unavailable, setUnavailable] = useState(false);
   const [phase, setPhase] = useState<Phase>('upload');
   const [chips, setChips] = useState<ChipData[]>([]);
   const filesRef = useRef(new Map<string, File>());
-  const [dpi, setDpi] = useState<ExportOptions['dpi']>(DEFAULT_DPI);
-  const [pageRange, setPageRange] = useState('');
-  const [rangeError, setRangeError] = useState<string | null>(null);
-  const [previewState, setPreviewState] = useState<'loading' | 'ready' | 'unavailable'>('loading');
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // Per-file config, keyed by fileId — the "Per-File Configuration" refactor:
+  // each queued file renders with its own dpi/pageRange/backgroundColor.
+  const [fileOptions, setFileOptions] = useState<Record<string, FileConfig>>({});
+  // ADR-007: which file's preview/config is shown when several are queued.
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const [result, setResult] = useState<ExportResult | null>(null);
@@ -54,6 +69,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
   const [regionMinHeight, setRegionMinHeight] = useState<number | null>(null);
   const pageErrorsRef = useRef<PageError[]>([]);
   const fileErrorsRef = useRef<Map<string, string>>(new Map());
+  const addFileInputRef = useRef<HTMLInputElement>(null);
 
   const controllerRef = useRef<JobController | null>(null);
   const controller = useCallback((): JobController => {
@@ -61,19 +77,6 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       controllerRef.current = new JobController({
         onInspect: (fileId, pageCount) => {
           setChips((cs) => cs.map((c) => (c.id === fileId ? { ...c, pageCount } : c)));
-        },
-        onPreview: (blob) => {
-          setPreviewUrl((old) => {
-            if (old) URL.revokeObjectURL(old);
-            return URL.createObjectURL(blob);
-          });
-          setPreviewState('ready');
-        },
-        onPreviewError: () => {
-          // The worker survives this (see render.worker.ts's preview()) —
-          // only the preview card needs to leave 'loading'. inspect() runs
-          // independently and still reports the file's real status/pageCount.
-          setPreviewState('unavailable');
         },
         onProgress: (data) => setProgress(data),
         onPageError: (error) => {
@@ -96,10 +99,6 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           setCancelling(false);
           setToast({ kind: 'error', message: t.corruptFile });
           setPhase((p) => (p === 'processing' ? 'options' : p));
-          // Whatever the preview card was doing when the worker died is gone
-          // with it — leaving it on 'loading' forever was the bug. The
-          // worker respawns, but nothing re-requests the preview for us.
-          setPreviewState((s) => (s === 'loading' ? 'unavailable' : s));
         },
         onUnavailable: () => {
           // JobController gave up respawning — every retry has hit the same
@@ -144,76 +143,134 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           filesRef.current.set(id, file);
           added.push({ id, name: file.name, size: file.size, pageCount: null, status: 'valid' });
           void controller().inspect(id, file); // ADR-003: fills pageCount / flags bad files early
+          // ADR-007: first-page thumbnail for the FileChip row and the
+          // output-size estimate. Independent of the filmstrip's own
+          // lazy-loaded thumbnails (this always fetches page 1 up front).
+          void controller()
+            .previewPage(file, 1)
+            .then((blob) => {
+              const url = URL.createObjectURL(blob);
+              setChips((cs) =>
+                cs.map((c) =>
+                  c.id === id ? { ...c, thumbnailUrl: url, thumbnailBytes: blob.size } : c,
+                ),
+              );
+            })
+            .catch(() => {
+              // Filmstrip's own per-page fetch will surface the same failure
+              // inline; the FileChip simply keeps its no-thumbnail layout.
+            });
         }
       }
-      setChips((cs) => {
-        const next = [...cs, ...added];
-        const firstValid = next.find((c) => c.status === 'valid');
-        if (firstValid && added.some((c) => c.id === firstValid.id)) {
-          setPreviewState('loading');
-          const f = filesRef.current.get(firstValid.id);
-          if (f) void controller().preview(f, dpi);
-        }
+      setChips((cs) => [...cs, ...added]);
+      setFileOptions((opts) => {
+        const next = { ...opts };
+        for (const c of added) if (c.status === 'valid') next[c.id] = defaultFileConfig();
         return next;
       });
       setPhase((p) => (p === 'upload' ? 'options' : p));
     },
-    [controller, dpi, t],
+    [controller, t],
   );
 
-  // Preview follows DPI (PRD R3).
+  // Keep the filmstrip pointed at a real file: falls back to the first valid
+  // chip whenever the active one is removed, or none is selected yet.
   useEffect(() => {
-    const first = chips.find((c) => c.status === 'valid');
-    if (!first || phase !== 'options') return;
-    const f = filesRef.current.get(first.id);
-    if (!f) return;
-    setPreviewState('loading');
-    void controller().preview(f, dpi);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dpi]);
+    if (chips.some((c) => c.id === activeFileId && c.status === 'valid')) return;
+    setActiveFileId(chips.find((c) => c.status === 'valid')?.id ?? null);
+  }, [chips, activeFileId]);
 
   const removeFile = useCallback((id: string) => {
     filesRef.current.delete(id);
     setChips((cs) => {
+      const removed = cs.find((c) => c.id === id);
+      if (removed?.thumbnailUrl) URL.revokeObjectURL(removed.thumbnailUrl);
       const next = cs.filter((c) => c.id !== id);
-      if (!next.some((c) => c.status === 'valid')) {
-        setPhase('upload');
-        setPreviewUrl((old) => {
-          if (old) URL.revokeObjectURL(old);
-          return null;
-        });
-      }
+      if (!next.some((c) => c.status === 'valid')) setPhase('upload');
+      return next;
+    });
+    setFileOptions((opts) => {
+      if (!(id in opts)) return opts;
+      const next = { ...opts };
+      delete next[id];
       return next;
     });
   }, []);
 
-  const onRangeChange = useCallback((value: string) => {
-    setPageRange(value);
-  }, []);
+  // The active file's own config — read and edited independently per file.
+  const activeConfig: FileConfig = fileOptions[activeFileId ?? ''] ?? defaultFileConfig();
 
-  // Validate syntax and detect clamping (R2) against known page counts (ADR-003).
-  const [rangeNotice, setRangeNotice] = useState<string | null>(null);
-  useEffect(() => {
-    if (pageRange.trim() === '') {
-      setRangeError(null);
-      setRangeNotice(null);
-      return;
-    }
-    const known = chips.filter((c) => c.status === 'valid' && c.pageCount != null);
-    const maxPages = known.length > 0 ? Math.max(...known.map((c) => c.pageCount!)) : null;
+  const setActiveDpi = useCallback(
+    (dpi: ExportOptions['dpi']) => {
+      if (!activeFileId) return;
+      setFileOptions((opts) => ({
+        ...opts,
+        [activeFileId]: { ...(opts[activeFileId] ?? defaultFileConfig()), dpi },
+      }));
+    },
+    [activeFileId],
+  );
+
+  const setActivePageRange = useCallback(
+    (pageRange: string) => {
+      if (!activeFileId) return;
+      setFileOptions((opts) => ({
+        ...opts,
+        [activeFileId]: { ...(opts[activeFileId] ?? defaultFileConfig()), pageRange },
+      }));
+    },
+    [activeFileId],
+  );
+
+  const setActiveBackgroundColor = useCallback(
+    (backgroundColor: NonNullable<ExportOptions['backgroundColor']>) => {
+      if (!activeFileId) return;
+      setFileOptions((opts) => ({
+        ...opts,
+        [activeFileId]: { ...(opts[activeFileId] ?? defaultFileConfig()), backgroundColor },
+      }));
+    },
+    [activeFileId],
+  );
+
+  // Validate the ACTIVE file's own range against its own page count (R2).
+  // Each file's range is independent now, so this only ever reflects
+  // whichever file is currently selected in the switcher/preview.
+  const { rangeError, rangeNotice } = useMemo(() => {
+    const value = activeConfig.pageRange;
+    if (value.trim() === '') return { rangeError: null, rangeNotice: null };
+    const maxPages = chips.find((c) => c.id === activeFileId)?.pageCount ?? null;
     try {
-      const parsed = parsePageRange(pageRange, maxPages ?? Number.MAX_SAFE_INTEGER);
-      setRangeError(null);
-      setRangeNotice(maxPages != null && parsed.clamped ? t.pageRangeClamped : null);
+      const parsed = parsePageRange(value, maxPages ?? Number.MAX_SAFE_INTEGER);
+      return {
+        rangeError: null as string | null,
+        rangeNotice: maxPages != null && parsed.clamped ? t.pageRangeClamped : null,
+      };
     } catch (e) {
-      setRangeNotice(null);
-      setRangeError(e instanceof PageRangeError ? t.pageRangeInvalid : String(e));
+      return {
+        rangeError: e instanceof PageRangeError ? t.pageRangeInvalid : String(e),
+        rangeNotice: null as string | null,
+      };
     }
-  }, [pageRange, chips, t]);
+  }, [activeConfig.pageRange, activeFileId, chips, t]);
+
+  const hasGlobalRangeError = useMemo(() => {
+    return chips.some((c) => {
+      if (c.status !== 'valid') return false;
+      const range = fileOptions[c.id]?.pageRange;
+      if (!range || range.trim() === '') return false;
+      try {
+        parsePageRange(range, c.pageCount ?? Number.MAX_SAFE_INTEGER);
+        return false;
+      } catch {
+        return true;
+      }
+    });
+  }, [chips, fileOptions]);
 
   const convert = useCallback(() => {
     const valid = chips.filter((c) => c.status === 'valid');
-    if (valid.length === 0 || rangeError) return;
+    if (valid.length === 0 || hasGlobalRangeError) return;
     pageErrorsRef.current = [];
     fileErrorsRef.current = new Map();
     setProgress(null);
@@ -223,16 +280,36 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
     // replaces it renders at the region top. Bring it into view once —
     // otherwise the user is left looking at reserved blank space.
     regionRef.current?.scrollIntoView({ block: 'nearest' });
-    const options: ExportOptions = {
-      dpi,
-      format,
-      ...(pageRange.trim() !== '' ? { pageRange: pageRange.trim() } : {}),
-    };
     void controller().start(
-      valid.map((c) => ({ fileId: c.id, file: filesRef.current.get(c.id)! })),
-      options,
+      valid.map((c) => {
+        const cfg = fileOptions[c.id] ?? defaultFileConfig();
+        const range = cfg.pageRange.trim();
+        // Defensive: this file's own range is only validated live while it's
+        // the active one in the switcher. A mistake left behind on a
+        // different (currently unselected) file must never block or crash
+        // the whole batch — fall back to "all pages" for that file instead.
+        let pageRange: string | undefined;
+        if (range !== '' && c.pageCount != null) {
+          try {
+            parsePageRange(range, c.pageCount);
+            pageRange = range;
+          } catch {
+            pageRange = undefined;
+          }
+        } else if (range !== '') {
+          pageRange = range;
+        }
+        return {
+          fileId: c.id,
+          file: filesRef.current.get(c.id)!,
+          dpi: cfg.dpi,
+          backgroundColor: cfg.backgroundColor,
+          pageRange,
+        };
+      }),
+      { format, deliveryMethod: 'zip' },
     );
-  }, [chips, controller, dpi, format, pageRange, rangeError]);
+  }, [chips, controller, fileOptions, format, hasGlobalRangeError]);
 
   const cancel = useCallback(() => {
     setCancelling(true);
@@ -241,18 +318,51 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
   const reset = useCallback(() => {
     filesRef.current.clear();
-    setChips([]);
+    setChips((cs) => {
+      cs.forEach((c) => {
+        if (c.thumbnailUrl) URL.revokeObjectURL(c.thumbnailUrl);
+      });
+      return [];
+    });
+    setActiveFileId(null);
+    setFileOptions({});
     setResult(null);
     setProgress(null);
-    setPageRange('');
-    setRangeError(null);
-    setPreviewUrl((old) => {
-      if (old) URL.revokeObjectURL(old);
-      return null;
-    });
     setRegionMinHeight(null);
     setPhase('upload');
   }, []);
+
+  // ADR-007: rough output-size estimate. Each file's own page-1 thumbnail
+  // (rendered at the fixed PREVIEW_DPI) is scaled by pixel-count ratio to the
+  // chosen export DPI, then multiplied by that file's own selected page
+  // count. Per-file config refactor: this now reflects only the ACTIVE
+  // file, matching the OptionsPanel it sits under (each file's estimate is
+  // independent, so a batch-wide sum no longer means anything coherent).
+  // CLS fix: this must only ever return `null` when there's no active file
+  // — that's the one case where the whole options phase (and this bar)
+  // isn't rendered at all. Every other "can't compute a real number yet"
+  // case (invalid range, thumbnail still loading, a caught parse error)
+  // returns a zero-value fallback instead, so the bar and the PrivacyLine
+  // mounted alongside it in OptionsPanel never unmount and collapse the panel.
+  const estimatedSize = useMemo(() => {
+    const chip = chips.find((c) => c.id === activeFileId && c.status === 'valid');
+    if (!chip) return null;
+    const unavailable = { bytes: 0, text: t.estimatedSizeUnavailable };
+    if (rangeError) return unavailable;
+    if (chip.pageCount == null || chip.thumbnailBytes == null) return unavailable;
+    const dpiRatio = (activeConfig.dpi / PREVIEW_DPI) ** 2;
+    let total = 0;
+    try {
+      const effectivePages = activeConfig.pageRange.trim()
+        ? parsePageRange(activeConfig.pageRange, chip.pageCount).pages.length
+        : chip.pageCount;
+      total = chip.thumbnailBytes * dpiRatio * effectivePages;
+    } catch {
+      // parsePageRange can throw during typing, before rangeError catches up.
+      return unavailable;
+    }
+    return { bytes: total, text: fmt(t.estimatedSize, { size: formatSize(total) }) };
+  }, [chips, activeFileId, activeConfig.dpi, activeConfig.pageRange, rangeError, t]);
 
   const skippedRows = useMemo(() => {
     if (!result) return [];
@@ -302,6 +412,9 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
   const validChips = chips.filter((c) => c.status !== 'invalid');
   const invalidChips = chips.filter((c) => c.status === 'invalid');
+  const selectableChips = chips.filter((c) => c.status === 'valid');
+  const activeChip = selectableChips.find((c) => c.id === activeFileId) ?? null;
+  const activeFile = activeChip ? filesRef.current.get(activeChip.id) : undefined;
 
   return (
     <div
@@ -309,25 +422,68 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       className="flex flex-col gap-5"
       style={regionMinHeight != null ? { minHeight: regionMinHeight } : undefined}
     >
-      {phase !== 'processing' && phase !== 'done' && (
-        <div>
+      {phase === 'upload' && (
+        <>
           <DropZone t={t} hasFiles={chips.length > 0} onFiles={addFiles} onPreload={preload} />
           <PrivacyLine t={t} />
-        </div>
+        </>
       )}
 
       {(validChips.length > 0 || invalidChips.length > 0) && phase !== 'done' && (
-        <ul className="flex flex-col gap-2">
-          {[...validChips, ...invalidChips].map((c, i) => (
-            <FileChip
-              key={c.id}
-              t={t}
-              data={c}
-              enterDelay={i * 40}
-              onRemove={phase === 'processing' ? undefined : removeFile}
-            />
-          ))}
-        </ul>
+        <div className="mb-4">
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[...validChips, ...invalidChips].map((c, i) => {
+              let hasError = false;
+              if (c.status === 'valid') {
+                const range = fileOptions[c.id]?.pageRange;
+                if (range && range.trim() !== '') {
+                  try {
+                    parsePageRange(range, c.pageCount ?? Number.MAX_SAFE_INTEGER);
+                  } catch {
+                    hasError = true;
+                  }
+                }
+              }
+              return (
+                <FileChip
+                  key={c.id}
+                  t={t}
+                  data={c}
+                  enterDelay={i * 40}
+                  onRemove={phase === 'processing' ? undefined : removeFile}
+                  isActive={phase === 'options' && c.id === activeFileId}
+                  hasError={hasError}
+                  onClick={phase === 'options' ? () => setActiveFileId(c.id) : undefined}
+                />
+              );
+            })}
+            {phase === 'options' && (
+              <li className="flex">
+                <button
+                  type="button"
+                  onClick={() => addFileInputRef.current?.click()}
+                  aria-label={t.addFile}
+                  title={t.addFile}
+                  className="btn-motion flex h-full min-h-[58px] w-full items-center justify-center gap-2 rounded-s border border-dashed border-amber/60 bg-gradient-to-br from-amber/10 to-[#F0C778]/20 text-amber shadow-[0_0_15px_rgba(232,182,95,0.15)] transition-all duration-200 hover:border-amber hover:from-amber/20 hover:to-[#F0C778]/30 hover:shadow-[0_0_20px_rgba(232,182,95,0.4)] dark:border-amber-dark/60 dark:from-amber-dark/20 dark:to-[#F0C778]/20 dark:text-amber-400 dark:hover:from-amber-dark/30 dark:hover:to-[#F0C778]/30"
+                >
+                  <Plus aria-hidden="true" className="h-6 w-6" strokeWidth={2.25} />
+                </button>
+                <input
+                  ref={addFileInputRef}
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    const incoming = e.currentTarget.files;
+                    if (incoming && incoming.length > 0) void addFiles([...incoming]);
+                    e.currentTarget.value = '';
+                  }}
+                />
+              </li>
+            )}
+          </ul>
+        </div>
       )}
 
       {phase === 'options' && validChips.length > 0 && (
@@ -335,20 +491,50 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           <div className="grid gap-5 md:grid-cols-[2fr_3fr]">
             <OptionsPanel
               t={t}
-              dpi={dpi}
-              onDpi={setDpi}
-              pageRange={pageRange}
-              onPageRange={onRangeChange}
+              dpi={activeConfig.dpi}
+              onDpi={setActiveDpi}
+              pageRange={activeConfig.pageRange}
+              onPageRange={setActivePageRange}
               rangeError={rangeError}
               rangeNotice={rangeNotice}
+              estimatedSize={estimatedSize}
+              format={format}
+              backgroundColor={activeConfig.backgroundColor}
+              onBackgroundColor={setActiveBackgroundColor}
+              fileInfo={
+                activeChip
+                  ? { name: activeChip.name, pageCount: activeChip.pageCount, size: activeChip.size }
+                  : null
+              }
             />
-            <Preview t={t} state={previewState} url={previewUrl} />
+            <div className="card-lit flex min-h-32 min-w-0 flex-col rounded-s border bg-surface px-3 pb-2 pt-1.5 dark:bg-surface-dark">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
+                  {t.previewTitle}
+                </p>
+              </div>
+              {activeFile && activeChip?.pageCount ? (
+                <PagePreview
+                  key={activeChip.id}
+                  t={t}
+                  file={activeFile}
+                  pageCount={activeChip.pageCount}
+                  getPage={(page) => controller().previewPage(activeFile, page)}
+                />
+              ) : (
+                <div className="flex flex-1 items-center justify-center">
+                  <p className="text-xs text-ink-muted dark:text-ink-muted-dark" aria-live="polite">
+                    {t.previewNoFile}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-          <div>
+          <div className="flex w-full justify-end mt-4">
             <button
               type="button"
               onClick={convert}
-              disabled={rangeError != null}
+              disabled={hasGlobalRangeError}
               className="btn-motion inline-flex min-h-11 items-center justify-center rounded-s bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
             >
               {t.convert}
@@ -369,7 +555,17 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
           result={result}
           skipped={skippedRows}
           crossLink={crossLink}
-          onDownload={() => triggerDownload(result.output, result.outputName)}
+          onDownload={() => {
+            if (result.pages) {
+              // Multiple simultaneous downloads get blocked/prompted by the
+              // browser — a small stagger keeps every file landing cleanly.
+              result.pages.forEach((f, i) => {
+                setTimeout(() => triggerDownload(f.blob, f.name), i * 300);
+              });
+            } else if (result.output && result.outputName) {
+              triggerDownload(result.output, result.outputName);
+            }
+          }}
           onConvertMore={reset}
         />
       )}

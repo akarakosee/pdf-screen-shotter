@@ -17,20 +17,25 @@ class ExportOptions:
     """Immutable bundle of export parameters.
 
     Attributes:
-        pdf_path:     Absolute path to the source PDF.
-        output_dir:   Parent directory where the output folder will be created.
+        pdf_paths:    List of absolute paths to the source PDFs.
+        output_dir:   Parent directory where output folders will be created.
         dpi:          Rendering resolution in dots per inch.
         image_format: Output image format (e.g. ``"png"``).
     """
 
-    pdf_path: Path
+    pdf_paths: list[Path]
     output_dir: Path
     dpi: int = DEFAULT_DPI
     image_format: str = DEFAULT_IMAGE_FORMAT
 
     def __post_init__(self) -> None:
         # Coerce str paths to Path objects for downstream consistency
-        if isinstance(self.pdf_path, str):
-            object.__setattr__(self, "pdf_path", Path(self.pdf_path))
+        if isinstance(self.pdf_paths, (str, Path)):
+            object.__setattr__(self, "pdf_paths", [Path(self.pdf_paths)])
+        else:
+            object.__setattr__(
+                self, "pdf_paths", [Path(p) if isinstance(p, str) else p for p in self.pdf_paths],
+            )
+
         if isinstance(self.output_dir, str):
             object.__setattr__(self, "output_dir", Path(self.output_dir))

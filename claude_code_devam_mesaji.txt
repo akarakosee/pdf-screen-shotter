@@ -1,0 +1,36 @@
+Direction confirmed: option 2 — keep the darkroom pivot (ADR-004) as the base. Drop the marigold `#D89000` / indigo `#242448` palette from my earlier brief entirely; amber/russet already own the "warm editorial accent" role and a second competing accent family would muddy exactly what ADR-004 was trying to establish. Write ADR-005 as an amendment to ADR-004 (not a revert), recording: context = a second brief was written against a stale (pre-darkroom) snapshot of the docs; decision = graft the motion/elevation system below onto the darkroom palette/fonts as-is, no new color tokens. Update UI_UX_TASARIM.md and CLAUDE.md accordingly once ADR-005 is written, per your usual discipline.
+
+Everything from my previous brief's §2 (motion) and §3 (depth) still applies, reinterpreted onto the current darkroom tokens instead of the ones I originally named:
+
+## Motion (apply using amber/russet/teal, not marigold/indigo)
+1. Buttons: hover = translateY(-1px) + shadow-2 fade-in (pseudo-element opacity, 120ms); active = translateY(0) scale(0.985).
+2. DropZone idle: slow "breathing" border oscillating between the default hairline and a 20% teal tint, 4s ease-in-out infinite, disabled under reduced-motion.
+3. DropZone dragover: overlay gains a soft warm tint drawn from the darkroom palette (amber-tinted in dark mode, parchment-tinted in light) with a 150ms fade; "Release to add" label scales in from 0.96 with cubic-bezier(0.2, 0.9, 0.3, 1.2), 200ms.
+4. FileChip enter: slide-up 8px + fade, 200ms, staggered 40ms per chip.
+5. Phase transitions: crossfade + 6px vertical drift, 200ms, region min-height rule stays (no jumps).
+6. ProgressPanel: bar fill via transform: scaleX (compositor-friendly) with an amber tail highlight on the completed portion.
+7. ResultPanel success: download button scales in 0.97→1 with the spring ease; one restrained one-time shimmer sweep across the panel's top border using the teal→amber pairing already established for the hero exception — reuse that exact gradient/motion rather than inventing a new one, so the "signature moment" stays singular per ADR-004's own consequence note ("no glow/3D reused elsewhere") — confirm whether reusing the hero's shimmer treatment here would violate that clause as written, and if so, either amend the clause in ADR-005 to explicitly allow this one additional reuse, or use a plainer non-shimmer entrance instead. Your call, but state which you chose and why in ADR-005.
+8. Home hero background dot-wave (from my original brief) — skip entirely. ADR-004 already established the hero's signature treatment; adding a second ambient background effect competes with it. Not needed.
+
+## Depth/elevation (apply using darkroom surface colors)
+- Extend shadows to 3 levels: shadow-1 (existing), shadow-2 (existing), new shadow-3 (0 12px 32px rgba(0,0,0,.14) equivalent, tuned against the darkroom dark bg `#120E0B`/`#1D1512` so it doesn't look muddy) — reserved for the drag-overlay panel and ResultPanel only.
+- Cards get a 1px top-highlight line (light-mode: soft warm-white per the parchment bg; dark-mode: faint light line against `#1D1512`) — the "lit from above" cue.
+- Preview card's rendered PDF page gets a paper treatment: 1px border + shadow-1 + a 2px bottom "stack" edge suggesting physical pages — this pairs naturally with the "darkroom/print" brand metaphor, lean into that framing in the ADR.
+
+## Guardrails (reconcile with ADR-004, don't just restate my old zero-exception version)
+ADR-004 already changed the anti-slop contract from absolute to "general rule + one signed exception." Don't re-assert my original "gradients/glow banned, full stop" language as if ADR-004 didn't happen. Instead: the motion/depth additions above must NOT introduce any new exception beyond what ADR-004 already granted — no new gradients, no new glow, no tilt/parallax anywhere in this pass. If item 7 above ends up needing its own exception, that's the only one to negotiate, explicitly, in ADR-005.
+Lighthouse ≥95 / CLS ≤0.02 gates and the full test suite (22 unit + 8 e2e) remain non-negotiable regardless of palette — re-run and re-verify, including ADR-004's own still-open action items (Lighthouse re-run, tool-page visual pass) while you're in there, since they were left unchecked.
+
+## Order of work
+1. ADR-005 + doc amendments (UI_UX_TASARIM.md, CLAUDE.md) — resolve the shimmer-reuse question from item 7 explicitly here.
+2. Elevation/shadow tokens.
+3. Component motion (buttons, chips, dropzone, phases, progress, result).
+4. Full gate run (including ADR-004's outstanding Lighthouse re-run) + a fresh screenshot pass (light/dark × 360/768/1280, including hover/drag states) + commit per step.
+
+## Use your installed tooling, don't default to plain hand-written CSS
+
+There are a lot of design/frontend-oriented skills, plugins, and MCP servers installed in this environment — don't hesitate to reach for them instead of doing everything from scratch. Concretely, before and during this pass:
+- Check what design-system, design-critique, accessibility-review, or frontend/component-generation skills and MCPs you actually have available right now, and use whichever are relevant to this work — e.g. a design-critique pass on the current darkroom implementation before you start layering motion on top of it, an accessibility-review pass on the new elevation/contrast choices, or any Figma/browser/screenshot MCP you have for visually inspecting your own output as you go, the same way you already do with Playwright screenshots.
+- If a design-token or component-library tool can generate/validate the shadow/elevation scale or motion curves more reliably than hand-rolling them, use it.
+- This isn't a request to add new dependencies for their own sake — it's the opposite: use what's already installed and available to you rather than re-deriving everything by hand when a proper tool exists for the job. If something isn't relevant to this specific task, skip it — just don't skip it by default without checking.
+
