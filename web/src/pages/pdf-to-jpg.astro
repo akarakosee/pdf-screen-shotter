@@ -1,6 +1,10 @@
 ---
 import ToolPage from '../layouts/ToolPage.astro';
+import { ToolShell } from '../components/ToolShell';
 import { toolCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
 ---
 
-<ToolPage lang="en" format="jpg" {...toolCopy.jpg.en} />
+<ToolPage lang="en" badgeLabel="FILM · COMPRESSED" {...toolCopy.jpg.en}>
+  <ToolShell client:load format="jpg" t={en} crossLink={toolCopy.jpg.en.crossLink} />
+</ToolPage>

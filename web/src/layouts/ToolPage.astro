@@ -1,11 +1,11 @@
 ---
 // Tool page template (UI_UX_TASARIM §4.1): H1 + one-sentence description,
-// ToolShell, then the 640px content section (How it works → FAQ → AdSlot).
+// a slotted tool component, then the 640px content section (How it works →
+// FAQ → AdSlot). The slot lets different tools (ToolShell for raster export,
+// MergeShell for merge) share this SEO/FAQ/filmstrip shell without ToolPage
+// needing to know which one it's rendering.
 import Base from './Base.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { ToolShell } from '../components/ToolShell';
-import { en } from '../i18n/en';
-import { tr } from '../i18n/tr';
 
 interface QA {
   q: string;
@@ -17,7 +17,7 @@ interface Step {
 }
 interface Props {
   lang: 'en' | 'tr';
-  format: 'png' | 'jpg';
+  badgeLabel: string;
   title: string;
   description: string;
   h1: string;
@@ -27,11 +27,8 @@ interface Props {
   faqTitle: string;
   steps: Step[];
   faq: QA[];
-  crossLink: { href: string; label: string };
 }
 const p = Astro.props;
-const strings = p.lang === 'tr' ? tr : en;
-const filmLabel = p.format === 'png' ? 'FILM · LOSSLESS' : 'FILM · COMPRESSED';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -72,12 +69,12 @@ function chunk<T>(items: T[], size: number): T[][] {
       class="mb-3 inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.06em] text-amber uppercase dark:text-amber-dark"
     >
       <span class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"></span>
-      {filmLabel}
+      {p.badgeLabel}
     </span>
     <h1 class="font-display text-xl font-semibold tracking-tight">{p.h1}</h1>
     <p class="mt-1 mb-6 text-sm text-ink-muted dark:text-ink-muted-dark">{p.tagline}</p>
     <div class="flex-1">
-      <ToolShell client:load format={p.format} t={strings} crossLink={p.crossLink} />
+      <slot />
     </div>
 
     <section class="reveal mt-auto relative -top-[15px] pt-8 pb-6 md:pt-16" data-reveal>
