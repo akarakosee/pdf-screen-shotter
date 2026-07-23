@@ -23,3 +23,7 @@ export function pageFileName(base: string, page: number, format: 'png' | 'jpg'):
 export function zipFileName(base: string): string {
   return `${base}_pages.zip`;
 }
+
+export function mergedFileName(): string {
+  return 'merged.pdf';
+}
