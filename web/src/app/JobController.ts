@@ -13,6 +13,7 @@ import type {
   ExportOptions,
   ExportResult,
   FileMeta,
+  MergeResult,
   PageError,
   PerFileExportOptions,
   ProgressData,
@@ -28,6 +29,10 @@ export interface JobEvents {
   onPageError?: (error: PageError) => void;
   onFileError?: (fileId: string, message: string) => void;
   onDone?: (result: ExportResult) => void;
+  /** ADR-008: one file finished opening during a merge run. */
+  onMergeProgress?: (fileIndex: number, totalFiles: number) => void;
+  /** ADR-008: the merge finished (or was cancelled). */
+  onMergeDone?: (result: MergeResult) => void;
   onFatal?: (message: string) => void;
   /** Fired once, instead of onFatal, when the worker has failed too many
    * times in a row and JobController has given up respawning it. Every
@@ -118,6 +123,17 @@ export class JobController {
     this.post({ type: 'start', files: buffers, meta, perFileOptions, ...shared }, buffers);
   }
 
+  /** ADR-008: combines every given file's pages, in array order, into one
+   * merged PDF. Unlike start(), there is no per-file render config — merge
+   * has no DPI/page-range/background concept. */
+  async mergeFiles(files: { file: File; fileId: string }[]): Promise<void> {
+    if (this.disabled || this.running) return;
+    this.running = true;
+    const buffers = await Promise.all(files.map((f) => f.file.arrayBuffer()));
+    const meta: FileMeta[] = files.map((f) => ({ fileId: f.fileId, name: f.file.name }));
+    this.post({ type: 'merge-start', files: buffers, meta }, buffers);
+  }
+
   cancel(): void {
     if (this.disabled) return;
     this.post({ type: 'cancel' });
@@ -172,6 +188,13 @@ export class JobController {
       case 'done':
         this.running = false;
         this.events.onDone?.(msg.result);
+        break;
+      case 'merge-progress':
+        this.events.onMergeProgress?.(msg.fileIndex, msg.totalFiles);
+        break;
+      case 'merge-done':
+        this.running = false;
+        this.events.onMergeDone?.(msg.result);
         break;
       case 'fatal':
         this.handleFatal(msg.message);
