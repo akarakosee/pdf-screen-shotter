@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/merge-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { MergeShell } from '../../components/MergeShell';
+import { mergeCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ARAÇ · BİRLEŞTİR" {...mergeCopy.tr}>
+  <MergeShell client:load t={tr} />
+</ToolPage>

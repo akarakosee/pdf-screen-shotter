@@ -1,7 +1,7 @@
 // FileChip: queued · valid · invalid · processing · done · failed.
 // File name in mono; size + page count; remove (×) with a 44px hit area.
 
-import { X } from 'lucide-react';
+import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import type { Strings } from '../i18n/en';
 import { fmt } from '../i18n/en';
 import type { FileStatus } from '../core/types';
@@ -30,6 +30,10 @@ export function FileChip({
   isActive = false,
   hasError = false,
   onClick,
+  onMoveUp,
+  onMoveDown,
+  canMoveUp = true,
+  canMoveDown = true,
 }: {
   t: Strings;
   data: ChipData;
@@ -38,6 +42,10 @@ export function FileChip({
   isActive?: boolean;
   hasError?: boolean;
   onClick?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
 }) {
   const isFailed = data.status === 'invalid' || data.status === 'failed';
   return (
@@ -82,6 +90,38 @@ export function FileChip({
               }`}
         </p>
       </div>
+      {!isFailed && (onMoveUp || onMoveDown) && (
+        <div className="relative z-10 flex shrink-0 flex-col">
+          {onMoveUp && (
+            <button
+              type="button"
+              aria-label={fmt(t.moveFileUp, { name: data.name })}
+              disabled={!canMoveUp}
+              onClick={(e) => {
+                e.stopPropagation();
+                onMoveUp();
+              }}
+              className="flex h-5 w-6 items-center justify-center text-ink-muted hover:text-ink disabled:opacity-30 dark:text-ink-muted-dark dark:hover:text-ink-dark"
+            >
+              <ChevronUp aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={2} />
+            </button>
+          )}
+          {onMoveDown && (
+            <button
+              type="button"
+              aria-label={fmt(t.moveFileDown, { name: data.name })}
+              disabled={!canMoveDown}
+              onClick={(e) => {
+                e.stopPropagation();
+                onMoveDown();
+              }}
+              className="flex h-5 w-6 items-center justify-center text-ink-muted hover:text-ink disabled:opacity-30 dark:text-ink-muted-dark dark:hover:text-ink-dark"
+            >
+              <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" strokeWidth={2} />
+            </button>
+          )}
+        </div>
+      )}
       {onRemove && (
         <button
           type="button"

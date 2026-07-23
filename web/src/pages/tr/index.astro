@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { FileImage, Image } from 'lucide-react';
+import { FileImage, Image, Layers } from 'lucide-react';
 import DevelopingTray from '../../components/DevelopingTray.astro';
 
 const tools = [
@@ -17,6 +17,13 @@ const tools = [
     name: "PDF'ten JPG'ye",
     line: 'Fotoğraf ve taramalar için küçük dosyalar',
     Icon: Image,
+  },
+  {
+    href: '/tr/merge-pdf',
+    idx: 'ARAÇ · BİRLEŞTİR',
+    name: 'PDF Birleştir',
+    line: 'Birden çok PDF\'i tek bir belgede birleştir',
+    Icon: Layers,
   },
 ];
 

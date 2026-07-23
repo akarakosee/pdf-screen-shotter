@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pageFileName, sanitizeBaseName, zipFileName } from '../src/app/naming';
+import { mergedFileName, pageFileName, sanitizeBaseName, zipFileName } from '../src/app/naming';
 
 describe('output naming (R6)', () => {
   it('strips extension and keeps Turkish characters', () => {
@@ -18,5 +18,11 @@ describe('output naming (R6)', () => {
   it('builds page and zip names per PRD R6', () => {
     expect(pageFileName('report', 7, 'png')).toBe('report_page_007.png');
     expect(zipFileName('report')).toBe('report_pages.zip');
+  });
+});
+
+describe('mergedFileName', () => {
+  it('returns a fixed merged.pdf name', () => {
+    expect(mergedFileName()).toBe('merged.pdf');
   });
 });

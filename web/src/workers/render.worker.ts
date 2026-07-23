@@ -15,7 +15,7 @@ import { DEFAULT_JPG_QUALITY, PREVIEW_DPI } from '../core/config';
 import { MuPdfEngine } from '../engine/MuPdfEngine';
 import { EncryptedError } from '../engine/PdfEngine';
 import { ZipStream } from './zipStream';
-import { pageFileName, sanitizeBaseName, zipFileName } from '../app/naming';
+import { mergedFileName, pageFileName, sanitizeBaseName, zipFileName } from '../app/naming';
 import { parsePageRange } from '../app/pageRange';
 import { renderDemoPages } from './demoRender';
 
@@ -42,7 +42,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   }
   // Reset on arrival (not when the queued run starts) so a cancel sent while
   // earlier messages are still processing isn't lost.
-  if (msg.type === 'start') cancelled = false;
+  if (msg.type === 'start' || msg.type === 'merge-start') cancelled = false;
   queue = queue.then(async () => {
     try {
       await ready;
@@ -58,6 +58,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
           msg.jpgQuality ?? DEFAULT_JPG_QUALITY,
           msg.deliveryMethod,
         );
+      else if (msg.type === 'merge-start') await mergeRun(msg.files, msg.meta);
       else if (msg.type === 'demo-render') await demoRenderHandler(msg.file, msg.dpi, msg.maxPages);
     } catch (e) {
       // Unrecoverable (e.g. WASM OOM): JobController terminates + respawns us.
@@ -288,6 +289,64 @@ async function run(
     cancelled,
   };
   post({ type: 'done', result });
+}
+
+// ADR-008: combines every successfully-opened file's pages, in array order,
+// into one merged PDF. A per-file cooperative-cancel check mirrors run()'s
+// per-page one; cancelling before any file merges means merge-done carries
+// no output (mirrors ExportResult's existing cancelled-with-no-output shape).
+async function mergeRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> {
+  const started = Date.now();
+  const docs: Awaited<ReturnType<typeof engine.open>>[] = [];
+  let totalPages = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    // Yield a macrotask so a pending 'cancel' can be delivered between files.
+    await new Promise((r) => setTimeout(r, 0));
+    if (cancelled) break;
+
+    const { fileId } = meta[i]!;
+    try {
+      const doc = await engine.open(files[i]!);
+      const count = engine.pageCount(doc);
+      if (count === 0) {
+        engine.close(doc);
+        post({ type: 'file-error', fileId, message: 'zero-pages' });
+      } else {
+        docs.push(doc);
+        totalPages += count;
+      }
+    } catch (e) {
+      console.error('[worker] merge: engine.open failed:', e);
+      post({
+        type: 'file-error',
+        fileId,
+        message: e instanceof EncryptedError ? 'encrypted' : 'corrupt',
+      });
+    }
+    post({ type: 'merge-progress', fileIndex: i + 1, totalFiles: files.length });
+  }
+
+  let output: Blob | undefined;
+  let outputName: string | undefined;
+  if (!cancelled && docs.length > 0) {
+    const merged = await engine.merge(docs);
+    output = new Blob([merged as BlobPart], { type: 'application/pdf' });
+    outputName = mergedFileName();
+  }
+  for (const doc of docs) engine.close(doc);
+
+  post({
+    type: 'merge-done',
+    result: {
+      totalPages,
+      mergedFiles: docs.length,
+      durationMs: Date.now() - started,
+      cancelled,
+      output,
+      outputName,
+    },
+  });
 }
 
 function range(n: number): number[] {

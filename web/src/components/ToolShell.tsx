@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
+import { reasonText } from '../app/fileErrors';
 import { parsePageRange, PageRangeError } from '../app/pageRange';
 import { validatePdfFile } from '../app/validators';
 import { DEFAULT_DPI, PREVIEW_DPI } from '../core/config';
@@ -573,15 +574,4 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       <Toast toast={toast} onClear={() => setToast(null)} />
     </div>
   );
-}
-
-function reasonText(code: string, t: Strings): string {
-  switch (code) {
-    case 'encrypted':
-      return t.encryptedFile;
-    case 'zero-pages':
-      return t.zeroPages;
-    default:
-      return t.corruptFile;
-  }
 }
