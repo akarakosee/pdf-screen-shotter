@@ -1,0 +1,11 @@
+---
+// web/src/pages/merge-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { MergeShell } from '../components/MergeShell';
+import { mergeCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="UTILITY · BIND" {...mergeCopy.en}>
+  <MergeShell client:load t={en} />
+</ToolPage>
