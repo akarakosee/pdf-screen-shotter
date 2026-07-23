@@ -28,6 +28,8 @@ export interface PdfEngine {
   /** Throws EncryptedError for password-protected files. */
   open(data: ArrayBuffer): Promise<PdfDoc>;
   pageCount(doc: PdfDoc): number;
+  /** Combines pages from every doc, in array order, into one new PDF. */
+  merge(docs: PdfDoc[]): Promise<Uint8Array>;
   renderPage(
     doc: PdfDoc,
     page: number, // 1-based

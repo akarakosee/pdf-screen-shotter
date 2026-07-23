@@ -34,6 +34,33 @@ export class MuPdfEngine implements PdfEngine {
     return (doc as MuPdfDoc).handle.countPages();
   }
 
+  async merge(docs: PdfDoc[]): Promise<Uint8Array> {
+    const m = this.require();
+    const out = new m.PDFDocument();
+    try {
+      let at = 0;
+      for (const doc of docs) {
+        const src = (doc as MuPdfDoc).handle.asPDF();
+        if (!src) throw new Error('merge: source document is not a PDF');
+        const count = (doc as MuPdfDoc).handle.countPages();
+        for (let i = 0; i < count; i++) {
+          out.graftPage(at, src, i);
+          at++;
+        }
+      }
+      const buf = out.saveToBuffer();
+      try {
+        // asUint8Array() copies out of WASM memory (same pattern as
+        // pixmap.asPNG() in renderPage() below — safe to destroy right after).
+        return buf.asUint8Array();
+      } finally {
+        buf.destroy();
+      }
+    } finally {
+      out.destroy();
+    }
+  }
+
   async renderPage(
     doc: PdfDoc,
     page: number,
