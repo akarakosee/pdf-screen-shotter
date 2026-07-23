@@ -205,3 +205,91 @@ export const toolCopy: Record<'png' | 'jpg', Record<'en' | 'tr', ToolCopy>> = {
     },
   },
 };
+
+const mergeStepsEn: Step[] = [
+  { name: 'Add your PDFs', text: 'Drop two or more PDF files on the page, or click to browse.' },
+  {
+    name: 'Set the order',
+    text: 'Use the up/down arrows on each file to put them in the order you want merged.',
+  },
+  { name: 'Merge and download', text: 'Press Merge and download the single combined PDF.' },
+];
+
+const mergeStepsTr: Step[] = [
+  {
+    name: 'PDF dosyalarını ekle',
+    text: 'İki veya daha fazla PDF dosyasını sayfaya bırak ya da tıklayıp seç.',
+  },
+  {
+    name: 'Sırayı ayarla',
+    text: 'Her dosyanın yanındaki yukarı/aşağı oklarıyla birleştirme sırasını belirle.',
+  },
+  { name: 'Birleştir ve indir', text: 'Birleştir düğmesine bas ve tek bir PDF olarak indir.' },
+];
+
+export const mergeCopy: Record<'en' | 'tr', ToolCopy> = {
+  en: {
+    title: 'Merge PDF — combine files in your browser, files never uploaded',
+    description:
+      'Combine multiple PDF files into one document, free and without limits. Everything runs in your browser — your files never leave your device.',
+    h1: 'Merge PDF',
+    tagline:
+      'Combine multiple PDFs into one document — free, no limits, and your files stay on your device.',
+    howToName: 'How to merge PDF files in your browser',
+    howItWorks: 'How it works',
+    faqTitle: 'Frequently asked questions',
+    steps: mergeStepsEn,
+    faq: [
+      {
+        q: 'Are my PDF files uploaded to a server?',
+        a: 'No. The merge runs entirely inside your browser using WebAssembly. Your files are read locally and the merged PDF is saved back to your device — no copy is transmitted anywhere.',
+      },
+      {
+        q: 'Can I change the order of the files?',
+        a: 'Yes. Use the up and down arrows next to each file to arrange them in the order you want them merged.',
+      },
+      {
+        q: 'Is there a file count or size limit?',
+        a: 'No fixed limit. Because your own device does the work, even many large files merge without being uploaded anywhere.',
+      },
+      {
+        q: 'What happens with password-protected or damaged PDFs?',
+        a: 'They are skipped with a clear message, and the rest of your files still merge together. Password-protected files cannot be opened yet.',
+      },
+    ],
+    crossLink: { href: '/pdf-to-png', label: 'Need to turn PDF pages into images instead? Convert PDF to PNG.' },
+  },
+  tr: {
+    title: "PDF Birleştir — tarayıcında birleştir, dosyalar yüklenmeden",
+    description:
+      'Birden çok PDF dosyasını ücretsiz ve sınırsız biçimde tek bir belgede birleştir. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.',
+    h1: 'PDF Birleştir',
+    tagline: 'Birden çok PDF\'i tek bir belgede birleştir — ücretsiz, sınırsız ve dosyaların cihazında kalır.',
+    howToName: 'Tarayıcıda PDF dosyalarını birleştirme',
+    howItWorks: 'Nasıl çalışır',
+    faqTitle: 'Sık sorulan sorular',
+    steps: mergeStepsTr,
+    faq: [
+      {
+        q: 'PDF dosyalarım bir sunucuya yükleniyor mu?',
+        a: 'Hayır. Birleştirme, WebAssembly kullanılarak tamamen tarayıcının içinde çalışır. Dosyalar cihazında okunur ve birleştirilmiş PDF yine cihazına kaydedilir — hiçbir kopya bir yere iletilmez.',
+      },
+      {
+        q: 'Dosyaların sırasını değiştirebilir miyim?',
+        a: 'Evet. Her dosyanın yanındaki yukarı ve aşağı oklarını kullanarak birleştirme sırasını istediğin gibi ayarlayabilirsin.',
+      },
+      {
+        q: 'Dosya sayısı veya boyutu için bir sınır var mı?',
+        a: 'Sabit bir sınır yok. İşi kendi cihazın yaptığı için çok sayıda büyük dosya bile hiçbir yere yüklenmeden birleştirilir.',
+      },
+      {
+        q: 'Şifreli veya hasarlı PDF dosyalarında ne olur?',
+        a: 'Bu dosyalar açık bir mesajla atlanır ve kalan dosyalar yine de birleştirilir. Şifreli dosyalar şimdilik açılamıyor.',
+      },
+    ],
+    crossLink: {
+      href: '/tr/pdf-to-png',
+      label: "PDF sayfalarını görüntüye çevirmek mi istiyorsun? PDF'i PNG'ye çevir.",
+    },
+  },
+};
