@@ -60,6 +60,16 @@ export interface ExportResult {
   cancelled: boolean;
 }
 
+export interface MergeResult {
+  totalPages: number;
+  mergedFiles: number;
+  durationMs: number;
+  cancelled: boolean;
+  /** Absent if every input file failed, or the merge was cancelled before any output existed. */
+  output?: Blob;
+  outputName?: string;
+}
+
 // ── Worker message protocol (§3.3) ──────────────────────────────────────────
 
 export interface FileMeta {
@@ -79,6 +89,7 @@ export type UiToWorkerMessage =
     }
   | { type: 'preview-page'; file: ArrayBuffer; dpi: number; page: number; requestId: string } // ADR-007: filmstrip thumbnails
   | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
+  | { type: 'merge-start'; files: ArrayBuffer[]; meta: FileMeta[] } // ADR-008: combine N PDFs into one
   | { type: 'demo-render'; file: ArrayBuffer; dpi: number; maxPages: number } // ADR-006: homepage live hero demo
   | { type: 'cancel' };
 
@@ -87,6 +98,8 @@ export type WorkerToUiMessage =
   | { type: 'preview-page-done'; requestId: string; page: number; blob: Blob } // ADR-007
   | { type: 'preview-page-error'; requestId: string; page: number; message: string } // ADR-007: a single bad thumbnail never tears down the worker
   | { type: 'inspect-done'; fileId: string; pageCount: number } // ADR-003; errors reuse file-error
+  | { type: 'merge-progress'; fileIndex: number; totalFiles: number } // ADR-008
+  | { type: 'merge-done'; result: MergeResult } // ADR-008
   | { type: 'progress'; data: ProgressData }
   | { type: 'page-error'; error: PageError } // page skipped, run continues
   | { type: 'file-error'; fileId: string; message: string } // file skipped, next file
