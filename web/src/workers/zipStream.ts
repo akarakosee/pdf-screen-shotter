@@ -2,7 +2,7 @@
 // the ZIP stream immediately and its buffer released, so at most ~1 rendered
 // page lives in memory. PNG/JPEG are already compressed → entries are STORED.
 
-import { Zip, ZipPassThrough } from 'fflate';
+import { Zip, ZipDeflate } from 'fflate';
 
 export class ZipStream {
   private chunks: Uint8Array[] = [];
@@ -26,7 +26,11 @@ export class ZipStream {
 
   add(name: string, data: Uint8Array): void {
     if (this.error) throw this.error;
-    const entry = new ZipPassThrough(name);
+    // Mac Archive Utility crashes on STORED (Method 0) + Data Descriptors.
+    // Streaming fflate always uses Data Descriptors. Using ZipDeflate with
+    // level 0 creates DEFLATE (Method 8) blocks with no compression, which
+    // Archive Utility supports perfectly.
+    const entry = new ZipDeflate(name, { level: 0 });
     this.zip.add(entry);
     entry.push(data, true);
   }

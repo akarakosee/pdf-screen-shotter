@@ -30,6 +30,8 @@ export interface PdfEngine {
   pageCount(doc: PdfDoc): number;
   /** Combines pages from every doc, in array order, into one new PDF. */
   merge(docs: PdfDoc[]): Promise<Uint8Array>;
+  /** Extracts the specified 1-based pages from a doc into one new PDF. */
+  split(doc: PdfDoc, pages: number[]): Promise<Uint8Array>;
   renderPage(
     doc: PdfDoc,
     page: number, // 1-based

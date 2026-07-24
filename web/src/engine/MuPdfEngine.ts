@@ -50,9 +50,30 @@ export class MuPdfEngine implements PdfEngine {
       }
       const buf = out.saveToBuffer();
       try {
-        // asUint8Array() copies out of WASM memory (same pattern as
-        // pixmap.asPNG() in renderPage() below — safe to destroy right after).
-        return buf.asUint8Array();
+        // asUint8Array() returns a view into WASM memory. We MUST .slice() it
+        // so we have a distinct JS copy before we destroy the WASM buffer.
+        return buf.asUint8Array().slice();
+      } finally {
+        buf.destroy();
+      }
+    } finally {
+      out.destroy();
+    }
+  }
+
+  async split(doc: PdfDoc, pages: number[]): Promise<Uint8Array> {
+    const m = this.require();
+    const out = new m.PDFDocument();
+    try {
+      const src = (doc as MuPdfDoc).handle.asPDF();
+      if (!src) throw new Error('split: source document is not a PDF');
+      for (let i = 0; i < pages.length; i++) {
+        // pages array is 1-indexed (from the UI), MuPDF expects 0-indexed
+        out.graftPage(i, src, pages[i]! - 1);
+      }
+      const buf = out.saveToBuffer();
+      try {
+        return buf.asUint8Array().slice();
       } finally {
         buf.destroy();
       }

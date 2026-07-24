@@ -17,6 +17,7 @@ import type {
   PageError,
   PerFileExportOptions,
   ProgressData,
+  SplitResult,
   UiToWorkerMessage,
   WorkerToUiMessage,
 } from '../core/types';
@@ -33,6 +34,8 @@ export interface JobEvents {
   onMergeProgress?: (fileIndex: number, totalFiles: number) => void;
   /** ADR-008: the merge finished (or was cancelled). */
   onMergeDone?: (result: MergeResult) => void;
+  onSplitProgress?: (extractedPages: number, totalSelected: number) => void;
+  onSplitDone?: (result: SplitResult) => void;
   onFatal?: (message: string) => void;
   /** Fired once, instead of onFatal, when the worker has failed too many
    * times in a row and JobController has given up respawning it. Every
@@ -134,6 +137,13 @@ export class JobController {
     this.post({ type: 'merge-start', files: buffers, meta }, buffers);
   }
 
+  async splitFiles(file: File, fileId: string, selectedPages: number[], mode: 'extract' | 'burst'): Promise<void> {
+    if (this.disabled || this.running) return;
+    this.running = true;
+    const buf = await file.arrayBuffer();
+    this.post({ type: 'split-start', file: buf, meta: { fileId, name: file.name }, selectedPages, mode }, [buf]);
+  }
+
   cancel(): void {
     if (this.disabled) return;
     this.post({ type: 'cancel' });
@@ -195,6 +205,13 @@ export class JobController {
       case 'merge-done':
         this.running = false;
         this.events.onMergeDone?.(msg.result);
+        break;
+      case 'split-progress':
+        this.events.onSplitProgress?.(msg.extractedPages, msg.totalSelected);
+        break;
+      case 'split-done':
+        this.running = false;
+        this.events.onSplitDone?.(msg.result);
         break;
       case 'fatal':
         this.handleFatal(msg.message);

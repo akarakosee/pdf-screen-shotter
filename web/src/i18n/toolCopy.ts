@@ -293,3 +293,38 @@ export const mergeCopy: Record<'en' | 'tr', ToolCopy> = {
     },
   },
 };
+
+export const splitCopy: Record<"en" | "tr", ToolCopy> = {
+  en: {
+    title: "Split PDF — extract pages in your browser, files never uploaded",
+    description: "Extract and separate PDF pages into multiple files, free and without limits. Everything runs in your browser — your files never leave your device.",
+    h1: "Split PDF",
+    tagline: "Extract pages from your PDF into new documents — free, no limits, and your files stay on your device.",
+    howToName: "How to split PDF files in your browser",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
+    steps: [
+      { name: "Add your PDF", text: "Drop a PDF file on the page." },
+      { name: "Select pages", text: "Click to select the pages you want to extract from the visual grid." },
+      { name: "Extract or Burst", text: "Extract them into a single PDF or burst them into individual page files." }
+    ],
+    faq: [],
+    crossLink: { href: "/merge-pdf", label: "Need to combine PDFs instead? Merge PDF files." },
+  },
+  tr: {
+    title: "PDF Böl — tarayıcında ayır, dosyalar yüklenmeden",
+    description: "PDF sayfalarını çıkart ve ayrı dosyalara böl. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
+    h1: "PDF Böl",
+    tagline: "PDF dosyandan sayfaları çıkararak yeni belgeler oluştur — ücretsiz, sınırsız ve dosyaların cihazında kalır.",
+    howToName: "Tarayıcıda PDF dosyalarını bölme",
+    howItWorks: "Nasıl çalışır",
+    faqTitle: "Sık sorulan sorular",
+    steps: [
+      { name: "PDF dosyanı ekle", text: "Bir PDF dosyasını sayfaya bırak." },
+      { name: "Sayfaları seç", text: "Görsel ızgaradan çıkarmak istediğin sayfalara tıkla." },
+      { name: "Çıkar veya Patlat", text: "Tek bir PDF olarak çıkar veya her bir sayfayı ayrı bir dosya (ZIP) olarak indir." }
+    ],
+    faq: [],
+    crossLink: { href: "/tr/merge-pdf", label: "Bölmek yerine birleştirmek mi istiyorsun? PDF Birleştir." },
+  },
+};

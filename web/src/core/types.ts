@@ -70,6 +70,16 @@ export interface MergeResult {
   outputName?: string;
 }
 
+export interface SplitResult {
+  totalPages: number;
+  extractedPages: number;
+  durationMs: number;
+  cancelled: boolean;
+  output?: Blob; // Present for 'extract' mode
+  outputName?: string;
+  pages?: { name: string; blob: Blob }[]; // Present for 'burst' mode
+}
+
 // ── Worker message protocol (§3.3) ──────────────────────────────────────────
 
 export interface FileMeta {
@@ -90,6 +100,7 @@ export type UiToWorkerMessage =
   | { type: 'preview-page'; file: ArrayBuffer; dpi: number; page: number; requestId: string } // ADR-007: filmstrip thumbnails
   | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
   | { type: 'merge-start'; files: ArrayBuffer[]; meta: FileMeta[] } // ADR-008: combine N PDFs into one
+  | { type: 'split-start'; file: ArrayBuffer; meta: FileMeta; selectedPages: number[]; mode: 'extract' | 'burst' }
   | { type: 'demo-render'; file: ArrayBuffer; dpi: number; maxPages: number } // ADR-006: homepage live hero demo
   | { type: 'cancel' };
 
@@ -100,6 +111,8 @@ export type WorkerToUiMessage =
   | { type: 'inspect-done'; fileId: string; pageCount: number } // ADR-003; errors reuse file-error
   | { type: 'merge-progress'; fileIndex: number; totalFiles: number } // ADR-008
   | { type: 'merge-done'; result: MergeResult } // ADR-008
+  | { type: 'split-progress'; extractedPages: number; totalSelected: number }
+  | { type: 'split-done'; result: SplitResult }
   | { type: 'progress'; data: ProgressData }
   | { type: 'page-error'; error: PageError } // page skipped, run continues
   | { type: 'file-error'; fileId: string; message: string } // file skipped, next file

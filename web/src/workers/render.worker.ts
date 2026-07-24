@@ -42,7 +42,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   }
   // Reset on arrival (not when the queued run starts) so a cancel sent while
   // earlier messages are still processing isn't lost.
-  if (msg.type === 'start' || msg.type === 'merge-start') cancelled = false;
+  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start') cancelled = false;
   queue = queue.then(async () => {
     try {
       await ready;
@@ -59,6 +59,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
           msg.deliveryMethod,
         );
       else if (msg.type === 'merge-start') await mergeRun(msg.files, msg.meta);
+      else if (msg.type === 'split-start') await splitRun(msg.file, msg.meta, msg.selectedPages, msg.mode);
       else if (msg.type === 'demo-render') await demoRenderHandler(msg.file, msg.dpi, msg.maxPages);
     } catch (e) {
       // Unrecoverable (e.g. WASM OOM): JobController terminates + respawns us.
@@ -341,6 +342,74 @@ async function mergeRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> {
     result: {
       totalPages,
       mergedFiles: docs.length,
+      durationMs: Date.now() - started,
+      cancelled,
+      output,
+      outputName,
+    },
+  });
+}
+
+async function splitRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  selectedPages: number[],
+  mode: 'extract' | 'burst'
+): Promise<void> {
+  const started = Date.now();
+  let output: Blob | undefined;
+  let outputName: string | undefined;
+  let extractedPages = 0;
+  let doc: Awaited<ReturnType<typeof engine.open>> | undefined;
+
+  try {
+    doc = await engine.open(file);
+    const totalPages = engine.pageCount(doc);
+
+    if (mode === 'extract') {
+      const extracted = await engine.split(doc, selectedPages);
+      output = new Blob([extracted as BlobPart], { type: 'application/pdf' });
+      outputName = `${sanitizeBaseName(meta.name)}-extracted.pdf`;
+      extractedPages = selectedPages.length;
+      post({ type: 'split-progress', extractedPages, totalSelected: selectedPages.length });
+    } else if (mode === 'burst') {
+      const zip = new ZipStream();
+      const base = sanitizeBaseName(meta.name);
+
+      for (let i = 0; i < selectedPages.length; i++) {
+        await new Promise((r) => setTimeout(r, 0));
+        if (cancelled) break;
+
+        const pageNum = selectedPages[i]!;
+        const extracted = await engine.split(doc, [pageNum]);
+        const entryName = `${base}-page-${pageNum}.pdf`;
+        zip.add(entryName, extracted);
+
+        extractedPages++;
+        post({ type: 'split-progress', extractedPages, totalSelected: selectedPages.length });
+      }
+
+      if (!cancelled) {
+        output = await zip.toBlob();
+        outputName = zipFileName(`${base}-burst`);
+      }
+    }
+  } catch (e) {
+    console.error('[worker] splitRun failed:', e);
+    post({
+      type: 'file-error',
+      fileId: meta.fileId,
+      message: e instanceof EncryptedError ? 'encrypted' : 'corrupt',
+    });
+  } finally {
+    if (doc) engine.close(doc);
+  }
+
+  post({
+    type: 'split-done',
+    result: {
+      totalPages: doc ? engine.pageCount(doc) : 0,
+      extractedPages,
       durationMs: Date.now() - started,
       cancelled,
       output,

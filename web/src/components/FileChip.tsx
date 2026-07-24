@@ -1,7 +1,8 @@
 // FileChip: queued · valid · invalid · processing · done · failed.
 // File name in mono; size + page count; remove (×) with a 44px hit area.
 
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronDown, ChevronUp, GripVertical, X } from 'lucide-react';
 import type { Strings } from '../i18n/en';
 import { fmt } from '../i18n/en';
 import type { FileStatus } from '../core/types';
@@ -34,6 +35,11 @@ export function FileChip({
   onMoveDown,
   canMoveUp = true,
   canMoveDown = true,
+  chipRef,
+  className: extraClassName,
+  onDragHandlePointerDown,
+  isDragging = false,
+  dragStyle,
 }: {
   t: Strings;
   data: ChipData;
@@ -46,20 +52,39 @@ export function FileChip({
   onMoveDown?: () => void;
   canMoveUp?: boolean;
   canMoveDown?: boolean;
+  chipRef?: (el: HTMLLIElement | null) => void; // FLIP animation ref callback
+  className?: string; // extra classes for animation states
+  onDragHandlePointerDown?: (e: React.PointerEvent<HTMLDivElement>) => void;
+  isDragging?: boolean;
+  dragStyle?: React.CSSProperties;
 }) {
   const isFailed = data.status === 'invalid' || data.status === 'failed';
+  
+  // Freeze the initial delay so it doesn't change on reorder
+  const [hasEntered, setHasEntered] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setHasEntered(true), (enterDelay || 0) + 600);
+    return () => clearTimeout(timer);
+  }, [enterDelay]);
+
   return (
     <li
-      style={enterDelay > 0 ? { animationDelay: `${enterDelay}ms` } : undefined}
-      className={`chip-enter relative flex items-center gap-3 rounded-s border px-3 py-2 transition-all duration-200 ${
-        isFailed
-          ? 'card-lit border-danger/40 bg-surface dark:bg-surface-dark'
-          : hasError
-            ? 'border-danger bg-gradient-to-r from-danger/10 to-danger/5 shadow-[0_0_15px_rgba(220,38,38,0.25)] dark:from-danger/20 dark:to-transparent'
-            : isActive
-              ? 'border-amber bg-gradient-to-r from-amber/10 to-[#F0C778]/5 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:from-amber-dark/20 dark:to-transparent'
-              : 'card-lit bg-surface hover:border-ink-muted/30 dark:bg-surface-dark dark:hover:border-ink-muted-dark/30'
-      } ${onClick && !isFailed ? 'cursor-pointer' : ''}`}
+      ref={chipRef}
+      style={{
+        ...(!hasEntered && enterDelay > 0 ? { animationDelay: `${enterDelay}ms` } : {}),
+        ...dragStyle,
+      }}
+      className={`${!hasEntered ? 'chip-enter ' : ''}relative flex items-center gap-3 rounded-s border px-3 py-2 ${
+        isDragging
+          ? 'border-amber bg-gradient-to-r from-amber/15 to-[#F0C778]/10 dark:border-amber-dark dark:from-amber-dark/25 dark:to-transparent'
+          : isFailed
+            ? 'card-lit border-danger/40 bg-surface dark:bg-surface-dark'
+            : hasError
+              ? 'border-danger bg-gradient-to-r from-danger/10 to-danger/5 shadow-[0_0_15px_rgba(220,38,38,0.25)] dark:from-danger/20 dark:to-transparent'
+              : isActive
+                ? 'border-amber bg-gradient-to-r from-amber/10 to-[#F0C778]/5 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:from-amber-dark/20 dark:to-transparent'
+                : 'card-lit bg-surface hover:border-ink-muted/30 dark:bg-surface-dark dark:hover:border-ink-muted-dark/30'
+      } ${onClick && !isFailed ? 'cursor-pointer' : ''} ${extraClassName ?? ''}`}
       onClick={!isFailed ? onClick : undefined}
       role={onClick && !isFailed ? 'button' : undefined}
       aria-pressed={isActive}
@@ -70,6 +95,20 @@ export function FileChip({
           <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.3s' }} />
           <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.6s' }} />
           <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.9s' }} />
+        </div>
+      )}
+      {/* Drag handle — only rendered in MergeShell's reorder phase */}
+      {onDragHandlePointerDown && !isFailed && (
+        <div
+          onPointerDown={onDragHandlePointerDown}
+          className={`relative z-10 -ml-1 flex shrink-0 cursor-grab items-center self-stretch justify-center rounded px-1 transition-colors duration-150 ${
+            isDragging
+              ? 'cursor-grabbing text-amber dark:text-amber-400'
+              : 'text-ink-muted/40 hover:text-ink-muted dark:text-ink-muted-dark/40 dark:hover:text-ink-muted-dark'
+          }`}
+          style={{ touchAction: 'none' }}
+        >
+          <GripVertical aria-hidden="true" className="h-4 w-4" strokeWidth={1.5} />
         </div>
       )}
       {!isFailed && data.thumbnailUrl && (

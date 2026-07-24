@@ -1,0 +1,11 @@
+---
+// web/src/pages/split-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { SplitShell } from '../components/SplitShell';
+import { splitCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="UTILITY · DIVIDE" {...splitCopy.en}>
+  <SplitShell client:load t={en} />
+</ToolPage>
