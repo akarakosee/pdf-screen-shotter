@@ -508,8 +508,8 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   : null
               }
             />
-            <div className="card-lit flex min-h-32 min-w-0 flex-col rounded-lg border bg-surface px-3 pb-2 pt-1.5 dark:bg-surface-dark">
-              <div className="mb-2 flex items-center justify-between gap-2">
+            <div className="card-lit flex w-fit max-w-full min-w-0 flex-col self-start rounded-lg border bg-surface pb-2 dark:bg-surface-dark">
+              <div className="mb-2 flex items-center justify-between gap-2 px-3 pt-1.5">
                 <p className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
                   {t.previewTitle}
                 </p>
@@ -523,7 +523,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   getPage={(page) => controller().previewPage(activeFile, page)}
                 />
               ) : (
-                <div className="flex flex-1 items-center justify-center">
+                <div className="flex flex-1 items-center justify-center px-3 pb-2">
                   <p className="text-xs text-ink-muted dark:text-ink-muted-dark" aria-live="polite">
                     {t.previewNoFile}
                   </p>
