@@ -309,7 +309,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'upload' && (
-        <div className="flex flex-col items-center gap-4">
+        <>
           <DropZone
             t={t}
             hasFiles={false}
@@ -320,7 +320,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
             sublabel={t.imgToPdfDropSublabel}
           />
           <PrivacyLine t={t} />
-        </div>
+        </>
       )}
 
       {phase === 'grid' && (
