@@ -66,8 +66,44 @@ export const tr: Strings = {
   mergeMinFiles: 'Birleştirmek için en az 2 geçerli PDF dosyası ekle.',
   mergeResultSummary: '{n} dosya tek bir PDF\'te birleştirildi ({pages} sayfa).',
   mergeDownload: "Birleştirilmiş PDF'i indir",
+  mergeDone: 'Birleştirme tamamlandı.',
+
   mergeMore: 'Yeni birleştirme',
   filePages: '{n} sayfa',
   desktopAppLink: 'Masaüstü uygulamayı edin',
+
+  // Split
+  splitPagesSelected: '{total} sayfadan {selected} tanesi seçildi',
+  splitSelectAll: 'Tümünü Seç',
+  splitClear: 'Seçimi Temizle',
+  splitExtract: 'Tek PDF Olarak Kaydet',
+  splitBurst: 'Ayrı Ayrı PDF\'ler Olarak İndir',
+
+  // Organize
+  organizeAdd: 'Dosya Ekle',
+  organizeExport: 'Düzenlenmiş PDF\'i Kaydet',
+  organizeRotateLeft: 'Sola Döndür',
+  organizeRotateRight: 'Sağa Döndür',
+  organizeDelete: 'Sayfayı Sil',
+  organizeEmpty: 'Tüm sayfalar silindi. Boş bir PDF kaydedilemez.',
+  // Img to PDF
+  imgToPdfDropIdle: 'Görselleri buraya bırak — veya tıklayıp seç',
+  imgToPdfDropSublabel: 'JPG, PNG ve WebP desteklenir — %100 tarayıcı içinde, gizli işlenir',
+  imgToPdfAdd: 'Görsel Ekle',
+  imgToPdfExport: "PDF'e Dönüştür",
+  imgToPdfPageSize: 'Sayfa Boyutu',
+  imgToPdfFit: 'Orijinal Görsel Boyutu',
+  imgToPdfA4: 'A4',
+  imgToPdfLetter: 'Letter',
+  imgToPdfOrientation: 'Yönlendirme',
+  imgToPdfAuto: 'Otomatik',
+  imgToPdfPortrait: 'Dikey',
+  imgToPdfLandscape: 'Yatay',
+  imgToPdfMargin: 'Kenar Boşluğu',
+  imgToPdfNoMargin: 'Kenar Boşluğu Yok (0pt)',
+  imgToPdfSmallMargin: 'Küçük (20pt)',
+  imgToPdfLargeMargin: 'Büyük (40pt)',
+
+  // Status & Errors
   adSpace: 'Reklam alanı',
 };

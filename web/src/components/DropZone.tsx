@@ -13,15 +13,33 @@ interface Props {
   onFiles: (files: File[]) => void;
   onPreload?: () => void; // hover/dragenter → warm up the WASM
   multiple?: boolean;
+  /** File input accept attribute — defaults to PDF-only. Image tools
+   * (img-to-pdf) pass their own so the shared chrome/animations stay
+   * identical across every tool while accepting the right file types. */
+  accept?: string;
+  /** Overrides the idle-state label (defaults to t.dropIdle, "Drop PDFs here"). */
+  idleLabel?: string;
+  /** Overrides the small caption under the label. */
+  sublabel?: string;
 }
 
-export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple = true }: Props) {
+export function DropZone({
+  t,
+  hasFiles,
+  onFiles,
+  onPreload = () => {},
+  multiple = true,
+  accept = '.pdf,application/pdf',
+  idleLabel,
+  sublabel = 'or click here to browse files',
+}: Props) {
   const inputId = useId();
   const [dragover, setDragover] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dragDepth = useRef(0);
+  const label = idleLabel ?? t.dropIdle;
 
-  const accept = useCallback(
+  const acceptFiles = useCallback(
     (list: FileList | null) => {
       if (!list || list.length === 0) return;
       onFiles([...list]);
@@ -51,7 +69,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
       e.preventDefault();
       dragDepth.current = 0;
       setDragover(false);
-      accept(e.dataTransfer.files);
+      acceptFiles(e.dataTransfer.files);
     };
     const esc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -71,7 +89,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
       window.removeEventListener('drop', drop);
       window.removeEventListener('keydown', esc);
     };
-  }, [accept, onPreload]);
+  }, [acceptFiles, onPreload]);
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -81,7 +99,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
         id={inputId}
         ref={inputRef}
         type="file"
-        accept=".pdf,application/pdf"
+        accept={accept}
         multiple={multiple}
         className="sr-only"
         style={{
@@ -95,7 +113,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
           border: 0,
         }}
         onChange={(e) => {
-          accept(e.currentTarget.files);
+          acceptFiles(e.currentTarget.files);
           e.currentTarget.value = '';
         }}
       />
@@ -103,7 +121,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
         htmlFor={inputId}
         role="button"
         tabIndex={0}
-        aria-label={t.dropIdle}
+        aria-label={label}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -152,10 +170,10 @@ export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple 
             key={dragover ? 'over' : 'idle'}
             className={`text-lg font-medium text-ink dark:text-ink-dark ${dragover ? 'pop-in text-amber dark:text-amber-dark' : ''}`}
           >
-            {dragover ? t.dropDragover : t.dropIdle}
+            {dragover ? t.dropDragover : label}
           </span>
           <span className={`text-sm text-ink-muted transition-opacity duration-300 dark:text-ink-muted-dark ${dragover ? 'opacity-0' : 'opacity-100'}`}>
-            or click here to browse files
+            {sublabel}
           </span>
         </div>
       </label>

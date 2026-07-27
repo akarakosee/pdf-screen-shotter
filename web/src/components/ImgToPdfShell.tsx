@@ -22,6 +22,7 @@ import { buildPdfFromImages, type ImgToPdfOptions, type PageSizePreset, type Ori
 import { Button } from './ui/Button';
 import { ProgressPanel } from './ProgressPanel';
 import { PrivacyLine } from './PrivacyLine';
+import { DropZone } from './DropZone';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 
@@ -196,13 +197,12 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
     })
   );
 
-  const handleFiles = async (files: FileList | null) => {
-    if (!files || files.length === 0) return;
+  const handleFiles = async (files: File[]) => {
+    if (files.length === 0) return;
     setErrorMessage(null);
 
     const newItems: ImgItem[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    for (const file of files) {
       const rej = await validateImageFile(file);
       if (rej) {
         setErrorMessage(`Invalid image format: ${file.name}`);
@@ -309,41 +309,17 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'upload' && (
-        <div className="flex flex-col items-center">
-          <label
-            htmlFor="img-upload-input"
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleFiles(e.dataTransfer.files);
-            }}
-            className="group relative flex min-h-[260px] w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-ink-muted/20 bg-surface/50 p-8 transition-all duration-200 hover:border-amber/50 hover:bg-surface dark:border-ink-muted-dark/20 dark:bg-surface-dark/50 dark:hover:border-amber-dark/50 dark:hover:bg-surface-dark"
-          >
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber to-russet text-[#1D1108] shadow-lg transition-transform duration-300 group-hover:scale-105 dark:from-amber-dark dark:to-russet">
-              <Plus className="h-7 w-7" strokeWidth={1.75} />
-            </div>
-            <p className="mb-1 text-base font-medium text-ink dark:text-ink-dark">
-              {t.dropIdle}
-            </p>
-            <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-              Supports JPG, PNG, and WebP — 100% private in-browser processing
-            </p>
-            <input
-              id="img-upload-input"
-              type="file"
-              multiple
-              accept=".jpg,.jpeg,.png,.webp"
-              onChange={(e) => handleFiles(e.target.files)}
-              className="sr-only"
-            />
-          </label>
-          <div className="mt-4">
-            <PrivacyLine t={t} />
-          </div>
+        <div className="flex flex-col items-center gap-4">
+          <DropZone
+            t={t}
+            hasFiles={false}
+            onFiles={handleFiles}
+            multiple
+            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+            idleLabel={t.imgToPdfDropIdle}
+            sublabel={t.imgToPdfDropSublabel}
+          />
+          <PrivacyLine t={t} />
         </div>
       )}
 
@@ -410,7 +386,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                   type="file"
                   multiple
                   accept=".jpg,.jpeg,.png,.webp"
-                  onChange={(e) => handleFiles(e.target.files)}
+                  onChange={(e) => handleFiles(e.target.files ? [...e.target.files] : [])}
                   className="sr-only"
                 />
               </label>

@@ -65,6 +65,43 @@ export const en = {
   mergeMinFiles: 'Add at least 2 valid PDF files to merge.',
   mergeResultSummary: 'Merged {n} files into one PDF ({pages} pages).',
   mergeDownload: 'Download merged PDF',
+  mergeDone: 'Merge complete.',
+
+  // Split
+  splitPagesSelected: '{selected} of {total} pages selected',
+  splitSelectAll: 'Select All',
+  splitClear: 'Clear Selection',
+  splitExtract: 'Save as Single PDF',
+  splitBurst: 'Save as Separate PDFs',
+
+  // Organize
+  organizeAdd: 'Add Files',
+  organizeExport: 'Save Organized PDF',
+  organizeRotateLeft: 'Rotate Left',
+  organizeRotateRight: 'Rotate Right',
+  organizeDelete: 'Remove Page',
+  organizeEmpty: 'All pages removed. Cannot save an empty PDF.',
+  organizeDone: 'Organization complete.',
+
+  // Img to PDF
+  imgToPdfDropIdle: 'Drop images here — or click to browse',
+  imgToPdfDropSublabel: 'Supports JPG, PNG, and WebP — 100% private in-browser processing',
+  imgToPdfAdd: 'Add Images',
+  imgToPdfExport: 'Convert to PDF',
+  imgToPdfPageSize: 'Page Size',
+  imgToPdfFit: 'Fit Image Size',
+  imgToPdfA4: 'A4',
+  imgToPdfLetter: 'Letter',
+  imgToPdfOrientation: 'Orientation',
+  imgToPdfAuto: 'Auto',
+  imgToPdfPortrait: 'Portrait',
+  imgToPdfLandscape: 'Landscape',
+  imgToPdfMargin: 'Margin',
+  imgToPdfNoMargin: 'No Margin (0pt)',
+  imgToPdfSmallMargin: 'Small (20pt)',
+  imgToPdfLargeMargin: 'Large (40pt)',
+
+  // Status & Errors
   mergeMore: 'Merge more',
   filePages: '{n} pages',
   desktopAppLink: 'Get the desktop app',
