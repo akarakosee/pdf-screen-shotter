@@ -410,6 +410,52 @@
     animation: tray-sparkle-burst var(--tray-cycle) linear infinite;
   }
 
+  /* PageCard Loading Animation */
+  .card-load-title {
+    height: 8px;
+    width: 55%;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: card-draw 1.2s linear infinite;
+  }
+  .card-load-line {
+    height: 5px;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: card-draw 1.2s linear infinite;
+  }
+  .card-load-accent {
+    margin-top: 6px;
+    height: 20px;
+    width: 60%;
+    border-radius: 4px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: card-draw 1.2s linear infinite;
+  }
+  .card-load-scan {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 40%;
+    background: linear-gradient(180deg, transparent 0%, rgba(232, 182, 95, 0.35) 50%, transparent 100%);
+    opacity: 0;
+    animation: card-scan 1.2s linear infinite;
+  }
+  .card-load-sparkle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-amber-dark) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.3);
+    animation: card-sparkle 1.2s linear infinite;
+  }
+
   /* Filmstrip (ADR-006): replaces the banned 3-equal-card "How it works"
      pattern with a single connected object — sprocket-hole dividers read
      as one physical film strip, not three interchangeable boxes. (The
@@ -430,6 +476,7 @@
   }
   .filmstrip-frame {
     position: relative;
+    min-height: 215px;
     padding: 22px 18px 18px;
     background: var(--color-surface);
   }
@@ -582,6 +629,26 @@
     opacity: 0;
     transform: scale(0.3);
   }
+}
+
+@keyframes card-draw {
+  0% { transform: scaleX(0); }
+  10% { transform: scaleX(1); }
+  95% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+@keyframes card-scan {
+  0% { transform: translateY(-120%); opacity: 0; }
+  10% { opacity: 1; }
+  60% { transform: translateY(220%); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes card-sparkle {
+  0%, 15% { opacity: 0; transform: scale(0.3); }
+  25% { opacity: 1; transform: scale(1.3); }
+  40%, 100% { opacity: 0; transform: scale(1.5); }
 }
 
 @keyframes dz-breathe {
