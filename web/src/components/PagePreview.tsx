@@ -91,20 +91,20 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
 
   return (
     <div
-      className="flex flex-col items-center gap-3 outline-none"
+      className="flex flex-1 flex-col items-center gap-3 outline-none"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'ArrowLeft') goPrev();
         else if (e.key === 'ArrowRight') goNext();
       }}
     >
-      <div className="flex items-center justify-center p-[5px]">
+      <div className="flex flex-1 min-h-0 w-full items-center justify-center p-[5px]">
         {state === 'ready' && url ? (
           <img
             key={page}
             src={url}
             alt={fmt(t.pageThumbnailAlt, { n: page })}
-            className="paper-page pop-in max-h-72 w-auto max-w-full border object-contain"
+            className="paper-page pop-in h-full w-auto max-w-full border object-contain"
           />
         ) : state === 'error' ? (
           <p
