@@ -489,7 +489,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
       {phase === 'options' && validChips.length > 0 && (
         <div className="phase-enter flex flex-col gap-5">
-          <div className="grid gap-5 md:grid-cols-[2fr_3fr]">
+          <div className="grid gap-5 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
             <OptionsPanel
               t={t}
               dpi={activeConfig.dpi}
