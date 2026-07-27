@@ -18,7 +18,7 @@ export function Toast({ toast, onClear }: { toast: ToastData | null; onClear: ()
   return (
     <div
       role={toast.kind === 'error' ? 'alert' : 'status'}
-      className={`fixed bottom-4 right-4 z-50 max-w-xs rounded-s border bg-surface px-4 py-3 text-xs shadow-2 dark:bg-surface-dark ${
+      className={`fixed bottom-4 right-4 z-50 max-w-xs rounded-lg border bg-surface px-4 py-3 text-xs shadow-2 dark:bg-surface-dark ${
         toast.kind === 'error' ? 'text-danger' : 'text-ink dark:text-ink-dark'
       }`}
     >

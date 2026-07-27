@@ -381,7 +381,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
   if (!wasmOk) {
     return (
-      <div className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.noWasm}</p>
         {desktopAppUrl && (
           <p className="mt-2 text-xs">
@@ -396,13 +396,13 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
   if (unavailable) {
     return (
-      <div role="alert" className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div role="alert" className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.toolUnavailable}</p>
         <div className="mt-3">
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="inline-flex min-h-11 items-center justify-center rounded-s border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
           >
             {t.reloadPage}
           </button>
@@ -465,7 +465,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   onClick={() => addFileInputRef.current?.click()}
                   aria-label={t.addFile}
                   title={t.addFile}
-                  className="btn-motion flex h-full min-h-[58px] w-full items-center justify-center gap-2 rounded-s border border-dashed border-amber/60 bg-gradient-to-br from-amber/10 to-[#F0C778]/20 text-amber shadow-[0_0_15px_rgba(232,182,95,0.15)] transition-all duration-200 hover:border-amber hover:from-amber/20 hover:to-[#F0C778]/30 hover:shadow-[0_0_20px_rgba(232,182,95,0.4)] dark:border-amber-dark/60 dark:from-amber-dark/20 dark:to-[#F0C778]/20 dark:text-amber-400 dark:hover:from-amber-dark/30 dark:hover:to-[#F0C778]/30"
+                  className="btn-motion flex h-full min-h-[58px] w-full items-center justify-center gap-2 rounded-lg border border-dashed border-amber/60 bg-gradient-to-br from-amber/10 to-[#F0C778]/20 text-amber shadow-[0_0_15px_rgba(232,182,95,0.15)] transition-all duration-200 hover:border-amber hover:from-amber/20 hover:to-[#F0C778]/30 hover:shadow-[0_0_20px_rgba(232,182,95,0.4)] dark:border-amber-dark/60 dark:from-amber-dark/20 dark:to-[#F0C778]/20 dark:text-amber-dark dark:hover:from-amber-dark/30 dark:hover:to-[#F0C778]/30"
                 >
                   <Plus aria-hidden="true" className="h-6 w-6" strokeWidth={2.25} />
                 </button>
@@ -508,7 +508,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   : null
               }
             />
-            <div className="card-lit flex min-h-32 min-w-0 flex-col rounded-s border bg-surface px-3 pb-2 pt-1.5 dark:bg-surface-dark">
+            <div className="card-lit flex min-h-32 min-w-0 flex-col rounded-lg border bg-surface px-3 pb-2 pt-1.5 dark:bg-surface-dark">
               <div className="mb-2 flex items-center justify-between gap-2">
                 <p className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
                   {t.previewTitle}
@@ -536,7 +536,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
               type="button"
               onClick={convert}
               disabled={hasGlobalRangeError}
-              className="btn-motion inline-flex min-h-11 items-center justify-center rounded-s bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
+              className="btn-motion inline-flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
             >
               {t.convert}
             </button>

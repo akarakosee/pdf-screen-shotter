@@ -3,7 +3,7 @@
 // visible overlay boundary; Esc cancels the drag-over state. Enter/Space
 // opens the file picker (keyboard flow, WCAG AA).
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useId } from 'react';
 import { FileUp } from 'lucide-react';
 import type { Strings } from '../i18n/en';
 
@@ -11,10 +11,12 @@ interface Props {
   t: Strings;
   hasFiles: boolean;
   onFiles: (files: File[]) => void;
-  onPreload: () => void; // hover/dragenter → warm up the WASM
+  onPreload?: () => void; // hover/dragenter → warm up the WASM
+  multiple?: boolean;
 }
 
-export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
+export function DropZone({ t, hasFiles, onFiles, onPreload = () => {}, multiple = true }: Props) {
+  const inputId = useId();
   const [dragover, setDragover] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dragDepth = useRef(0);
@@ -76,21 +78,32 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
   return (
     <>
       <input
+        id={inputId}
         ref={inputRef}
         type="file"
         accept=".pdf,application/pdf"
-        multiple
-        className="hidden"
+        multiple={multiple}
+        className="sr-only"
+        style={{
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          padding: 0,
+          margin: '-1px',
+          overflow: 'hidden',
+          clip: 'rect(0, 0, 0, 0)',
+          border: 0,
+        }}
         onChange={(e) => {
           accept(e.currentTarget.files);
           e.currentTarget.value = '';
         }}
       />
-      <div
+      <label
+        htmlFor={inputId}
         role="button"
         tabIndex={0}
         aria-label={t.dropIdle}
-        onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -145,7 +158,7 @@ export function DropZone({ t, hasFiles, onFiles, onPreload }: Props) {
             or click here to browse files
           </span>
         </div>
-      </div>
+      </label>
     </>
   );
 }

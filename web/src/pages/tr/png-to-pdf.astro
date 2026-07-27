@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/png-to-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { ImgToPdfShell } from '../../components/ImgToPdfShell';
+import { pngToPdfCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÖNÜŞTÜRÜCÜ · GÖRSELLER" {...pngToPdfCopy.tr}>
+  <ImgToPdfShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={tr} />
+</ToolPage>

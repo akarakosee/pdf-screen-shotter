@@ -1,0 +1,11 @@
+---
+// web/src/pages/organize-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { OrganizeShell } from '../components/OrganizeShell';
+import { organizeCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="UTILITY · ARRANGE" {...organizeCopy.en}>
+  <OrganizeShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={en} />
+</ToolPage>

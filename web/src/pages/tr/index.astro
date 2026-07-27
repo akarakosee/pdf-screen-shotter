@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { FileImage, Image, Layers } from 'lucide-react';
+import { Scissors, FileImage, Image, Images, Layers, Grid3X3, RotateCw, Lock, Unlock, FileText, Eraser, Stamp, Hash, Trash2, FileUp, PenTool, Minimize2 } from 'lucide-react';
 import DevelopingTray from '../../components/DevelopingTray.astro';
+import GlobalFaq from '../../components/GlobalFaq.astro';
 
 const tools = [
   {
@@ -19,18 +20,130 @@ const tools = [
     Icon: Image,
   },
   {
+    href: '/tr/png-to-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · GÖRSELLER',
+    name: "PNG'den PDF'e",
+    line: 'PNG resimlerini PDF belgesine dönüştürün',
+    Icon: FileUp,
+  },
+  {
+    href: '/tr/img-to-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · GÖRSELLER',
+    name: "JPG'den PDF'e",
+    line: 'JPG fotoğraflarını PDF belgesine dönüştürün',
+    Icon: FileUp,
+  },
+  {
     href: '/tr/merge-pdf',
-    idx: 'ARAÇ · BİRLEŞTİR',
+    idx: 'BİRLEŞTİR',
     name: 'PDF Birleştir',
-    line: 'Birden çok PDF\'i tek bir belgede birleştir',
+    line: 'PDF belgelerini tek dosyada birleştir',
     Icon: Layers,
+  },
+  {
+    href: '/tr/split-pdf',
+    idx: 'BÖL · AYIKLA',
+    name: 'PDF Böl',
+    line: 'Sayfaları ayıkla veya parçalara böl',
+    Icon: Scissors,
+  },
+  {
+    href: '/tr/organize-pdf',
+    idx: 'DÜZENLE · SIRALA',
+    name: 'PDF Düzenle',
+    line: 'Sayfaların sırasını ve yönünü düzenle',
+    Icon: Grid3X3,
+  },
+  {
+    href: '/tr/protect-pdf',
+    idx: 'GÜVENLİK · ŞİFRELE',
+    name: 'PDF Şifrele',
+    line: 'Belgenizi şifre ile koruyun',
+    Icon: Lock,
+  },
+  {
+    href: '/tr/unlock-pdf',
+    idx: 'GÜVENLİK · ŞİFRE KALDIR',
+    name: 'PDF Şifre Kaldır',
+    line: 'PDF dosyasından şifre korumasını kaldır',
+    Icon: Unlock,
+  },
+  {
+    href: '/tr/extract-text',
+    idx: 'ARAÇ · DIŞA AKTAR',
+    name: 'Metin Çıkar',
+    line: 'PDF içindeki tüm metinleri çıkarın',
+    Icon: FileText,
+  },
+  {
+    href: '/tr/extract-images',
+    idx: 'ARAÇ · DIŞA AKTAR',
+    name: 'Resim Çıkar',
+    line: 'Gömülü JPG ve PNG görsellerini indirin',
+    Icon: Images,
+  },
+  {
+    href: '/tr/compress-pdf',
+    idx: 'ARAÇ · OPTİMİZE ET',
+    name: 'PDF Sıkıştır / Küçült',
+    line: 'Kalite kaybı olmadan boyutu küçültün',
+    Icon: Minimize2,
+  },
+  {
+    href: '/tr/sanitize-pdf',
+    idx: 'GÜVENLİK · TEMİZLE',
+    name: 'PDF Temizle',
+    line: 'Gizli meta verilerini temizleyin',
+    Icon: Eraser,
+  },
+  {
+    href: '/tr/watermark-pdf',
+    idx: 'GÜVENLİK · FİLİGRAN',
+    name: 'Filigran Ekle',
+    line: 'PDF belgenize filigran ekleyin',
+    Icon: Stamp,
+  },
+  {
+    href: '/tr/flatten-pdf',
+    idx: 'DÜZENLE · DÜZLEŞTİR',
+    name: 'PDF Düzleştir',
+    line: 'Form ve notları sabit katman yapın',
+    Icon: Layers,
+  },
+  {
+    href: '/tr/sign-pdf',
+    idx: 'DÜZENLE · İMZALA',
+    name: 'PDF İmzala',
+    line: 'Belgeye imza ekleyin veya çizin',
+    Icon: PenTool,
+  },
+  {
+    href: '/tr/add-page-numbers',
+    idx: 'ARAÇ · DÜZENLEME',
+    name: 'Sayfa Numarası Ekle',
+    line: 'Belgenize sayfa numarası ekleyin',
+    Icon: Hash,
+  },
+  {
+    href: '/tr/rotate-pdf',
+    idx: 'ARAÇ · DÖNDÜR',
+    name: 'PDF Döndür',
+    line: 'Sayfaları istediğin yöne döndür',
+    Icon: RotateCw,
+  },
+  {
+    href: '/tr/remove-pages',
+    idx: 'ARAÇ · SAYFA SİL',
+    name: 'PDF Sayfa Sil',
+    line: 'İstenmeyen sayfaları belgeden sil',
+    Icon: Trash2,
   },
 ];
 
 const steps = [
-  { n: '01', h: 'Dosyayı yükle', p: 'Bir PDF sürükleyin veya seçin — doğrudan hafızaya okunur, hiçbir yere gönderilmez.' },
-  { n: '02', h: 'Pozlamayı ayarla', p: 'Çözünürlük ve sayfa aralığını seçin. Çoğu belge için 150 DPI yeterlidir.' },
-  { n: '03', h: 'Sayfaları çek', p: 'Sayfalar tek tek işlenir ve doğrudan cihazınıza indirilir.' },
+  { n: '01', h: 'PDF\'inizi ekleyin', p: 'PDF dosyanızı tarayıcıya bırakın. Dosyanız doğrudan belleğe okunur ve hiçbir sunucuya gönderilmez.' },
+  { n: '02', h: 'İşleminizi seçin', p: 'Tamamen yerel araçlarımızı kullanarak belgenizi birleştirin, bölün, şifreleyin veya dönüştürün.' },
+  { n: '03', h: 'Anında indirin', p: 'İşlenen dosyanız hiçbir sınır olmadan, tamamen ücretsiz olarak cihazınıza anında kaydedilir.' },
 ];
 ---
 
@@ -67,14 +180,14 @@ const steps = [
           <li>
             <a
               href={tool.href}
-              class="group flex min-h-11 flex-col gap-2 rounded-m border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
+              class="group flex h-[114px] flex-col justify-between rounded-2xl border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
             >
               <span class="font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark">{tool.idx}</span>
               <span class="flex items-center gap-2 font-heading text-md font-semibold">
                 <tool.Icon aria-hidden="true" className="h-4.5 w-4.5 shrink-0 text-accent dark:text-teal-dark" strokeWidth={1.75} />
                 {tool.name}
               </span>
-              <span class="text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
+              <span class="truncate text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
             </a>
           </li>
         ))
@@ -98,9 +211,9 @@ const steps = [
     </div>
   </section>
 
-  <section class="mx-auto max-w-[640px] px-4 pb-16">
+  <section class="mx-auto max-w-[640px] px-4 pb-8">
     <div
-      class="rounded-m border p-6 sm:p-8 dark:bg-gradient-to-br dark:from-teal-dim-dark/10 dark:via-amber-dim-dark/10 dark:to-russet-dim-dark/10"
+      class="rounded-2xl border p-6 sm:p-8 dark:bg-gradient-to-br dark:from-teal-dim-dark/10 dark:via-amber-dim-dark/10 dark:to-russet-dim-dark/10"
     >
       <p class="text-sm">
         Bu sitedeki her araç, işini WebAssembly kullanarak tarayıcınızın içinde yapar. Bir
@@ -111,7 +224,9 @@ const steps = [
         doğrulayabilirsiniz.
       </p>
       <pre
-        class="mt-4 overflow-x-auto rounded-s border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-bg-dark dark:text-ink-muted-dark">dönüşüm sırasında dosya verisi taşıyan ağ isteği: 0</pre>
+        class="mt-4 overflow-x-auto rounded-lg border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-bg-dark dark:text-ink-muted-dark">dönüşüm sırasında dosya verisi taşıyan ağ isteği: 0</pre>
     </div>
   </section>
+
+  <GlobalFaq lang="tr" />
 </Base>

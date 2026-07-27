@@ -1,0 +1,11 @@
+---
+// web/src/pages/flatten-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { FlattenShell } from '../components/FlattenShell';
+import { flattenCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · FLATTEN" {...flattenCopy.en}>
+  <FlattenShell client:load t={en} />
+</ToolPage>

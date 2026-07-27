@@ -69,7 +69,7 @@ export function OptionsPanel({
         </legend>
         {/* Flexible-width segments: the "Recommended" label (and its longer TR
             translation) must never clip — widths follow content. */}
-        <div role="radiogroup" className="flex overflow-hidden rounded-s border">
+        <div role="radiogroup" className="flex overflow-hidden rounded-lg border">
           {DPI_PRESETS.map((preset) => (
             <button
               key={preset}
@@ -105,7 +105,7 @@ export function OptionsPanel({
           placeholder={t.pageRangePlaceholder}
           aria-invalid={rangeError != null}
           aria-describedby={rangeError ? errorId : undefined}
-          className={`w-full min-h-11 rounded-s border bg-surface px-3 font-mono text-xs text-ink dark:bg-surface-dark dark:text-ink-dark ${
+          className={`w-full min-h-11 rounded-lg border bg-surface px-3 font-mono text-xs text-ink dark:bg-surface-dark dark:text-ink-dark ${
             rangeError ? 'border-danger' : ''
           }`}
         />
@@ -138,7 +138,7 @@ export function OptionsPanel({
               role="radio"
               aria-checked={backgroundColor === opt}
               onClick={() => onBackgroundColor(opt)}
-              className={`btn-motion flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-s border px-2 text-xs transition-colors duration-[120ms] ${
+              className={`btn-motion flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border px-2 text-xs transition-colors duration-[120ms] ${
                 backgroundColor === opt
                   ? 'border-accent bg-accent/10 font-medium text-accent dark:text-accent'
                   : 'bg-surface text-ink-muted hover:bg-bg dark:bg-surface-dark dark:text-ink-muted-dark dark:hover:bg-bg-dark'
@@ -168,7 +168,7 @@ export function OptionsPanel({
 
 
       {fileInfo && (
-        <div className="rounded-s border bg-surface/60 p-3 backdrop-blur-sm dark:bg-surface-dark/60">
+        <div className="rounded-lg border bg-surface/60 p-3 backdrop-blur-sm dark:bg-surface-dark/60">
           <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
             {t.fileInfoTitle}
           </p>

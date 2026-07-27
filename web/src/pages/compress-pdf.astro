@@ -1,0 +1,11 @@
+---
+// web/src/pages/compress-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { CompressShell } from '../components/CompressShell';
+import { compressCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="OPTIMIZE · COMPRESS" {...compressCopy.en}>
+  <CompressShell client:load t={en} />
+</ToolPage>

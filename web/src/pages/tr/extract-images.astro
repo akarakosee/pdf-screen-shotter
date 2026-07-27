@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/extract-images.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { ExtractImagesShell } from '../../components/ExtractImagesShell';
+import { extractImagesCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · RESİM ÇIKAR" {...extractImagesCopy.tr}>
+  <ExtractImagesShell client:load t={tr} />
+</ToolPage>

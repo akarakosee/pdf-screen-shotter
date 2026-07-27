@@ -208,16 +208,14 @@ export function SignShell({ t = en }: Props) {
   // stretches/distorts — unlike cropping independently to widthFrac x heightFrac.
   const guideBackgroundStyle: React.CSSProperties | undefined = previewUrl
     ? (() => {
-        const scale = 100 / Math.max(0.04, customBox.heightFrac);
-        const visibleWidthFrac = Math.min(1, customBox.heightFrac);
-        const centerX = customBox.xFrac + customBox.widthFrac / 2;
-        const xStart = Math.max(0, Math.min(1 - visibleWidthFrac, centerX - visibleWidthFrac / 2));
-        const posX = (xStart / Math.max(0.0001, 1 - visibleWidthFrac)) * 100;
-        const posY = (customBox.yFrac / Math.max(0.0001, 1 - customBox.heightFrac)) * 100;
+        const bgWidth = (1 / Math.max(0.01, customBox.widthFrac)) * 100;
+        const bgHeight = (1 / Math.max(0.01, customBox.heightFrac)) * 100;
+        const posX = Math.max(0, Math.min(100, (customBox.xFrac / Math.max(0.0001, 1 - customBox.widthFrac)) * 100));
+        const posY = Math.max(0, Math.min(100, (customBox.yFrac / Math.max(0.0001, 1 - customBox.heightFrac)) * 100));
         return {
           backgroundImage: `url(${previewUrl})`,
           backgroundRepeat: 'no-repeat',
-          backgroundSize: `${scale}% ${scale}%`,
+          backgroundSize: `${bgWidth}% ${bgHeight}%`,
           backgroundPosition: `${posX}% ${posY}%`,
         };
       })()
@@ -430,8 +428,8 @@ export function SignShell({ t = en }: Props) {
 
       {phase === 'options' && file && (
         <div className="phase-enter flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-m border border-amber/30 bg-surface p-4 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)] min-w-0 flex-1">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-s bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
+          <div className="flex items-center gap-3 rounded-2xl border border-amber/30 bg-surface p-4 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)] min-w-0 flex-1">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
               <PenTool className="h-5 w-5" />
             </div>
             <div className="flex flex-col overflow-hidden min-w-0 flex-1">
@@ -443,11 +441,11 @@ export function SignShell({ t = en }: Props) {
           </div>
 
           {/* Mode Selector Tabs */}
-          <div className="grid grid-cols-3 gap-2 rounded-m bg-surface-alt p-1 dark:bg-surface-dark-alt">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-surface-alt p-1 dark:bg-surface-dark-alt">
             <button
               type="button"
               onClick={() => setMode('draw')}
-              className={`flex items-center justify-center gap-2 rounded-s py-2 text-sm font-medium transition-all ${
+              className={`flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium transition-all ${
                 mode === 'draw'
                   ? 'bg-surface text-amber shadow-sm dark:bg-surface-dark dark:text-amber-dark'
                   : 'text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark'
@@ -458,20 +456,8 @@ export function SignShell({ t = en }: Props) {
             </button>
             <button
               type="button"
-              onClick={() => setMode('type')}
-              className={`flex items-center justify-center gap-2 rounded-s py-2 text-sm font-medium transition-all ${
-                mode === 'type'
-                  ? 'bg-surface text-amber shadow-sm dark:bg-surface-dark dark:text-amber-dark'
-                  : 'text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark'
-              }`}
-            >
-              <Type className="h-4 w-4" />
-              <span>{t.lang === 'tr' ? 'Yaz' : 'Type'}</span>
-            </button>
-            <button
-              type="button"
               onClick={() => setMode('upload')}
-              className={`flex items-center justify-center gap-2 rounded-s py-2 text-sm font-medium transition-all ${
+              className={`flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium transition-all ${
                 mode === 'upload'
                   ? 'bg-surface text-amber shadow-sm dark:bg-surface-dark dark:text-amber-dark'
                   : 'text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark'
@@ -483,10 +469,17 @@ export function SignShell({ t = en }: Props) {
           </div>
 
           {/* Signature Input Container */}
-          <div className="flex flex-col gap-3 rounded-m border bg-surface p-4 dark:bg-surface-dark">
+          <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
             {mode === 'draw' && (
               <div className="flex flex-col gap-2">
-                <div className="relative flex justify-center rounded border border-dashed border-ink-muted/30 bg-white dark:bg-zinc-100 overflow-hidden">
+                <div
+                  className="relative flex justify-center rounded border border-dashed border-ink-muted/30 bg-white overflow-hidden mx-auto w-full"
+                  style={{
+                    aspectRatio: `${Math.max(0.01, customBox.widthFrac)} / ${Math.max(0.01, customBox.heightFrac * 1.414)}`,
+                    maxHeight: '220px',
+                    minHeight: '130px',
+                  }}
+                >
                   {guideBackgroundStyle && (
                     <div
                       className="absolute inset-0 opacity-30 pointer-events-none"
@@ -495,13 +488,13 @@ export function SignShell({ t = en }: Props) {
                   )}
                   <canvas
                     ref={canvasRef}
-                    width={400}
-                    height={150}
+                    width={800}
+                    height={200}
                     onPointerDown={startDrawing}
                     onPointerMove={draw}
                     onPointerUp={stopDrawing}
                     onPointerLeave={stopDrawing}
-                    className="relative cursor-crosshair touch-none"
+                    className="relative w-full h-full cursor-crosshair touch-none block"
                   />
                 </div>
                 <div className="flex justify-between items-center text-xs text-ink-muted dark:text-ink-muted-dark">
@@ -528,14 +521,14 @@ export function SignShell({ t = en }: Props) {
                   className="w-full rounded border bg-surface p-2 text-sm text-ink dark:bg-surface-dark dark:text-ink-dark"
                 />
                 {typedName.trim() ? (
-                  <div className="relative flex h-24 items-center justify-center rounded border border-dashed border-amber/40 bg-white p-4 dark:bg-zinc-100 overflow-hidden">
+                  <div className="relative flex h-24 items-center justify-center rounded border border-dashed border-amber/40 bg-white p-4 overflow-hidden">
                     {guideBackgroundStyle && (
                       <div
                         className="absolute inset-0 opacity-30 pointer-events-none"
                         style={guideBackgroundStyle}
                       />
                     )}
-                    <span className="relative font-serif italic text-3xl text-zinc-800 select-none">
+                    <span className="relative font-serif italic text-3xl text-ink select-none">
                       {typedName.trim()}
                     </span>
                   </div>
@@ -579,7 +572,7 @@ export function SignShell({ t = en }: Props) {
           </div>
 
           {/* Interactive Live Page Preview & Signature Placement */}
-          <div className="flex flex-col gap-3 rounded-m border bg-surface p-4 dark:bg-surface-dark">
+          <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
                 {t.lang === 'tr' ? 'Canlı Sayfa Önizleme & Konum Belirleme' : 'Live Page Preview & Signature Placement'}
@@ -615,7 +608,7 @@ export function SignShell({ t = en }: Props) {
               </div>
             </div>
 
-            <div className="relative flex justify-center bg-zinc-200 dark:bg-zinc-800 rounded border border-border p-4 overflow-hidden min-h-[360px]">
+            <div className="relative flex justify-center bg-surface-2 dark:bg-surface-2-dark rounded border border-ink-muted/20 dark:border-ink-muted-dark/20 p-4 overflow-hidden min-h-[360px]">
               {isLoadingPreview && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 text-xs text-white font-medium">
                   {t.lang === 'tr' ? 'Sayfa önizlemesi yükleniyor...' : 'Loading page preview...'}
@@ -643,22 +636,13 @@ export function SignShell({ t = en }: Props) {
                     }}
                     onMouseDown={handleBoxMouseDown}
                   >
-                    {/* Dynamic Signature Display (drawn, typed, or uploaded) */}
-                    <div className="w-full h-full flex items-center justify-center p-1 pointer-events-none">
+                    {/* Dynamic Signature Display (drawn or uploaded) */}
+                    <div className="w-full h-full flex items-center justify-center p-0 pointer-events-none">
                       {mode === 'draw' && (
                         drawnDataUrl ? (
-                          <img src={drawnDataUrl} alt="Signature Preview" className="max-w-full max-h-full object-contain drop-shadow" />
+                          <img src={drawnDataUrl} alt="Signature Preview" className="w-full h-full object-fill drop-shadow" />
                         ) : (
                           <PenTool className="w-6 h-6 text-amber/60 dark:text-amber-dark/60" />
-                        )
-                      )}
-                      {mode === 'type' && (
-                        typedName.trim() ? (
-                          <span className="font-serif italic font-bold text-slate-800 dark:text-slate-100 text-sm sm:text-base truncate drop-shadow">
-                            {typedName}
-                          </span>
-                        ) : (
-                          <Type className="w-6 h-6 text-amber/60 dark:text-amber-dark/60" />
                         )
                       )}
                       {mode === 'upload' && (
@@ -692,7 +676,7 @@ export function SignShell({ t = en }: Props) {
 
           {/* Placement & Page Settings */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3 rounded-m border bg-surface p-3.5 dark:bg-surface-dark">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-3.5 dark:bg-surface-dark">
               <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
                 {t.lang === 'tr' ? 'Sayfa Seçimi' : 'Target Pages'}
               </span>
@@ -748,14 +732,14 @@ export function SignShell({ t = en }: Props) {
                       min={1}
                       value={customPageNum}
                       onChange={(e) => setCustomPageNum(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-20 rounded border border-border bg-surface px-2 py-1 text-xs text-ink dark:border-border-dark dark:bg-surface-dark dark:text-ink-dark focus:border-amber focus:outline-none"
+                      className="w-20 rounded border border-ink-muted/20 dark:border-ink-muted-dark/20 bg-surface px-2 py-1 text-xs text-ink dark:border-ink-muted/20 dark:border-ink-muted-dark/20-dark dark:bg-surface-dark dark:text-ink-dark focus:border-amber focus:outline-none"
                     />
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 rounded-m border bg-surface p-3.5 dark:bg-surface-dark">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-3.5 dark:bg-surface-dark">
               <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
                 {t.lang === 'tr' ? 'İmza Konumu' : 'Signature Position'}
               </span>
@@ -782,7 +766,7 @@ export function SignShell({ t = en }: Props) {
                       className={`flex flex-col items-center justify-center rounded border px-2 py-2.5 text-center text-xs transition-all ${
                         active
                           ? 'border-amber bg-amber/15 text-amber dark:border-amber-dark dark:bg-amber-dark/25 dark:text-amber-dark font-semibold shadow-[0_0_10px_rgba(232,182,95,0.15)]'
-                          : 'border-border/60 bg-surface-alt/50 text-ink-muted hover:border-amber/40 hover:text-ink dark:border-border-dark/60 dark:bg-surface-dark-alt/50 dark:text-ink-muted-dark dark:hover:text-ink-dark'
+                          : 'border-ink-muted/20 dark:border-ink-muted-dark/20/60 bg-surface-alt/50 text-ink-muted hover:border-amber/40 hover:text-ink dark:border-ink-muted/20 dark:border-ink-muted-dark/20-dark/60 dark:bg-surface-dark-alt/50 dark:text-ink-muted-dark dark:hover:text-ink-dark'
                       }`}
                     >
                       <span>{t.lang === 'tr' ? item.tr : item.en}</span>
@@ -806,16 +790,16 @@ export function SignShell({ t = en }: Props) {
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
             <span>{t.converting || 'Processing...'}</span>
           </div>
-          <div className="h-1 overflow-hidden rounded-s bg-surface border dark:bg-surface-dark">
+          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-custom-pulse bg-ink dark:bg-ink-dark" />
           </div>
         </div>
       )}
 
       {phase === 'done' && output && (
-        <div className="phase-enter flex flex-col gap-5 rounded-m border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
+        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
           <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
               <Check className="h-6 w-6" />
             </div>
             <div className="flex flex-col gap-1">

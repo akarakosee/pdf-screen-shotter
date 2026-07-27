@@ -6,7 +6,7 @@
 // rationale (ADR-008 covers the worker protocol addition).
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Check, Download, RefreshCw } from 'lucide-react';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
 import { reasonText } from '../app/fileErrors';
@@ -387,7 +387,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
 
   if (!wasmOk) {
     return (
-      <div className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.noWasm}</p>
         {desktopAppUrl && (
           <p className="mt-2 text-xs">
@@ -402,13 +402,13 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
 
   if (unavailable) {
     return (
-      <div role="alert" className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div role="alert" className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.toolUnavailable}</p>
         <div className="mt-3">
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="inline-flex min-h-11 items-center justify-center rounded-s border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
           >
             {t.reloadPage}
           </button>
@@ -462,7 +462,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
                 onClick={() => addFileInputRef.current?.click()}
                 aria-label={t.addFile}
                 title={t.addFile}
-                className="btn-motion flex h-full min-h-[58px] w-full items-center justify-center gap-2 rounded-s border border-dashed border-amber/60 bg-gradient-to-br from-amber/10 to-[#F0C778]/20 text-amber shadow-[0_0_15px_rgba(232,182,95,0.15)] transition-all duration-200 hover:border-amber hover:from-amber/20 hover:to-[#F0C778]/30 hover:shadow-[0_0_20px_rgba(232,182,95,0.4)] dark:border-amber-dark/60 dark:from-amber-dark/20 dark:to-[#F0C778]/20 dark:text-amber-400 dark:hover:from-amber-dark/30 dark:hover:to-[#F0C778]/30"
+                className="btn-motion flex h-full min-h-[58px] w-full items-center justify-center gap-2 rounded-lg border border-dashed border-amber/60 bg-gradient-to-br from-amber/10 to-[#F0C778]/20 text-amber shadow-[0_0_15px_rgba(232,182,95,0.15)] transition-all duration-200 hover:border-amber hover:from-amber/20 hover:to-[#F0C778]/30 hover:shadow-[0_0_20px_rgba(232,182,95,0.4)] dark:border-amber-dark/60 dark:from-amber-dark/20 dark:to-[#F0C778]/20 dark:text-amber-dark dark:hover:from-amber-dark/30 dark:hover:to-[#F0C778]/30"
               >
                 <Plus aria-hidden="true" className="h-6 w-6" strokeWidth={2.25} />
               </button>
@@ -511,7 +511,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
             }
             aria-valuemin={0}
             aria-valuemax={100}
-            className="h-1 overflow-hidden rounded-s bg-surface dark:bg-surface-dark border"
+            className="h-1 overflow-hidden rounded-lg bg-surface dark:bg-surface-dark border"
           >
             <div
               className="progress-fill h-full w-full"
@@ -531,23 +531,33 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'done' && mergeResult && (
-        <div className="card-lit flex flex-col items-start gap-3 rounded-s border bg-surface p-5 dark:bg-surface-dark">
-          <p className="text-sm font-medium">{t.doneTitle}</p>
-          <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-            {fmt(t.mergeResultSummary, { n: mergeResult.mergedFiles, pages: mergeResult.totalPages })}
-          </p>
-          {mergeResult.output && mergeResult.outputName && (
-            <Button onClick={() => triggerDownload(mergeResult.output!, mergeResult.outputName!)}>
-              {t.mergeDownload}
-            </Button>
-          )}
-          <button
-            type="button"
-            onClick={reset}
-            className="text-sm text-accent underline underline-offset-2"
-          >
-            {t.mergeMore}
-          </button>
+        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
+          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
+              <Check className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-lg font-semibold">
+                {t.lang === 'tr' ? 'PDF Dosyaları Başarıyla Birleştirildi!' : 'PDF Files Successfully Merged!'}
+              </h3>
+              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
+                {fmt(t.mergeResultSummary, { n: mergeResult.mergedFiles, pages: mergeResult.totalPages })}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Button variant="ghost" onClick={reset} className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4" />
+                {t.mergeMore}
+              </Button>
+              {mergeResult.output && mergeResult.outputName && (
+                <Button variant="primary" onClick={() => triggerDownload(mergeResult.output!, mergeResult.outputName!)} className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  {t.mergeDownload}
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

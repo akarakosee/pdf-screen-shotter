@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PDFDocument } from 'pdf-lib';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
 import { validatePdfFile } from '../app/validators';
@@ -10,7 +11,8 @@ import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
 import { PageCard } from './PageCard';
-import { Scissors, FileArchive } from 'lucide-react';
+import { ProgressPanel } from './ProgressPanel';
+import { Scissors, FileArchive, Check, Download, RefreshCw } from 'lucide-react';
 
 type Phase = 'upload' | 'grid' | 'processing' | 'done';
 
@@ -73,19 +75,30 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
       const f = incoming[0];
       if (!f) return;
       
-      const rejection = await validatePdfFile(f);
-      if (rejection) {
-        setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
+      if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
+        setToast({ kind: 'error', message: t.notPdf });
         return;
       }
       
-      const id = 's1';
-      setFile({ id, file: f, pageCount: 0 }); // pageCount will update onInspect
-      setPhase('processing'); // temporary phase while inspecting
-      setSelectedPages(new Set());
-      await controller().inspect(id, f);
+      try {
+        const arrayBuffer = await f.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+        const pageCount = pdfDoc.getPageCount();
+        if (pageCount === 0) {
+          setToast({ kind: 'error', message: t.corruptFile });
+          return;
+        }
+
+        const id = 's1';
+        setFile({ id, file: f, pageCount });
+        const all = new Set(Array.from({ length: pageCount }, (_, i) => i + 1));
+        setSelectedPages(all);
+        setPhase('grid');
+      } catch (err) {
+        setToast({ kind: 'error', message: t.corruptFile });
+      }
     },
-    [controller, t]
+    [t]
   );
 
   const togglePage = useCallback((page: number) => {
@@ -143,7 +156,7 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
 
   if (!wasmOk) {
     return (
-      <div className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.noWasm}</p>
         {desktopAppUrl && (
           <p className="mt-2 text-xs">
@@ -158,13 +171,13 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
 
   if (unavailable) {
     return (
-      <div role="alert" className="rounded-m border bg-surface p-6 dark:bg-surface-dark">
+      <div role="alert" className="rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
         <p className="text-sm">{t.toolUnavailable}</p>
         <div className="mt-3">
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="inline-flex min-h-11 items-center justify-center rounded-s border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
           >
             {t.reloadPage}
           </button>
@@ -188,16 +201,16 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'grid' && file && (
         <div className="phase-enter flex flex-col gap-6 pb-24" style={{ perspective: '1000px' }}>
           
-          <div className="flex items-center justify-between px-2">
-            <div className="flex flex-col">
-              <h3 className="text-sm font-semibold">{file.file.name}</h3>
+          <div className="flex items-center justify-between px-2 gap-4">
+            <div className="flex flex-col min-w-0 flex-1">
+              <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap scrollbar-thin pr-2" title={file.file.name}>{file.file.name}</div>
               <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                {selectedPages.size} / {file.pageCount} pages selected
+                {fmt(t.splitPagesSelected, { selected: selectedPages.size, total: file.pageCount })}
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" onClick={selectAll} className="text-xs h-8 px-3">Select All</Button>
-              <Button variant="secondary" onClick={clearSelection} disabled={selectedPages.size === 0} className="text-xs h-8 px-3">Clear</Button>
+            <div className="flex gap-2 shrink-0">
+              <Button variant="secondary" onClick={selectAll} className="text-xs h-8 px-3">{t.splitSelectAll}</Button>
+              <Button variant="secondary" onClick={clearSelection} disabled={selectedPages.size === 0} className="text-xs h-8 px-3">{t.splitClear}</Button>
             </div>
           </div>
 
@@ -215,9 +228,8 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
             ))}
           </div>
 
-          {/* Sticky Action Bar with massive 3D glassmorphism */}
           <div className={`
-            sticky bottom-6 mt-8 mx-auto p-2 rounded-2xl border
+            sticky z-50 bottom-6 mt-8 mx-auto p-2 rounded-2xl border
             bg-white/80 dark:bg-ink/80 backdrop-blur-xl shadow-2xl
             flex gap-2 transition-all duration-500 ease-out transform
             ${selectedPages.size > 0 
@@ -232,7 +244,7 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
                          hover:scale-[1.02] active:scale-95"
             >
               <Scissors className="w-4 h-4" />
-              <span className="text-sm">Extract to PDF</span>
+              <span className="text-sm">{t.splitExtract}</span>
             </button>
             <button
               onClick={() => runSplit('burst')}
@@ -243,79 +255,66 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
                          hover:scale-[1.05] active:scale-95"
             >
               <FileArchive className="w-4 h-4" />
-              <span className="text-sm">Burst to ZIP</span>
+              <span className="text-sm">{t.splitBurst}</span>
             </button>
           </div>
         </div>
       )}
 
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3" aria-live="polite">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>
-              {splitProgress && file?.pageCount
-                ? `Processing page ${splitProgress.extractedPages} of ${splitProgress.totalSelected}...`
-                : t.converting}
-            </span>
-            <span className="font-mono">
-              {splitProgress
-                ? Math.round((splitProgress.extractedPages / splitProgress.totalSelected) * 100)
-                : 0}
-              %
-            </span>
-          </div>
-          <div
-            role="progressbar"
-            aria-valuenow={
-              splitProgress ? Math.round((splitProgress.extractedPages / splitProgress.totalSelected) * 100) : 0
-            }
-            aria-valuemin={0}
-            aria-valuemax={100}
-            className="h-1 overflow-hidden rounded-s bg-surface dark:bg-surface-dark border"
-          >
-            <div
-              className="progress-fill h-full w-full"
-              style={{
-                transform: `scaleX(${
-                  splitProgress ? splitProgress.extractedPages / splitProgress.totalSelected : 0
-                })`,
-              }}
-            />
-          </div>
-          <div>
-            <Button variant="secondary" onClick={cancel} disabled={cancelling}>
-              {cancelling ? t.cancelling : t.cancel}
-            </Button>
-          </div>
-        </div>
+        <ProgressPanel
+          label={
+            splitProgress && file?.pageCount
+              ? `Processing page ${splitProgress.extractedPages} of ${splitProgress.totalSelected}...`
+              : t.converting || 'Processing...'
+          }
+          progressPercent={
+            splitProgress
+              ? (splitProgress.extractedPages / splitProgress.totalSelected) * 100
+              : 0
+          }
+          onCancel={cancel}
+          cancelling={cancelling}
+          cancelLabel={t.cancel || 'Cancel'}
+          cancellingLabel={t.cancelling || 'Cancelling...'}
+        />
       )}
 
       {phase === 'done' && splitResult && (
-        <div className="card-lit flex flex-col items-start gap-3 rounded-s border bg-surface p-5 dark:bg-surface-dark">
-          <p className="text-sm font-medium">{t.doneTitle}</p>
-          <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-            Extracted {splitResult.extractedPages} pages.
-          </p>
-          {splitResult.output && splitResult.outputName && (
-            <Button onClick={() => triggerDownload(splitResult.output!, splitResult.outputName!)}>
-              Download {splitResult.outputName.endsWith('.zip') ? 'ZIP' : 'PDF'}
-            </Button>
-          )}
-          <div className="flex items-center gap-4 mt-2">
-            <button
-              type="button"
-              onClick={splitSameFile}
-              className="text-sm font-medium text-amber underline underline-offset-2 hover:text-amber-hover dark:text-amber-400 dark:hover:text-amber-300 transition-colors"
-            >
-              Split same file
-            </button>
-            <button
-              type="button"
-              onClick={reset}
-              className="text-sm text-ink-muted dark:text-ink-muted-dark underline underline-offset-2 hover:text-ink dark:hover:text-ink-dark transition-colors"
-            >
-              Split another file
-            </button>
+        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
+          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
+              <Check className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-lg font-semibold">
+                {t.lang === 'tr' ? 'PDF Başarıyla Bölündü!' : 'PDF Successfully Split!'}
+              </h3>
+              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
+                {t.lang === 'tr'
+                  ? `Toplam ${splitResult.extractedPages} sayfa başarıyla ayrıldı.`
+                  : `Extracted ${splitResult.extractedPages} pages successfully.`}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Button variant="ghost" onClick={splitSameFile} className="flex items-center gap-2">
+                <Scissors className="h-4 w-4" />
+                {t.lang === 'tr' ? 'Aynı Dosyayı Böl' : 'Split Same File'}
+              </Button>
+              <Button variant="ghost" onClick={reset} className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4" />
+                {t.lang === 'tr' ? 'Yeni Dosya Seç' : 'Split Another PDF'}
+              </Button>
+              {splitResult.output && splitResult.outputName && (
+                <Button variant="primary" onClick={() => triggerDownload(splitResult.output!, splitResult.outputName!)} className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  {t.lang === 'tr'
+                    ? (splitResult.outputName.endsWith('.zip') ? 'ZIP İndir' : 'PDF İndir')
+                    : `Download ${splitResult.outputName.endsWith('.zip') ? 'ZIP' : 'PDF'}`}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/compress-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { CompressShell } from '../../components/CompressShell';
+import { compressCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="OPTİMİZE ET · SIKIŞTIR" {...compressCopy.tr}>
+  <CompressShell client:load t={tr} />
+</ToolPage>

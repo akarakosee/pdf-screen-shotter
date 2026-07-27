@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/remove-pages.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { OrganizeShell } from '../../components/OrganizeShell';
+import { removeCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ARAÇ · SAYFA SİL" {...removeCopy.tr}>
+  <OrganizeShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={tr} mode="remove" />
+</ToolPage>

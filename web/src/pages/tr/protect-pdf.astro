@@ -1,0 +1,12 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { protectCopy } from '../../i18n/toolCopy';
+import { ProtectShell } from '../../components/ProtectShell';
+import { tr } from '../../i18n/tr';
+
+const copy = protectCopy.tr;
+---
+
+<ToolPage lang="tr" {...copy}>
+  <ProtectShell client:load t={tr} />
+</ToolPage>

@@ -1,0 +1,11 @@
+---
+// web/src/pages/img-to-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { ImgToPdfShell } from '../components/ImgToPdfShell';
+import { imgToPdfCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="CONVERTER · IMAGES" {...imgToPdfCopy.en}>
+  <ImgToPdfShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={en} />
+</ToolPage>

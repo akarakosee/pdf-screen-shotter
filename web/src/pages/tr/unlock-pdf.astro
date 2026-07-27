@@ -1,0 +1,22 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { unlockCopy } from '../../i18n/toolCopy';
+import { UnlockShell } from '../../components/UnlockShell';
+import { tr } from '../../i18n/tr';
+
+const copy = unlockCopy.tr;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  crossLink={copy.crossLink}
+  lang="tr"
+>
+  <UnlockShell t={tr} client:load />
+</ToolPage>

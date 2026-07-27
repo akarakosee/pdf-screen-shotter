@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { FileImage, Image, Layers, Scissors } from 'lucide-react';
+import { FileImage, Image, Images, Layers, Scissors, Grid3X3, Lock, Unlock, FileText, Eraser, Stamp, Hash, RotateCw, Trash2, FileUp, PenTool, Minimize2 } from 'lucide-react';
 import DevelopingTray from '../components/DevelopingTray.astro';
+import GlobalFaq from '../components/GlobalFaq.astro';
 
 const tools = [
   {
@@ -19,25 +20,130 @@ const tools = [
     Icon: Image,
   },
   {
+    href: '/png-to-pdf',
+    idx: 'CONVERTER · IMAGES',
+    name: 'PNG to PDF',
+    line: 'Convert PNG images into a PDF document',
+    Icon: FileUp,
+  },
+  {
+    href: '/img-to-pdf',
+    idx: 'CONVERTER · IMAGES',
+    name: 'JPG to PDF',
+    line: 'Convert JPG photos into a PDF document',
+    Icon: FileUp,
+  },
+  {
     href: '/merge-pdf',
-    idx: 'UTILITY · BIND',
+    idx: 'BIND · COMBINE',
     name: 'Merge PDF',
-    line: 'Combine multiple PDFs into a single document',
+    line: 'Combine PDF files in custom order',
     Icon: Layers,
   },
   {
     href: '/split-pdf',
-    idx: 'UTILITY · DIVIDE',
+    idx: 'CUT · EXTRACT',
     name: 'Split PDF',
-    line: 'Extract pages or split a PDF into parts',
+    line: 'Extract page ranges or separate pages',
     Icon: Scissors,
+  },
+  {
+    href: '/organize-pdf',
+    idx: 'GRID · REORDER',
+    name: 'Organize PDF',
+    line: 'Reorder, rotate, and delete pages',
+    Icon: Grid3X3,
+  },
+  {
+    href: '/protect-pdf',
+    idx: 'SECURITY · LOCK',
+    name: 'Protect PDF',
+    line: 'Encrypt your document with a password',
+    Icon: Lock,
+  },
+  {
+    href: '/unlock-pdf',
+    idx: 'SECURITY · UNLOCK',
+    name: 'Unlock PDF',
+    line: 'Remove password protection from PDF',
+    Icon: Unlock,
+  },
+  {
+    href: '/extract-text',
+    idx: 'UTILITY · EXPORT',
+    name: 'Extract Text',
+    line: 'Extract all readable text from PDF',
+    Icon: FileText,
+  },
+  {
+    href: '/extract-images',
+    idx: 'UTILITY · EXTRACT',
+    name: 'Extract Images',
+    line: 'Extract embedded images into a ZIP',
+    Icon: Images,
+  },
+  {
+    href: '/compress-pdf',
+    idx: 'UTILITY · OPTIMIZE',
+    name: 'Compress PDF',
+    line: 'Reduce PDF size without quality loss',
+    Icon: Minimize2,
+  },
+  {
+    href: '/sanitize-pdf',
+    idx: 'SECURITY · CLEAN',
+    name: 'Sanitize PDF',
+    line: 'Remove hidden metadata from PDF',
+    Icon: Eraser,
+  },
+  {
+    href: '/watermark-pdf',
+    idx: 'SECURITY · WATERMARK',
+    name: 'Watermark PDF',
+    line: 'Stamp your PDF with a watermark',
+    Icon: Stamp,
+  },
+  {
+    href: '/flatten-pdf',
+    idx: 'EDIT · FLATTEN',
+    name: 'Flatten PDF',
+    line: 'Make form fields uneditable',
+    Icon: Layers,
+  },
+  {
+    href: '/sign-pdf',
+    idx: 'EDIT · SIGN',
+    name: 'Sign PDF',
+    line: 'Sign PDFs with drawn or typed signature',
+    Icon: PenTool,
+  },
+  {
+    href: '/add-page-numbers',
+    idx: 'UTILITY · ORGANIZE',
+    name: 'Add Page Numbers',
+    line: 'Add page numbers to your document',
+    Icon: Hash,
+  },
+  {
+    href: '/rotate-pdf',
+    idx: 'UTILITY · ROTATE',
+    name: 'Rotate PDF',
+    line: 'Rotate individual or all PDF pages',
+    Icon: RotateCw,
+  },
+  {
+    href: '/remove-pages',
+    idx: 'UTILITY · REMOVE',
+    name: 'Remove Pages',
+    line: 'Delete unwanted pages from PDF',
+    Icon: Trash2,
   },
 ];
 
 const steps = [
-  { n: '01', h: 'Load the file', p: "Drop a PDF or pick one — it's read straight into memory, never sent anywhere." },
-  { n: '02', h: 'Set the exposure', p: 'Choose resolution and page range. 150 DPI is right for most documents.' },
-  { n: '03', h: 'Pull the pages', p: 'Pages render one by one and download straight to your device.' },
+  { n: '01', h: 'Add your PDF', p: 'Drop your PDF file into the browser. It\'s read straight into memory and never sent to any server.' },
+  { n: '02', h: 'Choose your action', p: 'Merge, split, protect, unlock, or convert your document using our lightning-fast local tools.' },
+  { n: '03', h: 'Download instantly', p: 'Your processed file is saved instantly to your device with zero limits, completely free.' },
 ];
 ---
 
@@ -73,14 +179,14 @@ const steps = [
           <li>
             <a
               href={tool.href}
-              class="group flex min-h-11 flex-col gap-2 rounded-m border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
+              class="group flex h-[114px] flex-col justify-between rounded-2xl border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
             >
               <span class="font-mono text-[11px] text-ink-muted dark:text-ink-faint-dark">{tool.idx}</span>
               <span class="flex items-center gap-2 font-heading text-md font-semibold">
                 <tool.Icon aria-hidden="true" className="h-4.5 w-4.5 shrink-0 text-accent dark:text-teal-dark" strokeWidth={1.75} />
                 {tool.name}
               </span>
-              <span class="text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
+              <span class="truncate text-xs text-ink-muted dark:text-ink-muted-dark">{tool.line}</span>
             </a>
           </li>
         ))
@@ -104,9 +210,9 @@ const steps = [
     </div>
   </section>
 
-  <section class="mx-auto max-w-[640px] px-4 pb-16">
+  <section class="mx-auto max-w-[640px] px-4 pb-8">
     <div
-      class="rounded-m border p-6 sm:p-8 dark:bg-gradient-to-br dark:from-teal-dim-dark/10 dark:via-amber-dim-dark/10 dark:to-russet-dim-dark/10"
+      class="rounded-2xl border p-6 sm:p-8 dark:bg-gradient-to-br dark:from-teal-dim-dark/10 dark:via-amber-dim-dark/10 dark:to-russet-dim-dark/10"
     >
       <p class="text-sm">
         Every tool on this site does its work inside your browser, using WebAssembly. When you
@@ -116,7 +222,9 @@ const steps = [
         them. The code is open source, so this claim can be checked rather than trusted.
       </p>
       <pre
-        class="mt-4 overflow-x-auto rounded-s border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-bg-dark dark:text-ink-muted-dark">network requests carrying file data during conversion: 0</pre>
+        class="mt-4 overflow-x-auto rounded-lg border bg-surface p-3 font-mono text-xs text-ink-muted dark:bg-bg-dark dark:text-ink-muted-dark">network requests carrying file data during conversion: 0</pre>
     </div>
   </section>
+
+  <GlobalFaq lang="en" />
 </Base>

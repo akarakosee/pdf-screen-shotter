@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/organize-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { OrganizeShell } from '../../components/OrganizeShell';
+import { organizeCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ARAÇ · DÜZENLE" {...organizeCopy.tr}>
+  <OrganizeShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={tr} />
+</ToolPage>

@@ -74,7 +74,7 @@ export function FileChip({
         ...(!hasEntered && enterDelay > 0 ? { animationDelay: `${enterDelay}ms` } : {}),
         ...dragStyle,
       }}
-      className={`${!hasEntered ? 'chip-enter ' : ''}relative flex items-center gap-3 rounded-s border px-3 py-2 ${
+      className={`${!hasEntered ? 'chip-enter ' : ''}relative flex items-center gap-3 rounded-lg border px-3 py-2 ${
         isDragging
           ? 'border-amber bg-gradient-to-r from-amber/15 to-[#F0C778]/10 dark:border-amber-dark dark:from-amber-dark/25 dark:to-transparent'
           : isFailed
@@ -91,10 +91,10 @@ export function FileChip({
     >
       {hasError && (
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0s' }} />
-          <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.3s' }} />
-          <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.6s' }} />
-          <div className="absolute inset-0 animate-custom-ping rounded-s border-2 border-danger/60" style={{ animationDelay: '0.9s' }} />
+          <div className="absolute inset-0 animate-custom-ping rounded-lg border-2 border-danger/60" style={{ animationDelay: '0s' }} />
+          <div className="absolute inset-0 animate-custom-ping rounded-lg border-2 border-danger/60" style={{ animationDelay: '0.3s' }} />
+          <div className="absolute inset-0 animate-custom-ping rounded-lg border-2 border-danger/60" style={{ animationDelay: '0.6s' }} />
+          <div className="absolute inset-0 animate-custom-ping rounded-lg border-2 border-danger/60" style={{ animationDelay: '0.9s' }} />
         </div>
       )}
       {/* Drag handle — only rendered in MergeShell's reorder phase */}
@@ -103,7 +103,7 @@ export function FileChip({
           onPointerDown={onDragHandlePointerDown}
           className={`relative z-10 -ml-1 flex shrink-0 cursor-grab items-center self-stretch justify-center rounded px-1 transition-colors duration-150 ${
             isDragging
-              ? 'cursor-grabbing text-amber dark:text-amber-400'
+              ? 'cursor-grabbing text-amber dark:text-amber-dark'
               : 'text-ink-muted/40 hover:text-ink-muted dark:text-ink-muted-dark/40 dark:hover:text-ink-muted-dark'
           }`}
           style={{ touchAction: 'none' }}
@@ -116,11 +116,11 @@ export function FileChip({
           src={data.thumbnailUrl}
           alt=""
           aria-hidden="true"
-          className="h-10 w-8 shrink-0 rounded-s border object-contain relative z-10"
+          className="h-10 w-8 shrink-0 rounded-lg border object-contain relative z-10"
         />
       )}
       <div className="min-w-0 flex-1 relative z-10">
-        <p className="truncate font-mono text-xs">{data.name}</p>
+        <div className="overflow-x-auto whitespace-nowrap scrollbar-thin font-mono text-xs pr-1" title={data.name}>{data.name}</div>
         <p className={`text-xs ${isFailed || hasError ? 'text-danger' : 'text-ink-muted dark:text-ink-muted-dark'}`}>
           {isFailed
             ? data.reason
@@ -169,7 +169,7 @@ export function FileChip({
             e.stopPropagation();
             onRemove(data.id);
           }}
-          className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-s text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+          className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
         >
           <X aria-hidden="true" className="h-4 w-4" strokeWidth={1.75} />
         </button>

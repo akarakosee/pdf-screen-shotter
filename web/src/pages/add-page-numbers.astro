@@ -1,0 +1,21 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { numberCopy } from '../i18n/toolCopy';
+import { NumberShell } from '../components/NumberShell';
+
+const copy = numberCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  crossLink={copy.crossLink}
+  lang="en"
+>
+  <NumberShell client:load />
+</ToolPage>

@@ -1,0 +1,11 @@
+---
+// web/src/pages/sign-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { SignShell } from '../components/SignShell';
+import { signCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · SIGN" {...signCopy.en}>
+  <SignShell client:load t={en} />
+</ToolPage>

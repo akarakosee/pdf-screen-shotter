@@ -1,0 +1,11 @@
+---
+// web/src/pages/remove-pages.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { OrganizeShell } from '../components/OrganizeShell';
+import { removeCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="UTILITY · REMOVE" {...removeCopy.en}>
+  <OrganizeShell client:load desktopAppUrl="https://github.com/ayberk/pdf-tools-desktop/releases/latest" t={en} mode="remove" />
+</ToolPage>

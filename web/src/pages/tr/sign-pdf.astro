@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/sign-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { SignShell } from '../../components/SignShell';
+import { signCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · İMZALA" {...signCopy.tr}>
+  <SignShell client:load t={tr} />
+</ToolPage>
