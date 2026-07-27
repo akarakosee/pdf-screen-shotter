@@ -301,7 +301,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8">
+    <div className="flex flex-col gap-5">
       {errorMessage && (
         <div className="mb-6 rounded-xl border border-danger/50 bg-danger/10 p-4 text-center text-sm font-medium text-danger animate-custom-ping">
           {errorMessage}
@@ -407,7 +407,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
               items={items.map((i) => i.id)}
               strategy={rectSortingStrategy}
             >
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {items.map((item, idx) => (
                   <SortableImgItem
                     key={item.id}
