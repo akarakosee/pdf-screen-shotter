@@ -21,7 +21,28 @@ export default defineConfig({
       // worker graph, which re-triggers the same discovery — an infinite
       // loop of 504s on fflate.js in dev. Declaring it upfront makes it part
       // of the initial pre-bundle instead.
-      include: ['fflate'],
+      //
+      // Same failure mode for @dnd-kit/*: OrganizeShell.tsx (organize-pdf,
+      // rotate-pdf, remove-pages) and ImgToPdfShell.tsx (img-to-pdf,
+      // png-to-pdf) are React islands hydrated lazily, so the scanner never
+      // sees their @dnd-kit import at server start either — manifested as
+      // "504 Outdated Optimize Dep" on @dnd-kit_core/sortable/utilities,
+      // which aborts island hydration entirely (file picker looks dead:
+      // select a file, nothing happens, no error surfaces to the user).
+      //
+      // Identical structural risk for @pdfsmaller/pdf-decrypt (unlock-pdf)
+      // and @pdfsmaller/pdf-encrypt-lite (protect-pdf) — also only reachable
+      // through their own lazy islands. Not currently observed 504ing in a
+      // long-running dev session (already discovered by an earlier visit),
+      // but a fresh `npm run dev` hits the identical cold-start gap.
+      include: [
+        'fflate',
+        '@dnd-kit/core',
+        '@dnd-kit/sortable',
+        '@dnd-kit/utilities',
+        '@pdfsmaller/pdf-decrypt',
+        '@pdfsmaller/pdf-encrypt-lite',
+      ],
       // mupdf is real ESM ("type": "module") and ships a large WASM binary;
       // esbuild pre-bundling it is unnecessary and risks mishandling its
       // internal wasm asset resolution. It's already loaded via a runtime
