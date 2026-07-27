@@ -9,7 +9,6 @@ import { DPI_PRESETS } from '../core/config';
 import type { ExportOptions } from '../core/types';
 import type { Strings } from '../i18n/en';
 import { formatSize } from './FileChip';
-import { PrivacyLine } from './PrivacyLine';
 
 // A soft reference ceiling for the capacity bar — not a real limit (the tool
 // has none), just the visual scale the fill percentage is drawn against.
@@ -200,9 +199,6 @@ export function OptionsPanel({
               className="h-full rounded-full bg-gradient-to-r from-accent to-amber transition-[width] duration-500 ease-out"
               style={{ width: `${barPct}%` }}
             />
-          </div>
-          <div className="mt-[5px] flex justify-center">
-            <PrivacyLine t={t} />
           </div>
         </div>
       )}

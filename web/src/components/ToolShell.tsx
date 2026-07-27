@@ -531,15 +531,18 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
               )}
             </div>
           </div>
-          <div className="flex w-full justify-end mt-4">
-            <button
-              type="button"
-              onClick={convert}
-              disabled={hasGlobalRangeError}
-              className="btn-motion inline-flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
-            >
-              {t.convert}
-            </button>
+          <div className="flex w-full flex-col items-center gap-3 mt-4">
+            <PrivacyLine t={t} />
+            <div className="flex w-full justify-end">
+              <button
+                type="button"
+                onClick={convert}
+                disabled={hasGlobalRangeError}
+                className="btn-motion inline-flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
+              >
+                {t.convert}
+              </button>
+            </div>
           </div>
         </div>
       )}
