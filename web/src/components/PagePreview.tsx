@@ -104,7 +104,7 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
             key={page}
             src={url}
             alt={fmt(t.pageThumbnailAlt, { n: page })}
-            className="paper-page pop-in h-full w-auto max-w-full border object-contain"
+            className="paper-page pop-in max-h-80 w-auto max-w-full border object-contain"
           />
         ) : state === 'error' ? (
           <p

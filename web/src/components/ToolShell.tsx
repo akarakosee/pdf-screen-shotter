@@ -508,7 +508,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   : null
               }
             />
-            <div className="card-lit flex min-h-0 min-w-0 flex-col rounded-lg border bg-surface pb-2 dark:bg-surface-dark">
+            <div className="card-lit flex w-fit max-w-full min-w-0 flex-col self-start rounded-lg border bg-surface pb-2 dark:bg-surface-dark">
               <div className="mb-2 flex items-center justify-between gap-2 px-3 pt-1.5">
                 <p className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
                   {t.previewTitle}

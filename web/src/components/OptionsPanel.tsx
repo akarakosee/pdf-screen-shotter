@@ -62,7 +62,7 @@ export function OptionsPanel({
     : 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <fieldset>
         <legend className="mb-1.5 text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
           {t.dpiLabel}
@@ -166,11 +166,11 @@ export function OptionsPanel({
 
 
       {fileInfo && (
-        <div className="rounded-lg border bg-surface/60 p-3 backdrop-blur-sm dark:bg-surface-dark/60">
-          <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
+        <div className="rounded-lg border bg-surface/60 p-2.5 backdrop-blur-sm dark:bg-surface-dark/60">
+          <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-ink-muted dark:text-ink-muted-dark">
             {t.fileInfoTitle}
           </p>
-          <dl className="flex flex-col gap-1.5 text-xs">
+          <dl className="flex flex-col gap-1 text-xs">
             <div className="flex items-baseline justify-between gap-3">
               <dt className="text-ink-muted dark:text-ink-muted-dark">{t.fileInfoName}</dt>
               <dd className="truncate font-mono text-ink dark:text-ink-dark">{fileInfo.name}</dd>
