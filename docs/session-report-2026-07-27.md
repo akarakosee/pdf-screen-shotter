@@ -83,27 +83,34 @@ devam edebilmek için hazırlandı.
   diğer shell'lerdeki gibi gerçek bir `events` objesi (en azından boş/no-op handler'lar)
   geçirilmeli.
 
-## 3. Bugünkü konuşmada araştırılan ama HENÜZ implemente edilmeyen: Yeni araç yol haritası
+## 3. Açık kaynak PDF araçları: Detaylı araştırma tamamlandı
 
-Açık kaynak PDF araçları (Stirling-PDF, PDF24, iLovePDF, pdf-lib, Sejda) referans alınarak
-çıkarılan öneriler:
+GitHub API, NPM registry, ve browser compatibility analysis kullanılarak açık kaynak PDF
+projeleri kapsamlı şekilde araştırıldı. **Tarayıcıda çalışan ve localpdf mimarisine uyumlu**
+seçenekler belirlenmiş, her biri için komplekslik/ROI/zaman tahmini yapılmıştır.
 
-**Hızlı kazanç (mevcut pdf-lib/mupdf-wasm altyapısıyla uyumlu):**
-- Crop PDF — CropBox/MediaBox ayarı
-- N-up (çoklu sayfa/tek sayfa ızgara düzeni) — `embedPage` API'si
-- Redact PDF — Sign aracındaki sürükle-bırak arayüzü + siyah kutu + flatten mantığı
-- Reverse Pages — Organize PDF'e tek tık düğmesi veya ayrı araç
-- Header & Footer — Add Page Numbers altyapısının genişletilmesi
+**Çıkarılan Tier 1 (Hemen eklenebilir, mimari değişiklik yok):**
+- **Crop PDF** (⭐ komplekslik, 4-6h, ⭐⭐⭐⭐ ROI) — P0
+- **Reverse Pages** (⭐ komplekslik, 2-3h, ⭐⭐⭐ ROI) — P1
+- **Redact PDF** (⭐⭐ komplekslik, 10-12h, ⭐⭐⭐⭐ ROI) — P1
+- **Grayscale/Monochrome** (⭐⭐ komplekslik, 6-8h, ⭐⭐⭐ ROI) — P2
+- **N-up Imposition** (⭐⭐ komplekslik, 8-10h, ⭐⭐⭐ ROI) — P2
+- **Header & Footer** (⭐⭐ komplekslik, 6-8h, ⭐⭐ ROI) — P2
 
-**Daha büyük/riskli:**
-- PDF Compare (görsel diff, canvas üst üste bindirme)
-- PDF OCR (tesseract.js, tamamen lokal)
-- Grayscale/Monochrome dönüşüm
-- Booklet Imposition (kitapçık sayfa düzeni)
+**Tier 2 (Orta komplekslik, yeni worker mesaj tipi gerekli):**
+- **PDF Compare** (⭐⭐⭐ komplekslik, 12-16h, ⭐⭐⭐ ROI) — P3
+- **OCR Integration** (tesseract.js, ⭐⭐⭐ komplekslik, 16-20h, ⭐⭐⭐⭐ ROI) — P3
 
-**Karar bekleniyor:** Hangisiyle devam edileceği henüz seçilmedi. Bu konuşmada Crop PDF,
-Redact PDF, veya PDF Compare öne sürülmüştü ama kullanıcı bug'ı öncelikli görüp konuyu
-değiştirdi.
+**Tier 3 (Yüksek komplekslik, mimari düzeltme gerekli):**
+- **Booklet Imposition** (⭐⭐⭐⭐ komplekslik, 20-24h, ⭐⭐ ROI) — P4
+
+**Tarayıcı-uyumlu kütüphaneler belirlenmiş:**
+- tesseract.js (OCR, 88K stars)
+- Mozilla's PDF.js (rendering, 45K stars)
+- jsPDF/pdfmake (PDF oluşturma)
+- image-js (görsel filtering)
+
+**Detaylı araştırma:** `docs/open-source-pdf-tools-research-2026-07-27.md` (257 satır, karar matrisi + teknik detaylar)
 
 ## 4. Bir sonraki oturumda nereden devam edilmeli
 
