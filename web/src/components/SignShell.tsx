@@ -76,7 +76,14 @@ export function SignShell({ t = en }: Props) {
   const controllerRef = useRef<JobController | null>(null);
   const getController = useCallback((): JobController => {
     if (!controllerRef.current) {
-      controllerRef.current = new JobController();
+      controllerRef.current = new JobController({
+        onFatal: () => {
+          setToast({ kind: 'error', message: 'Worker failed — try reloading the page' });
+        },
+        onUnavailable: () => {
+          setToast({ kind: 'error', message: 'Preview unavailable — worker disabled' });
+        },
+      });
     }
     return controllerRef.current;
   }, []);
