@@ -1,20 +1,48 @@
 # CLAUDE.md — persistent working memory (web build)
 
-## Code exploration policy (binding, every session)
+## Code Exploration & Token-Saving Policy (STRICT MANDATORY RULE — NO EXCEPTIONS)
 
-For any file inspection, file reading, architecture reading, or planning task in
-this repo, use the `codebase-memory` MCP tools FIRST, before Read/Grep/Glob:
-`search_graph` / `trace_path` / `get_code_snippet` / `query_graph` /
-`get_architecture` / `detect_changes` / `search_code`. Project is pre-indexed as
-`Users-ayberk-Desktop-PDF_Screen_Shotter` — check `index_status` and only fall
-back to `index_repository` if it reports stale/missing. Plain Read/Grep/Glob stays
-fine for non-code files (docs, configs, images) and for a single already-known
-path. See `~/.claude/skills/codebase-memory/SKILL.md` for the decision matrix.
+1. **MANDATORY MCP TRIGGERING:** Every single coding, planning, debugging, or architectural task MUST begin by invoking `codebase-memory-mcp` (`search_graph`, `trace_path`, `get_architecture`, `query_graph`) and `TokenSave MCP`. Do NOT skip this step under any circumstances.
+2. **STRICT TOKEN-SAVING RULE (NO FULL-FILE READS):** You are EXPRESSLY FORBIDDEN from using standard file-reading tools (`Read`, `view_file`, `cat`, etc.) to load entire `.ts`, `.tsx`, `.js`, or `.astro` code files into context. You MUST use `get_code_snippet` to retrieve ONLY the specific function, class, or symbol definitions required.
+3. **WHEN TO USE FALLBACKS:** Standard file reading / grep / glob is permitted ONLY for non-code static assets (images, raw config files, documentation markdown files) or if `index_status` explicitly reports an error after attempting `index_repository`.
 
 Repo layout: Python desktop app at root (untouched); web product lives in `web/`.
 Source of truth, in order: WEB_PLANI.md → SISTEM_TASARIMI.md → ADR-001 / ADR-002
 (ADR-002 supersedes SISTEM_TASARIMI §3.5 COOP/COEP line) → PRD-pdf-to-png.md →
 UI_UX_TASARIM.md (binding design values). Deviations require a new ADR — no silent drift.
+
+## UI/UX & Animation Aesthetics (The "Taste" Standard) — BINDING IN EVERY SESSION
+
+When designing or modifying React components or layouts in this project, adhere strictly to the following aesthetic and interaction standards:
+1. **Color & Glow (The Amber Accent)**
+   - Use `amber` (`from-amber/15`, `border-amber`) for active, selected, or dragged states.
+   - Always map the dark mode equivalent accurately (`dark:border-amber-dark`, `dark:from-amber-dark/25`).
+   - Use soft `box-shadow` glows (e.g., `shadow-[0_0_15px_rgba(232,182,95,0.15)]`) to emphasize active elements.
+2. **Drag & Drop Physics (Manual vs. Synthetic)**
+   - **Manual Drag**: When a user physically drags an element, it must elevate into 3D space (`scale: 1.02` - `1.04`) with a strong drop shadow. Sibling elements must dynamically slide out of the way in real-time.
+   - **Synthetic Move**: When moving elements via buttons (e.g., up/down arrows), the element must remain completely flat (no scale, no shadow, no glow). It should smoothly glide into its new position.
+   - **Easing**: Use fluid physics for all layout shifts, preferably `cubic-bezier(0.22, 1, 0.36, 1)`.
+3. **Entry Animations & Reordering Stability**
+   - List items must enter with a staggered `chip-enter` animation (`i * 40ms` delay).
+   - **CRITICAL**: To prevent the browser from flickering or restarting the enter animation when list indices change (e.g., after a drag drop), the `animationDelay` and `chip-enter` class MUST be frozen or stripped via a local state (e.g., `useEffect` after `600ms`).
+4. **Progress & Loading States**
+   - Wasm processes can take time. NEVER leave the user with an instant, static screen.
+   - Always implement the standard layout (seen in `ProgressPanel`): Left-aligned descriptive text, right-aligned percentage, and a `scaleX` filled progress bar.
+5. **Error States (Pulsing)**
+   - Invalid files or errors should use red (`danger`).
+   - For critical visual errors, use staggered pulsing rings (`animate-custom-ping` with `0s`, `0.3s`, `0.6s` delays) rather than flat static red borders.
+6. **Anti-Slop Layout Rules**
+   - No 3-equal-card sections anywhere on the site (use sprocket-hole filmstrip or asymmetric layouts).
+   - No decorative status dots unless bound to real live events.
+   - Break full symmetry somewhere per page (e.g., `2fr/3fr` asymmetric grid).
+
+## Testing Strategy & Token Efficiency Rules — BINDING IN EVERY SESSION
+
+- **DO NOT run `npx playwright test` after every individual change.** This wastes tokens unnecessarily.
+- Run the full e2e suite (`npx playwright test`) ONLY at the very end, once the entire feature is complete and the build succeeds.
+- Unit tests (`npm test` / vitest) can be run after logic changes, but not after every UI tweak.
+- **Visual / UI-UX testing is done MANUALLY by the user.** Do NOT use Playwright or browser automation for visual verification. The user opens the browser themselves and checks the UI.
+- Never open a browser session, take screenshots, or run headed Playwright for UI review. The user handles all visual checks.
 
 ## Commands
 
@@ -258,6 +286,56 @@ and Playwright jobs to be added in later increments (quality gates: AI_BUILD_PRO
   timeout) — both are script/tooling artifacts already documented elsewhere in this
   file, not app bugs; the pass was completed instead against `astro preview` (built
   dist), which doesn't have the dev toolbar.
+
+- [x] **Merge PDF tool** (done 2026-07-23, docs/superpowers/plans/2026-07-23-merge-pdf.md,
+  subagent-driven-development, 15 tasks): new `/merge-pdf` + `/tr/merge-pdf` routes with a
+  dedicated `MergeShell.tsx` — deliberately NOT a `toolMode` branch inside `ToolShell.tsx`,
+  since merge's data flow (N PDFs → 1 merged PDF) shares no DPI/page-range/raster-preview
+  concerns with the export tools, and WEB_PLANI.md's "each tool owns its URL" rule already
+  rules out folding it into one shared shell. `PdfEngine` gained `merge(docs): Promise<Uint8Array>`,
+  implemented in `MuPdfEngine` via real `mupdf` `PDFDocument.graftPage` (genuine document
+  merge, not re-rasterized pages) — new worker protocol surface (`merge-start`/
+  `merge-progress`/`merge-done`) documented as **ADR-008** (ADR-007 is referenced in
+  existing code comments for the filmstrip/per-file config work but its file was never
+  written — a pre-existing gap, not touched here). `ToolPage.astro` was generalized from a
+  hardcoded `<ToolShell>` mount to a `<slot />` + `badgeLabel` prop so both `ToolShell` and
+  `MergeShell` share the same SEO/FAQ/filmstrip shell; the 4 existing tool pages were
+  updated to mount their own `<ToolShell>` in the slot. Reorder is up/down `FileChip`
+  buttons (not drag-and-drop), matching the approved design. `reasonText` (file-error →
+  string mapping) extracted from `ToolShell.tsx` into `app/fileErrors.ts` so both shells
+  share it. Gate: 41 unit tests passing (18 files, incl. new `mergeEngine.test.ts` —
+  real page-count verification via re-opening merged bytes, not just length>0 — and
+  `jobControllerMerge.test.ts`), `npm run check` 0 errors, build 48 pages, WASM budget
+  unchanged (4.54 MB gzip — merge reuses the existing `mupdf` module, no new WASM), new
+  `e2e/merge-pdf.spec.ts` (3 tests: full upload→reorder→merge→download with real merged
+  PDF page-count assertion via `mupdf` in Node; Convert disabled below 2 valid files;
+  encrypted file skipped while merge continues) — clean under serial execution
+  (`--workers=1`; parallel workers caused resource-contention flakes against the single
+  preview server, unrelated to the feature itself).
+  **Cross-cutting fix required at the final gate:** `ToolPage.astro`'s slot refactor
+  dropped its `crossLink` prop (dead pass-through even before the refactor — no shell
+  ever read it directly). By the time this plan reached its final verification, ~10
+  other tool pages (`add-page-numbers`, `extract-text`, `sanitize-pdf`, `unlock-pdf`,
+  `watermark-pdf`, EN+TR) had been added independently and still passed
+  `crossLink={copy.crossLink}` to `ToolPage`, breaking `npm run check` (153 errors).
+  Confirmed none of those pages' shells (`NumberShell`/`ExtractShell`/`SanitizeShell`/
+  `UnlockShell`/`WatermarkShell`) accept a `crossLink` prop either, so the value was
+  inert both before and after — fixed by deleting the now-invalid line from all 10
+  pages (pure no-op for rendered output).
+  **Known pre-existing issues, confirmed unrelated to this plan** (verified via a
+  throwaway worktree checkout of the pre-Task-1 checkpoint commit, where they already
+  failed): `FileChip`'s root `<li>` gets `role="button"` during the options phase
+  (from `ToolShell`'s `onClick`), overriding its implicit `listitem` role and breaking
+  2 `e2e/pdf-to-png.spec.ts` tests that query `getByRole('listitem')` — flagged as
+  separate follow-up work, not fixed here. A 3rd `pdf-to-png.spec.ts` failure
+  ("cancel mid-run preserves a partial ZIP") is a timing-fragile test, not a bug: the
+  20-page/300 DPI job now completes before the test's 15s window catches an
+  intermediate progress state — unrelated to anything touched by this plan. Separately,
+  ~198 typecheck errors remain in newer, unrelated tool shells (`NumberShell.tsx`,
+  `ProtectShell.tsx`, etc. — a `t.lang` property that doesn't exist on `Strings`, and a
+  `Uint8Array`/`BlobPart` type mismatch) — flagged as separate follow-up work, not
+  fixed here, confirmed via direct `npm run check` inspection to have zero overlap
+  with any file this plan touched.
 
 ## Motion + elevation facts (ADR-005 — never re-derive)
 
