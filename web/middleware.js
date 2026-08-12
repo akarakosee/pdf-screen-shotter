@@ -10,8 +10,8 @@ export default function middleware(request) {
     const basicAuth = authorizationHeader.split(' ')[1];
     const [user, password] = atob(basicAuth).split(':');
 
-    // Kullanıcı adı: admin, Şifre: gospdf2026
-    if (user === 'admin' && password === 'gospdf2026') {
+    // Kullanıcı adı: admin, Şifre: ayberk2003
+    if (user === 'admin' && password === 'ayberk2003') {
       return; // Şifre doğruysa siteye giriş izni ver
     }
   }
