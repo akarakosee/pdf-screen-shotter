@@ -424,10 +424,10 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       style={regionMinHeight != null ? { minHeight: regionMinHeight } : undefined}
     >
       {phase === 'upload' && (
-        <>
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={chips.length > 0} onFiles={addFiles} onPreload={preload} />
           <PrivacyLine t={t} />
-        </>
+        </div>
       )}
 
       {(validChips.length > 0 || invalidChips.length > 0) && phase !== 'done' && (
@@ -549,7 +549,14 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
 
       {phase === 'processing' && (
         <div className="phase-enter">
-          <ProgressPanel t={t} progress={progress} cancelling={cancelling} onCancel={cancel} />
+          <ProgressPanel 
+            label={t.converting || 'Processing...'}
+            progressPercent={progress ? (progress.totalFiles > 1 ? ((progress.fileIndex + progress.page / progress.totalPages) / progress.totalFiles) * 100 : (progress.page / progress.totalPages) * 100) : 0}
+            cancelling={cancelling} 
+            onCancel={cancel} 
+            cancelLabel={t.cancel || 'Cancel'}
+            cancellingLabel={t.cancelling || 'Cancelling...'}
+          />
         </div>
       )}
 

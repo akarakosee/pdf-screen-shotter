@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { ExtractPagesShell } from '../../components/ExtractPagesShell';
+import { extractPagesCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · AYIKLA" {...extractPagesCopy.tr}>
+  <ExtractPagesShell client:load t={tr} />
+</ToolPage>

@@ -9,7 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-s px-4 text-sm font-medium ' +
+  'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium ' +
   'disabled:opacity-50 disabled:pointer-events-none';
 
 // ADR-005 motion: surfaced variants get .btn-motion (hover lift + pseudo-shadow

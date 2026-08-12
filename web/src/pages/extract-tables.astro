@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { extractTablesCopy } from '../i18n/toolCopy';
+import { ExtractTablesShell } from '../components/ExtractTablesShell';
+
+const copy = extractTablesCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <ExtractTablesShell client:load />
+</ToolPage>

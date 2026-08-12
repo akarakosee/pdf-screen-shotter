@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { overlayPdfCopy } from '../i18n/toolCopy';
+import { OverlayPdfShell } from '../components/OverlayPdfShell';
+
+const copy = overlayPdfCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <OverlayPdfShell client:load />
+</ToolPage>

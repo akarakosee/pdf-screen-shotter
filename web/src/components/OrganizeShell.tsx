@@ -32,6 +32,7 @@ import { Toast, type ToastData } from './Toast';
 import { PageCard } from './PageCard';
 import { ProgressPanel } from './ProgressPanel';
 import { RotateCcw, RotateCw, Trash2, Download, Check, RefreshCw } from 'lucide-react';
+import { ResultPanel } from './ResultPanel';
 
 type Phase = 'upload' | 'grid' | 'processing' | 'done';
 
@@ -205,37 +206,17 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
       const f = incoming[0];
       if (!f) return;
       
-      if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-        setToast({ kind: 'error', message: t.notPdf });
+      const rejection = await validatePdfFile(f);
+      if (rejection) {
+        setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
         return;
       }
       
-      try {
-        const arrayBuffer = await f.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-        const pageCount = pdfDoc.getPageCount();
-        if (pageCount === 0) {
-          setToast({ kind: 'error', message: t.corruptFile });
-          return;
-        }
-
-        const id = 'org1';
-        setFile({ id, file: f, pageCount });
-        const initialPages: OrganizePageData[] = Array.from({ length: pageCount }, (_, i) => ({
-          id: `p-${i + 1}-${Date.now()}`,
-          originalPage: i + 1,
-          rotation: 0,
-        }));
-        setPages(initialPages);
-        setIsModified(false);
-        setSelectedIds(new Set());
-        setHasPerformedAction(false);
-        setPhase('grid');
-      } catch (err) {
-        setToast({ kind: 'error', message: t.corruptFile });
-      }
+      const id = 'org1';
+      setFile({ id, file: f, pageCount: 0 });
+      void controller().inspect(id, f);
     },
-    [t]
+    [controller, t]
   );
 
   const runOrganize = useCallback(() => {
@@ -398,10 +379,10 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
   return (
     <div className="flex flex-col gap-5">
       {phase === 'upload' && (
-        <>
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFiles} onPreload={preload} />
           <PrivacyLine t={t} />
-        </>
+        </div>
       )}
 
       {phase === 'grid' && file && (
@@ -527,11 +508,7 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
           `}>
             <button
               onClick={runOrganize}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300
-                         bg-amber text-white shadow-[0_0_20px_rgba(232,182,95,0.4)]
-                         hover:bg-amber-hover hover:shadow-[0_0_30px_rgba(232,182,95,0.6)]
-                         dark:bg-amber-dark dark:hover:bg-amber-dark
-                         hover:scale-[1.05] active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 bg-amber text-white shadow-[0_0_20px_rgba(232,182,95,0.4)] hover:bg-amber-hover hover:shadow-[0_0_30px_rgba(232,182,95,0.6)] dark:bg-amber-dark dark:hover:bg-amber-dark hover:scale-[1.05] active:scale-95"
             >
               <Download className="w-4 h-4" />
               <span className="text-sm">
@@ -565,46 +542,24 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
         />
       )}
 
-      {phase === 'done' && organizeResult && (
-        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
-              <Check className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold">
-                {mode === 'rotate'
-                  ? (t.lang === 'tr' ? 'PDF Başarıyla Döndürüldü!' : 'PDF Rotated Successfully!')
-                  : mode === 'remove'
-                  ? (t.lang === 'tr' ? 'Sayfalar Başarıyla Silindi!' : 'Pages Removed Successfully!')
-                  : (t.lang === 'tr' ? 'PDF Başarıyla Düzenlendi!' : 'PDF Organized Successfully!')}
-              </h3>
-              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-                {mode === 'rotate'
-                  ? (t.lang === 'tr' ? `${organizeResult.totalPages} sayfa başarıyla döndürüldü.` : `Rotated PDF with ${organizeResult.totalPages} pages.`)
-                  : mode === 'remove'
-                  ? (t.lang === 'tr' ? `Seçilen sayfalar kaldırıldı. Yeni PDF ${organizeResult.totalPages} sayfadan oluşuyor.` : `Selected pages removed. New PDF has ${organizeResult.totalPages} pages.`)
-                  : (t.lang === 'tr' ? `Belge sayfa sırası düzenlendi (${organizeResult.totalPages} sayfa).` : `Organized PDF with ${organizeResult.totalPages} pages.`)}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button variant="ghost" onClick={reset} className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4" />
-                {mode === 'rotate'
-                  ? (t.lang === 'tr' ? 'Yeni Dosya Seç' : 'Rotate Another PDF')
-                  : mode === 'remove'
-                  ? (t.lang === 'tr' ? 'Yeni Dosya Seç' : 'Remove From Another PDF')
-                  : (t.lang === 'tr' ? 'Yeni Dosya Seç' : 'Organize Another PDF')}
-              </Button>
-              {organizeResult.output && organizeResult.outputName && (
-                <Button variant="primary" onClick={() => triggerDownload(organizeResult.output!, organizeResult.outputName!)} className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  {t.lang === 'tr' ? 'PDF İndir' : 'Download PDF'}
-                </Button>
-              )}
-            </div>
-          </div>
+      {phase === 'done' && (
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
+            t={t}
+            result={{
+              totalPages: 1,
+              succeeded: 1,
+              failed: [],
+              durationMs: 0,
+              output: organizeResult?.output,
+              outputName: organizeResult?.outputName,
+              cancelled: false
+            }}
+            skipped={[]}
+            crossLink={null}
+            onDownload={() => { if (organizeResult?.output) triggerDownload(organizeResult?.output, organizeResult?.outputName); }}
+            onConvertMore={reset}
+          />
         </div>
       )}
 

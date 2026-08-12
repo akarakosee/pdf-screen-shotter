@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { HtmlShell } from '../../components/HtmlShell';
+import { htmlPdfCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ÇEVİRİCİ · HTML" {...htmlPdfCopy.tr}>
+  <HtmlShell client:load t={tr} />
+</ToolPage>

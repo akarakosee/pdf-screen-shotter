@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { autoRedactCopy } from '../i18n/toolCopy';
+import { AutoRedactShell } from '../components/AutoRedactShell';
+
+const copy = autoRedactCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <AutoRedactShell client:load />
+</ToolPage>

@@ -32,6 +32,8 @@ export interface PdfEngine {
   merge(docs: PdfDoc[]): Promise<Uint8Array>;
   /** Extracts the specified 1-based pages from a doc into one new PDF. */
   split(doc: PdfDoc, pages: number[]): Promise<Uint8Array>;
+  extractText?(doc: PdfDoc): Promise<string[]>;
+  renderSvgPage?(doc: PdfDoc, page: number): Promise<Uint8Array>;
   renderPage(
     doc: PdfDoc,
     page: number, // 1-based
@@ -42,4 +44,8 @@ export interface PdfEngine {
   ): Promise<RenderOutput>;
   /** Release WASM memory for the document. */
   close(doc: PdfDoc): void;
+  /** Attempts to repair a corrupted PDF by re-saving it through MuPDF's parser. */
+  repair?(doc: PdfDoc): Promise<Uint8Array>;
+  /** Rasterizes the entire PDF to grayscale images and rebuilds it. */
+  rasterizeToGrayscale?(doc: PdfDoc, onProgress?: (page: number, total: number) => void): Promise<Uint8Array>;
 }

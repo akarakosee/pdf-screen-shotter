@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { pdfToHtmlCopy } from '../i18n/toolCopy';
+import { PdfToHtmlShell } from '../components/PdfToHtmlShell';
+
+const copy = pdfToHtmlCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <PdfToHtmlShell client:load />
+</ToolPage>

@@ -1,16 +1,313 @@
 ---
 import Base from '../layouts/Base.astro';
-import { FileImage, Image, Images, Layers, Scissors, Grid3X3, Lock, Unlock, FileText, Eraser, Stamp, Hash, RotateCw, Trash2, FileUp, PenTool, Minimize2 } from 'lucide-react';
+import { Sun, Table, Braces, Headphones, Settings, BookX, Palette, FileCode2, Maximize, Scale, Search, Shuffle, FileImage, Image, Images, Layers, Scissors, Grid3X3, Lock, Unlock, FileText, Eraser, Stamp, Hash, RotateCw, Trash2, FileUp, PenTool, Minimize2, Crop, BookOpen, GitCompare, ShieldAlert, ScanText, Activity, Camera, Archive, LayoutGrid, FileX, ArrowDownUp, Tags, Code, Moon, FileCode, FilePlus, Edit3, FormInput, FileMinus } from 'lucide-react';
 import DevelopingTray from '../components/DevelopingTray.astro';
 import GlobalFaq from '../components/GlobalFaq.astro';
 
 const tools = [
+  {
+    href: '/extract-tables',
+    idx: 'EXTRACT · TABLES',
+    name: 'Extract Tables',
+    line: 'PDF to CSV',
+    Icon: Table,
+    category: 'Extract PDF',
+  },
+  {
+    href: '/pdf-to-json',
+    idx: 'EXTRACT · JSON',
+    name: 'PDF to JSON',
+    line: 'Developer raw data',
+    Icon: Braces,
+    category: 'Extract PDF',
+  },
+  {
+    href: '/scan-to-pdf',
+    idx: 'CREATE · SCAN',
+    name: 'Scan to PDF',
+    line: 'Camera to PDF',
+    Icon: Camera,
+    category: 'Convert to PDF',
+  },
+  {
+    href: '/audio-reader',
+    idx: 'EXTRACT · AUDIO',
+    name: 'Audio Reader',
+    line: 'TTS optimized text',
+    Icon: Headphones,
+    category: 'Extract PDF',
+  },
+
+  {
+    href: '/viewer-prefs',
+    idx: 'SECURITY · SETTINGS',
+    name: 'Viewer Preferences',
+    line: 'Force full screen PDF',
+    Icon: Settings,
+    category: 'Protect PDF',
+  },
+  {
+    href: '/extract-hidden-text',
+    idx: 'SECURITY · FORENSICS',
+    name: 'Extract Hidden Text',
+    line: 'Find invisible words',
+    Icon: Search,
+    category: 'Protect PDF',
+  },
+  {
+    href: '/wipe-bookmarks',
+    idx: 'SECURITY · STRUCTURE',
+    name: 'Wipe Bookmarks',
+    line: 'Destroy TOC structure',
+    Icon: BookX,
+    category: 'Protect PDF',
+  },
+
+  {
+    href: '/extract-javascript',
+    idx: 'EXTRACT · MALWARE',
+    name: 'Extract JavaScript',
+    line: 'Find malicious code',
+    Icon: Code,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/split-bookmarks',
+    idx: 'SPLIT · CHAPTERS',
+    name: 'Split by Bookmarks',
+    line: 'Split at TOC chapters',
+    Icon: BookOpen,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/split-blank',
+    idx: 'SPLIT · SCANNERS',
+    name: 'Split by Blank Page',
+    line: 'Auto batch separation',
+    Icon: FileMinus,
+    category: 'Organize PDF',
+  },
+
+  {
+    href: '/extract-attachments',
+    idx: 'EXTRACT · FILES',
+    name: 'Extract Attachments',
+    line: 'Recover hidden files',
+    Icon: Archive,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/extract-colors',
+    idx: 'EXTRACT · DESIGN',
+    name: 'Extract Color Palette',
+    line: 'Get all HEX codes',
+    Icon: Palette,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/remove-text',
+    idx: 'OPTIMIZE · TEMPLATE',
+    name: 'Remove Text',
+    line: 'Strip all text content',
+    Icon: Eraser,
+    category: 'Organize PDF',
+  },
+
+  {
+    href: '/pdf-to-html',
+    idx: 'CONVERT · WEB',
+    name: 'PDF to HTML',
+    line: 'Convert to Web Page',
+    Icon: FileText,
+    category: 'Convert to PDF',
+  },
+  {
+    href: '/extract-fonts',
+    idx: 'EXTRACT · DESIGN',
+    name: 'Extract Fonts',
+    line: 'Recover TTF/OTF',
+    Icon: FileUp,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/remove-images',
+    idx: 'OPTIMIZE · INK',
+    name: 'Remove Images',
+    line: 'Save Printer Ink',
+    Icon: FileText,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/extract-urls',
+    idx: 'EXTRACT · LINKS',
+    name: 'Extract URLs',
+    line: 'Get all links',
+    Icon: FileText,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/remove-duplicates',
+    idx: 'ORGANIZE · CLEAN',
+    name: 'Remove Duplicates',
+    line: 'Delete identical pages',
+    Icon: FileText,
+    category: 'Organize PDF',
+  },
+
+  {
+    href: '/auto-redact',
+    idx: 'SECURITY · REDACT',
+    name: 'Auto-Redact',
+    line: 'Hide PII & Sensitive Info',
+    Icon: FileText,
+    category: 'Security',
+  },
+  {
+    href: '/smart-markdown',
+    idx: 'EXTRACT · AI',
+    name: 'Smart Markdown',
+    line: 'AI-Ready MD Export',
+    Icon: FileText,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/contrast-enhancer',
+    idx: 'EDIT · SCAN',
+    name: 'Enhance Scan',
+    line: 'Fix Contrast & Brightness',
+    Icon: Sun,
+    category: 'Edit PDF',
+  },
+
+  {
+    href: '/extract-toc',
+    idx: 'EXTRACT · TOC',
+    name: 'Extract Bookmarks',
+    line: 'Export PDF Table of Contents',
+    Icon: FileText,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/overlay-pdf',
+    idx: 'EDIT · OVERLAY',
+    name: 'Add Letterhead',
+    line: 'Overlay a template behind your PDF',
+    Icon: FileUp,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/change-bg',
+    idx: 'EDIT · COLOR',
+    name: 'Change Background',
+    line: 'Dark Mode & Sepia for PDFs',
+    Icon: Palette,
+    category: 'Edit PDF',
+  },
+
+  {
+    href: '/remove-annotations',
+    idx: 'EDIT · CLEAN',
+    name: 'Remove Annotations',
+    line: 'Clear comments and forms from PDF',
+    Icon: Stamp,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/pdf-to-webp',
+    idx: 'CONVERT · WEBP',
+    name: 'PDF to WebP',
+    line: 'Convert PDF pages to WebP format',
+    Icon: FileImage,
+    category: 'Convert from PDF',
+  },
+  {
+    href: '/auto-crop',
+    idx: 'EDIT · CROP',
+    name: 'Auto-Crop PDF',
+    line: 'Remove white margins automatically',
+    Icon: Crop,
+    category: 'Edit PDF',
+  },
+
+  {
+    href: '/extract-images',
+    idx: 'CONVERT · EXTRACT IMAGES',
+    name: 'Extract Images',
+    line: 'Extract all images from a PDF',
+    Icon: Images,
+    category: 'Convert from PDF',
+  },
+  {
+    href: '/add-page-numbers',
+    idx: 'EDIT · PAGE NUMBERS',
+    name: 'Add Page Numbers',
+    line: 'Insert page numbers into a PDF',
+    Icon: Hash,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/remove-blank-pages',
+    idx: 'ORGANIZE · REMOVE BLANK',
+    name: 'Remove Blank Pages',
+    line: 'Detect and delete empty pages',
+    Icon: Eraser,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/mix-pdf',
+    idx: 'ORGANIZE · MIX',
+    name: 'Mix PDF',
+    line: 'Alternate pages from two PDFs',
+    Icon: Shuffle,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/split-half-pdf',
+    idx: 'ORGANIZE · SPLIT SPREADS',
+    name: 'Split in Half',
+    line: 'Cut 2-up spreads into 1-up pages',
+    Icon: Scissors,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/extract-by-keyword',
+    idx: 'ORGANIZE · EXTRACT TEXT',
+    name: 'Extract by Keyword',
+    line: 'Extract pages containing specific text',
+    Icon: Search,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/split-by-size',
+    idx: 'ORGANIZE · SPLIT BY SIZE',
+    name: 'Split by Size',
+    line: 'Split PDF into smaller parts by MB',
+    Icon: Scale,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/add-margins',
+    idx: 'EDIT · MARGINS',
+    name: 'Add Margins',
+    line: 'Add white padding around PDF pages',
+    Icon: Maximize,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/pdf-to-svg',
+    idx: 'CONVERT · PDF TO SVG',
+    name: 'PDF to SVG',
+    line: 'Convert PDF pages to SVG vectors',
+    Icon: FileCode2,
+    category: 'Convert from PDF',
+  },
   {
     href: '/pdf-to-png',
     idx: 'FILM · LOSSLESS',
     name: 'PDF to PNG',
     line: 'Lossless images for text and diagrams',
     Icon: FileImage,
+  category: 'Convert PDF',
   },
   {
     href: '/pdf-to-jpg',
@@ -18,6 +315,7 @@ const tools = [
     name: 'PDF to JPG',
     line: 'Smaller files for photos and scans',
     Icon: Image,
+  category: 'Convert PDF',
   },
   {
     href: '/png-to-pdf',
@@ -25,6 +323,7 @@ const tools = [
     name: 'PNG to PDF',
     line: 'Convert PNG images into a PDF document',
     Icon: FileUp,
+  category: 'Convert PDF',
   },
   {
     href: '/img-to-pdf',
@@ -32,6 +331,7 @@ const tools = [
     name: 'JPG to PDF',
     line: 'Convert JPG photos into a PDF document',
     Icon: FileUp,
+  category: 'Convert PDF',
   },
   {
     href: '/merge-pdf',
@@ -39,6 +339,7 @@ const tools = [
     name: 'Merge PDF',
     line: 'Combine PDF files in custom order',
     Icon: Layers,
+  category: 'Organize PDF',
   },
   {
     href: '/split-pdf',
@@ -46,6 +347,7 @@ const tools = [
     name: 'Split PDF',
     line: 'Extract page ranges or separate pages',
     Icon: Scissors,
+  category: 'Organize PDF',
   },
   {
     href: '/organize-pdf',
@@ -53,6 +355,7 @@ const tools = [
     name: 'Organize PDF',
     line: 'Reorder, rotate, and delete pages',
     Icon: Grid3X3,
+  category: 'Organize PDF',
   },
   {
     href: '/protect-pdf',
@@ -60,6 +363,7 @@ const tools = [
     name: 'Protect PDF',
     line: 'Encrypt your document with a password',
     Icon: Lock,
+  category: 'PDF Security',
   },
   {
     href: '/unlock-pdf',
@@ -67,6 +371,7 @@ const tools = [
     name: 'Unlock PDF',
     line: 'Remove password protection from PDF',
     Icon: Unlock,
+  category: 'PDF Security',
   },
   {
     href: '/extract-text',
@@ -74,6 +379,15 @@ const tools = [
     name: 'Extract Text',
     line: 'Extract all readable text from PDF',
     Icon: FileText,
+  category: 'PDF Intelligence',
+  },
+  {
+    href: '/ocr-pdf',
+    idx: 'AI · OCR',
+    name: 'OCR PDF',
+    line: 'Extract text from scanned images',
+    Icon: ScanText,
+  category: 'PDF Intelligence',
   },
   {
     href: '/extract-images',
@@ -81,6 +395,7 @@ const tools = [
     name: 'Extract Images',
     line: 'Extract embedded images into a ZIP',
     Icon: Images,
+  category: 'PDF Intelligence',
   },
   {
     href: '/compress-pdf',
@@ -88,6 +403,7 @@ const tools = [
     name: 'Compress PDF',
     line: 'Reduce PDF size without quality loss',
     Icon: Minimize2,
+  category: 'Optimize PDF',
   },
   {
     href: '/sanitize-pdf',
@@ -95,6 +411,7 @@ const tools = [
     name: 'Sanitize PDF',
     line: 'Remove hidden metadata from PDF',
     Icon: Eraser,
+  category: 'PDF Security',
   },
   {
     href: '/watermark-pdf',
@@ -102,6 +419,7 @@ const tools = [
     name: 'Watermark PDF',
     line: 'Stamp your PDF with a watermark',
     Icon: Stamp,
+  category: 'PDF Security',
   },
   {
     href: '/flatten-pdf',
@@ -109,6 +427,7 @@ const tools = [
     name: 'Flatten PDF',
     line: 'Make form fields uneditable',
     Icon: Layers,
+  category: 'Edit PDF',
   },
   {
     href: '/sign-pdf',
@@ -116,6 +435,7 @@ const tools = [
     name: 'Sign PDF',
     line: 'Sign PDFs with drawn or typed signature',
     Icon: PenTool,
+  category: 'Edit PDF',
   },
   {
     href: '/add-page-numbers',
@@ -123,6 +443,7 @@ const tools = [
     name: 'Add Page Numbers',
     line: 'Add page numbers to your document',
     Icon: Hash,
+  category: 'Organize PDF',
   },
   {
     href: '/rotate-pdf',
@@ -130,6 +451,7 @@ const tools = [
     name: 'Rotate PDF',
     line: 'Rotate individual or all PDF pages',
     Icon: RotateCw,
+  category: 'Organize PDF',
   },
   {
     href: '/remove-pages',
@@ -137,6 +459,183 @@ const tools = [
     name: 'Remove Pages',
     line: 'Delete unwanted pages from PDF',
     Icon: Trash2,
+  category: 'Organize PDF',
+  },
+  {
+    href: '/crop-pdf',
+    idx: 'EDIT · CROP',
+    name: 'Crop PDF',
+    line: 'Trim margins and adjust visible area',
+    Icon: Crop,
+  category: 'Optimize PDF',
+  },
+  {
+    href: '/booklet-pdf',
+    idx: 'EDIT · BOOKLET',
+    name: 'Booklet PDF',
+    line: 'Create a printable folding booklet',
+    Icon: BookOpen,
+  category: 'Organize PDF',
+  },
+  {
+    href: '/compare-pdf',
+    idx: 'EDIT · COMPARE',
+    name: 'PDF Compare',
+    line: 'Visually diff two PDF documents',
+    Icon: GitCompare,
+  category: 'Edit PDF',
+  },
+  {
+    href: '/redact-pdf',
+    idx: 'SECURITY · REDACT',
+    name: 'Redact PDF',
+    line: 'Blackout sensitive information',
+    Icon: ShieldAlert,
+  category: 'PDF Security',
+  },
+  {
+    href: '/repair-pdf',
+    idx: 'UTILITY · RECOVER',
+    name: 'Repair PDF',
+    line: 'Fix and recover corrupted files',
+    Icon: Activity,
+  category: 'PDF Intelligence',
+  },
+  {
+    href: '/grayscale-pdf',
+    idx: 'EDIT · COLOR',
+    name: 'Grayscale PDF',
+    line: 'Convert colored pages to black & white',
+    Icon: PenTool,
+  category: 'Edit PDF',
+  },
+  {
+    href: '/resize-pdf',
+    idx: 'EDIT · RESIZE',
+    name: 'Resize PDF',
+    line: 'Add margins or change page sizes',
+    Icon: Minimize2,
+  category: 'Optimize PDF',
+  },
+  {
+    href: '/scan-to-pdf',
+    idx: 'CONVERTER · CAMERA',
+    name: 'Scan to PDF',
+    line: 'Use camera to scan physical documents',
+    Icon: Camera,
+  category: 'Convert PDF',
+  },
+  {
+    href: '/bates-numbering',
+    idx: 'UTILITY · BATES',
+    name: 'Bates Numbering',
+    line: 'Add Bates stamps to legal documents',
+    Icon: Hash,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/n-up-pdf',
+    idx: 'LAYOUT · N-UP',
+    name: 'N-Up PDF',
+    line: 'Print multiple pages on a single sheet',
+    Icon: LayoutGrid,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/pdf-a',
+    idx: 'CONVERT · ARCHIVE',
+    name: 'PDF to PDF/A',
+    line: 'Convert PDF to PDF/A for archiving',
+    Icon: Archive,
+    category: 'Convert PDF',
+  },
+  {
+    href: '/remove-blank-pages',
+    idx: 'UTILITY · CLEAN',
+    name: 'Remove Blank Pages',
+    line: 'Detect and delete empty pages',
+    Icon: FileX,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/reverse-pdf',
+    idx: 'UTILITY · REVERSE',
+    name: 'Reverse PDF',
+    line: 'Reverse the order of pages',
+    Icon: ArrowDownUp,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/edit-metadata',
+    idx: 'EDIT · METADATA',
+    name: 'Edit Metadata',
+    line: 'Change author, title, and keywords',
+    Icon: Tags,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/base64-pdf',
+    idx: 'CONVERTER · BASE64',
+    name: 'Base64 to PDF',
+    line: 'Convert Base64 string to PDF and back',
+    Icon: Code,
+    category: 'Convert PDF',
+  },
+  {
+    href: '/invert-pdf',
+    idx: 'EDIT · COLOR',
+    name: 'Invert PDF Colors',
+    line: 'Dark mode for PDFs',
+    Icon: Moon,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/markdown-to-pdf',
+    idx: 'CONVERTER · MARKDOWN',
+    name: 'Markdown to PDF',
+    line: 'Convert MD files to styled PDFs',
+    Icon: FileCode,
+    category: 'Convert PDF',
+  },
+  {
+    href: '/html-to-pdf',
+    idx: 'CONVERTER · HTML',
+    name: 'HTML to PDF',
+    line: 'Convert raw HTML code to PDF',
+    Icon: Code,
+    category: 'Convert PDF',
+  },
+  {
+    href: '/extract-pages',
+    idx: 'UTILITY · EXTRACT',
+    name: 'Extract Pages',
+    line: 'Save specific pages to a new PDF',
+    Icon: FilePlus,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/annotate-pdf',
+    idx: 'EDIT · ANNOTATE',
+    name: 'Annotate PDF',
+    line: 'Add text and notes to your PDF',
+    Icon: PenTool,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/edit-pdf',
+    idx: 'EDIT · WHITEOUT',
+    name: 'Edit PDF',
+    line: 'Hide text and sensitive data',
+    Icon: Edit3,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/pdf-forms',
+    idx: 'EDIT · FORMS',
+    name: 'PDF Forms',
+    line: 'Fill interactive PDF forms',
+    Icon: FormInput,
+    category: 'Edit PDF',
   },
 ];
 
@@ -160,7 +659,7 @@ const steps = [
     </p>
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-8">
+  <section class="mx-auto max-w-[1440px] px-4 pb-8">
     <div class="flex justify-center pb-6">
       <span
         class="inline-flex items-center gap-2 rounded-full border bg-surface px-3.5 py-1.5 font-mono text-[11px] tracking-[0.06em] whitespace-nowrap text-amber uppercase shadow-1 dark:border-white/[0.14] dark:bg-surface-dark dark:text-amber-dark"
@@ -169,14 +668,24 @@ const steps = [
         No uploads · no signup · free
       </span>
     </div>
+    <div class="flex flex-wrap items-center justify-center gap-2 pb-6" id="category-filters">
+      <button class="filter-btn active rounded-full px-4 py-2 font-mono text-[13px] tracking-wide transition-colors duration-200 bg-amber text-bg dark:bg-amber-dark dark:text-bg-dark font-bold shadow-sm" data-category="All">All</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Organize PDF">Organize PDF</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Optimize PDF">Optimize PDF</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Convert PDF">Convert PDF</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Edit PDF">Edit PDF</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="PDF Security">PDF Security</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="PDF Intelligence">PDF Intelligence</button>
+    </div>
     <DevelopingTray trayLabel="DEVELOPING TRAY" />
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-[16px]">
-    <ul class="grid gap-3 sm:grid-cols-2">
+  
+  <section class="mx-auto max-w-[1440px] px-4 pb-[16px]">
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {
         tools.map((tool) => (
-          <li>
+          <li data-category={tool.category} class="tool-item transition-all duration-300 transform scale-100 opacity-100">
             <a
               href={tool.href}
               class="group flex h-[114px] flex-col justify-between rounded-2xl border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
@@ -228,3 +737,49 @@ const steps = [
 
   <GlobalFaq lang="en" />
 </Base>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filters = document.querySelectorAll('.filter-btn');
+    const tools = document.querySelectorAll('.tool-item');
+    
+    // Assign unique view-transition-names for smooth grid reflows
+    tools.forEach((tool: any, index) => {
+      tool.style.viewTransitionName = `tool-item-${index}`;
+    });
+    
+    filters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category');
+        
+        const updateDOM = () => {
+          // Update active class
+          filters.forEach(f => {
+            f.classList.remove('bg-amber', 'text-bg', 'dark:bg-amber-dark', 'dark:text-bg-dark', 'font-bold', 'shadow-sm', 'active');
+            f.classList.add('border', 'border-black/10', 'dark:border-white/10', 'bg-surface', 'dark:bg-surface-dark', 'text-ink-muted', 'dark:text-ink-muted-dark');
+          });
+          
+          btn.classList.add('bg-amber', 'text-bg', 'dark:bg-amber-dark', 'dark:text-bg-dark', 'font-bold', 'shadow-sm', 'active');
+          btn.classList.remove('border', 'border-black/10', 'dark:border-white/10', 'bg-surface', 'dark:bg-surface-dark', 'text-ink-muted', 'dark:text-ink-muted-dark');
+          
+          tools.forEach((tool: any) => {
+            if (category === 'All' || tool.getAttribute('data-category') === category) {
+              tool.style.display = 'block';
+            } else {
+              tool.style.display = 'none';
+            }
+          });
+        };
+
+        if (document.startViewTransition) {
+          document.startViewTransition(() => {
+            updateDOM();
+          });
+        } else {
+          updateDOM();
+        }
+      });
+    });
+  });
+</script>

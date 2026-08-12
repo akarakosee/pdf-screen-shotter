@@ -1,0 +1,22 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { ResizeShell } from '../../components/ResizeShell';
+import { resizeCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+
+const t = resizeCopy.tr;
+---
+
+<ToolPage
+  lang="tr"
+  title={t.title}
+  description={t.description}
+  h1={t.h1}
+  tagline={t.tagline}
+  howToName={t.howToName}
+  howItWorks={t.howItWorks}
+  steps={t.steps}
+  faq={t.faq}
+>
+  <ResizeShell client:load t={tr} />
+</ToolPage>

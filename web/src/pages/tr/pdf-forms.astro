@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { FormsShell } from '../../components/FormsShell';
+import { pdfFormsCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · FORM" {...pdfFormsCopy.tr}>
+  <FormsShell client:load t={tr} />
+</ToolPage>

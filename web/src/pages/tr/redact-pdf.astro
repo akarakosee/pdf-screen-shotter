@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/redact-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { RedactShell } from '../../components/RedactShell';
+import { redactCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="GÜVENLİK · KARARTMA" {...redactCopy.tr}>
+  <RedactShell client:load t={tr} />
+</ToolPage>

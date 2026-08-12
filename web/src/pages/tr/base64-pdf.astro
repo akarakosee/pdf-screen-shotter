@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { Base64Shell } from '../../components/Base64Shell';
+import { base64PdfCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÖNÜŞTÜRÜCÜ · BASE64" {...base64PdfCopy.tr}>
+  <Base64Shell client:load t={tr} />
+</ToolPage>

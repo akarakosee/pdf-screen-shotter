@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { extractJavascriptCopy } from '../i18n/toolCopy';
+import { ExtractJavascriptShell } from '../components/ExtractJavascriptShell';
+
+const copy = extractJavascriptCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <ExtractJavascriptShell client:load />
+</ToolPage>

@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { EditMetadataShell } from '../../components/EditMetadataShell';
+import { editMetadataCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · META VERİ" {...editMetadataCopy.tr}>
+  <EditMetadataShell client:load t={tr} />
+</ToolPage>

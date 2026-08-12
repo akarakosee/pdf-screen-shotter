@@ -1,0 +1,10 @@
+---
+import { AddMarginsShell } from '../../components/AddMarginsShell';
+import ToolPage from '../../layouts/ToolPage.astro';
+import { addmarginsCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="EDIT PDF \u00B7 ADD MARGINS" {...addmarginsCopy.tr}>
+  <AddMarginsShell client:load t={tr} />
+</ToolPage>

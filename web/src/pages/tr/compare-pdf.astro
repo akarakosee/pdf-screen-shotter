@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/compare-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { CompareShell } from '../../components/CompareShell';
+import { compareCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · KARŞILAŞTIR" {...compareCopy.tr}>
+  <CompareShell client:load t={tr} />
+</ToolPage>

@@ -1,20 +1,10 @@
 ---
+import { AddPageNumbersShell } from '../components/AddPageNumbersShell';
 import ToolPage from '../layouts/ToolPage.astro';
-import { numberCopy } from '../i18n/toolCopy';
-import { NumberShell } from '../components/NumberShell';
-
-const copy = numberCopy.en;
+import { pdftosvgCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
-  <NumberShell client:load />
+<ToolPage lang="en" badgeLabel="CONVERT FROM PDF \u00B7 PDF TO SVG" {...pdftosvgCopy.en}>
+  <AddPageNumbersShell client:load t={en} />
 </ToolPage>

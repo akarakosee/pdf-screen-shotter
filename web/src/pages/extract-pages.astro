@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { ExtractPagesShell } from '../components/ExtractPagesShell';
+import { extractPagesCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="ORGANIZE · EXTRACT" {...extractPagesCopy.en}>
+  <ExtractPagesShell client:load t={en} />
+</ToolPage>

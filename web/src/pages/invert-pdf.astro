@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { InvertShell } from '../components/InvertShell';
+import { invertPdfCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · COLOR" {...invertPdfCopy.en}>
+  <InvertShell client:load t={en} />
+</ToolPage>

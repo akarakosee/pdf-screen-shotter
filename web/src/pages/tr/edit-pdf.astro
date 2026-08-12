@@ -1,0 +1,10 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { EditShell } from '../../components/EditShell';
+import { editPdfCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · GİZLE" {...editPdfCopy.tr}>
+  <EditShell client:load t={tr} />
+</ToolPage>

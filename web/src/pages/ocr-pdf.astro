@@ -1,0 +1,11 @@
+---
+// web/src/pages/ocr-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { OcrShell } from '../components/OcrShell';
+import { ocrCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="AI · OCR" {...ocrCopy.en}>
+  <OcrShell client:load t={en} />
+</ToolPage>

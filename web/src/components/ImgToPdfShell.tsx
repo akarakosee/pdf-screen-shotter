@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ArrowUp, ArrowDown, Trash2, Plus, Download, RefreshCw, Check } from 'lucide-react';
+import { ResultPanel } from './ResultPanel';
 import { validateImageFile } from '../app/validators';
 import { buildPdfFromImages, type ImgToPdfOptions, type PageSizePreset, type Orientation } from '../engine/imgToPdf';
 import { Button } from './ui/Button';
@@ -309,7 +310,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'upload' && (
-        <>
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone
             t={t}
             hasFiles={false}
@@ -320,7 +321,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
             sublabel={t.imgToPdfDropSublabel}
           />
           <PrivacyLine t={t} />
-        </>
+        </div>
       )}
 
       {phase === 'grid' && (
@@ -439,33 +440,23 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'done' && (
-        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success">
-              <Check className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold text-ink dark:text-ink-dark">
-                {t.lang === 'tr' ? 'PDF Başarıyla Oluşturuldu!' : 'PDF Document Created Successfully!'}
-              </h3>
-              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-                {t.lang === 'tr'
-                  ? `${items.length} görsel birleştirilerek ${resultName} oluşturuldu (${durationMs} ms).`
-                  : `Combined ${items.length} images into ${resultName} (${durationMs} ms).`}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button variant="ghost" onClick={handleReset} className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4" />
-                {t.lang === 'tr' ? 'Yeni Görsel Seç' : 'Convert More Images'}
-              </Button>
-              <Button variant="primary" onClick={handleDownload} className="flex items-center gap-2">
-                <Download className="h-4 w-4" />
-                {t.lang === 'tr' ? 'PDF İndir' : 'Download PDF'}
-              </Button>
-            </div>
-          </div>
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
+            t={t}
+            result={{
+              totalPages: 1,
+              succeeded: 1,
+              failed: [],
+              durationMs: 0,
+              output: output?.blob,
+              outputName: output?.name,
+              cancelled: false
+            }}
+            skipped={[]}
+            crossLink={null}
+            onDownload={() => { if (output?.blob) triggerDownload(output?.blob, output?.name); }}
+            onConvertMore={reset}
+          />
         </div>
       )}
     </div>

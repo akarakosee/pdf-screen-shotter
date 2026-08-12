@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { removeTextCopy } from '../i18n/toolCopy';
+import { RemoveTextShell } from '../components/RemoveTextShell';
+
+const copy = removeTextCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <RemoveTextShell client:load />
+</ToolPage>

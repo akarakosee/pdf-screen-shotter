@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { EditShell } from '../components/EditShell';
+import { editPdfCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · WHITEOUT" {...editPdfCopy.en}>
+  <EditShell client:load t={en} />
+</ToolPage>

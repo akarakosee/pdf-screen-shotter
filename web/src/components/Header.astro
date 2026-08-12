@@ -13,20 +13,14 @@ const t = {
     theme: 'Toggle dark mode',
     otherLang: 'Türkçe',
     otherHref: trPath,
-    tools: [
-      { href: '/pdf-to-png', name: 'PDF to PNG' },
-      { href: '/pdf-to-jpg', name: 'PDF to JPG' },
-    ],
+    tools: [],
     more: 'Menu',
   },
   tr: {
     theme: 'Koyu modu değiştir',
     otherLang: 'English',
     otherHref: enPath,
-    tools: [
-      { href: '/tr/pdf-to-png', name: "PDF'ten PNG'ye" },
-      { href: '/tr/pdf-to-jpg', name: "PDF'ten JPG'ye" },
-    ],
+    tools: [],
     more: 'Menü',
   },
 }[lang];
@@ -54,7 +48,7 @@ const t = {
             <a
               href={tool.href}
               aria-current={normalizedPath === tool.href ? 'page' : undefined}
-              class={`flex h-11 items-center rounded-s px-2 text-xs hover:text-ink dark:hover:text-ink-dark ${
+              class={`flex h-11 items-center rounded-lg px-2 text-xs hover:text-ink dark:hover:text-ink-dark ${
                 normalizedPath === tool.href
                   ? 'text-amber dark:text-amber-dark'
                   : 'text-ink-muted dark:text-ink-muted-dark'
@@ -71,14 +65,14 @@ const t = {
     <nav class="hidden items-center gap-1 font-mono sm:flex">
       <a
         href={t.otherHref}
-        class="flex h-11 min-w-11 items-center justify-center rounded-s px-3 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+        class="flex h-11 min-w-11 items-center justify-center rounded-lg px-3 text-xs text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
         >{t.otherLang}</a
       >
       <button
         type="button"
         data-theme-toggle
         aria-label={t.theme}
-        class="flex h-11 w-11 items-center justify-center rounded-s text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
+        class="flex h-11 w-11 items-center justify-center rounded-lg text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark"
       >
         <svg
           class="hidden h-4 w-4 dark:block"
@@ -109,7 +103,7 @@ const t = {
     <!-- Mobile: language + theme collapse into one overflow menu (binding rule). -->
     <details class="relative sm:hidden">
       <summary
-        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-s text-ink-muted [&::-webkit-details-marker]:hidden"
+        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-lg text-ink-muted [&::-webkit-details-marker]:hidden"
         aria-label={t.more}
       >
         <svg
@@ -127,17 +121,17 @@ const t = {
         >
       </summary>
       <div
-        class="absolute right-0 z-50 mt-1 flex w-44 flex-col rounded-s border bg-surface p-1 shadow-2 dark:bg-surface-dark"
+        class="absolute right-0 z-50 mt-1 flex w-44 flex-col rounded-lg border bg-surface p-1 shadow-2 dark:bg-surface-dark"
       >
         <a
           href={t.otherHref}
-          class="flex min-h-11 items-center rounded-s px-3 text-xs hover:bg-bg dark:hover:bg-bg-dark"
+          class="flex min-h-11 items-center rounded-lg px-3 text-xs hover:bg-bg dark:hover:bg-bg-dark"
           >{t.otherLang}</a
         >
         <button
           type="button"
           data-theme-toggle
-          class="flex min-h-11 items-center rounded-s px-3 text-left text-xs hover:bg-bg dark:hover:bg-bg-dark"
+          class="flex min-h-11 items-center rounded-lg px-3 text-left text-xs hover:bg-bg dark:hover:bg-bg-dark"
         >
           {t.theme}
         </button>

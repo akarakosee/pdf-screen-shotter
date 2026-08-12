@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { pdfToJsonCopy } from '../i18n/toolCopy';
+import { PdfToJsonShell } from '../components/PdfToJsonShell';
+
+const copy = pdfToJsonCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <PdfToJsonShell client:load />
+</ToolPage>

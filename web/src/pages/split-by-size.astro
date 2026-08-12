@@ -1,0 +1,10 @@
+---
+import { SplitBySizeShell } from '../components/SplitBySizeShell';
+import ToolPage from '../layouts/ToolPage.astro';
+import { splitbysizeCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="ORGANIZE PDF \u00B7 SPLIT BY SIZE" {...splitbysizeCopy.en}>
+  <SplitBySizeShell client:load t={en} />
+</ToolPage>

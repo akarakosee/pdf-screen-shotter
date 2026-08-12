@@ -1,0 +1,10 @@
+---
+import { SplitHalfPdfShell } from '../../components/SplitHalfPdfShell';
+import ToolPage from '../../layouts/ToolPage.astro';
+import { splithalfpdfCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ORGANIZE PDF \u00B7 SPLIT PDF IN HALF" {...splithalfpdfCopy.tr}>
+  <SplitHalfPdfShell client:load t={tr} />
+</ToolPage>

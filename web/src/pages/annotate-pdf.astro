@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { AnnotateShell } from '../components/AnnotateShell';
+import { annotatePdfCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · ANNOTATE" {...annotatePdfCopy.en}>
+  <AnnotateShell client:load t={en} />
+</ToolPage>

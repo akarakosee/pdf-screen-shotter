@@ -1,0 +1,21 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { wipeBookmarksCopy } from '../../i18n/toolCopy';
+import { WipeBookmarksShell } from '../../components/WipeBookmarksShell';
+import { tr } from '../../i18n/tr';
+
+const copy = wipeBookmarksCopy.tr;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="tr"
+>
+  <WipeBookmarksShell client:load t={tr} />
+</ToolPage>

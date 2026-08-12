@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { removeImagesCopy } from '../i18n/toolCopy';
+import { RemoveImagesShell } from '../components/RemoveImagesShell';
+
+const copy = removeImagesCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <RemoveImagesShell client:load />
+</ToolPage>

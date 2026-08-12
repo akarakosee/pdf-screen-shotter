@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { EditMetadataShell } from '../components/EditMetadataShell';
+import { editMetadataCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · METADATA" {...editMetadataCopy.en}>
+  <EditMetadataShell client:load t={en} />
+</ToolPage>

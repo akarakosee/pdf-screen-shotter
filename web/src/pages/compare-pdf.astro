@@ -1,0 +1,11 @@
+---
+// web/src/pages/compare-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { CompareShell } from '../components/CompareShell';
+import { compareCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · COMPARE" {...compareCopy.en}>
+  <CompareShell client:load t={en} />
+</ToolPage>

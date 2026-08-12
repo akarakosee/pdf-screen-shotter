@@ -1,11 +1,10 @@
 ---
-// web/src/pages/extract-images.astro
-import ToolPage from '../layouts/ToolPage.astro';
 import { ExtractImagesShell } from '../components/ExtractImagesShell';
-import { extractImagesCopy } from '../i18n/toolCopy';
+import ToolPage from '../layouts/ToolPage.astro';
+import { pdftosvgCopy } from '../i18n/toolCopy';
 import { en } from '../i18n/en';
 ---
 
-<ToolPage lang="en" badgeLabel="ORGANIZE · EXTRACT" {...extractImagesCopy.en}>
+<ToolPage lang="en" badgeLabel="CONVERT FROM PDF \u00B7 PDF TO SVG" {...pdftosvgCopy.en}>
   <ExtractImagesShell client:load t={en} />
 </ToolPage>

@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { FormsShell } from '../components/FormsShell';
+import { pdfFormsCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · FORMS" {...pdfFormsCopy.en}>
+  <FormsShell client:load t={en} />
+</ToolPage>

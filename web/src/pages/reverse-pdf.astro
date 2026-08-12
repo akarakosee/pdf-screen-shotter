@@ -1,0 +1,22 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { ReverseShell } from '../components/ReverseShell';
+import { reverseCopy } from '../i18n/toolCopy';
+
+const copy = reverseCopy.en;
+---
+
+<ToolPage
+  lang="en"
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  faqTitle={copy.faqTitle}
+  faq={copy.faq}
+>
+  <ReverseShell client:load />
+</ToolPage>

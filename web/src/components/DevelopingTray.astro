@@ -21,7 +21,7 @@ interface Props {
 }
 const { trayLabel } = Astro.props;
 
-const CELL_COUNT = 6;
+const CELL_COUNT = 12;
 const SLOT_MS = 900; // one page's full turn
 const CYCLE_MS = CELL_COUNT * SLOT_MS; // 5400ms — matches the CSS animation-duration
 
@@ -58,7 +58,7 @@ const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
 ---
 
 <div
-  class="tray-tray overflow-hidden rounded-m border bg-surface dark:border-white/[0.14] dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark"
+  class="tray-tray overflow-hidden rounded-2xl border bg-surface dark:border-white/[0.14] dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark"
   style={`--tray-cycle:${CYCLE_MS}ms`}
 >
   <div
@@ -66,7 +66,7 @@ const cells = Array.from({ length: CELL_COUNT }, (_, i) => {
   >
     <span>{trayLabel}</span>
   </div>
-  <div class="grid grid-cols-3 gap-2.5 p-6 sm:grid-cols-6">
+  <div class="grid grid-cols-3 gap-2.5 p-6 sm:grid-cols-6 lg:grid-cols-12">
     {
       cells.map((cell) => (
         <div class="tray-page aspect-[3/4]">

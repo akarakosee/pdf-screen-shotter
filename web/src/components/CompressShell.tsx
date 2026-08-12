@@ -11,6 +11,7 @@ import { PrivacyLine } from './PrivacyLine';
 import { ProgressPanel } from './ProgressPanel';
 import { Toast, type ToastData } from './Toast';
 import { Minimize2, Download, Check, RefreshCw } from 'lucide-react';
+import { ResultPanel } from './ResultPanel';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 type CompressLevel = 'recommended' | 'extreme' | 'fast';
@@ -147,10 +148,10 @@ export function CompressShell({ t = en }: Props) {
 
       {/* Upload Phase */}
       {phase === 'upload' && (
-        <>
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={handleDrop} onPreload={preload} multiple={false} />
           <PrivacyLine t={t} />
-        </>
+        </div>
       )}
 
       {/* Options Phase */}
@@ -200,44 +201,24 @@ export function CompressShell({ t = en }: Props) {
       )}
 
       {/* Done Phase */}
-      {phase === 'done' && result && (
-        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
-              <Check className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold">
-                {isTr ? 'PDF Başarıyla Sıkıştırıldı!' : 'PDF Successfully Compressed!'}
-              </h3>
-              <div className="flex items-center justify-center gap-2 pt-1">
-                {savedPercent > 0 && (
-                  <span className="text-sm font-medium text-ink-muted line-through dark:text-ink-muted-dark">
-                    {formatSize(result.originalSize)}
-                  </span>
-                )}
-                <span className="text-base font-bold text-success dark:text-success">
-                  {formatSize(result.compressedSize)}
-                </span>
-                {savedPercent > 0 && (
-                  <span className="rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-semibold text-success">
-                    -{savedPercent}%
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button variant="ghost" onClick={handleReset} className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4" />
-                {isTr ? 'Yeni PDF Sıkıştır' : 'Compress Another PDF'}
-              </Button>
-              <Button variant="primary" onClick={handleDownload} className="flex items-center gap-2">
-                <Download className="h-4 w-4" />
-                {isTr ? 'Sıkıştırılmış PDF İndir' : 'Download Compressed PDF'}
-              </Button>
-            </div>
-          </div>
+      {phase === 'done' && (
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
+            t={t}
+            result={{
+              totalPages: 1,
+              succeeded: 1,
+              failed: [],
+              durationMs: 0,
+              output: result?.output,
+              outputName: result?.outputName,
+              cancelled: false
+            }}
+            skipped={[]}
+            crossLink={null}
+            onDownload={() => { if (result?.output) triggerDownload(result?.output, result?.outputName); }}
+            onConvertMore={reset}
+          />
         </div>
       )}
     </div>

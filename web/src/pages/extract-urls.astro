@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { extractUrlsCopy } from '../i18n/toolCopy';
+import { ExtractUrlsShell } from '../components/ExtractUrlsShell';
+
+const copy = extractUrlsCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <ExtractUrlsShell client:load />
+</ToolPage>

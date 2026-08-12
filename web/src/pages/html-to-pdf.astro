@@ -1,0 +1,10 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { HtmlShell } from '../components/HtmlShell';
+import { htmlPdfCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="CONVERTER · HTML" {...htmlPdfCopy.en}>
+  <HtmlShell client:load t={en} />
+</ToolPage>

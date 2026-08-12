@@ -13,6 +13,7 @@ import { Toast, type ToastData } from './Toast';
 import { PageCard } from './PageCard';
 import { ProgressPanel } from './ProgressPanel';
 import { Scissors, FileArchive, Check, Download, RefreshCw } from 'lucide-react';
+import { ResultPanel } from './ResultPanel';
 
 type Phase = 'upload' | 'grid' | 'processing' | 'done';
 
@@ -39,6 +40,8 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
       controllerRef.current = new JobController({
         onInspect: (fileId, pageCount) => {
           setFile((prev) => prev?.id === fileId ? { ...prev, pageCount } : prev);
+          const all = new Set(Array.from({ length: pageCount }, (_, i) => i + 1));
+          setSelectedPages(all);
           setPhase('grid');
         },
         onFileError: (fileId, message) => {
@@ -75,30 +78,17 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
       const f = incoming[0];
       if (!f) return;
       
-      if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-        setToast({ kind: 'error', message: t.notPdf });
+      const rejection = await validatePdfFile(f);
+      if (rejection) {
+        setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
         return;
       }
       
-      try {
-        const arrayBuffer = await f.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-        const pageCount = pdfDoc.getPageCount();
-        if (pageCount === 0) {
-          setToast({ kind: 'error', message: t.corruptFile });
-          return;
-        }
-
-        const id = 's1';
-        setFile({ id, file: f, pageCount });
-        const all = new Set(Array.from({ length: pageCount }, (_, i) => i + 1));
-        setSelectedPages(all);
-        setPhase('grid');
-      } catch (err) {
-        setToast({ kind: 'error', message: t.corruptFile });
-      }
+      const id = 's1';
+      setFile({ id, file: f, pageCount: 0 });
+      void controller().inspect(id, f);
     },
-    [t]
+    [controller, t]
   );
 
   const togglePage = useCallback((page: number) => {
@@ -192,10 +182,10 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
   return (
     <div className="flex flex-col gap-5">
       {phase === 'upload' && (
-        <>
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFiles} onPreload={preload} />
           <PrivacyLine t={t} />
-        </>
+        </div>
       )}
 
       {phase === 'grid' && file && (
@@ -238,21 +228,14 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
           `}>
             <button
               onClick={() => runSplit('extract')}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300
-                         bg-surface/80 hover:bg-surface border border-transparent hover:border-ink/10
-                         dark:bg-surface-dark/80 dark:hover:bg-surface-dark dark:hover:border-surface-300
-                         hover:scale-[1.02] active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 bg-surface/80 hover:bg-surface border border-transparent hover:border-ink/10 dark:bg-surface-dark/80 dark:hover:bg-surface-dark dark:hover:border-surface-300 hover:scale-[1.02] active:scale-95"
             >
               <Scissors className="w-4 h-4" />
               <span className="text-sm">{t.splitExtract}</span>
             </button>
             <button
               onClick={() => runSplit('burst')}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300
-                         bg-amber text-white shadow-[0_0_20px_rgba(232,182,95,0.4)]
-                         hover:bg-amber-hover hover:shadow-[0_0_30px_rgba(232,182,95,0.6)]
-                         dark:bg-amber-dark dark:hover:bg-amber-dark
-                         hover:scale-[1.05] active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 bg-amber text-white shadow-[0_0_20px_rgba(232,182,95,0.4)] hover:bg-amber-hover hover:shadow-[0_0_30px_rgba(232,182,95,0.6)] dark:bg-amber-dark dark:hover:bg-amber-dark hover:scale-[1.05] active:scale-95"
             >
               <FileArchive className="w-4 h-4" />
               <span className="text-sm">{t.splitBurst}</span>
@@ -280,42 +263,24 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
         />
       )}
 
-      {phase === 'done' && splitResult && (
-        <div className="phase-enter flex flex-col gap-5 rounded-2xl border border-amber/30 bg-surface p-6 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-          <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success dark:text-success">
-              <Check className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold">
-                {t.lang === 'tr' ? 'PDF Başarıyla Bölündü!' : 'PDF Successfully Split!'}
-              </h3>
-              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-                {t.lang === 'tr'
-                  ? `Toplam ${splitResult.extractedPages} sayfa başarıyla ayrıldı.`
-                  : `Extracted ${splitResult.extractedPages} pages successfully.`}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button variant="ghost" onClick={splitSameFile} className="flex items-center gap-2">
-                <Scissors className="h-4 w-4" />
-                {t.lang === 'tr' ? 'Aynı Dosyayı Böl' : 'Split Same File'}
-              </Button>
-              <Button variant="ghost" onClick={reset} className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4" />
-                {t.lang === 'tr' ? 'Yeni Dosya Seç' : 'Split Another PDF'}
-              </Button>
-              {splitResult.output && splitResult.outputName && (
-                <Button variant="primary" onClick={() => triggerDownload(splitResult.output!, splitResult.outputName!)} className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  {t.lang === 'tr'
-                    ? (splitResult.outputName.endsWith('.zip') ? 'ZIP İndir' : 'PDF İndir')
-                    : `Download ${splitResult.outputName.endsWith('.zip') ? 'ZIP' : 'PDF'}`}
-                </Button>
-              )}
-            </div>
-          </div>
+      {phase === 'done' && (
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
+            t={t}
+            result={{
+              totalPages: 1,
+              succeeded: 1,
+              failed: [],
+              durationMs: 0,
+              output: splitResult?.output,
+              outputName: splitResult?.outputName,
+              cancelled: false
+            }}
+            skipped={[]}
+            crossLink={null}
+            onDownload={() => { if(splitResult?.output) triggerDownload(splitResult.output, splitResult.outputName || "split.pdf"); else if(splitResult?.outputUrl) { const a = document.createElement("a"); a.href = splitResult.outputUrl; a.download = splitResult.outputName; a.click(); } }}
+            onConvertMore={reset}
+          />
         </div>
       )}
 

@@ -1,0 +1,23 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { PdfAShell } from '../../components/PdfAShell';
+import { pdfaCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+
+const copy = pdfaCopy.tr;
+---
+
+<ToolPage
+  lang="tr"
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  faqTitle={copy.faqTitle}
+  faq={copy.faq}
+>
+  <PdfAShell client:load t={tr} />
+</ToolPage>

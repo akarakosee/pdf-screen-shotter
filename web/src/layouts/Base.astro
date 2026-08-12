@@ -59,5 +59,30 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
       <slot />
     </main>
     <Footer lang={lang} />
+    <script>
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (reduce || !('IntersectionObserver' in window)) {
+        for (const el of targets) el.classList.add('reveal-in');
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-in');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15, rootMargin: '200px 0px' },
+        );
+        for (const el of targets) io.observe(el);
+
+        setTimeout(() => {
+          for (const el of targets) el.classList.add('reveal-in');
+          io.disconnect();
+        }, 500);
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,10 @@
+---
+import { SplitBySizeShell } from '../../components/SplitBySizeShell';
+import ToolPage from '../../layouts/ToolPage.astro';
+import { splitbysizeCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ORGANIZE PDF \u00B7 SPLIT BY SIZE" {...splitbysizeCopy.tr}>
+  <SplitBySizeShell client:load t={tr} />
+</ToolPage>

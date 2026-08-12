@@ -1,16 +1,313 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { Scissors, FileImage, Image, Images, Layers, Grid3X3, RotateCw, Lock, Unlock, FileText, Eraser, Stamp, Hash, Trash2, FileUp, PenTool, Minimize2 } from 'lucide-react';
+import { Sun, Table, Braces, Headphones, Settings, BookX, Palette, FileCode2, Maximize, Scale, Search, Shuffle, FileImage, Image, Images, Layers, Scissors, Grid3X3, Lock, Unlock, FileText, Eraser, Stamp, Hash, RotateCw, Trash2, FileUp, PenTool, Minimize2, Crop, BookOpen, GitCompare, ShieldAlert, ScanText, Activity, Camera, Archive, LayoutGrid, FileX, ArrowDownUp, Tags, Code, Moon, FileCode, FilePlus, Edit3, FormInput, FileMinus } from 'lucide-react';
 import DevelopingTray from '../../components/DevelopingTray.astro';
 import GlobalFaq from '../../components/GlobalFaq.astro';
 
 const tools = [
+  {
+    href: '/tr/extract-tables',
+    idx: 'ÇIKART · TABLO',
+    name: 'Tablo Çıkarıcı',
+    line: 'PDF\'ten CSV\'ye',
+    Icon: Table,
+    category: 'PDF Çıkar',
+  },
+  {
+    href: '/tr/pdf-to-json',
+    idx: 'ÇIKART · JSON',
+    name: 'PDF to JSON',
+    line: 'Ham geliştirici verisi',
+    Icon: Braces,
+    category: 'PDF Çıkar',
+  },
+  {
+    href: '/tr/scan-to-pdf',
+    idx: 'OLUŞTUR · TARAYICI',
+    name: 'Kameradan PDF',
+    line: 'Scan to PDF',
+    Icon: Camera,
+    category: 'PDF\'e Dönüştür',
+  },
+  {
+    href: '/tr/audio-reader',
+    idx: 'ÇIKART · SES',
+    name: 'Sesli Okuma (TTS)',
+    line: 'Ses motoru için metin',
+    Icon: Headphones,
+    category: 'PDF Çıkar',
+  },
+
+  {
+    href: '/tr/viewer-prefs',
+    idx: 'GÜVENLİK · AYARLAR',
+    name: 'Açılış Ayarları',
+    line: 'Tam ekran zorla',
+    Icon: Settings,
+    category: 'PDF Güvenliği',
+  },
+  {
+    href: '/tr/extract-hidden-text',
+    idx: 'GÜVENLİK · ADLİ BİLİŞİM',
+    name: 'Gizli Yazı Bul',
+    line: 'Görünmez metinleri bul',
+    Icon: Search,
+    category: 'PDF Güvenliği',
+  },
+  {
+    href: '/tr/wipe-bookmarks',
+    idx: 'GÜVENLİK · YAPI',
+    name: 'İçindekiler Sil',
+    line: 'TOC yapısını yok et',
+    Icon: BookX,
+    category: 'PDF Güvenliği',
+  },
+
+  {
+    href: '/tr/extract-javascript',
+    idx: 'ÇIKAR · GÜVENLİK',
+    name: 'JS Sökücü',
+    line: 'Zararlı kodları bul',
+    Icon: Code,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/split-bookmarks',
+    idx: 'BÖL · İÇİNDEKİLER',
+    name: 'Bölümlere Göre Ayır',
+    line: 'Kitapları parçala',
+    Icon: BookOpen,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/split-blank',
+    idx: 'BÖL · TARAYICILAR',
+    name: 'Boş Sayfadan Parçala',
+    line: 'Toplu taramaları ayır',
+    Icon: FileMinus,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/extract-attachments',
+    idx: 'ÇIKAR · DOSYALAR',
+    name: 'Ekleri Çıkar',
+    line: 'Gizli dosyaları sök',
+    Icon: Archive,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/extract-colors',
+    idx: 'ÇIKAR · TASARIM',
+    name: 'Renk Paleti Çıkar',
+    line: 'Tüm HEX kodlarını bul',
+    Icon: Palette,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/remove-text',
+    idx: 'OPTİMİZE · ŞABLON',
+    name: 'Yazıları Sil',
+    line: 'Tüm metni temizle',
+    Icon: Eraser,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/pdf-to-html',
+    idx: 'DÖNÜŞTÜR · WEB',
+    name: 'PDF to HTML',
+    line: 'Web Sayfasına Çevir',
+    Icon: FileText,
+    category: 'PDF\'ye Dönüştür',
+  },
+  {
+    href: '/tr/extract-fonts',
+    idx: 'ÇIKAR · TASARIM',
+    name: 'Fontları Çıkar',
+    line: 'TTF/OTF Kurtar',
+    Icon: FileUp,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/remove-images',
+    idx: 'OPTİMİZE · MÜREKKEP',
+    name: 'Resimleri Sil',
+    line: 'Mürekkep Tasarrufu',
+    Icon: FileText,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/extract-urls',
+    idx: 'ÇIKAR · LİNKLER',
+    name: 'Linkleri Çıkar',
+    line: 'Tüm URL\'leri al',
+    Icon: FileText,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/remove-duplicates',
+    idx: 'DÜZENLE · TEMİZLE',
+    name: 'Kopyaları Sil',
+    line: 'Aynı sayfaları yok et',
+    Icon: FileText,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/auto-redact',
+    idx: 'GÜVENLİK · SANSÜR',
+    name: 'Otomatik Sansür',
+    line: 'Kişisel Verileri (PII) Gizle',
+    Icon: FileText,
+    category: 'Güvenlik',
+  },
+  {
+    href: '/tr/smart-markdown',
+    idx: 'ÇIKAR · AI',
+    name: 'Akıllı Markdown',
+    line: 'Yapay Zeka İçin Çeviri',
+    Icon: FileText,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/contrast-enhancer',
+    idx: 'DÜZENLE · TARAMA',
+    name: 'Tarama Netleştir',
+    line: 'Kötü Taramaları İyileştir',
+    Icon: Sun,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/extract-toc',
+    idx: 'ÇIKAR · İÇİNDEKİLER',
+    name: 'İçindekileri Çıkar',
+    line: 'PDF Başlık Ağacını Dışa Aktar',
+    Icon: FileText,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/overlay-pdf',
+    idx: 'DÜZENLE · ANTET',
+    name: 'Antet Ekle',
+    line: 'PDF arka planına şablon ekleyin',
+    Icon: FileUp,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/change-bg',
+    idx: 'DÜZENLE · RENK',
+    name: 'Arka Plan Rengi',
+    line: 'Gece Modu & Sepya zemin',
+    Icon: Palette,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/remove-annotations',
+    idx: 'DÜZENLE · TEMİZLE',
+    name: 'Açıklamaları Sil',
+    line: 'PDF yorumlarını ve formlarını temizle',
+    Icon: Stamp,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/pdf-to-webp',
+    idx: 'DÖNÜŞTÜR · WEBP',
+    name: 'PDF to WebP',
+    line: 'PDF sayfalarını WebP formatına dönüştür',
+    Icon: FileImage,
+    category: 'PDF\'ten Dönüştür',
+  },
+  {
+    href: '/tr/auto-crop',
+    idx: 'DÜZENLE · KIRP',
+    name: 'Otomatik Kırp',
+    line: 'Beyaz boşlukları otomatik kaldır',
+    Icon: Crop,
+    category: 'PDF Düzenle',
+  },
+
+  {
+    href: '/tr/extract-images',
+    idx: 'DÖNÜŞTÜR · GÖRSELLERİ ÇIKAR',
+    name: 'Görselleri Çıkar',
+    line: 'PDF içindeki tüm resimleri ayıkla',
+    Icon: Images,
+    category: 'PDF\'ten Dönüştür',
+  },
+  {
+    href: '/tr/add-page-numbers',
+    idx: 'DÜZENLE · SAYFA NUMARASI',
+    name: 'Sayfa Numarası',
+    line: 'PDF sayfalarına otomatik numara ekle',
+    Icon: Hash,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/remove-blank-pages',
+    idx: 'DÜZENLE · BOŞLUKLARI SİL',
+    name: 'Boş Sayfaları Sil',
+    line: 'Boş veya beyaz sayfaları tespit edip sil',
+    Icon: Eraser,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/mix-pdf',
+    idx: 'DÜZENLE · KARIŞTIR',
+    name: 'PDF Karıştır',
+    line: 'İki PDF\'in sayfalarını sırayla birleştir',
+    Icon: Shuffle,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/split-half-pdf',
+    idx: 'DÜZENLE · ORTADAN BÖL',
+    name: 'Ortadan Böl',
+    line: 'Yan yana taranmış sayfaları ikiye böl',
+    Icon: Scissors,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/extract-by-keyword',
+    idx: 'DÜZENLE · KELİMEYLE ÇIKAR',
+    name: 'Kelimeyle Çıkar',
+    line: 'Belirli bir metni içeren sayfaları al',
+    Icon: Search,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/split-by-size',
+    idx: 'DÜZENLE · BOYUTA GÖRE BÖL',
+    name: 'Boyuta Göre Böl',
+    line: 'PDF\'i belirli MB boyutlarında parçalara ayır',
+    Icon: Scale,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/add-margins',
+    idx: 'DÜZENLE · BOŞLUK EKLE',
+    name: 'Boşluk Ekle',
+    line: 'PDF sayfalarının kenarlarına pay ekle',
+    Icon: Maximize,
+    category: 'PDF Düzenle',
+  },
+  {
+    href: '/tr/pdf-to-svg',
+    idx: 'DÖNÜŞTÜR · PDF TO SVG',
+    name: 'PDF\'ten SVG\'ye',
+    line: 'PDF sayfalarını SVG vektörlerine çevir',
+    Icon: FileCode2,
+    category: 'PDF\'ten Dönüştür',
+  },
   {
     href: '/tr/pdf-to-png',
     idx: 'FİLM · KAYIPSIZ',
     name: "PDF'ten PNG'ye",
     line: 'Metin ve şemalar için kayıpsız görüntü',
     Icon: FileImage,
+  category: 'Dönüştür',
   },
   {
     href: '/tr/pdf-to-jpg',
@@ -18,6 +315,7 @@ const tools = [
     name: "PDF'ten JPG'ye",
     line: 'Fotoğraf ve taramalar için küçük dosyalar',
     Icon: Image,
+  category: 'Dönüştür',
   },
   {
     href: '/tr/png-to-pdf',
@@ -25,6 +323,7 @@ const tools = [
     name: "PNG'den PDF'e",
     line: 'PNG resimlerini PDF belgesine dönüştürün',
     Icon: FileUp,
+  category: 'Dönüştür',
   },
   {
     href: '/tr/img-to-pdf',
@@ -32,6 +331,7 @@ const tools = [
     name: "JPG'den PDF'e",
     line: 'JPG fotoğraflarını PDF belgesine dönüştürün',
     Icon: FileUp,
+  category: 'Dönüştür',
   },
   {
     href: '/tr/merge-pdf',
@@ -39,6 +339,7 @@ const tools = [
     name: 'PDF Birleştir',
     line: 'PDF belgelerini tek dosyada birleştir',
     Icon: Layers,
+  category: 'Düzenle',
   },
   {
     href: '/tr/split-pdf',
@@ -46,6 +347,7 @@ const tools = [
     name: 'PDF Böl',
     line: 'Sayfaları ayıkla veya parçalara böl',
     Icon: Scissors,
+  category: 'Düzenle',
   },
   {
     href: '/tr/organize-pdf',
@@ -53,6 +355,7 @@ const tools = [
     name: 'PDF Düzenle',
     line: 'Sayfaların sırasını ve yönünü düzenle',
     Icon: Grid3X3,
+  category: 'Düzenle',
   },
   {
     href: '/tr/protect-pdf',
@@ -60,6 +363,7 @@ const tools = [
     name: 'PDF Şifrele',
     line: 'Belgenizi şifre ile koruyun',
     Icon: Lock,
+  category: 'Güvenlik',
   },
   {
     href: '/tr/unlock-pdf',
@@ -67,6 +371,7 @@ const tools = [
     name: 'PDF Şifre Kaldır',
     line: 'PDF dosyasından şifre korumasını kaldır',
     Icon: Unlock,
+  category: 'Güvenlik',
   },
   {
     href: '/tr/extract-text',
@@ -74,6 +379,15 @@ const tools = [
     name: 'Metin Çıkar',
     line: 'PDF içindeki tüm metinleri çıkarın',
     Icon: FileText,
+  category: 'Yapay Zeka & Araçlar',
+  },
+  {
+    href: '/tr/ocr-pdf',
+    idx: 'YAPAY ZEKA · OCR',
+    name: 'OCR PDF',
+    line: 'Taramalardan metin çıkarın',
+    Icon: ScanText,
+  category: 'Yapay Zeka & Araçlar',
   },
   {
     href: '/tr/extract-images',
@@ -81,6 +395,7 @@ const tools = [
     name: 'Resim Çıkar',
     line: 'Gömülü JPG ve PNG görsellerini indirin',
     Icon: Images,
+  category: 'Yapay Zeka & Araçlar',
   },
   {
     href: '/tr/compress-pdf',
@@ -88,6 +403,7 @@ const tools = [
     name: 'PDF Sıkıştır / Küçült',
     line: 'Kalite kaybı olmadan boyutu küçültün',
     Icon: Minimize2,
+  category: 'Optimize Et',
   },
   {
     href: '/tr/sanitize-pdf',
@@ -95,6 +411,7 @@ const tools = [
     name: 'PDF Temizle',
     line: 'Gizli meta verilerini temizleyin',
     Icon: Eraser,
+  category: 'Güvenlik',
   },
   {
     href: '/tr/watermark-pdf',
@@ -102,6 +419,7 @@ const tools = [
     name: 'Filigran Ekle',
     line: 'PDF belgenize filigran ekleyin',
     Icon: Stamp,
+  category: 'Güvenlik',
   },
   {
     href: '/tr/flatten-pdf',
@@ -109,6 +427,7 @@ const tools = [
     name: 'PDF Düzleştir',
     line: 'Form ve notları sabit katman yapın',
     Icon: Layers,
+  category: 'Düzenle & İmza',
   },
   {
     href: '/tr/sign-pdf',
@@ -116,6 +435,7 @@ const tools = [
     name: 'PDF İmzala',
     line: 'Belgeye imza ekleyin veya çizin',
     Icon: PenTool,
+  category: 'Düzenle & İmza',
   },
   {
     href: '/tr/add-page-numbers',
@@ -123,6 +443,7 @@ const tools = [
     name: 'Sayfa Numarası Ekle',
     line: 'Belgenize sayfa numarası ekleyin',
     Icon: Hash,
+  category: 'Düzenle',
   },
   {
     href: '/tr/rotate-pdf',
@@ -130,6 +451,7 @@ const tools = [
     name: 'PDF Döndür',
     line: 'Sayfaları istediğin yöne döndür',
     Icon: RotateCw,
+  category: 'Düzenle',
   },
   {
     href: '/tr/remove-pages',
@@ -137,6 +459,183 @@ const tools = [
     name: 'PDF Sayfa Sil',
     line: 'İstenmeyen sayfaları belgeden sil',
     Icon: Trash2,
+  category: 'Düzenle',
+  },
+  {
+    href: '/tr/crop-pdf',
+    idx: 'DÜZENLE · KIRP',
+    name: 'PDF Kırp',
+    line: 'Kenar boşluklarını kırpın',
+    Icon: Crop,
+  category: 'Optimize Et',
+  },
+  {
+    href: '/tr/booklet-pdf',
+    idx: 'DÜZENLE · KİTAPÇIK',
+    name: 'Kitapçık PDF',
+    line: 'Yazdırılabilir kitapçık düzeni oluşturun',
+    Icon: BookOpen,
+  category: 'Düzenle',
+  },
+  {
+    href: '/tr/compare-pdf',
+    idx: 'DÜZENLE · KARŞILAŞTIR',
+    name: 'PDF Karşılaştırma',
+    line: 'İki belgeyi görsel olarak kıyaslayın',
+    Icon: GitCompare,
+  category: 'Düzenle & İmza',
+  },
+  {
+    href: '/tr/redact-pdf',
+    idx: 'GÜVENLİK · KARARTMA',
+    name: 'PDF Karartma',
+    line: 'Hassas bilgileri gizleyin',
+    Icon: ShieldAlert,
+  category: 'Güvenlik',
+  },
+  {
+    href: '/tr/repair-pdf',
+    idx: 'ARAÇ · KURTARMA',
+    name: 'PDF Onar',
+    line: 'Bozuk dosyaları onarın',
+    Icon: Activity,
+  category: 'Yapay Zeka & Araçlar',
+  },
+  {
+    href: '/tr/grayscale-pdf',
+    idx: 'DÜZENLE · RENK',
+    name: 'Siyah Beyaz PDF',
+    line: 'Renkli sayfaları siyah beyaza çevirin',
+    Icon: PenTool,
+  category: 'Düzenle & İmza',
+  },
+  {
+    href: '/tr/resize-pdf',
+    idx: 'DÜZENLE · BOYUT',
+    name: 'Boyutlandır',
+    line: 'Kenar boşluğu ekle veya boyut değiştir',
+    Icon: Minimize2,
+  category: 'Optimize Et',
+  },
+  {
+    href: '/tr/scan-to-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · KAMERA',
+    name: 'Tara & PDF Yap',
+    line: 'Kamerayı kullanarak fiziksel belgeleri tarayın',
+    Icon: Camera,
+    category: 'Dönüştür',
+  },
+  {
+    href: '/tr/bates-numbering',
+    idx: 'ARAÇ · BATES',
+    name: 'Bates Numaralandırma',
+    line: 'Hukuki belgeler için endeks numaraları ekle',
+    Icon: Hash,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/n-up-pdf',
+    idx: 'DÜZEN · ÇOKLU',
+    name: 'Çoklu Sayfa',
+    line: 'Birden fazla sayfayı tek sayfada birleştir',
+    Icon: LayoutGrid,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/pdf-a',
+    idx: 'DÖNÜŞTÜR · ARŞİV',
+    name: "PDF'ten PDF/A'ya",
+    line: 'Uzun süreli arşivleme için dönüştür',
+    Icon: Archive,
+    category: 'Dönüştür',
+  },
+  {
+    href: '/tr/remove-blank-pages',
+    idx: 'ARAÇ · TEMİZLE',
+    name: 'Boş Sayfaları Sil',
+    line: 'Boş sayfaları otomatik bul ve sil',
+    Icon: FileX,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/reverse-pdf',
+    idx: 'ARAÇ · TERSİNE',
+    name: 'Tersine Çevir',
+    line: 'Sayfa sırasını baştan sona ters çevir',
+    Icon: ArrowDownUp,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/edit-metadata',
+    idx: 'DÜZENLE · META VERİ',
+    name: 'Meta Veri Düzenle',
+    line: 'Yazar, başlık ve etiketleri değiştir',
+    Icon: Tags,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/base64-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · BASE64',
+    name: "Base64'ten PDF'e",
+    line: 'Base64 dizgesini PDF dosyasına çevir',
+    Icon: Code,
+    category: 'Dönüştür',
+  },
+  {
+    href: '/tr/invert-pdf',
+    idx: 'DÜZENLE · RENK',
+    name: 'Renkleri Ters Çevir',
+    line: "PDF'ler için karanlık mod",
+    Icon: Moon,
+    category: 'Düzenle',
+  },
+  {
+    href: '/tr/markdown-to-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · MARKDOWN',
+    name: "Markdown'dan PDF'e",
+    line: 'MD dosyalarını şık PDF yapın',
+    Icon: FileCode,
+    category: 'Dönüştür',
+  },
+  {
+    href: '/tr/html-to-pdf',
+    idx: 'DÖNÜŞTÜRÜCÜ · HTML',
+    name: "HTML'den PDF'e",
+    line: 'Ham HTML kodunu PDF yapın',
+    Icon: Code,
+    category: 'Dönüştür',
+  },
+  {
+    href: '/tr/extract-pages',
+    idx: 'ARAÇ · ÇIKAR',
+    name: 'Sayfaları Çıkar',
+    line: 'Belirli sayfaları yeni bir PDF olarak kaydet',
+    Icon: FilePlus,
+    category: 'Organize PDF',
+  },
+  {
+    href: '/tr/annotate-pdf',
+    idx: 'DÜZENLE · NOT EKLE',
+    name: 'PDF Not Ekle',
+    line: 'PDF dosyasına metin ve notlar ekle',
+    Icon: PenTool,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/tr/edit-pdf',
+    idx: 'DÜZENLE · GİZLE',
+    name: 'PDF Düzenle',
+    line: 'Metinleri gizle ve hassas verileri kapat',
+    Icon: Edit3,
+    category: 'Edit PDF',
+  },
+  {
+    href: '/tr/pdf-forms',
+    idx: 'DÜZENLE · FORM',
+    name: 'PDF Formları',
+    line: 'Etkileşimli PDF formlarını doldur',
+    Icon: FormInput,
+    category: 'Edit PDF',
   },
 ];
 
@@ -161,7 +660,7 @@ const steps = [
     </p>
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-8">
+  <section class="mx-auto max-w-[1440px] px-4 pb-8">
     <div class="flex justify-center pb-6">
       <span
         class="inline-flex items-center gap-2 rounded-full border bg-surface px-3.5 py-1.5 font-mono text-[11px] tracking-[0.06em] whitespace-nowrap text-amber uppercase shadow-1 dark:border-white/[0.14] dark:bg-surface-dark dark:text-amber-dark"
@@ -170,14 +669,24 @@ const steps = [
         Yükleme yok · kayıt yok · ücretsiz
       </span>
     </div>
+    <div class="flex flex-wrap items-center justify-center gap-2 pb-6" id="category-filters">
+      <button class="filter-btn active rounded-full px-4 py-2 font-mono text-[13px] tracking-wide transition-colors duration-200 bg-amber text-bg dark:bg-amber-dark dark:text-bg-dark font-bold shadow-sm" data-category="All">Tümü</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Düzenle">Düzenle</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Optimize Et">Optimize Et</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Dönüştür">Dönüştür</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Düzenle & İmza">Düzenle & İmza</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Güvenlik">Güvenlik</button>
+      <button class="filter-btn rounded-full border border-black/10 dark:border-white/10 bg-surface dark:bg-surface-dark px-4 py-2 font-mono text-[13px] tracking-wide text-ink-muted dark:text-ink-muted-dark hover:border-amber dark:hover:border-amber-dark transition-colors duration-200" data-category="Yapay Zeka & Araçlar">Yapay Zeka & Araçlar</button>
+    </div>
     <DevelopingTray trayLabel="GELİŞTİRME TEPSİSİ" />
   </section>
 
-  <section class="mx-auto max-w-[720px] px-4 pb-8">
-    <ul class="grid gap-3 sm:grid-cols-2">
+  
+  <section class="mx-auto max-w-[1440px] px-4 pb-[16px]">
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {
         tools.map((tool) => (
-          <li>
+          <li data-category={tool.category} class="tool-item transition-all duration-300 transform scale-100 opacity-100">
             <a
               href={tool.href}
               class="group flex h-[114px] flex-col justify-between rounded-2xl border bg-surface p-5 shadow-1 transition-all duration-[200ms] hover:-translate-y-0.5 hover:border-amber dark:bg-gradient-to-br dark:from-surface-dark dark:to-bg-dark dark:hover:border-amber-dim-dark"
@@ -230,3 +739,49 @@ const steps = [
 
   <GlobalFaq lang="tr" />
 </Base>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filters = document.querySelectorAll('.filter-btn');
+    const tools = document.querySelectorAll('.tool-item');
+    
+    // Assign unique view-transition-names for smooth grid reflows
+    tools.forEach((tool: any, index) => {
+      tool.style.viewTransitionName = `tool-item-${index}`;
+    });
+    
+    filters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category');
+        
+        const updateDOM = () => {
+          // Update active class
+          filters.forEach(f => {
+            f.classList.remove('bg-amber', 'text-bg', 'dark:bg-amber-dark', 'dark:text-bg-dark', 'font-bold', 'shadow-sm', 'active');
+            f.classList.add('border', 'border-black/10', 'dark:border-white/10', 'bg-surface', 'dark:bg-surface-dark', 'text-ink-muted', 'dark:text-ink-muted-dark');
+          });
+          
+          btn.classList.add('bg-amber', 'text-bg', 'dark:bg-amber-dark', 'dark:text-bg-dark', 'font-bold', 'shadow-sm', 'active');
+          btn.classList.remove('border', 'border-black/10', 'dark:border-white/10', 'bg-surface', 'dark:bg-surface-dark', 'text-ink-muted', 'dark:text-ink-muted-dark');
+          
+          tools.forEach((tool: any) => {
+            if (category === 'All' || tool.getAttribute('data-category') === category) {
+              tool.style.display = 'block';
+            } else {
+              tool.style.display = 'none';
+            }
+          });
+        };
+
+        if (document.startViewTransition) {
+          document.startViewTransition(() => {
+            updateDOM();
+          });
+        } else {
+          updateDOM();
+        }
+      });
+    });
+  });
+</script>

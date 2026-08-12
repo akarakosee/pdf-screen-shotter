@@ -1,0 +1,11 @@
+---
+// web/src/pages/tr/crop-pdf.astro
+import ToolPage from '../../layouts/ToolPage.astro';
+import { CropShell } from '../../components/CropShell';
+import { cropCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="DÜZENLE · KIRP" {...cropCopy.tr}>
+  <CropShell client:load t={tr} />
+</ToolPage>

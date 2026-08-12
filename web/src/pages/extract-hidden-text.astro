@@ -1,0 +1,20 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { extractHiddenTextCopy } from '../i18n/toolCopy';
+import { ExtractHiddenTextShell } from '../components/ExtractHiddenTextShell';
+
+const copy = extractHiddenTextCopy.en;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="en"
+>
+  <ExtractHiddenTextShell client:load />
+</ToolPage>

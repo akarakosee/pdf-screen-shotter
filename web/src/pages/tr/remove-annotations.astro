@@ -1,0 +1,21 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+import { removeAnnotationsCopy } from '../../i18n/toolCopy';
+import { RemoveAnnotationsShell } from '../../components/RemoveAnnotationsShell';
+import { tr } from '../../i18n/tr';
+
+const copy = removeAnnotationsCopy.tr;
+---
+
+<ToolPage
+  title={copy.title}
+  description={copy.description}
+  h1={copy.h1}
+  tagline={copy.tagline}
+  howToName={copy.howToName}
+  howItWorks={copy.howItWorks}
+  steps={copy.steps}
+  lang="tr"
+>
+  <RemoveAnnotationsShell client:load t={tr} />
+</ToolPage>

@@ -1,0 +1,10 @@
+---
+import { PdfToSvgShell } from '../../components/PdfToSvgShell';
+import ToolPage from '../../layouts/ToolPage.astro';
+import { pdftosvgCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="CONVERT FROM PDF \u00B7 PDF TO SVG" {...pdftosvgCopy.tr}>
+  <PdfToSvgShell client:load t={tr} />
+</ToolPage>

@@ -1,0 +1,10 @@
+---
+import { ExtractByKeywordShell } from '../../components/ExtractByKeywordShell';
+import ToolPage from '../../layouts/ToolPage.astro';
+import { extractbykeywordCopy } from '../../i18n/toolCopy';
+import { tr } from '../../i18n/tr';
+---
+
+<ToolPage lang="tr" badgeLabel="ORGANIZE PDF \u00B7 EXTRACT BY KEYWORD" {...extractbykeywordCopy.tr}>
+  <ExtractByKeywordShell client:load t={tr} />
+</ToolPage>

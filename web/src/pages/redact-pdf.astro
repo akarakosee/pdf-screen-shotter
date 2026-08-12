@@ -1,0 +1,11 @@
+---
+// web/src/pages/redact-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { RedactShell } from '../components/RedactShell';
+import { redactCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="SECURITY · REDACT" {...redactCopy.en}>
+  <RedactShell client:load t={en} />
+</ToolPage>

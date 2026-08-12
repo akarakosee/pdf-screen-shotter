@@ -1,0 +1,11 @@
+---
+// web/src/pages/crop-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { CropShell } from '../components/CropShell';
+import { cropCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · CROP" {...cropCopy.en}>
+  <CropShell client:load t={en} />
+</ToolPage>

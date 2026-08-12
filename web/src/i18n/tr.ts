@@ -86,6 +86,7 @@ export const tr: Strings = {
   organizeRotateRight: 'Sağa Döndür',
   organizeDelete: 'Sayfayı Sil',
   organizeEmpty: 'Tüm sayfalar silindi. Boş bir PDF kaydedilemez.',
+  organizeDone: 'Düzenleme tamamlandı.',
   // Img to PDF
   imgToPdfDropIdle: 'Görselleri buraya bırak — veya tıklayıp seç',
   imgToPdfDropSublabel: 'JPG, PNG ve WebP desteklenir — %100 tarayıcı içinde, gizli işlenir',

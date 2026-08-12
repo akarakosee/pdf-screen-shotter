@@ -1,0 +1,11 @@
+---
+// web/src/pages/booklet-pdf.astro
+import ToolPage from '../layouts/ToolPage.astro';
+import { BookletShell } from '../components/BookletShell';
+import { bookletCopy } from '../i18n/toolCopy';
+import { en } from '../i18n/en';
+---
+
+<ToolPage lang="en" badgeLabel="EDIT · BOOKLET" {...bookletCopy.en}>
+  <BookletShell client:load t={en} />
+</ToolPage>
