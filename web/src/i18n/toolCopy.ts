@@ -2100,9 +2100,9 @@ export const autoRedactCopy = {
     howToName: 'How to auto-redact a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your PDF document.' },
-      { name: 'Scan', text: 'Our engine detects Emails, SSNs, and more.' },
-      { name: 'Download', text: 'Get your censored PDF.' }
+      { name: 'Add your PDF', text: 'Drop the document containing personally identifiable information (PII) onto the page.' },
+      { name: 'Scan and redact', text: 'Our local AI scans the text to detect and draw black boxes over sensitive data.' },
+      { name: 'Download PDF', text: 'Download the safely censored document, completely redacting sensitive information.' }
     ],
   },
   tr: {
@@ -2113,9 +2113,9 @@ export const autoRedactCopy = {
     howToName: 'PDF nasıl otomatik sansürlenir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF belgenizi seçin.' },
-      { name: 'Tara', text: 'Motorumuz hassas verileri otomatik bulur.' },
-      { name: 'İndir', text: 'Sansürlü belgenizi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Kişisel veri veya gizli bilgiler (PII) içeren belgeyi sayfaya bırak.' },
+      { name: 'Tara ve sansürle', text: 'Yapay zekamız metni tarayıp hassas verilerin üzerine siyah kutular çizer.' },
+      { name: 'PDF olarak indir', text: 'Hassas bilgileri tamamen sansürlenmiş güvenli PDF belgenizi indirin.' }
     ],
   }
 };
@@ -2129,9 +2129,9 @@ export const smartMarkdownCopy = {
     howToName: 'How to convert PDF to Markdown',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a text-heavy PDF.' },
-      { name: 'Convert', text: 'Font sizes are analyzed to structure the document.' },
-      { name: 'Download', text: 'Get your Markdown (.md) file.' }
+      { name: 'Add your PDF', text: 'Drop a text-heavy PDF document or report onto the page.' },
+      { name: 'Analyze structure', text: 'We analyze font sizes locally to accurately infer document hierarchy and headings.' },
+      { name: 'Download Markdown', text: 'Download a clean, structured Markdown (.md) file ready for AI agents or text editors.' }
     ],
   },
   tr: {
@@ -2142,9 +2142,9 @@ export const smartMarkdownCopy = {
     howToName: 'PDF Markdown\'a nasıl dönüştürülür',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Metin içeren bir PDF seçin.' },
-      { name: 'Dönüştür', text: 'Font boyutları analiz edilerek belge yapılandırılır.' },
-      { name: 'İndir', text: 'Markdown (.md) dosyanızı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Metin ağırlıklı PDF belgenizi veya makalenizi sayfaya bırak.' },
+      { name: 'Yapıyı analiz et', text: 'Belge hiyerarşisini ve başlıkları doğru çıkarmak için font boyutlarını yerel olarak analiz ediyoruz.' },
+      { name: 'Markdown indir', text: 'Yapay zeka araçları için hazır, yapılandırılmış temiz Markdown (.md) dosyanızı indirin.' }
     ],
   }
 };
@@ -2188,9 +2188,9 @@ export const pdfToHtmlCopy = {
     howToName: 'How to convert PDF to HTML',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select the PDF file.' },
-      { name: 'Convert', text: 'Our engine extracts the semantic structure.' },
-      { name: 'Download', text: 'Get your web-ready HTML file.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to publish on the web.' },
+      { name: 'Convert layout', text: 'We locally parse the text and layout to create a semantic, responsive web page.' },
+      { name: 'Download HTML', text: 'Download a clean HTML file that maintains your original text formatting.' }
     ],
   },
   tr: {
@@ -2201,9 +2201,9 @@ export const pdfToHtmlCopy = {
     howToName: 'PDF HTML\'e nasıl çevrilir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyasını seçin.' },
-      { name: 'Dönüştür', text: 'Motorumuz metin yapısını HTML\'e çevirir.' },
-      { name: 'İndir', text: 'HTML dosyanızı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İnternette sayfa olarak yayınlamak istediğiniz PDF belgesini buraya bırakın.' },
+      { name: 'Düzeni dönüştür', text: 'Anlamsal (semantic) bir web sayfası oluşturmak için metni ve düzeni yerel olarak ayrıştırıyoruz.' },
+      { name: 'HTML indir', text: 'Orijinal metin formatınızı koruyan, web uyumlu temiz HTML dosyasını indirin.' }
     ],
   }
 };
@@ -2217,9 +2217,9 @@ export const extractFontsCopy = {
     howToName: 'How to extract fonts from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF with embedded fonts.' },
-      { name: 'Extract', text: 'We scan the resource dictionaries for font streams.' },
-      { name: 'Download', text: 'Download a ZIP of all fonts.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document containing custom embedded typography.' },
+      { name: 'Extract fonts', text: 'We scan the resource dictionaries locally to recover raw TTF and OTF font files.' },
+      { name: 'Download ZIP', text: 'Download a ZIP archive containing all the original font files used in the document.' }
     ],
   },
   tr: {
@@ -2230,9 +2230,9 @@ export const extractFontsCopy = {
     howToName: 'PDF\'den font nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Gömülü fontlar içeren bir PDF seçin.' },
-      { name: 'Ayıkla', text: 'Font dosyalarını kaynak koddan sökeriz.' },
-      { name: 'İndir', text: 'Tüm fontları ZIP olarak indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Özel tipografi ve gömülü fontlar içeren PDF belgesini sayfaya bırak.' },
+      { name: 'Fontları ayıkla', text: 'TTF ve OTF font dosyalarını kurtarmak için PDF kaynak sözlüklerini yerel olarak tarıyoruz.' },
+      { name: 'ZIP indir', text: 'Belgede kullanılan tüm orijinal font dosyalarını içeren tek bir ZIP arşivi indirin.' }
     ],
   }
 };
@@ -2246,9 +2246,9 @@ export const removeImagesCopy = {
     howToName: 'How to remove images from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your heavy PDF.' },
-      { name: 'Strip', text: 'We safely remove all image objects.' },
-      { name: 'Download', text: 'Get your ink-saving text-only PDF.' }
+      { name: 'Add your PDF', text: 'Drop a heavy PDF filled with photos or graphics onto the page.' },
+      { name: 'Strip images', text: 'We safely locate and delete all heavy image objects directly within the browser.' },
+      { name: 'Download PDF', text: 'Download an ink-saving, text-only document that prints instantly.' }
     ],
   },
   tr: {
@@ -2259,9 +2259,9 @@ export const removeImagesCopy = {
     howToName: 'PDF\'den resimler nasıl silinir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Görsel dolu PDF\'inizi seçin.' },
-      { name: 'Temizle', text: 'Tüm görsel nesneleri güvenle kaldırırız.' },
-      { name: 'İndir', text: 'Sadece metinden oluşan PDF\'i indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Fotoğraflar ve ağır grafiklerle dolu PDF belgenizi sayfaya bırakın.' },
+      { name: 'Resimleri sil', text: 'Tarayıcı içinde tüm ağır görsel nesneleri güvenli bir şekilde bulup kalıcı olarak siliyoruz.' },
+      { name: 'PDF indir', text: 'Yazıcıdan anında çıkan, mürekkep tasarruflu, yalnızca metinden oluşan belgenizi indirin.' }
     ],
   }
 };
@@ -2275,9 +2275,9 @@ export const extractUrlsCopy = {
     howToName: 'How to extract links from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF containing hyperlinks.' },
-      { name: 'Parse', text: 'We scan link annotations across all pages.' },
-      { name: 'Download', text: 'Download a text file with all URLs.' }
+      { name: 'Add your PDF', text: 'Drop an academic paper or report containing hyperlinks.' },
+      { name: 'Parse links', text: 'We scan through all pages locally to locate click annotations and external references.' },
+      { name: 'Download TXT', text: 'Download a clean text file listing all the URLs found in your document.' }
     ],
   },
   tr: {
@@ -2288,9 +2288,9 @@ export const extractUrlsCopy = {
     howToName: 'PDF\'den linkler nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Link içeren bir PDF seçin.' },
-      { name: 'Tara', text: 'Tüm sayfalardaki bağlantı noktalarını tararız.' },
-      { name: 'İndir', text: 'Tüm URL\'lerin olduğu dosyayı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Tıklanabilir bağlantılar içeren makale veya raporu sayfaya bırakın.' },
+      { name: 'Linkleri bul', text: 'Bağlantı noktalarını ve harici referansları bulmak için tüm sayfaları yerel olarak tarıyoruz.' },
+      { name: 'TXT indir', text: 'Belgenizde bulunan tüm URL\'leri listeleyen temiz bir metin dosyasını indirin.' }
     ],
   }
 };
@@ -2304,9 +2304,9 @@ export const removeDuplicatesCopy = {
     howToName: 'How to remove duplicate PDF pages',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your PDF document.' },
-      { name: 'Analyze', text: 'We do a fast pixel-hash comparison of all pages.' },
-      { name: 'Download', text: 'Get your cleaned up PDF.' }
+      { name: 'Add your PDF', text: 'Drop a poorly scanned or merged document with duplicate pages.' },
+      { name: 'Compare pages', text: 'We perform a fast, local pixel-hash comparison to identify visually identical pages.' },
+      { name: 'Download PDF', text: 'Download a clean, de-duplicated document free of any double pages.' }
     ],
   },
   tr: {
@@ -2317,9 +2317,9 @@ export const removeDuplicatesCopy = {
     howToName: 'PDF\'deki çift sayfalar nasıl silinir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF belgenizi seçin.' },
-      { name: 'Analiz', text: 'Hızlı bir piksel-hash karşılaştırması yaparız.' },
-      { name: 'İndir', text: 'Temizlenmiş PDF\'nizi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Çift çekilmiş veya kopya sayfalar barındıran belgeyi sayfaya bırak.' },
+      { name: 'Sayfaları kıyasla', text: 'Görsel olarak tamamen aynı olan sayfaları bulmak için hızlı bir piksel karşılaştırması yapıyoruz.' },
+      { name: 'PDF indir', text: 'Kopya sayfalardan tamamen arındırılmış temiz ve tekilleştirilmiş belgenizi indirin.' }
     ],
   }
 };
@@ -2334,9 +2334,9 @@ export const extractAttachmentsCopy = {
     howToName: 'How to extract attachments from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF with embedded files.' },
-      { name: 'Extract', text: 'We scan the /EmbeddedFiles dictionary.' },
-      { name: 'Download', text: 'Download a ZIP of all attachments.' }
+      { name: 'Add your PDF', text: 'Drop a PDF containing portfolios or embedded e-invoice XML files.' },
+      { name: 'Extract files', text: 'We scan the embedded files dictionary locally to securely recover all attachments.' },
+      { name: 'Download ZIP', text: 'Download a single ZIP archive containing all the hidden attached files.' }
     ],
   },
   tr: {
@@ -2347,9 +2347,9 @@ export const extractAttachmentsCopy = {
     howToName: 'PDF\'den ekler nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Ek içeren bir PDF seçin.' },
-      { name: 'Ayıkla', text: 'Gömülü dosyalar sözlüğünü tararız.' },
-      { name: 'İndir', text: 'Tüm ekleri ZIP olarak indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçinde e-fatura XML\'i veya ekli portfolyo dosyaları bulunan belgeyi bırak.' },
+      { name: 'Dosyaları ayıkla', text: 'Tüm ekleri güvenle kurtarmak için gömülü dosyalar bölümünü yerel olarak tarıyoruz.' },
+      { name: 'ZIP indir', text: 'Belge içine gizlenmiş tüm ek dosyaları içeren tek bir ZIP arşivini indirin.' }
     ],
   }
 };
@@ -2363,9 +2363,9 @@ export const extractColorsCopy = {
     howToName: 'How to extract colors from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your designed PDF.' },
-      { name: 'Scan', text: 'We analyze the raw drawing operations.' },
-      { name: 'Download', text: 'Get your HEX color palette.' }
+      { name: 'Add your PDF', text: 'Drop a beautifully designed PDF or vector graphic onto the page.' },
+      { name: 'Scan colors', text: 'We locally analyze all raw drawing operations to extract the exact HEX color codes.' },
+      { name: 'Download Palette', text: 'Download a comprehensive text file containing the entire document color palette.' }
     ],
   },
   tr: {
@@ -2376,9 +2376,9 @@ export const extractColorsCopy = {
     howToName: 'PDF\'den renkler nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Tasarım içeren PDF\'i seçin.' },
-      { name: 'Tara', text: 'Ham çizim operasyonlarını analiz ederiz.' },
-      { name: 'İndir', text: 'Renk paletinizi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Güzel tasarlanmış bir PDF veya vektörel grafik belgesini sayfaya bırak.' },
+      { name: 'Renkleri tara', text: 'Tam HEX kodlarını çıkarmak için tüm ham çizim operasyonlarını yerel olarak analiz ediyoruz.' },
+      { name: 'Paleti indir', text: 'Belgede kullanılan tüm renk paletini içeren kapsamlı metin dosyasını indirin.' }
     ],
   }
 };
@@ -2392,9 +2392,9 @@ export const removeTextCopy = {
     howToName: 'How to remove text from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your PDF document.' },
-      { name: 'Strip', text: 'We safely delete all text drawing operators.' },
-      { name: 'Download', text: 'Get your text-free document.' }
+      { name: 'Add your PDF', text: 'Drop the document you want to use as a visual template.' },
+      { name: 'Strip text', text: 'We safely delete all text drawing operators locally, leaving backgrounds intact.' },
+      { name: 'Download PDF', text: 'Download your text-free document, perfectly prepped for translation or recreation.' }
     ],
   },
   tr: {
@@ -2405,9 +2405,9 @@ export const removeTextCopy = {
     howToName: 'PDF\'den metin nasıl silinir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Belgenizi seçin.' },
-      { name: 'Temizle', text: 'Tüm metin çizim operatörlerini yok ederiz.' },
-      { name: 'İndir', text: 'Yazısız (sadece görsel) şablonu indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Görsel şablon olarak kullanmak istediğiniz PDF belgesini sayfaya bırakın.' },
+      { name: 'Metni sil', text: 'Arka planlara dokunmadan, sadece metin çizim komutlarını yerel olarak güvenle siliyoruz.' },
+      { name: 'PDF indir', text: 'Çeviri veya yeniden tasarım için hazır, metinden arındırılmış şablonunuzu indirin.' }
     ],
   }
 };
