@@ -20,6 +20,11 @@ interface Props {
 }
 const { title, description, keywords, lang = 'en' } = Astro.props;
 
+const globalEnKeywords = 'pdf, pdf tools, free pdf tools, online pdf, edit pdf, convert pdf, all in one pdf, best pdf tools';
+const globalTrKeywords = 'pdf, pdf araçları, ücretsiz pdf, online pdf, pdf düzenle, pdf dönüştürücü, tüm pdf araçları';
+const baseKeywords = lang === 'tr' ? globalTrKeywords : globalEnKeywords;
+const finalKeywords = keywords ? `${keywords}, ${baseKeywords}` : baseKeywords;
+
 // hreflang alternates: /x ↔ /tr/x (subdirectory i18n, WEB_PLANI §6).
 const path = Astro.url.pathname;
 const enPath = path.replace(/^\/tr(\/|$)/, '/') || '/';
@@ -34,7 +39,7 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="keywords" content={finalKeywords} />
     <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={soraWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />
