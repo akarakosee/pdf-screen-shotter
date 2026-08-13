@@ -21,6 +21,7 @@ interface Props {
   badgeLabel?: string;
   title: string;
   description: string;
+  keywords?: string;
   h1: string;
   tagline: string;
   howToName: string;
@@ -55,7 +56,7 @@ function chunk<T>(items: T[], size: number): T[][] {
 }
 ---
 
-<Base title={p.title} description={p.description} lang={p.lang}>
+<Base title={p.title} description={p.description} keywords={p.keywords} lang={p.lang}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
 
   <div class="mx-auto flex max-w-[720px] flex-col px-4 pt-10 pb-0">

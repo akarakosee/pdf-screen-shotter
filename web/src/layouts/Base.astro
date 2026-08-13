@@ -15,9 +15,10 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
+  keywords?: string;
   lang?: 'en' | 'tr';
 }
-const { title, description, lang = 'en' } = Astro.props;
+const { title, description, keywords, lang = 'en' } = Astro.props;
 
 // hreflang alternates: /x ↔ /tr/x (subdirectory i18n, WEB_PLANI §6).
 const path = Astro.url.pathname;
@@ -33,6 +34,7 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
     <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={soraWoff2} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />

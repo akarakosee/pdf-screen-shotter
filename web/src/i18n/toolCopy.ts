@@ -11,6 +11,7 @@ interface Step {
 export interface ToolCopy {
   title: string;
   description: string;
+  keywords?: string;
   h1: string;
   tagline: string;
   howToName: string;
