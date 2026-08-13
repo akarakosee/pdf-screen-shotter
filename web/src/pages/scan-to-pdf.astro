@@ -6,15 +6,6 @@ import { ScanToPdfShell } from '../components/ScanToPdfShell';
 const copy = scanToPdfCopy.en;
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
+<ToolPage lang="en" badgeLabel="CREATE · SCAN" {...copy}>
   <ScanToPdfShell client:load />
 </ToolPage>

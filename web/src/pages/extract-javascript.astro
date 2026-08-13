@@ -6,15 +6,6 @@ import { ExtractJavascriptShell } from '../components/ExtractJavascriptShell';
 const copy = extractJavascriptCopy.en;
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
+<ToolPage lang="en" badgeLabel="EXTRACT · MALWARE" {...copy}>
   <ExtractJavascriptShell client:load />
 </ToolPage>

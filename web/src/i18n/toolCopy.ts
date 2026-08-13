@@ -2422,9 +2422,9 @@ export const extractJavascriptCopy = {
     howToName: 'How to extract JavaScript from PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a potentially malicious PDF.' },
-      { name: 'Scan', text: 'We scan dictionaries and actions for JS.' },
-      { name: 'Download', text: 'Download a clean .js file for analysis.' }
+      { name: 'Add your PDF', text: 'Drop a potentially malicious PDF document onto the page.' },
+      { name: 'Scan and extract', text: 'We parse the document structure locally to find and extract all embedded JavaScript code.' },
+      { name: 'Download JS', text: 'Download a clean .js file to safely analyze the code.' }
     ],
   },
   tr: {
@@ -2435,9 +2435,9 @@ export const extractJavascriptCopy = {
     howToName: 'PDF\'den JavaScript nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Şüpheli PDF dosyasını seçin.' },
-      { name: 'Tara', text: 'Tüm PDF ağaçlarında gizli JS kodlarını tararız.' },
-      { name: 'İndir', text: 'Güvenli analiz için .js dosyasını indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Şüpheli olabilecek PDF belgesini sayfaya bırak.' },
+      { name: 'Tara ve ayıkla', text: 'Tüm belge yapısını yerel olarak tarayıp gizlenmiş JavaScript kodlarını tespit ediyoruz.' },
+      { name: 'JS dosyasını indir', text: 'Kodları güvenle analiz edebilmek için temiz bir .js dosyası olarak indir.' }
     ],
   }
 };
@@ -2451,9 +2451,9 @@ export const splitBookmarksCopy = {
     howToName: 'How to split PDF by TOC',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF with a Table of Contents.' },
-      { name: 'Parse', text: 'We read the bookmarks and chapter points.' },
-      { name: 'Download', text: 'Get a ZIP file of chapter-separated PDFs.' }
+      { name: 'Add your PDF', text: 'Drop a large textbook or report that contains a Table of Contents.' },
+      { name: 'Detect chapters', text: 'We instantly read the bookmarks to identify all chapter breakpoints.' },
+      { name: 'Split and download', text: 'Extract and download a ZIP file containing each chapter as a separate PDF.' }
     ],
   },
   tr: {
@@ -2464,9 +2464,9 @@ export const splitBookmarksCopy = {
     howToName: 'PDF bölümlere göre nasıl ayrılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'İçindekiler bölümü olan bir PDF seçin.' },
-      { name: 'Böl', text: 'Bölüm başlıklarını tespit edip keseriz.' },
-      { name: 'İndir', text: 'Ayrı ayrı PDF\'leri ZIP olarak indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçindekiler tablosu (TOC) bulunan büyük bir ders kitabı veya raporu sayfaya bırak.' },
+      { name: 'Bölümleri algıla', text: 'İçindekiler listesini anında okuyarak bölüm başlangıç noktalarını belirliyoruz.' },
+      { name: 'Böl ve indir', text: 'Her bir bölümü ayrı bir PDF\'e ayırıp tek bir ZIP arşivi olarak indir.' }
     ],
   }
 };
@@ -2480,9 +2480,9 @@ export const splitBlankCopy = {
     howToName: 'How to split PDF by blank pages',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your batch-scanned PDF.' },
-      { name: 'Detect', text: 'We scan every page for completely blank pixels.' },
-      { name: 'Download', text: 'Get a ZIP of properly separated documents.' }
+      { name: 'Add your PDF', text: 'Drop your batch-scanned PDF file onto the page.' },
+      { name: 'Scan for blanks', text: 'We analyze every pixel locally to detect completely blank separator pages.' },
+      { name: 'Split and download', text: 'Download a ZIP archive containing your perfectly separated individual documents.' }
     ],
   },
   tr: {
@@ -2493,9 +2493,9 @@ export const splitBlankCopy = {
     howToName: 'PDF boş sayfalara göre nasıl bölünür',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Toplu taranmış evrakları seçin.' },
-      { name: 'Tara', text: 'Piksel bazında beyaz/boş sayfaları buluruz.' },
-      { name: 'İndir', text: 'Ayrılmış onlarca evrakı ZIP olarak indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Toplu olarak taranmış PDF belgesini sayfaya bırak.' },
+      { name: 'Boş sayfaları tara', text: 'Belgeyi ayıran tamamen boş sayfaları bulmak için her pikseli yerel olarak analiz ediyoruz.' },
+      { name: 'Böl ve indir', text: 'Kusursuzca ayrılmış bireysel evraklarınızı tek bir ZIP arşivi halinde indir.' }
     ],
   }
 };
@@ -2510,9 +2510,9 @@ export const viewerPrefsCopy = {
     howToName: 'How to set PDF initial view',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select the PDF you want to configure.' },
-      { name: 'Configure', text: 'Choose to hide toolbars, menus, or force full screen.' },
-      { name: 'Download', text: 'Download the modified PDF.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to configure.' },
+      { name: 'Set preferences', text: 'Choose to force full-screen mode, hide toolbars, or center the window automatically.' },
+      { name: 'Save settings', text: 'Download the modified PDF with your new professional presentation settings applied.' }
     ],
   },
   tr: {
@@ -2523,9 +2523,9 @@ export const viewerPrefsCopy = {
     howToName: 'PDF açılış ayarları nasıl yapılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Ayarlanacak belgeyi seçin.' },
-      { name: 'Seç', text: 'Tam ekran, araç çubuğu gizleme gibi modları seçin.' },
-      { name: 'İndir', text: 'Düzenlenmiş dosyayı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Açılış ayarlarını değiştirmek istediğin PDF belgesini sayfaya bırak.' },
+      { name: 'Tercihleri belirle', text: 'Tam ekran moduna zorlamayı, araç çubuklarını gizlemeyi veya pencereyi ortalamayı seç.' },
+      { name: 'Ayarları kaydet', text: 'Profesyonel sunum ayarlarının uygulandığı yeni PDF belgesini indir.' }
     ],
   }
 };
@@ -2539,9 +2539,9 @@ export const extractHiddenTextCopy = {
     howToName: 'How to detect hidden text in PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a suspicious PDF document.' },
-      { name: 'Scan', text: 'We scan content streams for invisible rendering modes.' },
-      { name: 'Download', text: 'Download a report of all hidden text blocks.' }
+      { name: 'Add your PDF', text: 'Drop a suspicious PDF document onto the page.' },
+      { name: 'Scan for forensics', text: 'We analyze raw content streams locally to detect invisible rendering modes and hidden text.' },
+      { name: 'Download report', text: 'Download a text file containing all the hidden trackers, SEO spam, or steganography we found.' }
     ],
   },
   tr: {
@@ -2552,9 +2552,9 @@ export const extractHiddenTextCopy = {
     howToName: 'PDF\'den gizli metin nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Şüpheli belgeyi seçin.' },
-      { name: 'Tara', text: 'Raw byteları tarayarak gizli komutları buluruz.' },
-      { name: 'İndir', text: 'Deşifre edilen yazıları TXT olarak indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Şüpheli gördüğün PDF belgesini sayfaya bırak.' },
+      { name: 'Adli analiz yap', text: 'Görünmez katmanları ve gizli metinleri bulmak için belgenin ham veri akışını yerel olarak tarıyoruz.' },
+      { name: 'Raporu indir', text: 'Bulduğumuz tüm gizli SEO spam\'lerini ve takipçileri içeren metin dosyasını indir.' }
     ],
   }
 };
@@ -2568,9 +2568,9 @@ export const wipeBookmarksCopy = {
     howToName: 'How to delete PDF bookmarks',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF with a Table of Contents.' },
-      { name: 'Wipe', text: 'We safely destroy the Outlines hierarchy.' },
-      { name: 'Download', text: 'Download your cleaned document.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document that contains a Table of Contents or bookmarks.' },
+      { name: 'Destroy outlines', text: 'We safely remove the entire outlines hierarchy and document structure locally.' },
+      { name: 'Download clean PDF', text: 'Download your cleaned document, free of any internal structural metadata.' }
     ],
   },
   tr: {
@@ -2581,9 +2581,9 @@ export const wipeBookmarksCopy = {
     howToName: 'PDF içindekiler nasıl silinir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'İçindekiler listesi olan bir PDF seçin.' },
-      { name: 'Sil', text: 'Outlines hiyerarşisini kökünden yok ederiz.' },
-      { name: 'İndir', text: 'Temizlenmiş belgeyi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçindekiler tablosu veya yer imleri (bookmarks) olan PDF belgesini sayfaya bırak.' },
+      { name: 'Yapıyı yok et', text: 'Belgenin tüm iskelet yapısını ve içindekiler hiyerarşisini güvenli bir şekilde tamamen siliyoruz.' },
+      { name: 'Temiz PDF\'i indir', text: 'İç yapısal meta verilerden tamamen arındırılmış temiz belgenizi indir.' }
     ],
   }
 };
@@ -2598,9 +2598,9 @@ export const extractTablesCopy = {
     howToName: 'How to extract PDF tables',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF with tables.' },
-      { name: 'Analyze', text: 'We calculate text alignment to reconstruct rows.' },
-      { name: 'Download', text: 'Download the CSV file.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document containing tabular data onto the page.' },
+      { name: 'Analyze layout', text: 'We mathematically calculate text alignments and bounding boxes to reconstruct rows and columns.' },
+      { name: 'Download CSV', text: 'Download the extracted data as an Excel-ready CSV file.' }
     ],
   },
   tr: {
@@ -2611,9 +2611,9 @@ export const extractTablesCopy = {
     howToName: 'PDF içindeki tablolar nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Tablo içeren bir belge seçin.' },
-      { name: 'Analiz', text: 'Kelimelerin X ve Y koordinatları birleştirilir.' },
-      { name: 'İndir', text: 'Excel\'de açılabilir CSV\'yi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçinde tablolar bulunan PDF belgesini sayfaya bırak.' },
+      { name: 'Düzeni analiz et', text: 'Satır ve sütunları yeniden oluşturmak için metin hizalamalarını matematiksel olarak hesaplıyoruz.' },
+      { name: 'CSV olarak indir', text: 'Çıkarılan tüm tablo verilerini Excel\'de açılabilir bir CSV dosyası olarak indir.' }
     ],
   }
 };
@@ -2627,9 +2627,9 @@ export const pdfToJsonCopy = {
     howToName: 'How to convert PDF to JSON',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF document.' },
-      { name: 'Parse', text: 'We build a structural JSON tree.' },
-      { name: 'Download', text: 'Download the raw JSON data.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to parse onto the page.' },
+      { name: 'Parse structure', text: 'We process the document locally to build a complete structural tree with exact coordinates.' },
+      { name: 'Download JSON', text: 'Download the raw JSON data, ready to be used in AI pipelines or developer tools.' }
     ],
   },
   tr: {
@@ -2640,9 +2640,9 @@ export const pdfToJsonCopy = {
     howToName: 'PDF JSON formatına nasıl çevrilir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Analiz edilecek belgeyi seçin.' },
-      { name: 'Parse', text: 'Belge ağacı JSON objesine dönüştürülür.' },
-      { name: 'İndir', text: 'Ham JSON verisini indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Ayrıştırmak (parse) istediğin PDF belgesini sayfaya bırak.' },
+      { name: 'Yapıyı ayrıştır', text: 'Tam koordinatları içeren yapısal bir veri haritası oluşturmak için belgeyi yerel olarak işliyoruz.' },
+      { name: 'JSON olarak indir', text: 'Yapay zeka veya yazılım projelerinde kullanılmaya hazır ham JSON verisini indir.' }
     ],
   }
 };
@@ -2656,9 +2656,9 @@ export const scanToPdfCopy = {
     howToName: 'How to scan documents to PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Allow Camera', text: 'Grant webcam access.' },
-      { name: 'Capture', text: 'Take photos of your physical documents.' },
-      { name: 'Generate', text: 'We compile them into a secure PDF.' }
+      { name: 'Allow camera access', text: 'Grant webcam or mobile camera access securely within your browser.' },
+      { name: 'Snap documents', text: 'Take clear photos of your physical documents directly through the app.' },
+      { name: 'Generate PDF', text: 'We instantly compile and optimize your photos into a single PDF document.' }
     ],
   },
   tr: {
@@ -2669,9 +2669,9 @@ export const scanToPdfCopy = {
     howToName: 'Kameradan PDF nasıl yapılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'İzin Ver', text: 'Kamera erişimine izin verin.' },
-      { name: 'Çek', text: 'Evrakların fotoğraflarını çekin.' },
-      { name: 'Birleştir', text: 'Anında tek bir PDF olarak indirin.' }
+      { name: 'Kamera izni ver', text: 'Tarayıcın üzerinden web kamerasını veya telefon kamerasını kullanmaya güvenle izin ver.' },
+      { name: 'Evrakları çek', text: 'Uygulama üzerinden fiziksel evraklarının net fotoğraflarını arka arkaya çek.' },
+      { name: 'PDF oluştur', text: 'Çektiğin fotoğrafları anında optimize edip tek bir PDF belgesinde birleştirerek indir.' }
     ],
   }
 };
@@ -2685,9 +2685,9 @@ export const audioReaderCopy = {
     howToName: 'How to make a PDF ready for audio',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a readable PDF.' },
-      { name: 'Extract', text: 'We extract clean, flowing text.' },
-      { name: 'Download', text: 'Download a clean TXT file ready for TTS engines.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to listen to onto the page.' },
+      { name: 'Extract flowing text', text: 'We extract and clean the raw text locally, removing page numbers and weird line breaks.' },
+      { name: 'Download TXT', text: 'Download a clean text file perfectly optimized for Text-to-Speech (TTS) engines.' }
     ],
   },
   tr: {

@@ -6,15 +6,6 @@ import { ExtractHiddenTextShell } from '../components/ExtractHiddenTextShell';
 const copy = extractHiddenTextCopy.en;
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
+<ToolPage lang="en" badgeLabel="SECURITY · FORENSICS" {...copy}>
   <ExtractHiddenTextShell client:load />
 </ToolPage>
