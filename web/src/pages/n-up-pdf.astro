@@ -6,17 +6,6 @@ import { nupCopy } from '../i18n/toolCopy';
 const copy = nupCopy.en;
 ---
 
-<ToolPage
-  lang="en"
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  faqTitle={copy.faqTitle}
-  faq={copy.faq}
->
+<ToolPage lang="en" badgeLabel="LAYOUT · N-UP" {...nupCopy.en}>
   <NUpShell client:load />
 </ToolPage>

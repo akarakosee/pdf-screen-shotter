@@ -6,17 +6,6 @@ import { pdfaCopy } from '../i18n/toolCopy';
 const copy = pdfaCopy.en;
 ---
 
-<ToolPage
-  lang="en"
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  faqTitle={copy.faqTitle}
-  faq={copy.faq}
->
+<ToolPage lang="en" badgeLabel="CONVERT · ARCHIVE" {...pdfaCopy.en}>
   <PdfAShell client:load />
 </ToolPage>

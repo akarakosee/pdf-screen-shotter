@@ -435,14 +435,17 @@ export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the PDF document you want to reverse.",
+        name: "Add your PDF",
+        text: "Drop the PDF document whose page order you want to invert.",
       },
       {
-        name: "Instant Processing",
-        text: "We reverse the order of all pages instantly.",
+        name: "Reverse order",
+        text: "We instantly flip the entire document so the last page becomes the first locally.",
       },
-      { name: "Download", text: "Download your new PDF with reversed pages." },
+      {
+        name: "Download PDF",
+        text: "Download your properly reversed PDF document.",
+      },
     ],
     faq: [
       {
@@ -471,16 +474,16 @@ export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Sayfalarını tersine çevirmek istediğiniz PDF belgesini seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Sayfa sırasını tersine çevirmek istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Anında İşlem",
-        text: "Tüm sayfaların sırasını anında tersine çeviriyoruz.",
+        name: "Sırayı tersine çevir",
+        text: "Son sayfa ilk sayfa olacak şekilde tüm belgeyi yerel olarak anında ters çeviriyoruz.",
       },
       {
-        name: "İndir",
-        text: "Sayfaları tersine çevrilmiş yeni PDF'inizi indirin.",
+        name: "PDF indir",
+        text: "Düzgün bir şekilde ters çevrilmiş PDF belgenizi indirin.",
       },
     ],
     faq: [
@@ -511,14 +514,17 @@ export const batesCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the legal document you want to stamp.",
+        name: "Add your PDF",
+        text: "Drop the legal or professional documents you want to stamp.",
       },
       {
-        name: "Configure Format",
-        text: "Set your prefix, suffix, and starting number.",
+        name: "Configure numbering",
+        text: "Set the prefix, suffix, and starting number perfectly locally.",
       },
-      { name: "Download", text: "Download your professionally stamped PDF." },
+      {
+        name: "Download PDF",
+        text: "Download your legally formatted and Bates stamped PDF document.",
+      },
     ],
     faq: [
       {
@@ -547,16 +553,16 @@ export const batesCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Damgalamak istediğiniz yasal belgeyi seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Damgalamak istediğiniz yasal veya profesyonel belgeleri sayfaya bırakın.",
       },
       {
-        name: "Formatı Ayarla",
-        text: "Önekinizi, sonekinizi ve başlangıç numaranızı belirleyin.",
+        name: "Numaralandırmayı ayarla",
+        text: "Önek, sonek ve başlangıç numarasını yerel olarak mükemmel şekilde ayarlayın.",
       },
       {
-        name: "İndir",
-        text: "Profesyonel olarak damgalanmış PDF'inizi indirin.",
+        name: "PDF indir",
+        text: "Yasal olarak biçimlendirilmiş ve Bates damgası basılmış PDF belgenizi indirin.",
       },
     ],
     faq: [
@@ -588,14 +594,17 @@ export const nupCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the document you want to compress onto fewer pages.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to format for N-up printing.",
       },
       {
-        name: "Select Layout",
-        text: "Choose how many pages to fit per sheet (e.g., 2, 4, 9, or 16).",
+        name: "Select grid",
+        text: "Choose how many pages to print per sheet and arrange them locally.",
       },
-      { name: "Download", text: "Download your new N-Up formatted PDF." },
+      {
+        name: "Download PDF",
+        text: "Download your perfectly arranged PDF, ready to save paper and ink.",
+      },
     ],
     faq: [
       {
@@ -628,14 +637,17 @@ export const nupCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Daha az sayfaya sığdırmak istediğiniz belgeyi seçin.",
+        name: "PDF dosyanı ekle",
+        text: "N-up baskı için biçimlendirmek istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Düzeni Seçin",
-        text: "Her yaprağa kaç sayfa sığdırılacağını seçin (örn. 2, 4, 9 veya 16).",
+        name: "Izgarayı seç",
+        text: "Yaprak başına kaç sayfa yazdırılacağını seçin ve yerel olarak düzenleyin.",
       },
-      { name: "İndir", text: "Yeni N-Up formatındaki PDF'inizi indirin." },
+      {
+        name: "PDF indir",
+        text: "Kağıt ve mürekkep tasarrufu için mükemmel şekilde düzenlenmiş PDF belgenizi indirin.",
+      },
     ],
     faq: [
       {
@@ -671,14 +683,17 @@ export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the PDF document you want to archive.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to convert for long-term archiving.",
       },
       {
-        name: "Standardize",
-        text: "We inject standard metadata and prepare the file for archiving.",
+        name: "Convert to PDF/A",
+        text: "We locally embed all fonts and strip incompatible features to meet ISO standards.",
       },
-      { name: "Download", text: "Download your new PDF/A compliant document." },
+      {
+        name: "Download PDF",
+        text: "Download your compliant PDF/A file, perfectly preserved for the future.",
+      },
     ],
     faq: [
       {
@@ -711,14 +726,17 @@ export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Arşivlemek istediğiniz PDF belgesini seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Uzun süreli arşivleme için dönüştürmek istediğiniz PDF belgesini bırakın.",
       },
       {
-        name: "Standartlaştır",
-        text: "Standart meta verileri ekliyor ve dosyayı arşivleme için hazırlıyoruz.",
+        name: "PDF/A'ya dönüştür",
+        text: "ISO standartlarını karşılamak için tüm yazı tiplerini gömüyor ve uyumsuz özellikleri yerel olarak kaldırıyoruz.",
       },
-      { name: "İndir", text: "Yeni PDF/A uyumlu belgenizi indirin." },
+      {
+        name: "PDF indir",
+        text: "Gelecek için mükemmel şekilde korunmuş, uyumlu PDF/A dosyanızı indirin.",
+      },
     ],
     faq: [
       {
@@ -869,16 +887,16 @@ export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "How it works",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the PDF file you want to watermark.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to stamp with a watermark.",
       },
       {
-        name: "Set Text",
-        text: "Type your custom watermark text (e.g. 'CONFIDENTIAL').",
+        name: "Customize watermark",
+        text: "Type your text, adjust the opacity, and rotate it perfectly locally.",
       },
       {
-        name: "Save",
-        text: "Download the watermarked PDF directly to your device.",
+        name: "Download PDF",
+        text: "Download your professionally watermarked PDF document securely.",
       },
     ],
     crossLink: {
@@ -897,13 +915,16 @@ export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Filigran eklemek istediğiniz dosyayı sayfaya bırakın.",
+        name: "PDF dosyanı ekle",
+        text: "Filigran damgalamak istediğiniz PDF belgesini sayfaya bırakın.",
       },
-      { name: "Metin Yaz", text: "Damga metninizi girin (Örn: 'GİZLİDİR')." },
       {
-        name: "Kaydet",
-        text: "Filigran basılmış PDF dosyasını cihazınıza indirin.",
+        name: "Filigranı özelleştir",
+        text: "Metninizi yazın, opaklığını ayarlayın ve yerel olarak mükemmel şekilde döndürün.",
+      },
+      {
+        name: "PDF indir",
+        text: "Profesyonelce filigran eklenmiş PDF belgenizi güvenle indirin.",
       },
     ],
     crossLink: {
@@ -922,14 +943,17 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to add page numbers to a PDF online",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select the PDF file you want to number." },
       {
-        name: "Customize",
-        text: "Choose the position and format (e.g., '1 of 10').",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to add page numbers to.",
       },
       {
-        name: "Save",
-        text: "Download the numbered PDF directly to your device.",
+        name: "Format numbers",
+        text: "Choose the exact position and style for your page numbers locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your properly paginated and numbered PDF document.",
       },
     ],
     crossLink: {
@@ -947,16 +971,16 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Numara eklemek istediğiniz dosyayı sayfaya bırakın.",
+        name: "PDF dosyanı ekle",
+        text: "Sayfa numarası eklemek istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Ayarla",
-        text: "Konumu ve numaralandırma formatını seçin (Örn: '1 / 10').",
+        name: "Numaraları biçimlendir",
+        text: "Sayfa numaralarınızın tam konumunu ve stilini yerel olarak seçin.",
       },
       {
-        name: "Kaydet",
-        text: "Numaralandırılmış PDF dosyasını cihazınıza indirin.",
+        name: "PDF indir",
+        text: "Düzgün bir şekilde numaralandırılmış PDF belgenizi indirin.",
       },
     ],
     crossLink: {
@@ -1092,14 +1116,17 @@ export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to rotate PDF pages in your browser",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Drop your PDF document onto the page." },
       {
-        name: "Rotate Pages",
-        text: "Click the rotate buttons on individual pages or rotate all selected pages at once.",
+        name: "Add your PDF",
+        text: "Drop the PDF document containing pages that need rotating.",
       },
       {
-        name: "Download",
-        text: "Save the newly oriented PDF straight to your device.",
+        name: "Rotate pages",
+        text: "Rotate individual pages or the entire document instantly and locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your correctly oriented PDF document securely.",
       },
     ],
     crossLink: {
@@ -1118,16 +1145,16 @@ export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Döndürmek istediğiniz belgeyi sayfaya bırakın.",
+        name: "PDF dosyanı ekle",
+        text: "Döndürülmesi gereken sayfalar içeren PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Sayfaları Döndür",
-        text: "Sayfalardaki döndürme butonlarına tıklayın veya seçilenleri tek tıkla çevirin.",
+        name: "Sayfaları döndür",
+        text: "Tek tek sayfaları veya tüm belgeyi yerel olarak anında döndürün.",
       },
       {
-        name: "İndir",
-        text: "Doğru açıya getirilmiş yeni PDF belgenizi anında indirin.",
+        name: "PDF indir",
+        text: "Doğru yönde ayarlanmış PDF belgenizi güvenle indirin.",
       },
     ],
     crossLink: {
@@ -1147,14 +1174,17 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to remove pages from a PDF online",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Drop the PDF file you want to trim." },
       {
-        name: "Select & Delete",
-        text: "Click the trash icon on any page you want to remove.",
+        name: "Add your PDF",
+        text: "Drop the PDF document containing pages you want to delete.",
+      },
+      {
+        name: "Select pages",
+        text: "Click on the visual grid locally to remove any unwanted pages.",
       },
       {
         name: "Download PDF",
-        text: "Save the cleaned PDF document without the deleted pages.",
+        text: "Download your streamlined PDF document securely.",
       },
     ],
     crossLink: {
@@ -1173,16 +1203,16 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Düzenlemek istediğiniz PDF dosyasını yükleyin.",
+        name: "PDF dosyanı ekle",
+        text: "Silmek istediğiniz sayfaları içeren PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Seç ve Sil",
-        text: "Kaldırmak istediğiniz sayfaların üzerindeki çöp kutusu simgesine tıklayın.",
+        name: "Sayfaları seç",
+        text: "İstenmeyen sayfaları kaldırmak için yerel olarak görsel ızgaraya tıklayın.",
       },
       {
-        name: "PDF İndir",
-        text: "Silinen sayfalar olmadan temiz PDF belgenizi indirin.",
+        name: "PDF indir",
+        text: "İstenmeyen sayfalardan arındırılmış PDF belgenizi güvenle indirin.",
       },
     ],
     crossLink: {
@@ -1321,16 +1351,16 @@ export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "How it works",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Drop your interactive or annotated PDF file.",
+        name: "Add your PDF",
+        text: "Drop the PDF containing forms or annotations you want to flatten.",
       },
       {
-        name: "Select Options",
-        text: "Choose whether to flatten form fields and annotations.",
+        name: "Flatten contents",
+        text: "We merge all interactive fields and annotations into the document permanently locally.",
       },
       {
-        name: "Download",
-        text: "Get your uneditable, flattened PDF document instantly.",
+        name: "Download PDF",
+        text: "Download your uneditable, perfectly flattened PDF document.",
       },
     ],
     crossLink: {
@@ -1349,16 +1379,16 @@ export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Doldurulmuş form veya not içeren PDF dosyanızı sürükleyin.",
+        name: "PDF dosyanı ekle",
+        text: "Düzleştirmek istediğiniz form veya açıklamalar içeren PDF belgesini bırakın.",
       },
       {
-        name: "Seçenekleri Belirle",
-        text: "Form alanlarının ve açıklamaların düzleştirileceğini seçin.",
+        name: "İçerikleri düzleştir",
+        text: "Etkileşimli tüm alanları ve açıklamaları belgeye kalıcı ve yerel olarak birleştiriyoruz.",
       },
       {
-        name: "İndir",
-        text: "Düzenlenemez, sabitlenmiş PDF belgenizi anında indirin.",
+        name: "PDF indir",
+        text: "Düzenlenemez, mükemmel şekilde düzleştirilmiş PDF belgenizi indirin.",
       },
     ],
     crossLink: {
@@ -1379,12 +1409,18 @@ export const signCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to sign a PDF online for free",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Drop your PDF document." },
       {
-        name: "Create Signature",
-        text: "Draw your signature, type your name, or upload an image.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to electronically sign.",
       },
-      { name: "Download", text: "Get your signed PDF document instantly." },
+      {
+        name: "Add signature",
+        text: "Draw, type, or upload your signature locally and position it securely.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your signed and finalized PDF document.",
+      },
     ],
     crossLink: {
       href: "/flatten-pdf",
@@ -1402,14 +1438,17 @@ export const signCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "İmzalamak istediğiniz PDF belgesini sürükleyin.",
+        name: "PDF dosyanı ekle",
+        text: "Elektronik olarak imzalamak istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "İmzanı Oluştur",
-        text: "İmzanızı çizin, adınızı yazın veya imza görseli yükleyin.",
+        name: "İmza ekle",
+        text: "İmzanızı yerel olarak çizin, yazın veya yükleyin ve güvenle konumlandırın.",
       },
-      { name: "İndir", text: "İmzalanan PDF belgenizi anında indirin." },
+      {
+        name: "PDF indir",
+        text: "İmzalanmış ve son halini almış PDF belgenizi indirin.",
+      },
     ],
     crossLink: {
       href: "/tr/flatten-pdf",
@@ -1552,16 +1591,16 @@ export const redactCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the PDF document you want to redact.",
+        name: "Add your PDF",
+        text: "Drop the PDF document containing sensitive information you need to hide.",
       },
       {
-        name: "Draw Blackout Boxes",
-        text: "Click and drag over the document preview to draw black boxes over sensitive information.",
+        name: "Blackout text",
+        text: "Draw completely opaque redaction boxes over sensitive areas locally.",
       },
       {
-        name: "Apply & Download",
-        text: "Click Apply Redactions to stamp the black boxes onto your PDF and download the result.",
+        name: "Download PDF",
+        text: "Download your redacted PDF document, perfectly sanitized and secure.",
       },
     ],
     faq: [
@@ -1587,16 +1626,16 @@ export const redactCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Karartmak istediğiniz PDF belgesini yükleyin.",
+        name: "PDF dosyanı ekle",
+        text: "Gizlemeniz gereken hassas bilgiler içeren PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Karartma Kutuları Çiz",
-        text: "Hassas bilgilerin üzerini kapatmak için önizleme üzerinde farenizle kutular çizin.",
+        name: "Metni karart",
+        text: "Hassas alanların üzerine yerel olarak tamamen opak karartma kutuları çizin.",
       },
       {
-        name: "Uygula ve İndir",
-        text: "Uygula butonuna basarak siyah kutuları PDF'inize kalıcı olarak ekleyin ve indirin.",
+        name: "PDF indir",
+        text: "Mükemmel şekilde temizlenmiş ve güvenli hale getirilmiş karartılmış PDF belgenizi indirin.",
       },
     ],
     faq: [
@@ -1624,16 +1663,16 @@ export const repairCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload broken PDF",
-        text: "Drag and drop your corrupted PDF file into the drop zone.",
+        name: "Add your PDF",
+        text: "Drop the corrupted or damaged PDF document you want to repair.",
       },
       {
-        name: "Automatic recovery",
-        text: "Our local engine automatically rebuilds the broken document structures.",
+        name: "Repair file",
+        text: "We scan and reconstruct the PDF structure locally to recover its contents.",
       },
       {
-        name: "Download repaired PDF",
-        text: "Save the healthy, recovered PDF file to your device.",
+        name: "Download PDF",
+        text: "Download your fully repaired and usable PDF document securely.",
       },
     ],
     faq: [
@@ -1659,16 +1698,16 @@ export const repairCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "Bozuk PDF'i yükle",
-        text: "Açılmayan veya bozuk PDF dosyanızı alana sürükleyip bırakın.",
+        name: "PDF dosyanı ekle",
+        text: "Onarmak istediğiniz bozuk veya hasarlı PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Otomatik kurtarma",
-        text: "Yerel motorumuz bozuk belge yapısını otomatik olarak yeniden inşa eder.",
+        name: "Dosyayı onar",
+        text: "İçerikleri kurtarmak için PDF yapısını yerel olarak tarıyor ve yeniden oluşturuyoruz.",
       },
       {
-        name: "Onarılan PDF'i indir",
-        text: "Kurtarılmış, sağlıklı PDF dosyasını cihazınıza indirin.",
+        name: "PDF indir",
+        text: "Tamamen onarılmış ve kullanılabilir PDF belgenizi güvenle indirin.",
       },
     ],
     faq: [
@@ -1696,16 +1735,16 @@ export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently Asked Questions",
     steps: [
       {
-        name: "Upload PDF",
-        text: "Select the PDF file you want to convert to black and white.",
+        name: "Add your PDF",
+        text: "Drop the colored PDF document you want to convert.",
       },
       {
-        name: "Rasterize to Grayscale",
-        text: "Our local engine converts every page into a high-quality grayscale image.",
+        name: "Apply grayscale",
+        text: "We instantly convert all colored text, images, and backgrounds to black & white locally.",
       },
       {
-        name: "Download Grayscale PDF",
-        text: "Save the newly generated black and white PDF to your device.",
+        name: "Download PDF",
+        text: "Download your perfectly grayscaled PDF document.",
       },
     ],
     faq: [
@@ -1735,16 +1774,16 @@ export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Siyah beyaza dönüştürmek istediğiniz PDF dosyasını seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Dönüştürmek istediğiniz renkli PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Gri Tonlamaya Çevir",
-        text: "Yerel motorumuz her sayfayı yüksek kaliteli siyah beyaz bir görsele dönüştürür.",
+        name: "Siyah beyaz yap",
+        text: "Tüm renkli metin, görüntü ve arka planları yerel olarak anında siyah beyaza dönüştürüyoruz.",
       },
       {
-        name: "Siyah Beyaz PDF'i İndir",
-        text: "Yeni oluşturulan siyah beyaz PDF dosyasını cihazınıza kaydedin.",
+        name: "PDF indir",
+        text: "Mükemmel şekilde siyah beyaz yapılmış PDF belgenizi indirin.",
       },
     ],
     faq: [
@@ -1775,14 +1814,17 @@ export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "How it works",
     faqTitle: "Frequently Asked Questions",
     steps: [
-      { name: "Upload PDF", text: "Select the PDF file you want to resize." },
       {
-        name: "Choose Settings",
-        text: "Select your desired target size (e.g., A4) and the margin width you want to add.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to resize or add margins to.",
       },
       {
-        name: "Apply & Download",
-        text: "Click apply to scale the pages perfectly and download the new document.",
+        name: "Set dimensions",
+        text: "Adjust the page size and margins locally to fit your exact requirements.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your perfectly resized PDF document.",
       },
     ],
     faq: [
@@ -1812,16 +1854,16 @@ export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Sıkça Sorulan Sorular",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Boyutlandırmak istediğiniz PDF dosyasını seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Yeniden boyutlandırmak veya kenar boşlukları eklemek istediğiniz PDF belgesini bırakın.",
       },
       {
-        name: "Ayarları Seç",
-        text: "Hedef boyutunuzu (örneğin A4) ve eklemek istediğiniz kenar boşluğu miktarını seçin.",
+        name: "Boyutları ayarla",
+        text: "Tam gereksinimlerinize uyması için sayfa boyutunu ve kenar boşluklarını yerel olarak ayarlayın.",
       },
       {
-        name: "Uygula ve İndir",
-        text: "Sayfaları mükemmel şekilde ölçeklendirmek için uygulaya tıklayın ve yeni belgeyi indirin.",
+        name: "PDF indir",
+        text: "Mükemmel şekilde yeniden boyutlandırılmış PDF belgenizi indirin.",
       },
     ],
     faq: [
@@ -1931,9 +1973,18 @@ export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to create a booklet",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select the PDF file." },
-      { name: "Arrange", text: "The pages are arranged automatically." },
-      { name: "Download", text: "Download the booklet PDF." },
+      {
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to convert into a printable booklet.",
+      },
+      {
+        name: "Arrange pages",
+        text: "We calculate the folding order and place two pages per sheet locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your document perfectly formatted for double-sided booklet printing.",
+      },
     ],
   },
   tr: {
@@ -1944,9 +1995,18 @@ export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "Kitapçık nasıl oluşturulur",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF Yükle", text: "PDF dosyasını seçin." },
-      { name: "Düzenle", text: "Sayfalar otomatik düzenlenir." },
-      { name: "İndir", text: "Kitapçık PDF'ini indirin." },
+      {
+        name: "PDF dosyanı ekle",
+        text: "Yazdırılabilir kitapçığa dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.",
+      },
+      {
+        name: "Sayfaları düzenle",
+        text: "Katlama sırasını hesaplıyor ve yerel olarak yaprak başına iki sayfa yerleştiriyoruz.",
+      },
+      {
+        name: "PDF indir",
+        text: "Çift taraflı kitapçık baskısı için mükemmel biçimlendirilmiş belgenizi indirin.",
+      },
     ],
   },
 };
@@ -1960,9 +2020,18 @@ export const compareCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to compare PDFs",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDFs", text: "Select the two PDF files." },
-      { name: "Compare", text: "View them side by side." },
-      { name: "Review", text: "Find the differences." },
+      {
+        name: "Add PDFs",
+        text: "Drop the two PDF documents you want to visually compare side-by-side.",
+      },
+      {
+        name: "Highlight differences",
+        text: "We instantly overlay the pages locally to highlight any visual changes.",
+      },
+      {
+        name: "Review files",
+        text: "Review the diff perfectly without uploading any sensitive documents.",
+      },
     ],
   },
   tr: {
@@ -1973,9 +2042,18 @@ export const compareCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF'ler nasıl karşılaştırılır",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF'leri Yükle", text: "İki PDF dosyasını seçin." },
-      { name: "Karşılaştır", text: "Yan yana görüntüleyin." },
-      { name: "İncele", text: "Farkları bulun." },
+      {
+        name: "PDF'leri ekle",
+        text: "Yan yana görsel olarak karşılaştırmak istediğiniz iki PDF belgesini bırakın.",
+      },
+      {
+        name: "Farkları vurgula",
+        text: "Tüm görsel değişiklikleri vurgulamak için sayfaları yerel olarak anında üst üste bindiriyoruz.",
+      },
+      {
+        name: "Dosyaları incele",
+        text: "Hassas belgeleri hiçbir yere yüklemeden farklılıkları mükemmel bir şekilde inceleyin.",
+      },
     ],
   },
 };
@@ -1989,9 +2067,18 @@ export const cropCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to crop a PDF",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select the PDF file." },
-      { name: "Select Area", text: "Draw the crop box." },
-      { name: "Download", text: "Download the cropped PDF." },
+      {
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to trim or adjust margins for.",
+      },
+      {
+        name: "Crop area",
+        text: "Draw a rectangle over the pages to define the exact visible area locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your perfectly cropped PDF document.",
+      },
     ],
   },
   tr: {
@@ -2002,9 +2089,18 @@ export const cropCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF nasıl kırpılır",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF Yükle", text: "PDF dosyasını seçin." },
-      { name: "Alan Seç", text: "Kırpma alanını çizin." },
-      { name: "İndir", text: "Kırpılmış PDF'i indirin." },
+      {
+        name: "PDF dosyanı ekle",
+        text: "Kırpmak veya kenar boşluklarını ayarlamak istediğiniz PDF belgesini bırakın.",
+      },
+      {
+        name: "Alanı kırp",
+        text: "Görünür alanı yerel olarak tam tanımlamak için sayfaların üzerine bir dikdörtgen çizin.",
+      },
+      {
+        name: "PDF indir",
+        text: "Mükemmel şekilde kırpılmış PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2096,12 +2192,18 @@ export const editMetadataCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to edit PDF metadata",
     howItWorks: "How it works",
     steps: [
-      { name: "Add your PDF", text: "Drop your document on the page." },
       {
-        name: "Edit fields",
-        text: "Modify the title, author, and other metadata fields.",
+        name: "Add your PDF",
+        text: "Drop the PDF document whose metadata you want to modify.",
       },
-      { name: "Save", text: "Download the updated PDF immediately." },
+      {
+        name: "Edit properties",
+        text: "Update the title, author, subject, and keywords locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your updated PDF document with correctly modified metadata.",
+      },
     ],
   },
   tr: {
@@ -2114,12 +2216,18 @@ export const editMetadataCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF meta verileri nasıl düzenlenir",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF ekle", text: "Belgenizi sayfaya bırakın." },
       {
-        name: "Alanları düzenle",
-        text: "Başlık, yazar ve diğer meta veri alanlarını değiştirin.",
+        name: "PDF dosyanı ekle",
+        text: "Meta verilerini değiştirmek istediğiniz PDF belgesini sayfaya bırakın.",
       },
-      { name: "Kaydet", text: "Güncellenmiş PDF'i anında indirin." },
+      {
+        name: "Özellikleri düzenle",
+        text: "Başlık, yazar, konu ve anahtar kelimeleri yerel olarak güncelleyin.",
+      },
+      {
+        name: "PDF indir",
+        text: "Doğru bir şekilde değiştirilmiş meta verileriyle güncellenmiş PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2134,14 +2242,17 @@ export const base64PdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to use the Base64 converter",
     howItWorks: "How it works",
     steps: [
-      { name: "Input data", text: "Upload a PDF or paste a Base64 string." },
       {
-        name: "Convert",
-        text: "The conversion happens instantly in your browser.",
+        name: "Paste or upload",
+        text: "Paste your Base64 string or upload a PDF document.",
       },
       {
-        name: "Export",
-        text: "Copy the Base64 text or download the decoded PDF.",
+        name: "Convert instantly",
+        text: "We convert between Base64 and PDF formats instantly and locally.",
+      },
+      {
+        name: "Download or copy",
+        text: "Download the generated PDF or copy the Base64 string directly.",
       },
     ],
   },
@@ -2155,13 +2266,16 @@ export const base64PdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "Girdi verisi",
-        text: "Bir PDF yükleyin veya Base64 dizgesi yapıştırın.",
+        name: "Yapıştır veya yükle",
+        text: "Base64 dizesini yapıştırın veya bir PDF belgesi yükleyin.",
       },
-      { name: "Dönüştür", text: "Dönüşüm tarayıcınızda anında gerçekleşir." },
       {
-        name: "Dışa aktar",
-        text: "Base64 metnini kopyalayın veya PDF'yi indirin.",
+        name: "Anında dönüştür",
+        text: "Base64 ve PDF formatları arasında anında ve yerel olarak dönüşüm sağlıyoruz.",
+      },
+      {
+        name: "İndir veya kopyala",
+        text: "Oluşturulan PDF'yi indirin veya Base64 dizesini doğrudan kopyalayın.",
       },
     ],
   },
@@ -2179,13 +2293,16 @@ export const invertPdfCopy: Record<"en" | "tr", ToolCopy> = {
     steps: [
       {
         name: "Add your PDF",
-        text: "Upload the document you want to read in dark mode.",
+        text: "Drop the PDF document you want to invert.",
       },
       {
         name: "Invert colors",
-        text: "We apply a color inversion filter to every page.",
+        text: "We reverse all colors locally to create a perfect dark mode reading experience.",
       },
-      { name: "Download", text: "Save the dark mode PDF to your device." },
+      {
+        name: "Download PDF",
+        text: "Download your inverted, eye-friendly PDF document.",
+      },
     ],
   },
   tr: {
@@ -2198,14 +2315,17 @@ export const invertPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF ekle",
-        text: "Karanlık modda okumak istediğiniz belgeyi yükleyin.",
+        name: "PDF dosyanı ekle",
+        text: "Renklerini tersine çevirmek istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Renkleri ters çevir",
-        text: "Her sayfaya renk ters çevirme filtresi uygularız.",
+        name: "Renkleri tersine çevir",
+        text: "Mükemmel bir karanlık mod okuma deneyimi için tüm renkleri yerel olarak tersine çeviriyoruz.",
       },
-      { name: "İndir", text: "Karanlık moddaki PDF'i cihazınıza kaydedin." },
+      {
+        name: "PDF indir",
+        text: "Tersine çevrilmiş, göz dostu PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2221,14 +2341,17 @@ export const markdownPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "How it works",
     steps: [
       {
-        name: "Input Markdown",
-        text: "Type or paste your Markdown syntax into the editor.",
+        name: "Add Markdown",
+        text: "Write or paste your Markdown text directly into the editor.",
       },
       {
-        name: "Preview",
-        text: "See a live preview of how your document will look.",
+        name: "Style and preview",
+        text: "Customize the CSS and instantly preview the rendered document locally.",
       },
-      { name: "Download", text: "Click to generate and download the PDF." },
+      {
+        name: "Download PDF",
+        text: "Download your beautifully styled, print-ready PDF document.",
+      },
     ],
   },
   tr: {
@@ -2241,14 +2364,17 @@ export const markdownPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "Markdown Girin",
-        text: "Editöre Markdown metninizi yazın veya yapıştırın.",
+        name: "Markdown ekle",
+        text: "Markdown metninizi doğrudan düzenleyiciye yazın veya yapıştırın.",
       },
       {
-        name: "Önizleme",
-        text: "Belgenizin nasıl görüneceğini canlı olarak izleyin.",
+        name: "Biçimlendir ve önizle",
+        text: "CSS'yi özelleştirin ve oluşturulan belgeyi yerel olarak anında önizleyin.",
       },
-      { name: "İndir", text: "PDF'i oluşturmak ve indirmek için tıklayın." },
+      {
+        name: "PDF indir",
+        text: "Güzel biçimlendirilmiş, baskıya hazır PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2264,11 +2390,17 @@ export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "How it works",
     steps: [
       {
-        name: "Paste HTML",
-        text: "Paste your raw HTML code (including inline styles) into the box.",
+        name: "Add HTML",
+        text: "Write or paste your raw HTML and CSS code directly into the editor.",
       },
-      { name: "Render", text: "The browser renders your HTML securely." },
-      { name: "Download", text: "Save the rendered output as a PDF file." },
+      {
+        name: "Live preview",
+        text: "We render the HTML locally so you can see exactly how it will look.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your perfectly rendered PDF document.",
+      },
     ],
   },
   tr: {
@@ -2281,14 +2413,17 @@ export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "HTML Yapıştır",
-        text: "Ham HTML kodunuzu (satıriçi stillerle) kutuya yapıştırın.",
+        name: "HTML ekle",
+        text: "Ham HTML ve CSS kodunuzu doğrudan düzenleyiciye yazın veya yapıştırın.",
       },
       {
-        name: "İşle",
-        text: "Tarayıcınız HTML kodunuzu güvenli bir şekilde işler.",
+        name: "Canlı önizleme",
+        text: "Nasıl görüneceğini tam olarak görebilmeniz için HTML'yi yerel olarak oluşturuyoruz.",
       },
-      { name: "İndir", text: "İşlenmiş çıktıyı PDF dosyası olarak kaydedin." },
+      {
+        name: "PDF indir",
+        text: "Mükemmel şekilde oluşturulmuş PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2303,14 +2438,17 @@ export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to extract PDF pages",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select a document to extract pages from." },
       {
-        name: "Select pages",
-        text: "Click on the thumbnails of the pages you want to keep.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to extract specific pages from.",
       },
       {
-        name: "Extract",
-        text: "Download a new PDF containing only your selected pages.",
+        name: "Select pages",
+        text: "Click the exact pages you want to keep using the local visual grid.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download a new PDF containing only your selected pages securely.",
       },
     ],
   },
@@ -2324,16 +2462,16 @@ export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "PDF Yükle",
-        text: "Sayfalarını çıkarmak istediğiniz belgeyi seçin.",
+        name: "PDF dosyanı ekle",
+        text: "Belirli sayfaları çıkarmak istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
         name: "Sayfaları seç",
-        text: "Saklamak istediğiniz sayfaların küçük resimlerine tıklayın.",
+        text: "Yerel görsel ızgarayı kullanarak saklamak istediğiniz sayfaları seçin.",
       },
       {
-        name: "Çıkar",
-        text: "Yalnızca seçtiğiniz sayfaları içeren yeni bir PDF indirin.",
+        name: "PDF indir",
+        text: "Yalnızca seçtiğiniz sayfaları içeren yeni PDF belgenizi güvenle indirin.",
       },
     ],
   },
@@ -2349,12 +2487,18 @@ export const annotatePdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to annotate a PDF",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select a document to annotate." },
       {
-        name: "Add text",
-        text: "Type your text and set its position on the page.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to review or annotate.",
       },
-      { name: "Save", text: "Download your newly annotated PDF." },
+      {
+        name: "Add annotations",
+        text: "Highlight text, add sticky notes, or draw directly on the pages locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your fully annotated and reviewed PDF document.",
+      },
     ],
   },
   tr: {
@@ -2366,12 +2510,18 @@ export const annotatePdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF'e nasıl not eklenir",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF Yükle", text: "Not eklemek istediğiniz belgeyi seçin." },
       {
-        name: "Metin ekle",
-        text: "Metninizi yazın ve sayfadaki konumunu ayarlayın.",
+        name: "PDF dosyanı ekle",
+        text: "İncelemek veya not eklemek istediğiniz PDF belgesini sayfaya bırakın.",
       },
-      { name: "Kaydet", text: "Not eklenmiş PDF'inizi indirin." },
+      {
+        name: "Notlar ekle",
+        text: "Yerel olarak metni vurgulayın, yapışkan notlar ekleyin veya doğrudan sayfalara çizin.",
+      },
+      {
+        name: "PDF indir",
+        text: "Tamamen notlandırılmış ve incelenmiş PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2386,12 +2536,18 @@ export const editPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to edit a PDF",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF", text: "Select a document to edit." },
       {
-        name: "Apply Whiteout",
-        text: "Specify the area to hide with a white rectangle.",
+        name: "Add your PDF",
+        text: "Drop the PDF document you want to edit or whiteout.",
       },
-      { name: "Save", text: "Download your edited PDF securely." },
+      {
+        name: "Edit content",
+        text: "Add new text, shapes, or use whiteout to hide unwanted information locally.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your completely updated and edited PDF document.",
+      },
     ],
   },
   tr: {
@@ -2403,12 +2559,18 @@ export const editPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF nasıl düzenlenir",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PDF Yükle", text: "Düzenlemek istediğiniz belgeyi seçin." },
       {
-        name: "Whiteout Uygula",
-        text: "Beyaz bir dikdörtgenle gizlenecek alanı belirtin.",
+        name: "PDF dosyanı ekle",
+        text: "Düzenlemek veya silmek istediğiniz PDF belgesini sayfaya bırakın.",
       },
-      { name: "Kaydet", text: "Düzenlenmiş PDF'inizi güvenle indirin." },
+      {
+        name: "İçeriği düzenle",
+        text: "İstenmeyen bilgileri gizlemek için yeni metin veya şekiller ekleyin, veya düzeltici kullanın.",
+      },
+      {
+        name: "PDF indir",
+        text: "Tamamen güncellenmiş ve düzenlenmiş PDF belgenizi indirin.",
+      },
     ],
   },
 };
@@ -2423,12 +2585,18 @@ export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to fill PDF forms",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PDF Form", text: "Select an interactive PDF form." },
       {
-        name: "Fill fields",
-        text: "Enter your information into the detected form fields.",
+        name: "Add your PDF",
+        text: "Drop the interactive PDF form you need to complete.",
       },
-      { name: "Save", text: "Download the flattened, filled PDF document." },
+      {
+        name: "Fill form",
+        text: "Type directly into form fields and select checkboxes locally and securely.",
+      },
+      {
+        name: "Download PDF",
+        text: "Download your filled PDF form, ready to print or email.",
+      },
     ],
   },
   tr: {
@@ -2440,12 +2608,18 @@ export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PDF formları nasıl doldurulur",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "Form Yükle", text: "Etkileşimli bir PDF formu seçin." },
       {
-        name: "Alanları doldur",
-        text: "Bilgilerinizi algılanan form alanlarına girin.",
+        name: "PDF dosyanı ekle",
+        text: "Doldurmanız gereken etkileşimli PDF formunu sayfaya bırakın.",
       },
-      { name: "Kaydet", text: "Doldurulmuş PDF belgesini indirin." },
+      {
+        name: "Formu doldur",
+        text: "Doğrudan form alanlarına yazın ve onay kutularını yerel olarak güvenle seçin.",
+      },
+      {
+        name: "PDF indir",
+        text: "Yazdırmaya veya e-postayla göndermeye hazır, doldurulmuş PDF formunuzu indirin.",
+      },
     ],
   },
 };
@@ -2837,15 +3011,15 @@ export const removeblankpagesCopy = {
     steps: [
       {
         name: "Add your PDF",
-        text: "Drop a batch-scanned PDF that contains unwanted empty pages.",
+        text: "Drop the PDF document containing unwanted blank pages.",
       },
       {
-        name: "Detect blanks",
-        text: "We perform a local pixel-level analysis to find completely blank or white pages.",
+        name: "Scan for blanks",
+        text: "We analyze the document locally to instantly detect completely empty pages.",
       },
       {
         name: "Download PDF",
-        text: "Download your cleaned-up document with all empty separator pages securely removed.",
+        text: "Download your perfectly clean and streamlined PDF document.",
       },
     ],
   },
@@ -2859,15 +3033,15 @@ export const removeblankpagesCopy = {
     steps: [
       {
         name: "PDF dosyanı ekle",
-        text: "Arasında istenmeyen boş sayfalar bulunan toplu taranmış PDF belgesini bırakın.",
+        text: "İstenmeyen boş sayfalar içeren PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Boşlukları bul",
-        text: "Tamamen beyaz veya boş sayfaları bulmak için yerel piksel analizi yapıyoruz.",
+        name: "Boş sayfaları tara",
+        text: "Tamamen boş sayfaları anında tespit etmek için belgeyi yerel olarak analiz ediyoruz.",
       },
       {
         name: "PDF indir",
-        text: "Tüm boş sayfalardan güvenli bir şekilde arındırılmış temiz belgenizi indirin.",
+        text: "Mükemmel şekilde temizlenmiş ve arındırılmış PDF belgenizi indirin.",
       },
     ],
   },
@@ -4135,16 +4309,16 @@ export const scanToPdfCopy = {
     howItWorks: "How it works",
     steps: [
       {
-        name: "Allow camera access",
-        text: "Grant webcam or mobile camera access securely within your browser.",
+        name: "Use camera",
+        text: "Use your webcam or phone camera to take clear photos of your documents.",
       },
       {
-        name: "Snap documents",
-        text: "Take clear photos of your physical documents directly through the app.",
+        name: "Crop and enhance",
+        text: "Locally adjust the corners and enhance the contrast for perfect readability.",
       },
       {
-        name: "Generate PDF",
-        text: "We instantly compile and optimize your photos into a single PDF document.",
+        name: "Download PDF",
+        text: "Download your newly created, high-quality scanned PDF document.",
       },
     ],
   },
@@ -4158,16 +4332,16 @@ export const scanToPdfCopy = {
     howItWorks: "Nasıl çalışır",
     steps: [
       {
-        name: "Kamera izni ver",
-        text: "Tarayıcın üzerinden web kamerasını veya telefon kamerasını kullanmaya güvenle izin ver.",
+        name: "Kamerayı kullan",
+        text: "Belgelerinizin net fotoğraflarını çekmek için web kameranızı veya telefon kameranızı kullanın.",
       },
       {
-        name: "Evrakları çek",
-        text: "Uygulama üzerinden fiziksel evraklarının net fotoğraflarını arka arkaya çek.",
+        name: "Kırp ve iyileştir",
+        text: "Mükemmel okunabilirlik için köşeleri yerel olarak ayarlayın ve kontrastı artırın.",
       },
       {
-        name: "PDF oluştur",
-        text: "Çektiğin fotoğrafları anında optimize edip tek bir PDF belgesinde birleştirerek indir.",
+        name: "PDF indir",
+        text: "Yeni oluşturulmuş, yüksek kaliteli taranmış PDF belgenizi indirin.",
       },
     ],
   },
