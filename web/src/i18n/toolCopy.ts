@@ -249,6 +249,8 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Merge PDF — combine files in your browser, files never uploaded",
     description:
       "Combine multiple PDF files into one document, free and without limits. Everything runs in your browser — your files never leave your device.",
+    keywords:
+      "merge pdf, combine pdf, join pdf, bind pdf together, pdf birleştir, merge multiple pdfs, combine files",
     h1: "Merge PDF",
     tagline:
       "Combine multiple PDFs into one document — free, no limits, and your files stay on your device.",
@@ -278,6 +280,8 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Birleştir — tarayıcında birleştir, dosyalar yüklenmeden",
     description:
       "Birden çok PDF dosyasını ücretsiz ve sınırsız biçimde tek bir belgede birleştir. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
+    keywords:
+      "pdf birleştirme, pdf birleştir, çoklu pdf birleştir, pdf dosyalarını birleştir, combine pdf, merge pdf",
     h1: "PDF Birleştir",
     tagline:
       "Birden çok PDF'i tek bir belgede birleştir — ücretsiz, sınırsız ve dosyaların cihazında kalır.",
@@ -310,6 +314,8 @@ export const splitCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Split PDF — extract pages in your browser, files never uploaded",
     description:
       "Extract and separate PDF pages into multiple files, free and without limits. Everything runs in your browser — your files never leave your device.",
+    keywords:
+      "split pdf, separate pdf, extract pages from pdf, cut pdf, divide pdf, pdf böl, pdf ayır",
     h1: "Split PDF",
     tagline:
       "Extract pages from your PDF into new documents — free, unlimited, and 100% private.",
@@ -340,6 +346,8 @@ export const splitCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Böl — tarayıcında ayır, dosyalar yüklenmeden",
     description:
       "PDF sayfalarını çıkart ve ayrı dosyalara böl. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
+    keywords:
+      "pdf böl, pdf bölme, pdf ayır, pdf sayfalarını ayır, sayfaları çıkar, split pdf, cut pdf",
     h1: "PDF Böl",
     tagline:
       "PDF'ten sayfaları çıkarıp yeni belgeler oluşturun — ücretsiz ve %100 yerel.",
@@ -372,6 +380,8 @@ export const organizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Organize PDF — reorder, rotate, or delete pages locally",
     description:
       "Sort, reorder, rotate, or delete pages in your PDF document. Processed securely on your device without server uploads.",
+    keywords:
+      "organize pdf, reorder pdf pages, arrange pdf, sort pdf pages, pdf düzenle, pdf sayfalarını sırala",
     h1: "Organize PDF",
     tagline:
       "Rearrange, rotate, or trim pages in your PDF document — free, fast, and 100% private.",
@@ -400,6 +410,8 @@ export const organizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Düzenle — sayfaları sırala, döndür veya sil",
     description:
       "PDF dosyanızdaki sayfaları sıralayın, çevirin veya silin. Tamamen tarayıcınızda ve gizlilik garantisiyle çalışır.",
+    keywords:
+      "pdf düzenle, pdf sayfalarını sırala, pdf sırala, sayfaların yerini değiştir, organize pdf",
     h1: "PDF Düzenle",
     tagline: "Sayfaları sırala, döndür veya sil — ücretsiz ve %100 yerel.",
     howToName: "Tarayıcıda PDF sayfaları nasıl düzenlenir",
@@ -429,6 +441,8 @@ export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Reverse PDF Pages — change page order",
     description:
       "Reverse the order of pages in your PDF document instantly. Fast, free, and completely local.",
+    keywords:
+      "reverse pdf, invert page order, flip pdf pages, reverse pdf order, pdf ters çevir, sondan başa pdf",
     h1: "Reverse PDF Pages",
     tagline: "Reverse your PDF page order from last to first in seconds.",
     howToName: "How to reverse PDF page order",
@@ -467,6 +481,8 @@ export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Sayfalarını Tersine Çevir — sayfa sırasını değiştirin",
     description:
       "PDF belgenizdeki sayfaların sırasını anında tersine çevirin. Hızlı, ücretsiz ve tamamen yerel.",
+    keywords:
+      "pdf ters çevir, pdf sayfa sırasını ters çevir, pdf sondan başa, sayfaları tersine çevir",
     h1: "Sayfaları Tersine Çevir",
     tagline:
       "PDF sayfa sıranızı saniyeler içinde sondan başa doğru tersine çevirin.",
@@ -508,6 +524,8 @@ export const batesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Add Bates Numbering to PDF — professional document stamping",
     description:
       "Add Bates numbers to your PDF documents instantly. Perfect for legal professionals. Free, fast, and completely local.",
+    keywords:
+      "bates numbering, bates stamp, legal stamp pdf, add bates number, bates damgası, bates numaralandırma",
     h1: "Bates Numbering",
     tagline: "Stamp your PDF with professional Bates numbers in seconds.",
     howToName: "How to add Bates numbering to a PDF",
@@ -546,6 +564,8 @@ export const batesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF'ye Bates Numaralandırması Ekle — profesyonel belge damgalama",
     description:
       "PDF belgelerinize anında Bates numaraları ekleyin. Hukuk profesyonelleri için mükemmeldir. Ücretsiz, hızlı ve tamamen yerel.",
+    keywords:
+      "bates numaralandırma, bates damgası, pdf bates ekle, hukuki damga, bates numbering",
     h1: "Bates Numaralandırması",
     tagline:
       "PDF'inizi saniyeler içinde profesyonel Bates numaralarıyla damgalayın.",
@@ -588,6 +608,8 @@ export const nupCopy: Record<"en" | "tr", ToolCopy> = {
     title: "N-Up PDF — multiple pages per sheet",
     description:
       "Combine multiple PDF pages onto a single sheet (2-up, 4-up, 9-up). Perfect for printing slides or saving paper. Fast, free, and totally local.",
+    keywords:
+      "n-up pdf, multiple pages per sheet, print multiple pages, pdf layout, 2-up, 4-up, çoklu sayfa yazdırma",
     h1: "N-Up PDF",
     tagline: "Shrink and combine multiple pages onto a single sheet instantly.",
     howToName: "How to combine multiple pages onto one sheet",
@@ -630,6 +652,8 @@ export const nupCopy: Record<"en" | "tr", ToolCopy> = {
     title: "N-Up PDF — tek yaprağa çoklu sayfa",
     description:
       "Birden fazla PDF sayfasını tek bir yaprakta birleştirin (2, 4, 9 sayfa vb.). Sunum yazdırmak veya kağıt tasarrufu sağlamak için mükemmel. Hızlı, ücretsiz ve yerel.",
+    keywords:
+      "n-up pdf, tek sayfaya çoklu sayfa, yaprak başına birden fazla sayfa, pdf yazdırma düzeni",
     h1: "N-Up PDF",
     tagline:
       "Birden fazla sayfayı anında küçültüp tek bir yaprakta birleştirin.",
@@ -676,6 +700,8 @@ export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Convert to PDF/A — archive your documents safely",
     description:
       "Convert your PDF to PDF/A format for long-term archiving. Fast, free, and completely local processing.",
+    keywords:
+      "pdf to pdf/a, pdf/a converter, archive pdf, iso compliant pdf, long term pdf, pdfa, pdf/a",
     h1: "Convert to PDF/A",
     tagline:
       "Ensure your documents are ready for long-term archiving and standard compliance.",
@@ -719,6 +745,8 @@ export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF/A'ya Dönüştür — belgelerinizi güvenle arşivleyin",
     description:
       "Uzun süreli arşivleme için PDF'inizi PDF/A formatına dönüştürün. Hızlı, ücretsiz ve tamamen yerel işlem.",
+    keywords:
+      "pdf/a dönüştürücü, pdf i pdf/a yap, arşiv pdf, uzun süreli pdf, iso pdf, pdf to pdf/a",
     h1: "PDF/A'ya Dönüştür",
     tagline:
       "Belgelerinizin uzun vadeli arşivlemeye ve standartlara uygun olduğundan emin olun.",
@@ -765,6 +793,8 @@ export const extractCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Extract Text from PDF — locally, files never uploaded",
     description:
       "Extract all readable text from your PDF into a TXT file directly in your browser. No servers involved.",
+    keywords:
+      "extract text from pdf, pdf to text, pdf to txt, read pdf text, pdf metin çıkar, pdf yazıları al",
     h1: "Extract Text from PDF",
     tagline:
       "Pull all readable text from your PDF into a TXT file — free and 100% private.",
@@ -793,6 +823,8 @@ export const extractCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF'ten Metin Çıkar — yazıları kopyala, cihazında kalsın",
     description:
       "PDF dosyanızdaki tüm yazıları TXT dosyası olarak dışa aktarın. Sunucusuz, doğrudan tarayıcınızın içinde çalışır.",
+    keywords:
+      "pdf metin çıkar, pdf yazıları al, pdf to txt, pdf	en metin kopyala, extract text from pdf",
     h1: "PDF'ten Metin Çıkar",
     tagline:
       "PDF'teki tüm metinleri çıkarıp TXT dosyası olarak kaydedin — ücretsiz ve yerel.",
@@ -823,6 +855,8 @@ export const sanitizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Sanitize PDF — remove metadata, files never uploaded",
     description:
       "Remove author, creation date, and all hidden metadata from your PDF file for maximum privacy. No servers involved.",
+    keywords:
+      "sanitize pdf, clean pdf metadata, remove pdf properties, secure pdf, clear metadata, pdf temizle",
     h1: "Sanitize PDF",
     tagline:
       "Strip hidden metadata and digital footprints from your PDF — free and 100% private.",
@@ -851,6 +885,8 @@ export const sanitizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Temizle — meta verileri sil, dosyalar cihazında kalsın",
     description:
       "PDF dosyanızdaki yazar, oluşturulma tarihi ve gizli meta verilerini silerek tam gizlilik sağlayın. Sunucu kullanılmaz.",
+    keywords:
+      "pdf temizle, pdf meta veri sil, pdf yazar sil, pdf arındır, sanitize pdf, remove metadata",
     h1: "PDF Temizle (Meta Veri Sil)",
     tagline:
       "PDF'teki gizli meta verileri ve dijital izleri temizleyin — ücretsiz ve yerel.",
@@ -881,6 +917,8 @@ export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Add Watermark to PDF — free, secure, local",
     description:
       "Stamp your PDF with a custom text watermark. Protect your documents from unauthorized use. Processed completely in your browser.",
+    keywords:
+      "watermark pdf, add watermark, stamp pdf, pdf logo, protect pdf, pdf filigran, filigran ekle",
     h1: "Watermark PDF",
     tagline:
       "Add a diagonal watermark to every page of your document in seconds.",
@@ -909,6 +947,8 @@ export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF'e Filigran Ekle — ücretsiz, güvenli, yerel",
     description:
       "PDF'inize özel metin filigranı (damga) ekleyin. Belgelerinizi izinsiz kullanıma karşı koruyun. Tamamen tarayıcınızda işlenir.",
+    keywords:
+      "pdf filigran ekle, filigran oluştur, pdf damga, watermark pdf, pdf arkasına yazı yaz",
     h1: "Filigran Ekle",
     tagline:
       "Belgenizin her sayfasına saniyeler içinde damga (filigran) vurun.",
@@ -939,6 +979,8 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Add Page Numbers to PDF — free, fast, local",
     description:
       "Easily add page numbers to your PDF documents. Customize format and position. Processed securely on your device.",
+    keywords:
+      "add page numbers to pdf, number pdf pages, paginate pdf, pdf page numbers, pdf sayfa numarası",
     h1: "Add Page Numbers",
     tagline: "Organize your documents by adding page numbers instantly.",
     howToName: "How to add page numbers to a PDF online",
@@ -966,6 +1008,8 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF'e Sayfa Numarası Ekle — ücretsiz, hızlı, yerel",
     description:
       "PDF belgelerinize kolayca sayfa numarası ekleyin. Formatı ve konumu ayarlayın. Tamamen cihazınızda güvenle işlenir.",
+    keywords:
+      "pdf sayfa numarası ekle, sayfa numaralandırma, pdf numaralandır, add page numbers to pdf",
     h1: "Sayfa Numarası Ekle",
     tagline: "Belgelerinizi anında numaralandırarak daha düzenli hale getirin.",
     howToName: "PDF dosyasına nasıl sayfa numarası eklenir",
@@ -995,6 +1039,8 @@ export const protectCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Protect PDF — encrypt your file locally with a password",
     description:
       "Encrypt and protect your PDF document with a strong password. Processed securely in your browser.",
+    keywords:
+      "secure pdf, secret pdf, safe pdf, lock pdf, protect pdf with password, encrypt pdf, password protect pdf",
     h1: "Protect PDF",
     tagline:
       "Lock your confidential documents with password encryption — free and 100% private.",
@@ -1023,6 +1069,8 @@ export const protectCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Şifrele — belgeni parolayla kilitle ve koru",
     description:
       "PDF dosyanızı güçlü bir şifreyle koruma altına alın. Tüm şifreleme tarayıcınızda ve gizlilikle yapılır.",
+    keywords:
+      "pdf şifrele, gizli pdf, pdf kilitle, güvenli pdf, pdf parola koy, protect pdf, secure pdf, lock pdf",
     h1: "PDF Şifrele",
     tagline:
       "Gizli belgelerinizi saniyeler içinde parola ile kilitleyin — ücretsiz ve %100 yerel.",
@@ -1053,6 +1101,8 @@ export const unlockCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Unlock PDF — remove password protection locally",
     description:
       "Remove passwords and security restrictions from your PDF files in seconds. Completely local and private.",
+    keywords:
+      "unlock pdf, remove pdf password, unprotect pdf, decrypt pdf, open secure pdf, pdf kilit aç",
     h1: "Unlock PDF",
     tagline:
       "Strip password protection from PDF documents — free, fast, and secure.",
@@ -1081,6 +1131,8 @@ export const unlockCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Şifre Kaldır — parolayı ve korumayı kaldır",
     description:
       "PDF dosyalarınızdaki şifreleri ve kısıtlamaları saniyeler içinde kaldırın. %100 gizli ve tarayıcınızda.",
+    keywords:
+      "pdf kilit aç, pdf şifre kaldır, korumalı pdf aç, unlock pdf, pdf parolası kaldır",
     h1: "PDF Şifre Kaldır",
     tagline:
       "PDF belgelerinizdeki şifre korumasını temizleyin — ücretsiz, hızlı ve güvenli.",
@@ -1111,6 +1163,8 @@ export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Rotate PDF — turn pages 90, 180, or 270 degrees locally",
     description:
       "Rotate individual PDF pages or all pages at once. Your files stay on your device — free, fast, and secure.",
+    keywords:
+      "rotate pdf, turn pdf, flip pdf, pdf orientation, upside down pdf, pdf döndür, pdf çevir",
     h1: "Rotate PDF",
     tagline:
       "Turn upside-down or sideways pages to the right orientation — free, instant, and 100% private.",
@@ -1139,6 +1193,8 @@ export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Döndür — sayfaları 90, 180 veya 270 derece çevir",
     description:
       "PDF sayfalarını tek tek veya topluca çevirin. Dosyalarınız cihazınızdan asla çıkmaz — ücretsiz ve güvenli.",
+    keywords:
+      "pdf döndür, pdf yönünü değiştir, ters pdf düzelt, sayfaları çevir, rotate pdf",
     h1: "PDF Döndür",
     tagline:
       "Ters veya yan duran sayfaları doğru açıda hizalayın — ücretsiz, anında ve %100 gizli.",
@@ -1169,6 +1225,8 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Remove Pages from PDF — delete unwanted pages locally",
     description:
       "Delete extra or sensitive pages from your PDF document in seconds. No servers involved, 100% private.",
+    keywords:
+      "remove pdf pages, delete pages from pdf, erase pdf page, extract pages, pdf sayfa sil, sayfa kaldır",
     h1: "Remove Pages",
     tagline:
       "Strip unwanted pages from your PDF cleanly — free, unlimited, and entirely in your browser.",
@@ -1197,6 +1255,8 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Sayfa Sil — istenmeyen sayfaları anında çıkar",
     description:
       "PDF dosyanızdan gereksiz veya hatalı sayfaları saniyeler içinde kaldırın. Sunucuya yüklenmez, gizlilik garantili.",
+    keywords:
+      "pdf sayfa sil, pdf sayfalarını çıkar, pdf	en sayfa kaldır, remove pdf pages, delete pdf pages",
     h1: "PDF Sayfa Sil",
     tagline:
       "İstenmeyen sayfaları PDF belgenizden temizleyin — ücretsiz, sınırsız ve tarayıcınızda.",
@@ -1227,6 +1287,8 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "JPG to PDF — convert images to PDF document locally",
     description:
       "Convert JPG, PNG, and WebP images into a single PDF document in your browser. Organize, adjust orientation and margin, 100% private.",
+    keywords:
+      "image to pdf, jpg to pdf, jpeg to pdf, pictures to pdf, photo to pdf, resimden pdf, jpg pdf yap",
     h1: "JPG to PDF",
     tagline:
       "Turn your images into a clean PDF document — free, instant, and 100% private.",
@@ -1255,6 +1317,8 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "JPG'den PDF'e — fotoğrafları ve görselleri PDF'e dönüştür",
     description:
       "JPG, PNG ve WebP görsellerinizi tarayıcınızda tek bir PDF belgesine dönüştürün. Sayfa yapısı ve kenar boşluklarını ayarlayın, %100 gizli.",
+    keywords:
+      "resimden pdf yap, fotoğraftan pdf, jpg to pdf, jpeg to pdf, image to pdf, resimleri pdf yap",
     h1: "JPG'den PDF'e",
     tagline:
       "Görsellerinizi anında PDF belgesine dönüştürün — ücretsiz, sınırsız ve tarayıcınızda.",
@@ -1286,6 +1350,8 @@ export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PNG to PDF — convert PNG images to PDF document locally",
     description:
       "Convert PNG, JPG, and WebP images into a high-quality PDF document in your browser. Maintain transparency and sharp edges, 100% private.",
+    keywords:
+      "png to pdf, convert png to pdf, transparent image to pdf, png pdf yap, png den pdf",
     h1: "PNG to PDF",
     tagline:
       "Turn your PNG images into a clean PDF document — free, instant, and 100% private.",
@@ -1314,6 +1380,8 @@ export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PNG'den PDF'e — PNG görsellerini ve şemalarını PDF'e dönüştür",
     description:
       "PNG, JPG ve WebP görsellerinizi tarayıcınızda tek bir PDF belgesine dönüştürün. Şeffaflık ve keskin kenarları koruyun, %100 gizli.",
+    keywords:
+      "png to pdf, png pdf yap, png dönüştürücü, resim pdf çevir, png to pdf converter",
     h1: "PNG'den PDF'e",
     tagline:
       "PNG görsellerinizi anında PDF belgesine dönüştürün — ücretsiz, sınırsız ve tarayıcınızda.",
@@ -1345,6 +1413,8 @@ export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Flatten PDF — make form fields and annotations uneditable locally",
     description:
       "Convert interactive PDF forms, highlights, and annotations into static page content. 100% private, processed in your browser.",
+    keywords:
+      "flatten pdf, make pdf uneditable, flatten form, lock pdf form, pdf düzleştir, form kilitle",
     h1: "Flatten PDF",
     tagline:
       "Turn PDF form fields and annotations into static content — free and 100% private.",
@@ -1373,6 +1443,8 @@ export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Düzleştir — form alanlarını ve notları sabit katmana dönüştür",
     description:
       "İnteraktif PDF formlarını, açıklamaları ve işaretlemeleri sabit sayfa içeriğine dönüştürün. %100 gizli, tarayıcınızda çalışır.",
+    keywords:
+      "pdf düzleştir, pdf flatten, düzenlenemez pdf yap, pdf formu kilitle, form düzleştirme",
     h1: "PDF Düzleştir",
     tagline:
       "PDF form alanlarını sabit ve düzenlenemez içeriğe dönüştürün — ücretsiz ve %100 gizli.",
@@ -1404,6 +1476,8 @@ export const signCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Sign PDF — add signatures locally without uploading",
     description:
       "Sign PDF documents with your drawn, typed, or uploaded signature. 100% private, your files and signature never leave your device.",
+    keywords:
+      "sign pdf, e-sign pdf, electronic signature, draw signature, pdf imza, pdf imzala, e-imza pdf",
     h1: "Sign PDF",
     tagline:
       "Stamp your signature onto any PDF document — free, instant, and 100% private.",
@@ -1432,6 +1506,8 @@ export const signCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF İmzala — tarayıcında güvenle imza ekle",
     description:
       "PDF belgelerine çizdiğiniz, yazdığınız veya yüklediğiniz imzanızı ekleyin. %100 gizli, dosyanız ve imzanız cihazınızdan çıkmaz.",
+    keywords:
+      "pdf imzala, pdf imza ekle, e-imza pdf, dijital imza, elektronik imza, sign pdf",
     h1: "PDF İmzala",
     tagline:
       "PDF belgelerinizi tarayıcınızda güvenle imzalayın — ücretsiz ve %100 gizli.",
@@ -1463,6 +1539,8 @@ export const extractImagesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Extract Images from PDF — download embedded JPG and PNG",
     description:
       "Extract all embedded raster images from PDF documents in original quality. 100% private, files never leave your device.",
+    keywords:
+      "extract images from pdf, pdf to jpg, pdf pictures, save pdf images, pdf resim çıkar, pdf foto al",
     h1: "Extract Images",
     tagline:
       "Extract embedded JPG and PNG images from your PDF — free and 100% private.",
@@ -1491,6 +1569,8 @@ export const extractImagesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Resim Çıkar — gömülü fotoğrafları orijinal kalitede indir",
     description:
       "PDF belgelerindeki tüm gömülü resimleri ve fotoğrafları orijinal kalitede ayıklayın. %100 gizli, dosyanız cihazınızdan çıkmaz.",
+    keywords:
+      "pdf resim çıkar, pdf fotoğrafları al, pdf ten resim ayıkla, pdf to jpg, extract images from pdf",
     h1: "PDF Resim Çıkar",
     tagline:
       "PDF'teki gömülü JPG ve PNG resimlerini ayıklayın — ücretsiz ve %100 gizli.",
@@ -1523,6 +1603,8 @@ export const compressCopy: Record<"en" | "tr", ToolCopy> = {
       "Compress PDF — reduce file size in your browser, files never uploaded",
     description:
       "Compress and reduce PDF file size with zero quality loss. Remove unused objects and optimize streams locally in your browser. 100% private.",
+    keywords:
+      "compress pdf, reduce pdf size, shrink pdf, small pdf, optimize pdf, pdf küçült, pdf sıkıştır",
     h1: "Compress PDF",
     tagline:
       "Shrink your PDF file size in seconds — free, instant, and 100% private.",
@@ -1552,6 +1634,8 @@ export const compressCopy: Record<"en" | "tr", ToolCopy> = {
       "PDF Küçült / Sıkıştır — tarayıcında dosya boyutunu azalt, gizli ve ücretsiz",
     description:
       "PDF dosya boyutunu kalite kaybı olmadan küçültün. Kullanılmayan nesneleri ve çift akışları temizleyin. %100 gizli, dosyalar cihazınızdan çıkmaz.",
+    keywords:
+      "pdf sıkıştır, pdf boyutu küçült, dosya küçültme, compress pdf, shrink pdf, pdf optimize et",
     h1: "PDF Sıkıştır",
     tagline:
       "PDF dosyanızın boyutunu saniyeler içinde küçültün — ücretsiz, hızlı ve %100 gizli.",
@@ -1584,6 +1668,8 @@ export const redactCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Redact PDF — hide sensitive information",
     description:
       "Permanently black out sensitive text, images, or graphics in your PDF. 100% private and fast.",
+    keywords:
+      "redact pdf, blackout text in pdf, hide pdf text, censor pdf, secure redact, pdf karart, pdf sansür",
     h1: "Redact PDF",
     tagline:
       "Black out sensitive content in your PDF documents in seconds — free and completely local.",
@@ -1619,6 +1705,8 @@ export const redactCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Karartma — hassas bilgileri gizleyin",
     description:
       "PDF'inizdeki hassas bilgileri gizlemek için üzerlerine siyah kutular çizin. %100 gizli ve hızlı.",
+    keywords:
+      "pdf karart, pdf sansürle, pdf gizli metin, redact pdf, pdf blackout, metin sansürleme",
     h1: "PDF Karartma",
     tagline:
       "PDF belgelerinizdeki hassas içerikleri saniyeler içinde karartın — ücretsiz ve %100 gizli.",
@@ -1656,6 +1744,8 @@ export const repairCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Repair PDF — fix corrupted documents locally",
     description:
       "Fix and recover corrupted or broken PDF files instantly in your browser. 100% private, no uploads.",
+    keywords:
+      "repair pdf, fix pdf, recover pdf, corrupt pdf, broken pdf, pdf onar, bozuk pdf düzelt",
     h1: "Repair PDF",
     tagline:
       "Fix corrupted PDF files and recover data instantly — free and completely local.",
@@ -1691,6 +1781,8 @@ export const repairCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Onar — bozuk belgeleri tarayıcıda düzelt",
     description:
       "Bozuk veya açılmayan PDF dosyalarınızı tarayıcınızda anında onarın ve kurtarın. %100 gizli, yükleme yok.",
+    keywords:
+      "pdf onar, bozuk pdf kurtar, pdf tamir et, hasarlı pdf aç, repair pdf, fix corrupt pdf",
     h1: "PDF Onar",
     tagline:
       "Bozuk PDF dosyalarınızı onarın ve verilerinizi kurtarın — ücretsiz ve tamamen yerel.",
@@ -1728,6 +1820,8 @@ export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Grayscale PDF — convert to black & white locally",
     description:
       "Convert your PDF documents to grayscale to save ink and reduce file size. Fast, local, and private.",
+    keywords:
+      "grayscale pdf, black and white pdf, b&w pdf, remove colors from pdf, pdf siyah beyaz, renksiz pdf",
     h1: "Grayscale PDF",
     tagline:
       "Remove colors from your PDF files to create black and white documents — free and completely local.",
@@ -1767,6 +1861,8 @@ export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Siyah Beyaz PDF — yerel olarak dönüştür",
     description:
       "Mürekkep tasarrufu yapmak ve dosya boyutunu küçültmek için PDF'lerinizi gri tonlamaya çevirin. Hızlı, yerel ve gizli.",
+    keywords:
+      "pdf siyah beyaz yap, siyah beyaz pdf, gri tonlama pdf, grayscale pdf, renksiz pdf",
     h1: "Siyah Beyaz PDF",
     tagline:
       "PDF dosyalarınızdan renkleri kaldırarak siyah beyaz belgeler oluşturun — ücretsiz ve tamamen yerel.",
@@ -1808,6 +1904,8 @@ export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Resize PDF — change page size and add margins",
     description:
       "Scale your PDF pages to standard sizes like A4 or Letter, and add uniform margins. 100% private.",
+    keywords:
+      "resize pdf, change pdf size, add margins to pdf, scale pdf, pdf boyutlandır, pdf kenarlık ekle",
     h1: "Resize PDF",
     tagline:
       "Scale PDF pages to standard dimensions and add beautiful margins — free and completely local.",
@@ -1847,6 +1945,8 @@ export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Boyutlandır — boyut değiştir ve boşluk ekle",
     description:
       "PDF sayfalarınızı A4 veya Letter gibi standart boyutlara ölçeklendirin ve kenar boşlukları ekleyin. %100 gizli.",
+    keywords:
+      "pdf boyutlandır, pdf yeniden boyutlandır, pdf kenar boşluğu ekle, resize pdf, change pdf dimensions",
     h1: "PDF Boyutlandır",
     tagline:
       "PDF sayfalarını standart boyutlara ölçeklendirin ve kenar boşlukları ekleyin — ücretsiz ve tamamen yerel.",
@@ -1888,6 +1988,8 @@ export const scanCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Scan to PDF — scan physical documents",
     description:
       "Use your device camera to scan physical documents and create high-quality PDFs instantly. 100% private.",
+    keywords:
+      "scan to pdf, document scanner, scan pages, digitalize document, paper to pdf, pdf tarayıcı, belge tara",
     h1: "Scan to PDF",
     tagline:
       "Turn your device into a document scanner and generate PDF files directly in your browser.",
@@ -1927,6 +2029,8 @@ export const scanCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Kameradan PDF — fiziksel belgeleri tarayın",
     description:
       "Fiziksel belgeleri taramak ve anında PDF oluşturmak için cihazınızın kamerasını kullanın. %100 gizli.",
+    keywords:
+      "pdf tara, belge tara, kağıt tarayıcı, scan to pdf, pdf tarama aracı, tarayıcıdan pdf yap",
     h1: "Kameradan PDF",
     tagline:
       "Cihazınızı bir tarayıcıya dönüştürün ve doğrudan tarayıcınızda PDF dosyaları oluşturun.",
@@ -1969,6 +2073,8 @@ export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Booklet PDF — create printable booklets",
     description:
       "Convert your PDF into a printable booklet layout. Free and completely local.",
+    keywords:
+      "create booklet, pdf booklet, print booklet, saddle stitch pdf, booklet maker, kitapçık yap, pdf kitapçık",
     h1: "Booklet PDF",
     tagline: "Rearrange pages into a saddle-stitch booklet layout.",
     howToName: "How to create a booklet",
@@ -1991,6 +2097,8 @@ export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
   tr: {
     title: "Kitapçık PDF — yazdırılabilir kitapçık oluştur",
     description: "PDF dosyanızı yazdırılabilir kitapçık düzenine dönüştürün.",
+    keywords:
+      "pdf kitapçık, kitapçık yap, kitapçık bastır, booklet maker, create booklet, kitapçık düzeni",
     h1: "Kitapçık PDF",
     tagline: "Sayfaları kitapçık düzeninde yeniden sıralayın.",
     howToName: "Kitapçık nasıl oluşturulur",
@@ -2016,6 +2124,8 @@ export const compareCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Compare PDF — find differences between documents",
     description: "Visually compare two PDF files side by side.",
+    keywords:
+      "compare pdf, diff pdf, pdf comparison, find differences pdf, compare documents, pdf karşılaştır, pdf fark bul",
     h1: "Compare PDF",
     tagline: "Spot differences between two documents instantly.",
     howToName: "How to compare PDFs",
@@ -2038,6 +2148,8 @@ export const compareCopy: Record<"en" | "tr", ToolCopy> = {
   tr: {
     title: "PDF Karşılaştır — belgeler arası farkları bul",
     description: "İki PDF dosyasını yan yana görsel olarak karşılaştırın.",
+    keywords:
+      "pdf karşılaştır, pdf fark bul, iki pdf kıyasla, compare pdf, belge karşılaştırma aracı",
     h1: "PDF Karşılaştır",
     tagline: "İki belge arasındaki farkları anında tespit edin.",
     howToName: "PDF'ler nasıl karşılaştırılır",
@@ -2063,6 +2175,8 @@ export const cropCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Crop PDF — remove margins",
     description: "Crop your PDF pages to remove unnecessary margins.",
+    keywords:
+      "crop pdf, trim pdf margins, cut pdf borders, resize page area, pdf kırp, pdf sayfa kes",
     h1: "Crop PDF",
     tagline: "Trim PDF margins quickly and locally.",
     howToName: "How to crop a PDF",
@@ -2085,6 +2199,8 @@ export const cropCopy: Record<"en" | "tr", ToolCopy> = {
   tr: {
     title: "PDF Kırp — kenar boşluklarını kaldır",
     description: "PDF sayfalarınızı kırparak gereksiz boşlukları temizleyin.",
+    keywords:
+      "pdf kırp, pdf kes, sayfa kırpma, boşlukları al, crop pdf, trim pdf",
     h1: "PDF Kırp",
     tagline: "Kenar boşluklarını hızlıca kesin.",
     howToName: "PDF nasıl kırpılır",
@@ -2110,6 +2226,8 @@ export const ocrCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "OCR PDF — extract text from scanned documents",
     description: "Convert scanned PDFs into searchable text documents.",
+    keywords:
+      "ocr pdf, optical character recognition, scanned pdf to text, searchable pdf, pdf ocr, metin tanıma, taranmış pdf okuma",
     h1: "OCR PDF",
     tagline: "Make scanned documents searchable with AI.",
     howToName: "How to use OCR on a PDF",
@@ -2132,6 +2250,8 @@ export const ocrCopy: Record<"en" | "tr", ToolCopy> = {
   tr: {
     title: "OCR PDF — taranmış belgelerden metin çıkar",
     description: "Taranmış PDF'leri aranabilir metin belgelerine dönüştürün.",
+    keywords:
+      "pdf ocr, ocr pdf, metin tanıma, resimdeki yazıyı okuma, taranmış pdf çeviri, aranabilir pdf",
     h1: "OCR PDF",
     tagline: "Yapay zeka ile taranmış belgeleri aranabilir yapın.",
     howToName: "PDF'te OCR nasıl kullanılır",
@@ -2157,6 +2277,8 @@ export const removeBlankCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Remove Blank Pages — clean up your PDF",
     description: "Automatically detect and remove blank pages from your PDF.",
+    keywords:
+      "remove blank pages, delete empty pages, clean pdf, erase blank sheets, pdf boş sayfa sil, boş sayfaları kaldır",
     h1: "Remove Blank Pages",
     tagline: "Clean up your documents instantly and locally.",
     howToName: "How to remove blank pages",
@@ -2171,6 +2293,8 @@ export const removeBlankCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Boş Sayfaları Sil — PDF'inizi temizleyin",
     description:
       "PDF'inizdeki boş sayfaları otomatik olarak tespit edip kaldırın.",
+    keywords:
+      "pdf boş sayfa sil, boş sayfaları çıkar, pdf temizle, remove blank pages, delete empty pages",
     h1: "Boş Sayfaları Sil",
     tagline: "Belgelerinizi anında ve yerel olarak temizleyin.",
     howToName: "Boş sayfalar nasıl silinir",
@@ -2188,6 +2312,8 @@ export const editMetadataCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Edit PDF Metadata — change author, title, and keywords locally",
     description:
       "View and edit PDF properties and metadata fields like Author, Title, Subject, and Keywords without uploading your file.",
+    keywords:
+      "edit pdf metadata, change pdf author, modify pdf properties, pdf tags, pdf meta veri düzenle",
     h1: "Edit PDF Metadata",
     tagline: "Change document properties locally and instantly.",
     howToName: "How to edit PDF metadata",
@@ -2212,6 +2338,8 @@ export const editMetadataCopy: Record<"en" | "tr", ToolCopy> = {
       "PDF Meta Verilerini Düzenle — yazar, başlık ve anahtar kelimeleri yerel olarak değiştir",
     description:
       "PDF özelliklerini ve Yazar, Başlık, Konu gibi meta veri alanlarını dosyanızı yüklemeden görüntüleyin ve düzenleyin.",
+    keywords:
+      "pdf meta veri düzenle, pdf yazar değiştir, pdf özelliklerini değiştir, edit metadata pdf",
     h1: "PDF Meta Verilerini Düzenle",
     tagline: "Belge özelliklerini anında ve yerel olarak değiştirin.",
     howToName: "PDF meta verileri nasıl düzenlenir",
@@ -2238,6 +2366,8 @@ export const base64PdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Base64 to PDF & PDF to Base64 — developer tools",
     description:
       "Convert a PDF to a Base64 string for embedding in code, or decode a Base64 string back into a PDF file locally.",
+    keywords:
+      "pdf to base64, base64 to pdf, encode pdf, decode pdf, base64 converter, pdf base64 çevir",
     h1: "Base64 PDF Converter",
     tagline: "Encode or decode PDFs to and from Base64 instantly.",
     howToName: "How to use the Base64 converter",
@@ -2261,6 +2391,8 @@ export const base64PdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Base64'ten PDF'e ve PDF'ten Base64'e — geliştirici araçları",
     description:
       "Koda gömmek için PDF'yi Base64 dizgesine dönüştürün veya bir Base64 dizgesini yerel olarak PDF dosyasına çevirin.",
+    keywords:
+      "pdf to base64, base64 to pdf, pdf kodlama, base64 çevirici, pdf encode decode",
     h1: "Base64 PDF Dönüştürücü",
     tagline: "PDF'leri anında Base64'e kodlayın veya çözün.",
     howToName: "Base64 dönüştürücü nasıl kullanılır",
@@ -2287,6 +2419,8 @@ export const invertPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Invert PDF Colors — dark mode for PDFs",
     description:
       "Invert the colors of your PDF document for easier night reading. All processing is done locally.",
+    keywords:
+      "invert pdf colors, dark mode pdf, negative pdf, reverse colors pdf, pdf renkleri tersine çevir, pdf karanlık mod",
     h1: "Invert PDF Colors",
     tagline: "Turn bright documents into dark mode PDFs.",
     howToName: "How to invert PDF colors",
@@ -2310,6 +2444,8 @@ export const invertPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Renklerini Ters Çevir — PDF'ler için karanlık mod",
     description:
       "Gece okumasını kolaylaştırmak için PDF belgenizin renklerini tersine çevirin. Tüm işlemler yerel olarak yapılır.",
+    keywords:
+      "pdf karanlık mod, pdf renk tersine çevir, invert pdf, dark mode pdf, negatif pdf",
     h1: "PDF Renklerini Ters Çevir",
     tagline: "Parlak belgeleri karanlık mod PDF'lerine dönüştürün.",
     howToName: "PDF renkleri nasıl tersine çevrilir",
@@ -2336,6 +2472,8 @@ export const markdownPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Markdown to PDF — convert MD files locally",
     description:
       "Write or paste Markdown syntax and instantly export it to a beautifully formatted PDF document. Runs 100% in your browser.",
+    keywords:
+      "markdown to pdf, md to pdf, convert markdown, render md as pdf, markdown pdf yap, md çevirici",
     h1: "Markdown to PDF",
     tagline: "Convert MD files to styled PDFs instantly.",
     howToName: "How to convert Markdown to PDF",
@@ -2359,6 +2497,8 @@ export const markdownPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Markdown'dan PDF'e — MD dosyalarını yerel olarak dönüştür",
     description:
       "Markdown formatında yazın veya yapıştırın, anında şık bir PDF belgesine dönüştürün. %100 tarayıcınızda çalışır.",
+    keywords:
+      "markdown pdf yap, md to pdf, markdown çevirici, convert md to pdf",
     h1: "Markdown to PDF",
     tagline: "MD dosyalarını anında şekilli PDF'lere dönüştürün.",
     howToName: "Markdown PDF'e nasıl dönüştürülür",
@@ -2385,6 +2525,8 @@ export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "HTML to PDF — render raw HTML code locally",
     description:
       "Paste raw HTML code and convert it directly into a PDF document. Perfect for developers saving web snippets.",
+    keywords:
+      "html to pdf, webpage to pdf, save as pdf, convert html, render html to pdf, html pdf yap",
     h1: "HTML to PDF",
     tagline: "Convert raw HTML code to a PDF document.",
     howToName: "How to convert HTML to PDF",
@@ -2408,6 +2550,8 @@ export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "HTML'den PDF'e — ham HTML kodunu yerel dönüştür",
     description:
       "Ham HTML kodunu yapıştırın ve doğrudan PDF belgesine dönüştürün. Web içeriklerini kaydetmek isteyen geliştiriciler için mükemmeldir.",
+    keywords:
+      "html pdf yap, web sayfasını pdf kaydet, html to pdf, convert html to pdf",
     h1: "HTML to PDF",
     tagline: "Ham HTML kodunu PDF belgesine dönüştürün.",
     howToName: "HTML PDF'e nasıl dönüştürülür",
@@ -2434,6 +2578,8 @@ export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Extract PDF Pages — save specific pages",
     description:
       "Visually select specific pages from a PDF document and save them as a brand new PDF file.",
+    keywords:
+      "extract pdf pages, separate pages, pull out pages, pdf split, pdf sayfa çıkar, pdf sayfa al",
     h1: "Extract Pages",
     tagline: "Pick the pages you want to keep.",
     howToName: "How to extract PDF pages",
@@ -2457,6 +2603,8 @@ export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Sayfaları Çıkar — belirli sayfaları yeni bir PDF yap",
     description:
       "Bir PDF belgesindeki belirli sayfaları görsel olarak seçin ve bunları yepyeni bir PDF dosyası olarak kaydedin.",
+    keywords:
+      "pdf sayfa çıkar, pdf içinden sayfa al, sayfaları ayır, extract pages from pdf",
     h1: "Sayfaları Çıkar",
     tagline: "Sadece tutmak istediğiniz sayfaları seçin.",
     howToName: "PDF sayfaları nasıl çıkarılır",
@@ -2483,6 +2631,8 @@ export const annotatePdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Annotate PDF — draw and add text to your PDF files",
     description:
       "Add text annotations and highlights to your PDF documents entirely in your browser.",
+    keywords:
+      "annotate pdf, highlight pdf, add notes to pdf, draw on pdf, pdf not al, pdf çiz, pdf vurgula",
     h1: "Annotate PDF",
     tagline: "Add text and notes to your documents.",
     howToName: "How to annotate a PDF",
@@ -2506,6 +2656,8 @@ export const annotatePdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Not Ekle — PDF dosyalarına metin ve çizim ekle",
     description:
       "Tamamen tarayıcınızda PDF belgelerinize metin ve notlar ekleyin.",
+    keywords:
+      "pdf not al, pdf üstünü çiz, pdf highlight, pdf vurgula, annotate pdf",
     h1: "PDF Not Ekle",
     tagline: "Belgelerinize metin ve notlar ekleyin.",
     howToName: "PDF'e nasıl not eklenir",
@@ -2532,6 +2684,8 @@ export const editPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "Edit PDF — modify and hide text in your PDF files",
     description:
       "Apply whiteout and hide sensitive information in your PDFs directly in your browser.",
+    keywords:
+      "edit pdf, modify pdf, change pdf text, replace pdf image, free pdf editor, pdf düzenle, pdf yazı değiştir",
     h1: "Edit PDF",
     tagline: "Hide sensitive information with whiteout.",
     howToName: "How to edit a PDF",
@@ -2555,6 +2709,8 @@ export const editPdfCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Düzenle — PDF dosyalarında metin gizle ve düzenle",
     description:
       "Tarayıcınızda doğrudan PDF dosyalarınızdaki hassas bilgileri gizleyin (whiteout).",
+    keywords:
+      "pdf düzenle, pdf metin değiştir, pdf editör, pdf yazı ekle, ücretsiz pdf düzenleyici",
     h1: "PDF Düzenle",
     tagline: "Hassas bilgileri beyazlatarak (whiteout) gizleyin.",
     howToName: "PDF nasıl düzenlenir",
@@ -2581,6 +2737,8 @@ export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Forms — fill and manage PDF forms",
     description:
       "Fill interactive PDF forms quickly and easily, right in your browser.",
+    keywords:
+      "fill pdf form, interactive pdf, type in pdf, complete pdf form, fill and sign, pdf form doldur",
     h1: "PDF Forms",
     tagline: "Fill interactive PDF forms quickly.",
     howToName: "How to fill PDF forms",
@@ -2604,6 +2762,8 @@ export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
     title: "PDF Formları — PDF formlarını doldurun ve yönetin",
     description:
       "Etkileşimli PDF formlarını tarayıcınızda hızlıca ve kolayca doldurun.",
+    keywords:
+      "pdf form doldur, pdf yazı yaz, etkileşimli pdf, fill and sign pdf, pdf doldurma aracı",
     h1: "PDF Formları",
     tagline: "Etkileşimli PDF formlarını hızlıca doldurun.",
     howToName: "PDF formları nasıl doldurulur",
@@ -2629,6 +2789,8 @@ export const mixpdfCopy = {
   en: {
     title: "Alternate & Mix PDF",
     description: "Interleave pages from two PDFs.",
+    keywords:
+      "mix pdf, alternate pdf pages, interleave pdf, blend pdf, pdf sayfalarını karıştır, pdf harmanla",
     h1: "Alternate & Mix PDF",
     tagline: "Interleave pages from two PDFs.",
     howToName: "How to use Alternate & Mix PDF",
@@ -2651,6 +2813,8 @@ export const mixpdfCopy = {
   tr: {
     title: "Alternate & Mix PDF",
     description: "Interleave pages from two PDFs.",
+    keywords:
+      "pdf sayfalarını karıştır, pdf harmanla, sırayla birleştir, mix pdf pages",
     h1: "Alternate & Mix PDF",
     tagline: "Interleave pages from two PDFs.",
     howToName: "Alternate & Mix PDF Nasıl Kullanılır",
@@ -2676,6 +2840,8 @@ export const splithalfpdfCopy = {
   en: {
     title: "Split PDF in Half",
     description: "Split 2-up spreads into 1-up pages.",
+    keywords:
+      "split pdf in half, divide page, cut page in middle, split scanned book, pdf ikiye böl, sayfayı ortadan kes",
     h1: "Split PDF in Half",
     tagline: "Split 2-up spreads into 1-up pages.",
     howToName: "How to use Split PDF in Half",
@@ -2698,6 +2864,8 @@ export const splithalfpdfCopy = {
   tr: {
     title: "Split PDF in Half",
     description: "Split 2-up spreads into 1-up pages.",
+    keywords:
+      "pdf ikiye böl, sayfayı ortadan kes, split pdf in half, kitap taraması ayır",
     h1: "Split PDF in Half",
     tagline: "Split 2-up spreads into 1-up pages.",
     howToName: "Split PDF in Half Nasıl Kullanılır",
@@ -2723,6 +2891,8 @@ export const extractbykeywordCopy = {
   en: {
     title: "Extract by Keyword",
     description: "Extract pages containing specific text.",
+    keywords:
+      "extract pdf by keyword, search and extract pdf, filter pdf pages, find text extract page, kelimeye göre sayfa çıkar",
     h1: "Extract by Keyword",
     tagline: "Extract pages containing specific text.",
     howToName: "How to use Extract by Keyword",
@@ -2745,6 +2915,8 @@ export const extractbykeywordCopy = {
   tr: {
     title: "Extract by Keyword",
     description: "Extract pages containing specific text.",
+    keywords:
+      "kelimeye göre sayfa çıkar, pdf içinde ara ve çıkar, metne göre pdf böl, extract by keyword",
     h1: "Extract by Keyword",
     tagline: "Extract pages containing specific text.",
     howToName: "Extract by Keyword Nasıl Kullanılır",
@@ -2770,6 +2942,8 @@ export const splitbysizeCopy = {
   en: {
     title: "Split by Size",
     description: "Split PDF into smaller parts by MB size.",
+    keywords:
+      "split pdf by size, divide pdf size, chunk pdf, reduce file size split, pdf boyuta göre böl, mb a göre pdf böl",
     h1: "Split by Size",
     tagline: "Split PDF into smaller parts by MB size.",
     howToName: "How to use Split by Size",
@@ -2792,6 +2966,8 @@ export const splitbysizeCopy = {
   tr: {
     title: "Split by Size",
     description: "Split PDF into smaller parts by MB size.",
+    keywords:
+      "pdf boyuta göre böl, dosya boyutuna göre ayır, parçalara böl, split pdf by size",
     h1: "Split by Size",
     tagline: "Split PDF into smaller parts by MB size.",
     howToName: "Split by Size Nasıl Kullanılır",
@@ -2817,6 +2993,8 @@ export const addmarginsCopy = {
   en: {
     title: "Add Margins",
     description: "Add white padding around PDF pages.",
+    keywords:
+      "add margins to pdf, increase white space, padding pdf, resize margins, pdf boşluk ekle, pdf kenar boşluğu",
     h1: "Add Margins",
     tagline: "Add white padding around PDF pages.",
     howToName: "How to use Add Margins",
@@ -2839,6 +3017,8 @@ export const addmarginsCopy = {
   tr: {
     title: "Add Margins",
     description: "Add white padding around PDF pages.",
+    keywords:
+      "pdf kenar boşluğu ekle, pdf marj ekle, beyaz boşluk ekle, add margins to pdf",
     h1: "Add Margins",
     tagline: "Add white padding around PDF pages.",
     howToName: "Add Margins Nasıl Kullanılır",
@@ -2864,6 +3044,8 @@ export const pdftosvgCopy = {
   en: {
     title: "PDF to SVG",
     description: "Convert PDF pages to SVG vectors.",
+    keywords:
+      "pdf to svg, vectorise pdf, convert to svg, pdf vektör yap, pdf svg çevir",
     h1: "PDF to SVG",
     tagline: "Convert PDF pages to SVG vectors.",
     howToName: "How to use PDF to SVG",
@@ -2886,6 +3068,7 @@ export const pdftosvgCopy = {
   tr: {
     title: "PDF to SVG",
     description: "Convert PDF pages to SVG vectors.",
+    keywords: "pdf svg çevir, pdf to svg, vektörel pdf, svg dönüştürücü",
     h1: "PDF to SVG",
     tagline: "Convert PDF pages to SVG vectors.",
     howToName: "PDF to SVG Nasıl Kullanılır",
@@ -2958,6 +3141,8 @@ export const addpagenumbersCopy = {
   en: {
     title: "Add Page Numbers",
     description: "Insert page numbers into a PDF.",
+    keywords:
+      "add page numbers, paginate pdf, number pages, insert page numbers, sayfa numarası ekle, numaralandır",
     h1: "Add Page Numbers",
     tagline: "Insert page numbers into a PDF.",
     howToName: "How to use Add Page Numbers",
@@ -2980,6 +3165,8 @@ export const addpagenumbersCopy = {
   tr: {
     title: "Sayfa Numarası",
     description: "PDF sayfalarına otomatik numara ekle.",
+    keywords:
+      "sayfa numarası ekle, pdf numaralandırma, sayfalandır, add page numbers to pdf",
     h1: "Sayfa Numarası",
     tagline: "PDF sayfalarına otomatik numara ekle.",
     howToName: "Sayfa Numarası Nasıl Kullanılır",
@@ -3005,6 +3192,8 @@ export const removeblankpagesCopy = {
   en: {
     title: "Remove Blank Pages",
     description: "Detect and delete empty pages.",
+    keywords:
+      "remove blank pages, delete empty pages, clean pdf, boş sayfa sil, boş sayfaları çıkar",
     h1: "Remove Blank Pages",
     tagline: "Detect and delete empty pages.",
     howToName: "How to use Remove Blank Pages",
@@ -3027,6 +3216,8 @@ export const removeblankpagesCopy = {
   tr: {
     title: "Boş Sayfaları Sil",
     description: "Boş veya beyaz sayfaları tespit edip sil.",
+    keywords:
+      "boş sayfa sil, yazısız sayfa sil, boşluk temizle, remove blank pages",
     h1: "Boş Sayfaları Sil",
     tagline: "Boş veya beyaz sayfaları tespit edip sil.",
     howToName: "Boş Sayfaları Sil Nasıl Kullanılır",
@@ -3053,6 +3244,8 @@ export const removeAnnotationsCopy = {
     title: "Remove Annotations — clear comments and forms from PDF",
     description:
       "Instantly strip all highlights, sticky notes, comments, and form fields from your PDF.",
+    keywords:
+      "remove annotations, delete pdf comments, clear highlights, clean pdf, pdf notları sil, açıklamaları kaldır",
     h1: "Remove Annotations",
     tagline: "Remove all annotations, comments, and form fields from your PDF.",
     howToName: "How to remove annotations from a PDF",
@@ -3076,6 +3269,8 @@ export const removeAnnotationsCopy = {
     title: "Açıklamaları Sil — PDF yorumlarını ve formlarını temizle",
     description:
       "PDF belgenizdeki tüm vurguları, yapışkan notları, yorumları ve form alanlarını tek tıkla silin.",
+    keywords:
+      "pdf notları sil, pdf yorumları kaldır, açıklamaları temizle, remove annotations",
     h1: "Açıklamaları Sil",
     tagline:
       "PDF belgenizdeki tüm açıklamaları, yorumları ve form alanlarını temizleyin.",
@@ -3103,6 +3298,8 @@ export const pdfToWebpCopy = {
     title: "PDF to WebP — convert in your browser",
     description:
       "Convert PDF pages to WebP format for 30% smaller file sizes with no loss in quality.",
+    keywords:
+      "pdf to webp, webp converter, convert pdf to image, pdf resim yap, pdf webp çevir",
     h1: "PDF to WebP",
     tagline:
       "Convert PDF pages to modern, lightweight WebP images directly in your browser.",
@@ -3127,6 +3324,7 @@ export const pdfToWebpCopy = {
     title: "PDF to WebP — tarayıcınızda dönüştürün",
     description:
       "Kalite kaybı olmadan %30 daha küçük dosya boyutları için PDF sayfalarını WebP formatına dönüştürün.",
+    keywords: "pdf webp çevir, pdf to webp, pdf resim yap, webp dönüştürücü",
     h1: "PDF to WebP",
     tagline:
       "PDF sayfalarını tarayıcınızda doğrudan modern ve hafif WebP görüntülerine dönüştürün.",
@@ -3154,6 +3352,8 @@ export const autoCropCopy = {
     title: "Auto-Crop PDF — remove white margins automatically",
     description:
       "Automatically detect and crop out unnecessary white margins from your PDF pages.",
+    keywords:
+      "auto crop pdf, smart crop, remove white margins, auto trim pdf, pdf otomatik kırp, kenar boşluklarını sil",
     h1: "Auto-Crop PDF",
     tagline:
       "Smart detection automatically removes white borders and margins from every page.",
@@ -3178,6 +3378,8 @@ export const autoCropCopy = {
     title: "Otomatik Kırp — beyaz boşlukları otomatik kaldır",
     description:
       "PDF sayfalarınızdaki gereksiz beyaz boşlukları ve kenar boşluklarını otomatik olarak tespit edip kırpın.",
+    keywords:
+      "pdf otomatik kırp, akıllı kırpma, boşlukları sil, beyaz marj sil, auto crop pdf",
     h1: "Otomatik Kırp",
     tagline:
       "Akıllı tarama sistemi sayesinde tüm sayfalardaki gereksiz beyaz çerçeveleri otomatik olarak kırpın.",
@@ -3205,6 +3407,8 @@ export const extractTocCopy = {
     title: "Extract Bookmarks — export PDF Table of Contents",
     description:
       "Instantly extract the Table of Contents (Bookmarks) from any PDF and save it as a Markdown file.",
+    keywords:
+      "extract toc, get pdf bookmarks, extract table of contents, pdf içindekiler çıkar, pdf menü al",
     h1: "Extract Bookmarks (TOC)",
     tagline:
       "Export your PDF's outline tree structure to a structured text file in one click.",
@@ -3229,6 +3433,8 @@ export const extractTocCopy = {
     title: "İçindekileri Çıkar — PDF Başlık Ağacını Dışa Aktar",
     description:
       "Herhangi bir PDF'in İçindekiler Tablosunu (Yer İmlerini) anında çıkarın ve Markdown dosyası olarak kaydedin.",
+    keywords:
+      "pdf içindekiler çıkar, pdf toc al, yer imlerini al, extract table of contents, extract bookmarks",
     h1: "İçindekileri Çıkar",
     tagline:
       "PDF belgenizin başlık hiyerarşisini tek tıkla yapılandırılmış bir metin dosyasına aktarın.",
@@ -3256,6 +3462,8 @@ export const overlayPdfCopy = {
     title: "Add Letterhead — overlay a template behind your PDF",
     description:
       "Stamp a company letterhead or invoice template to the background of every page in your PDF document.",
+    keywords:
+      "overlay pdf, superimpose pdf, merge layers, pdf üst üste koy, pdf katman birleştir, şeffaf pdf ekle",
     h1: "Add Letterhead (Overlay)",
     tagline:
       "Seamlessly embed a template PDF into the background of your target document.",
@@ -3280,6 +3488,8 @@ export const overlayPdfCopy = {
     title: "Antet Ekle — PDF'inizin arka planına şablon ekleyin",
     description:
       "Şirket antetli kağıdınızı veya fatura şablonunuzu PDF belgenizin her sayfasının arka planına ekleyin.",
+    keywords:
+      "pdf üst üste bindir, pdf katman birleştir, overlay pdf, şeffaf katman ekle, antetli kağıt pdf",
     h1: "Antet / Şablon Ekle",
     tagline:
       "Şablon bir PDF'i, hedef belgenizin tüm sayfalarının arka planına kusursuzca gömün.",
@@ -3307,6 +3517,8 @@ export const changeBgCopy = {
     title: "Change PDF Background — Dark Mode & Sepia",
     description:
       "Change the background color of your transparent or white PDFs. Perfect for Dark Mode reading or eye protection.",
+    keywords:
+      "change pdf background, add background color, remove background pdf, pdf arka plan değiştir, pdf renk değiştir",
     h1: "Change Background Color",
     tagline:
       "Instantly set a custom background color for your PDF pages to reduce eye strain.",
@@ -3331,6 +3543,8 @@ export const changeBgCopy = {
     title: "Arka Plan Rengini Değiştir — Gece Modu & Sepya",
     description:
       "Şeffaf veya beyaz PDF'lerinizin arka plan rengini değiştirin. Gece okuması ve göz koruması için mükemmeldir.",
+    keywords:
+      "pdf arka plan değiştir, pdf arka plan rengi, pdf renk değiştir, pdf arkaplan sil, change pdf background",
     h1: "Arka Plan Rengini Değiştir",
     tagline:
       "Göz yorgunluğunu azaltmak için PDF sayfalarınızın arka planına anında özel bir renk atayın.",
@@ -3358,6 +3572,8 @@ export const autoRedactCopy = {
     title: "Auto-Redact PII — hide sensitive information",
     description:
       "Automatically detect and censor Emails, Phone Numbers, and Credit Cards from your PDF using client-side AI.",
+    keywords:
+      "auto redact pdf, smart redact, hide sensitive info, auto censor pdf, otomatik sansür, pdf hassas veri gizle",
     h1: "Auto-Redact PDF",
     tagline:
       "Black out Personally Identifiable Information (PII) with zero uploads.",
@@ -3382,6 +3598,8 @@ export const autoRedactCopy = {
     title: "Otomatik Sansür — kişisel verileri gizleyin",
     description:
       "PDF'nizdeki E-posta, Telefon ve Kredi Kartı gibi kişisel verileri (PII) otomatik olarak tespit edip sansürleyin.",
+    keywords:
+      "otomatik sansür, pdf hassas veri karart, akıllı redact, otomatik gizle, auto redact pdf",
     h1: "Otomatik PDF Sansür",
     tagline:
       "Kişisel verilerinizi %100 gizlilikle otomatik siyah kutulara alın.",
@@ -3409,6 +3627,8 @@ export const smartMarkdownCopy = {
     title: "Smart PDF to Markdown — AI-ready export",
     description:
       "Convert PDFs to structured Markdown. Infers headings (H1, H2, H3) based on font sizes automatically.",
+    keywords:
+      "smart markdown, ai pdf to md, structured markdown converter, akıllı markdown, pdf ten markdown a",
     h1: "Smart PDF to Markdown",
     tagline:
       "Perfect for LLMs and AI agents. Get structured MD files instantly.",
@@ -3433,6 +3653,8 @@ export const smartMarkdownCopy = {
     title: "Akıllı PDF to Markdown — Yapay Zeka Çıktısı",
     description:
       "PDF'leri yapılandırılmış Markdown formatına dönüştürün. Başlıkları font boyutlarına göre otomatik algılar.",
+    keywords:
+      "akıllı markdown, pdf to md, yapılandırılmış md, smart markdown converter, pdf ten md ye",
     h1: "PDF to Markdown",
     tagline:
       "LLM ve yapay zeka ajanları için kusursuz. Anında yapılandırılmış MD dosyaları alın.",
@@ -3460,6 +3682,8 @@ export const contrastEnhancerCopy = {
     title: "Enhance PDF — adjust contrast & brightness",
     description:
       "Fix bad scans by increasing contrast and brightness. Make faded text crisp and readable again.",
+    keywords:
+      "enhance pdf contrast, darken pdf text, readable pdf, improve scan quality, pdf kontrast artır, soluk yazıyı koyulaştır",
     h1: "Enhance Scanned PDF",
     tagline: "Adjust brightness and contrast of poor PDF scans effortlessly.",
     howToName: "How to enhance a scanned PDF",
@@ -3483,6 +3707,8 @@ export const contrastEnhancerCopy = {
     title: "PDF Netleştir — kontrast ve parlaklık artır",
     description:
       "Kötü taranmış soluk belgelerin kontrastını artırarak metinleri cam gibi net hale getirin.",
+    keywords:
+      "pdf kontrast artır, soluk yazıyı netleştir, tarama kalitesi artır, enhance pdf contrast, darken text",
     h1: "Taranmış PDF Netleştir",
     tagline:
       "Soluk PDF taramalarının parlaklığını ve kontrastını zahmetsizce ayarlayın.",
@@ -3510,6 +3736,8 @@ export const pdfToHtmlCopy = {
     title: "PDF to HTML — export as web page",
     description:
       "Convert your PDF documents into clean, semantic HTML files directly in your browser.",
+    keywords:
+      "pdf to html, convert pdf to web page, pdf to code, pdf html yap, web sayfası yap, pdf i koda çevir",
     h1: "PDF to HTML Converter",
     tagline:
       "Publish your PDFs on the web easily without losing text formatting.",
@@ -3534,6 +3762,8 @@ export const pdfToHtmlCopy = {
     title: "PDF to HTML — web sayfası yap",
     description:
       "PDF belgelerinizi doğrudan tarayıcınızda temiz ve anlamsal (semantic) HTML dosyalarına dönüştürün.",
+    keywords:
+      "pdf html yap, pdf ten web sayfasına, pdf to html, web uymulu pdf, kodu html çevir",
     h1: "PDF HTML Çevirici",
     tagline: "PDF'lerinizi web'de kolayca yayınlayın.",
     howToName: "PDF HTML'e nasıl çevrilir",
@@ -3560,6 +3790,8 @@ export const extractFontsCopy = {
     title: "Extract Fonts from PDF — recover TTF/OTF",
     description:
       "Find and extract embedded TrueType (TTF) and OpenType (OTF) font files from any PDF.",
+    keywords:
+      "extract fonts, get pdf fonts, download pdf font, pdf font çıkar, font ayıkla, pdf yazı tipi al",
     h1: "Extract PDF Fonts",
     tagline:
       "A lifesaver for graphic designers. Recover original fonts instantly.",
@@ -3584,6 +3816,8 @@ export const extractFontsCopy = {
     title: "PDF Font Çıkarıcı — TTF/OTF Kurtar",
     description:
       "Herhangi bir PDF içine gömülmüş TrueType (TTF) ve OpenType (OTF) font dosyalarını bulup çıkarın.",
+    keywords:
+      "pdf font çıkar, yazı tipi al, font ayıkla, pdf içindeki fontu bul, extract fonts",
     h1: "PDF Font Kurtarıcı",
     tagline:
       "Tasarımcılar için hayat kurtarıcı. Orijinal fontları saniyeler içinde geri alın.",
@@ -3611,6 +3845,8 @@ export const removeImagesCopy = {
     title: "Remove Images from PDF — ink saver",
     description:
       "Strip all images, photos, and heavy graphics from your PDF to save 90% printer ink.",
+    keywords:
+      "remove images from pdf, delete pictures, text only pdf, strip images, pdf resimleri sil, grafik sil",
     h1: "Remove Images from PDF",
     tagline:
       "Create text-only documents instantly. Perfect for printing long slides.",
@@ -3635,6 +3871,8 @@ export const removeImagesCopy = {
     title: "Görselleri Sil — Mürekkep Tasarrufu",
     description:
       "Yazıcı mürekkebinden %90 tasarruf etmek için PDF'nizdeki tüm resimleri ve ağır grafikleri silin.",
+    keywords:
+      "pdf resimleri sil, grafikleri kaldır, sadece metin pdf, resimsiz pdf, remove pdf images",
     h1: "PDF Resimlerini Sil",
     tagline:
       "Saniyeler içinde sadece-metin belgeleri oluşturun. Slayt yazdırmak için ideal.",
@@ -3662,6 +3900,8 @@ export const extractUrlsCopy = {
     title: "Extract URLs from PDF — link parser",
     description:
       "Find all clickable links, URLs, and external references inside a PDF and export them.",
+    keywords:
+      "extract urls, get pdf links, find hyperlinks, pdf linkleri çıkar, bağlantıları al, url ayıkla",
     h1: "Extract Links from PDF",
     tagline:
       "Parse academic papers and reports for external references in one click.",
@@ -3686,6 +3926,8 @@ export const extractUrlsCopy = {
     title: "Linkleri Çıkar — URL Ayrıştırıcı",
     description:
       "Bir PDF'in içindeki tüm tıklanabilir bağlantıları, URL'leri ve harici referansları bulup dışa aktarın.",
+    keywords:
+      "pdf linkleri çıkar, url ayıkla, bağlantıları al, extract links, get pdf urls",
     h1: "PDF'den Link Çıkar",
     tagline:
       "Akademik makaleler ve raporlardaki bağlantıları tek tıkla listeleyin.",
@@ -3713,6 +3955,8 @@ export const removeDuplicatesCopy = {
     title: "Remove Duplicate Pages — de-duplicator",
     description:
       "Automatically find and delete visually identical pages from your PDF.",
+    keywords:
+      "remove duplicate pages, delete repeated pages, clean pdf, mükerrer sayfa sil, aynı sayfaları sil, kopya sayfa kaldır",
     h1: "Remove Duplicate Pages",
     tagline:
       "Clean up merged or poorly scanned documents by eliminating double pages.",
@@ -3737,6 +3981,8 @@ export const removeDuplicatesCopy = {
     title: "Kopya Sayfaları Sil — Tekilleştirici",
     description:
       "PDF'nizdeki görsel olarak tamamen aynı olan kopya sayfaları otomatik bulup silin.",
+    keywords:
+      "kopya sayfa sil, mükerrer sayfaları kaldır, aynı sayfaları çıkar, remove duplicate pages",
     h1: "Kopya Sayfaları Sil",
     tagline: "Hatalı taranmış belgelerdeki çifte sayfaları yok edin.",
     howToName: "PDF'deki çift sayfalar nasıl silinir",
@@ -3763,6 +4009,8 @@ export const extractAttachmentsCopy = {
     title: "Extract Attachments — recover embedded files",
     description:
       "Find and extract hidden XML, Word, Excel, or other files embedded inside a PDF.",
+    keywords:
+      "extract attachments, download embedded files, pdf attachments, pdf eklerini çıkar, gömülü dosya al",
     h1: "Extract PDF Attachments",
     tagline: "Recover hidden files and portfolios instantly.",
     howToName: "How to extract attachments from PDF",
@@ -3786,6 +4034,8 @@ export const extractAttachmentsCopy = {
     title: "Ek Dosyaları Sök — Gömülü dosyaları kurtar",
     description:
       "PDF içine gizlenmiş XML, Word, Excel gibi gömülü ek dosyaları (attachments) bulup çıkarın.",
+    keywords:
+      "pdf eklerini çıkar, gömülü dosyaları al, ek dosya indir, extract attachments pdf",
     h1: "PDF Ek Dosyası Çıkarıcı",
     tagline:
       "E-faturalardaki veya kurum belgelerindeki gizli dosyaları kurtarın.",
@@ -3813,6 +4063,8 @@ export const extractColorsCopy = {
     title: "Extract Color Palette — find HEX codes",
     description:
       "Scan your PDF to extract a complete color palette of all HEX codes used in vectors, backgrounds, and fonts.",
+    keywords:
+      "extract colors, pdf color palette, get hex codes, find pdf colors, pdf renk paleti çıkar, renk kodlarını al",
     h1: "PDF Color Palette Extractor",
     tagline: "The ultimate tool for graphic designers and brand managers.",
     howToName: "How to extract colors from PDF",
@@ -3836,6 +4088,8 @@ export const extractColorsCopy = {
     title: "Renk Paleti Çıkarıcı — HEX Kodlarını Bul",
     description:
       "Vektörlerde, arka planlarda ve metinlerde kullanılan tüm HEX renk kodlarını çıkarıp tam bir renk paleti oluşturun.",
+    keywords:
+      "pdf renk paleti çıkar, hex kodları al, renkleri bul, extract pdf colors, get color palette",
     h1: "PDF Renk Hırsızı",
     tagline: "Grafikerler ve tasarımcılar için bulunmaz bir araç.",
     howToName: "PDF'den renkler nasıl çıkarılır",
@@ -3862,6 +4116,8 @@ export const removeTextCopy = {
     title: "Remove Text from PDF — template mode",
     description:
       "Strip all text from a PDF, leaving only images, graphics, and backgrounds intact.",
+    keywords:
+      "remove text from pdf, delete text, image only pdf, clear text, pdf metin sil, yazıları kaldır",
     h1: "Remove Text from PDF",
     tagline:
       "Perfect for stealing templates or preparing documents for translation.",
@@ -3886,6 +4142,8 @@ export const removeTextCopy = {
     title: "Metinleri Sil — Sadece Görsel/Şablon",
     description:
       "Sadece resimlerin ve arka planların kalması için PDF'teki tüm metinleri tamamen silin.",
+    keywords:
+      "pdf metin sil, yazıları tamamen kaldır, sadece resim pdf, remove text from pdf",
     h1: "PDF Yazılarını Sil",
     tagline: "Şablonları kopyalamak veya çeviri altlığı hazırlamak için ideal.",
     howToName: "PDF'den metin nasıl silinir",
@@ -3912,6 +4170,8 @@ export const extractJavascriptCopy = {
     title: "Extract JavaScript — malware analysis",
     description:
       "Scan and extract embedded JavaScript code from PDF documents for security and malware analysis.",
+    keywords:
+      "extract javascript, find pdf scripts, get embedded js, pdf js çıkar, pdf script ayıkla, güvenlik analizi",
     h1: "PDF JavaScript Extractor",
     tagline: "The ultimate tool for cyber security analysts.",
     howToName: "How to extract JavaScript from PDF",
@@ -3935,6 +4195,8 @@ export const extractJavascriptCopy = {
     title: "JS Sökücü — Malware Analizi",
     description:
       "Siber güvenlik ve zararlı yazılım analizi için PDF belgelerine gizlenmiş JavaScript kodlarını tespit edip çıkarın.",
+    keywords:
+      "pdf js çıkar, pdf javascript al, betikleri ayıkla, gömülü kodu bul, extract pdf javascript",
     h1: "PDF JavaScript Sökücü",
     tagline: "Siber güvenlik uzmanları için eşsiz bir araç.",
     howToName: "PDF'den JavaScript nasıl çıkarılır",
@@ -3961,6 +4223,8 @@ export const splitBookmarksCopy = {
     title: "Split by Bookmarks — auto chapter split",
     description:
       "Automatically split large textbooks or reports into multiple PDFs based on their Table of Contents (TOC) bookmarks.",
+    keywords:
+      "split by bookmarks, divide by chapters, split pdf sections, pdf yer imlerine göre böl, bölümlere ayır",
     h1: "Split PDF by Bookmarks",
     tagline: "Instantly break down textbooks into chapters.",
     howToName: "How to split PDF by TOC",
@@ -3984,6 +4248,8 @@ export const splitBookmarksCopy = {
     title: "Bölümlere Göre Parçala — İçindekiler Ayırıcı",
     description:
       "Büyük ders kitaplarını veya raporları, İçindekiler (TOC) tablosundaki bölüm başlıklarına göre otomatik olarak ayrı PDF'lere bölün.",
+    keywords:
+      "pdf yer imlerine göre böl, bölümlere göre ayır, split by bookmarks pdf, chapter split",
     h1: "İçindekiler Tablosuna Göre Böl",
     tagline: "Yüzlerce sayfalık kitapları saniyeler içinde bölümlere ayırın.",
     howToName: "PDF bölümlere göre nasıl ayrılır",
@@ -4010,6 +4276,8 @@ export const splitBlankCopy = {
     title: "Split by Blank Page — auto scanner split",
     description:
       "Automatically divide a large scanned PDF into multiple documents whenever a blank page is detected.",
+    keywords:
+      "split at blank pages, divide by empty page, scan separator, pdf boş sayfada böl, ayırıcı sayfa",
     h1: "Split PDF by Blank Page",
     tagline: "A lifesaver for batch scanning and archiving.",
     howToName: "How to split PDF by blank pages",
@@ -4033,6 +4301,8 @@ export const splitBlankCopy = {
     title: "Boş Sayfadan Parçala — Tarayıcı Ayırıcı",
     description:
       "Tarayıcıdan toplu olarak taranmış büyük bir belgeyi, aradaki boş sayfaları tespit ederek otomatik olarak ayrı PDF'lere bölün.",
+    keywords:
+      "pdf boş sayfada böl, tarama ayırıcı, boş sayfadan sonra ayır, split at blank page",
     h1: "Boş Sayfalardan Böl",
     tagline: "Arşivciler ve fotokopi merkezleri için devrim niteliğinde.",
     howToName: "PDF boş sayfalara göre nasıl bölünür",
@@ -4059,6 +4329,8 @@ export const viewerPrefsCopy = {
     title: "Viewer Preferences — PDF auto open settings",
     description:
       "Configure how your PDF behaves when opened. Force full screen mode, hide toolbars, or center the window automatically.",
+    keywords:
+      "edit viewer preferences, pdf initial view, fullscreen pdf, pdf görünüm ayarları, başlangıç görünümü düzenle",
     h1: "Set PDF Viewer Preferences",
     tagline: "Professional presentation settings for eBooks and reports.",
     howToName: "How to set PDF initial view",
@@ -4082,6 +4354,8 @@ export const viewerPrefsCopy = {
     title: "Açılış Ayarları — PDF görünümünü ayarla",
     description:
       "PDF'iniz açıldığında nasıl davranacağını kodlayın. Tam ekranda açmaya zorlayın veya menü çubuklarını gizleyin.",
+    keywords:
+      "pdf görünüm ayarları, tam ekran açılış, pdf başlangıç görünümü, edit viewer preferences",
     h1: "PDF Açılış Ayarları (ViewerPrefs)",
     tagline: "E-kitaplar ve profesyonel sunumlar için olmazsa olmaz.",
     howToName: "PDF açılış ayarları nasıl yapılır",
@@ -4108,6 +4382,8 @@ export const extractHiddenTextCopy = {
     title: "Extract Hidden Text — forensics tool",
     description:
       "A forensics tool to detect and extract invisible or white-on-white text hidden inside a PDF document.",
+    keywords:
+      "extract hidden text, find invisible text, get ocr layer, pdf gizli metin çıkar, görünmez yazıları bul",
     h1: "Hidden Text Detector",
     tagline: "Uncover hidden trackers, SEO spam, or steganography.",
     howToName: "How to detect hidden text in PDF",
@@ -4131,6 +4407,8 @@ export const extractHiddenTextCopy = {
     title: "Gizli Yazı Dedektörü — Forensics aracı",
     description:
       "Adli bilişim (forensics) amaçlı olarak PDF içine gizlenmiş, görünmez kodlu veya beyaz metinleri tespit edip çıkarın.",
+    keywords:
+      "pdf gizli metin çıkar, görünmez yazıları al, ocr katmanını bul, extract hidden text",
     h1: "Gizli Metin Sökücü",
     tagline: "SEO spamlarnı veya görünmez filigranları ortaya çıkarın.",
     howToName: "PDF'den gizli metin nasıl çıkarılır",
@@ -4157,6 +4435,8 @@ export const wipeBookmarksCopy = {
     title: "Wipe Bookmarks — remove TOC",
     description:
       "Completely delete the Table of Contents (Bookmarks) structure from a PDF for privacy or file size reduction.",
+    keywords:
+      "remove bookmarks, wipe outlines, delete toc, pdf yer imlerini sil, içindekiler tablosunu temizle",
     h1: "Remove PDF Bookmarks",
     tagline: "Hide your document structure before publishing.",
     howToName: "How to delete PDF bookmarks",
@@ -4180,6 +4460,8 @@ export const wipeBookmarksCopy = {
     title: "İçindekiler Silici — Outline Yok Et",
     description:
       'Gizlilik veya boyut tasarrufu amacıyla PDF içindeki "İçindekiler" (Bookmarks/Outlines) ağacını tamamen yok edin.',
+    keywords:
+      "pdf yer imlerini sil, outline temizle, içindekileri kaldır, remove pdf bookmarks",
     h1: "PDF İçindekiler Silici",
     tagline: "Belgenizin iskeletini ve başlık hiyerarşisini gizleyin.",
     howToName: "PDF içindekiler nasıl silinir",
@@ -4206,6 +4488,8 @@ export const extractTablesCopy = {
     title: "Extract Tables — PDF to CSV",
     description:
       "Mathematically analyze bounding boxes to extract tabular data from PDF into an Excel-ready CSV format.",
+    keywords:
+      "extract tables pdf, pdf to csv, pdf to excel, get grid data, pdf tablo çıkar, pdf excel yap, tablo ayıkla",
     h1: "PDF to CSV Converter",
     tagline: "Automated tabular data extraction for analysts.",
     howToName: "How to extract PDF tables",
@@ -4229,6 +4513,8 @@ export const extractTablesCopy = {
     title: "Tablo Çıkarıcı — PDF to CSV",
     description:
       "PDF içindeki metin hizalamalarını matematiksel analiz ederek verileri Excel (CSV) formatına dökün.",
+    keywords:
+      "pdf tablo çıkar, pdf excel yap, pdf to csv, tablo ayıkla, extract tables",
     h1: "PDF Tablo Çıkarıcı (CSV)",
     tagline: "Fatura ve veri analizleri için birebir.",
     howToName: "PDF içindeki tablolar nasıl çıkarılır",
@@ -4255,6 +4541,8 @@ export const pdfToJsonCopy = {
     title: "PDF to JSON — for developers",
     description:
       "Convert a PDF into a structured JSON payload containing text, fonts, and bounding box coordinates.",
+    keywords:
+      "pdf to json, structured pdf data, parse pdf, extract data json, pdf json yap, verileri json al",
     h1: "PDF to JSON Converter",
     tagline: "A developer tool for AI pipelines and parsing.",
     howToName: "How to convert PDF to JSON",
@@ -4278,6 +4566,8 @@ export const pdfToJsonCopy = {
     title: "PDF to JSON — Yazılımcılar İçin",
     description:
       "Yazılımcılar ve AI projeleri için PDF belgelerini tüm yapısal haritası ve koordinatlarıyla JSON formatına çevirin.",
+    keywords:
+      "pdf json yap, verileri json al, pdf to json, parse pdf, yapılandırılmış veri",
     h1: "PDF to JSON Çevirici",
     tagline: "Geliştiricilerin aradığı o eşsiz araç.",
     howToName: "PDF JSON formatına nasıl çevrilir",
@@ -4304,6 +4594,8 @@ export const scanToPdfCopy = {
     title: "Scan to PDF — camera scanner",
     description:
       "Use your webcam or mobile camera to snap pictures of documents and instantly turn them into a single PDF.",
+    keywords:
+      "scan to pdf, camera to pdf, webcam scanner, dijital tarayıcı, kameradan pdf yap, fotoğraf pdf",
     h1: "Camera Scanner to PDF",
     tagline: "Turn your device into a portable document scanner.",
     howToName: "How to scan documents to PDF",
@@ -4327,6 +4619,8 @@ export const scanToPdfCopy = {
     title: "Kameradan PDF — Scan to PDF",
     description:
       "Bilgisayar veya telefon kameranızı kullanarak fiziksel evraklarınızı anında tek bir PDF belgesine dönüştürün.",
+    keywords:
+      "kameradan pdf yap, fotoğrafı pdf yap, web tarayıcı, scan to pdf, camera scanner",
     h1: "Kamera Tarayıcı (Scan to PDF)",
     tagline: "Cihazınızı portatif bir tarayıcıya dönüştürün.",
     howToName: "Kameradan PDF nasıl yapılır",
@@ -4353,6 +4647,8 @@ export const audioReaderCopy = {
     title: "Audio Reader — Text to Speech",
     description:
       "Extract raw text from a PDF optimized for audio reading (Text-to-Speech) software and audiobooks.",
+    keywords:
+      "listen to pdf, read pdf aloud, pdf text to speech, tts pdf, sesli pdf okuma, pdf dinle, metin seslendirme",
     h1: "PDF Audio Reader Prep",
     tagline: "Prepare your documents for smooth listening.",
     howToName: "How to make a PDF ready for audio",
@@ -4376,6 +4672,8 @@ export const audioReaderCopy = {
     title: "Sesli Okuma — TTS Hazırlık",
     description:
       "PDF belgelerindeki metinleri Sesli Kitap (Text-to-Speech) uygulamalarının pürüzsüz okuyabilmesi için saf txt formatına dökün.",
+    keywords:
+      "sesli pdf okuma, pdf dinle, metin seslendirme, tts pdf, listen to pdf, read aloud pdf",
     h1: "Sesli Okuyucu Hazırlığı",
     tagline: "Belgelerinizi dinlemek için en temiz formata çevirin.",
     howToName: "PDF sese nasıl çevrilir",
