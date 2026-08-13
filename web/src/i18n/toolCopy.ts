@@ -1836,9 +1836,9 @@ export const extractimagesCopy = {
     howToName: 'How to use Extract Images',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document containing photos or graphics onto the page.' },
+      { name: 'Extract images', text: 'We scan the resource dictionaries locally to safely extract all embedded image files.' },
+      { name: 'Download ZIP', text: 'Download a ZIP archive containing all the original, untouched images from your document.' }
     ]
   },
   tr: {
@@ -1849,9 +1849,9 @@ export const extractimagesCopy = {
     howToName: 'Görselleri Çıkar Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçinde fotoğraflar veya grafikler bulunan PDF belgesini sayfaya bırak.' },
+      { name: 'Resimleri ayıkla', text: 'Gömülü tüm resim dosyalarını kurtarmak için PDF kaynak sözlüklerini yerel olarak tarıyoruz.' },
+      { name: 'ZIP indir', text: 'Belgedeki orijinal ve dokunulmamış tüm görselleri içeren tek bir ZIP arşivi indirin.' }
     ]
   }
 };
@@ -1865,9 +1865,9 @@ export const addpagenumbersCopy = {
     howToName: 'How to use Add Page Numbers',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document that needs pagination onto the page.' },
+      { name: 'Add numbers', text: 'We automatically calculate the position and stamp sequential page numbers locally.' },
+      { name: 'Download PDF', text: 'Download your neatly organized and professionally numbered document.' }
     ]
   },
   tr: {
@@ -1878,9 +1878,9 @@ export const addpagenumbersCopy = {
     howToName: 'Sayfa Numarası Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Sayfa numarası eklenmesi gereken PDF belgesini sayfaya bırakın.' },
+      { name: 'Numara ekle', text: 'Doğru konumu otomatik hesaplayarak sıralı sayfa numaralarını belgenize yerel olarak basıyoruz.' },
+      { name: 'PDF indir', text: 'Profesyonel bir şekilde numaralandırılmış ve düzenlenmiş belgenizi anında indirin.' }
     ]
   }
 };
@@ -1894,9 +1894,9 @@ export const removeblankpagesCopy = {
     howToName: 'How to use Remove Blank Pages',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a batch-scanned PDF that contains unwanted empty pages.' },
+      { name: 'Detect blanks', text: 'We perform a local pixel-level analysis to find completely blank or white pages.' },
+      { name: 'Download PDF', text: 'Download your cleaned-up document with all empty separator pages securely removed.' }
     ]
   },
   tr: {
@@ -1907,9 +1907,9 @@ export const removeblankpagesCopy = {
     howToName: 'Boş Sayfaları Sil Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Arasında istenmeyen boş sayfalar bulunan toplu taranmış PDF belgesini bırakın.' },
+      { name: 'Boşlukları bul', text: 'Tamamen beyaz veya boş sayfaları bulmak için yerel piksel analizi yapıyoruz.' },
+      { name: 'PDF indir', text: 'Tüm boş sayfalardan güvenli bir şekilde arındırılmış temiz belgenizi indirin.' }
     ]
   }
 };
@@ -1924,9 +1924,9 @@ export const removeAnnotationsCopy = {
     howToName: 'How to remove annotations from a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select the PDF file.' },
-      { name: 'Clean', text: 'All annotations will be instantly stripped locally.' },
-      { name: 'Download', text: 'Get your clean PDF.' }
+      { name: 'Add your PDF', text: 'Drop a PDF filled with sticky notes, highlights, or form fields.' },
+      { name: 'Clean document', text: 'We safely strip all interactive annotations and comments directly within your browser.' },
+      { name: 'Download PDF', text: 'Download a completely clean, read-only version of your original document.' }
     ],
   },
   tr: {
@@ -1937,9 +1937,9 @@ export const removeAnnotationsCopy = {
     howToName: 'PDF açıklamaları nasıl silinir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyasını seçin.' },
-      { name: 'Temizle', text: 'Tüm açıklamalar cihazınızda anında silinir.' },
-      { name: 'İndir', text: 'Temiz PDF dosyanızı alın.' }
+      { name: 'PDF dosyanı ekle', text: 'Vurgular, yorumlar veya doldurulmuş form alanları içeren PDF belgesini bırakın.' },
+      { name: 'Belgeyi temizle', text: 'Tüm etkileşimli açıklamaları ve yorumları tarayıcınızın içinde güvenli bir şekilde siliyoruz.' },
+      { name: 'PDF indir', text: 'Orijinal belgenizin tamamen temizlenmiş, salt okunur yeni versiyonunu indirin.' }
     ],
   }
 };
@@ -1953,9 +1953,9 @@ export const pdfToWebpCopy = {
     howToName: 'How to convert PDF to WebP',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Drop your PDF here.' },
-      { name: 'Convert', text: 'Pages are converted to high-quality WebP.' },
-      { name: 'Download', text: 'Download the ZIP archive.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to convert into images.' },
+      { name: 'Convert pages', text: 'We render each page locally into a high-quality, lightweight WebP image.' },
+      { name: 'Download ZIP', text: 'Download a ZIP archive containing your fast-loading, web-optimized image files.' }
     ],
   },
   tr: {
@@ -1966,9 +1966,9 @@ export const pdfToWebpCopy = {
     howToName: 'PDF WebP formatına nasıl dönüştürülür',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı sürükleyin.' },
-      { name: 'Dönüştür', text: 'Sayfalar yüksek kaliteli WebP olarak dönüştürülür.' },
-      { name: 'İndir', text: 'ZIP arşivini indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Görüntü dosyalarına dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.' },
+      { name: 'Sayfaları çevir', text: 'Her sayfayı yerel olarak yüksek kaliteli ve çok hafif WebP görsellerine dönüştürüyoruz.' },
+      { name: 'ZIP indir', text: 'Web için optimize edilmiş, süper hızlı yüklenen görsellerinizi tek bir ZIP arşivinde indirin.' }
     ],
   }
 };
@@ -1982,9 +1982,9 @@ export const autoCropCopy = {
     howToName: 'How to auto-crop a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a scanned or wide-margin PDF.' },
-      { name: 'Analyze', text: 'Each page is analyzed to find the actual content box.' },
-      { name: 'Download', text: 'Download the cropped, mobile-friendly PDF.' }
+      { name: 'Add your PDF', text: 'Drop a scanned document or a PDF with large white borders.' },
+      { name: 'Detect margins', text: 'We analyze each page locally to detect the exact content bounding box.' },
+      { name: 'Download PDF', text: 'Download your mobile-friendly document with all unnecessary white margins perfectly cropped.' }
     ],
   },
   tr: {
@@ -1995,9 +1995,9 @@ export const autoCropCopy = {
     howToName: 'PDF otomatik olarak nasıl kırpılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Geniş kenarlı veya taranmış bir PDF seçin.' },
-      { name: 'Analiz', text: 'Her sayfanın içeriği tespit edilerek sınırları çizilir.' },
-      { name: 'İndir', text: 'Kırpılmış ve telefonda okunması kolay PDF dosyanızı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Geniş beyaz kenarlıkları olan veya taranmış PDF belgesini sayfaya bırakın.' },
+      { name: 'Sınırları bul', text: 'Asıl içerik alanını bulmak için her sayfayı yerel olarak tek tek analiz ediyoruz.' },
+      { name: 'PDF indir', text: 'Gereksiz beyaz boşlukları mükemmel şekilde kırpılmış, mobilde okunması kolay belgenizi indirin.' }
     ],
   }
 };
@@ -2012,9 +2012,9 @@ export const extractTocCopy = {
     howToName: 'How to extract bookmarks from a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select a PDF that has an embedded outline.' },
-      { name: 'Extract', text: 'The bookmarks are parsed entirely in your browser.' },
-      { name: 'Download', text: 'Get your Markdown (.md) file.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document containing a table of contents or bookmarks.' },
+      { name: 'Parse outlines', text: 'We scan the internal document structure locally to extract the entire bookmark hierarchy.' },
+      { name: 'Download Markdown', text: 'Download a neatly structured text file containing your complete table of contents.' }
     ],
   },
   tr: {
@@ -2025,9 +2025,9 @@ export const extractTocCopy = {
     howToName: 'PDF\'ten içindekiler nasıl çıkarılır',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'İçindekiler kısmı olan bir PDF seçin.' },
-      { name: 'Çıkar', text: 'Başlık ağacı tamamen tarayıcınızda ayrıştırılır.' },
-      { name: 'İndir', text: 'Markdown (.md) dosyanızı indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'İçindekiler tablosu veya yer imleri içeren PDF belgesini sayfaya bırakın.' },
+      { name: 'Başlıkları çıkar', text: 'Tüm yer imi hiyerarşisini çıkarmak için belgenin iç yapısını yerel olarak tarıyoruz.' },
+      { name: 'Markdown indir', text: 'Tüm içindekiler tablosunu içeren düzenli ve yapılandırılmış metin dosyasını indirin.' }
     ],
   }
 };
@@ -2041,9 +2041,9 @@ export const overlayPdfCopy = {
     howToName: 'How to add a letterhead to a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload Target', text: 'Select the main PDF document you want to stamp.' },
-      { name: 'Upload Template', text: 'Select your 1-page letterhead or template PDF.' },
-      { name: 'Download', text: 'Get your branded PDF document.' }
+      { name: 'Add target PDF', text: 'Select the main PDF document you want to stamp with a letterhead.' },
+      { name: 'Add template', text: 'Select your 1-page letterhead or design template PDF to use as the background.' },
+      { name: 'Download PDF', text: 'Download your newly branded document with the template seamlessly applied to every page.' }
     ],
   },
   tr: {
@@ -2054,9 +2054,9 @@ export const overlayPdfCopy = {
     howToName: 'PDF\'e antet veya şablon nasıl eklenir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Hedefi Yükle', text: 'Şablon basmak istediğiniz ana PDF\'i seçin.' },
-      { name: 'Şablon Yükle', text: '1 sayfalık antetli kağıdınızı veya şablon PDF\'inizi seçin.' },
-      { name: 'İndir', text: 'Kurumsal PDF belgenizi indirin.' }
+      { name: 'Ana PDF\'i ekle', text: 'Antet veya şablon eklemek istediğiniz asıl PDF belgesini seçin.' },
+      { name: 'Şablonu ekle', text: 'Arka plan olarak kullanılacak tek sayfalık tasarım veya antetli kağıdınızı seçin.' },
+      { name: 'PDF indir', text: 'Şablonun tüm sayfalara kusursuzca uygulandığı yeni kurumsal belgenizi indirin.' }
     ],
   }
 };
@@ -2070,9 +2070,9 @@ export const changeBgCopy = {
     howToName: 'How to change the background color of a PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your PDF document.' },
-      { name: 'Select Color', text: 'Pick a color like Dark Gray or Sepia.' },
-      { name: 'Download', text: 'Download the recolored PDF.' }
+      { name: 'Add your PDF', text: 'Drop a transparent or white PDF document onto the page.' },
+      { name: 'Select color', text: 'Choose a soothing color like Dark Gray or Sepia to reduce eye strain.' },
+      { name: 'Download PDF', text: 'Download your newly recolored document, perfectly optimized for nighttime reading.' }
     ],
   },
   tr: {
@@ -2083,9 +2083,9 @@ export const changeBgCopy = {
     howToName: 'PDF arka plan rengi nasıl değiştirilir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'PDF belgenizi seçin.' },
-      { name: 'Renk Seç', text: 'Koyu Gri veya Sepya gibi bir zemin rengi belirleyin.' },
-      { name: 'İndir', text: 'Yeniden renklendirilmiş PDF\'inizi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Şeffaf veya beyaz arka planlı PDF belgenizi sayfaya bırakın.' },
+      { name: 'Rengi seç', text: 'Göz yorgunluğunu azaltmak için Koyu Gri veya Sepya gibi dinlendirici bir renk belirleyin.' },
+      { name: 'PDF indir', text: 'Gece okuması veya uzun çalışmalar için mükemmel hale getirilmiş yeni belgenizi indirin.' }
     ],
   }
 };
@@ -2158,9 +2158,9 @@ export const contrastEnhancerCopy = {
     howToName: 'How to enhance a scanned PDF',
     howItWorks: 'How it works',
     steps: [
-      { name: 'Upload', text: 'Select your scanned PDF.' },
-      { name: 'Adjust', text: 'Set your desired brightness and contrast.' },
-      { name: 'Download', text: 'Download the enhanced PDF.' }
+      { name: 'Add your PDF', text: 'Drop the poorly scanned or faded PDF document onto the page.' },
+      { name: 'Enhance contrast', text: 'We locally process image filters to increase brightness and adjust contrast for perfect readability.' },
+      { name: 'Download PDF', text: 'Download the enhanced, crisp, and clear document instantly.' }
     ],
   },
   tr: {
@@ -2171,9 +2171,9 @@ export const contrastEnhancerCopy = {
     howToName: 'Taranmış PDF nasıl netleştirilir',
     howItWorks: 'Nasıl çalışır',
     steps: [
-      { name: 'Yükle', text: 'Taranmış PDF\'nizi seçin.' },
-      { name: 'Ayarla', text: 'Parlaklık ve kontrast oranını belirleyin.' },
-      { name: 'İndir', text: 'Netleştirilmiş PDF\'inizi indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Kötü taranmış veya soluk görünen PDF belgenizi sayfaya bırakın.' },
+      { name: 'Kontrastı artır', text: 'Mükemmel okunabilirlik için parlaklık ve kontrast filtrelerini yerel olarak uyguluyoruz.' },
+      { name: 'PDF indir', text: 'Metinlerin cam gibi netleştiği, geliştirilmiş belgenizi anında indirin.' }
     ],
   }
 };

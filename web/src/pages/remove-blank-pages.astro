@@ -1,10 +1,10 @@
 ---
 import { RemoveBlankPagesShell } from '../components/RemoveBlankPagesShell';
 import ToolPage from '../layouts/ToolPage.astro';
-import { pdftosvgCopy } from '../i18n/toolCopy';
+import { removeblankpagesCopy } from '../i18n/toolCopy';
 import { en } from '../i18n/en';
 ---
 
-<ToolPage lang="en" badgeLabel="CONVERT FROM PDF \u00B7 PDF TO SVG" {...pdftosvgCopy.en}>
+<ToolPage lang="en" badgeLabel="ORGANIZE · REMOVE BLANK" {...removeblankpagesCopy.en}>
   <RemoveBlankPagesShell client:load t={en} />
 </ToolPage>

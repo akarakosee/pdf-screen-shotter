@@ -6,15 +6,6 @@ import { OverlayPdfShell } from '../components/OverlayPdfShell';
 const copy = overlayPdfCopy.en;
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
+<ToolPage lang="en" badgeLabel="EDIT · OVERLAY" {...copy}>
   <OverlayPdfShell client:load />
 </ToolPage>

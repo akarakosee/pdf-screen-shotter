@@ -6,15 +6,6 @@ import { ContrastEnhancerShell } from '../components/ContrastEnhancerShell';
 const copy = contrastEnhancerCopy.en;
 ---
 
-<ToolPage
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  lang="en"
->
+<ToolPage lang="en" badgeLabel="EDIT · SCAN" {...copy}>
   <ContrastEnhancerShell client:load />
 </ToolPage>
