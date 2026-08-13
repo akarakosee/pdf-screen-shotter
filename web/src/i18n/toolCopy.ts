@@ -829,9 +829,9 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to convert JPG images to PDF online",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload Images", text: "Drop one or more JPG, PNG, or WebP images onto the page." },
-      { name: "Reorder & Configure", text: "Drag to reorder photos, choose page size, orientation, and margin." },
-      { name: "Create PDF", text: "Download your beautifully combined PDF document instantly." }
+      { name: 'Add your images', text: 'Drop one or more JPG/JPEG photos you want to combine into a document.' },
+      { name: 'Arrange pages', text: 'We instantly process your images locally to assemble them into a structured file.' },
+      { name: 'Download PDF', text: 'Download your high-quality, multi-page PDF document securely.' }
     ],
     crossLink: { href: "/pdf-to-jpg", label: "Need to extract images from a PDF? Convert PDF to JPG." },
   },
@@ -843,9 +843,9 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "Görsellerden PDF nasıl oluşturulur",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "Görselleri Yükle", text: "Bir veya daha fazla JPG, PNG ya da WebP dosyasını sürükleyin." },
-      { name: "Sırala ve Ayarla", text: "Fotoğrafların sırasını değiştirin, sayfa boyutu ve kenar boşluğu seçin." },
-      { name: "PDF Oluştur", text: "Birleştirilmiş PDF belgenizi anında cihazınıza indirin." }
+      { name: 'Resimleri ekle', text: 'Tek bir belgede birleştirmek istediğiniz bir veya daha fazla JPG/JPEG fotoğrafını bırakın.' },
+      { name: 'Sayfaları düzenle', text: 'Fotoğraflarınızı düzgün yapılandırılmış bir belgede toplamak için yerel olarak anında işliyoruz.' },
+      { name: 'PDF indir', text: 'Yüksek kaliteli ve çok sayfalı yeni PDF belgenizi güvenle indirin.' }
     ],
     crossLink: { href: "/tr/pdf-to-jpg", label: "PDF içindeki görselleri dışarı mı çıkarmak istiyorsunuz? PDF'ten JPG'ye." },
   },
@@ -859,9 +859,9 @@ export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "How to convert PNG images to PDF online",
     howItWorks: "How it works",
     steps: [
-      { name: "Upload PNGs", text: "Drop one or more PNG images onto the page." },
-      { name: "Reorder & Configure", text: "Drag to reorder diagrams, choose page size, orientation, and margin." },
-      { name: "Create PDF", text: "Download your beautifully combined PDF document instantly." }
+      { name: 'Add your images', text: 'Drop one or more PNG image files you want to combine into a document.' },
+      { name: 'Arrange pages', text: 'We instantly process your images locally to assemble them into a structured file.' },
+      { name: 'Download PDF', text: 'Download your high-quality, multi-page PDF document securely.' }
     ],
     crossLink: { href: "/pdf-to-png", label: "Need to extract lossless PNGs from a PDF? Convert PDF to PNG." },
   },
@@ -873,9 +873,9 @@ export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     howToName: "PNG görsellerinden PDF nasıl oluşturulur",
     howItWorks: "Nasıl çalışır",
     steps: [
-      { name: "PNG'leri Yükle", text: "Bir veya daha fazla PNG dosyasını sürükleyin." },
-      { name: "Sırala ve Ayarla", text: "Şemaların sırasını değiştirin, sayfa boyutu ve kenar boşluğu seçin." },
-      { name: "PDF Oluştur", text: "Birleştirilmiş PDF belgenizi anında cihazınıza indirin." }
+      { name: 'Resimleri ekle', text: 'Tek bir belgede birleştirmek istediğiniz bir veya daha fazla PNG dosyasını sayfaya bırakın.' },
+      { name: 'Sayfaları düzenle', text: 'Resimlerinizi düzgün yapılandırılmış bir belgede toplamak için yerel olarak anında işliyoruz.' },
+      { name: 'PDF indir', text: 'Yüksek çözünürlüklü ve çok sayfalı yeni PDF belgenizi güvenle indirin.' }
     ],
     crossLink: { href: "/tr/pdf-to-png", label: "PDF içindeki sayfaları kayıpsız PNG olarak mı çıkarmak istiyorsunuz? PDF'ten PNG'ye." },
   },
@@ -1662,9 +1662,9 @@ export const mixpdfCopy = {
     howToName: 'How to use Alternate & Mix PDF',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add PDFs', text: 'Drop the two PDF documents you want to interleave onto the page.' },
+      { name: 'Mix pages', text: 'We locally alternate pages from both documents to create a single, merged file.' },
+      { name: 'Download PDF', text: 'Download your perfectly mixed document securely.' }
     ]
   },
   tr: {
@@ -1675,9 +1675,9 @@ export const mixpdfCopy = {
     howToName: 'Alternate & Mix PDF Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF\'leri ekle', text: 'Sayfalarını harmanlamak istediğiniz iki PDF belgesini sayfaya bırakın.' },
+      { name: 'Sayfaları karıştır', text: 'Tek bir belge oluşturmak için her iki dosyanın sayfalarını yerel olarak sırayla birleştiriyoruz.' },
+      { name: 'PDF indir', text: 'Mükemmel bir şekilde harmanlanmış yeni belgenizi güvenle indirin.' }
     ]
   }
 };
@@ -1691,9 +1691,9 @@ export const splithalfpdfCopy = {
     howToName: 'How to use Split PDF in Half',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a PDF containing scanned 2-up spreads or side-by-side pages.' },
+      { name: 'Split spreads', text: 'We calculate the center locally and cut each spread into two separate pages.' },
+      { name: 'Download PDF', text: 'Download your perfectly separated, 1-up page document.' }
     ]
   },
   tr: {
@@ -1704,9 +1704,9 @@ export const splithalfpdfCopy = {
     howToName: 'Split PDF in Half Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Yan yana taranmış kitap veya dergi sayfaları içeren PDF belgesini bırakın.' },
+      { name: 'Sayfaları ayır', text: 'Merkez noktasını yerel olarak hesaplayıp her sayfayı tam ortadan ikiye bölüyoruz.' },
+      { name: 'PDF indir', text: 'Mükemmel şekilde ayrılmış ve tekli sayfalara dönüştürülmüş belgenizi indirin.' }
     ]
   }
 };
@@ -1720,9 +1720,9 @@ export const extractbykeywordCopy = {
     howToName: 'How to use Extract by Keyword',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a large PDF document and enter the specific keyword you are looking for.' },
+      { name: 'Search text', text: 'We scan all pages locally to locate every instance of your exact keyword.' },
+      { name: 'Download PDF', text: 'Download a new PDF containing only the pages that matched your search.' }
     ]
   },
   tr: {
@@ -1733,9 +1733,9 @@ export const extractbykeywordCopy = {
     howToName: 'Extract by Keyword Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Büyük boyutlu PDF belgenizi bırakın ve aradığınız anahtar kelimeyi yazın.' },
+      { name: 'Metni ara', text: 'Anahtar kelimenizin geçtiği yerleri bulmak için tüm sayfaları yerel olarak tarıyoruz.' },
+      { name: 'PDF indir', text: 'Yalnızca aramanızla eşleşen sayfaları içeren yeni PDF belgenizi indirin.' }
     ]
   }
 };
@@ -1749,9 +1749,9 @@ export const splitbysizeCopy = {
     howToName: 'How to use Split by Size',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a large PDF document and specify your maximum desired file size in MB.' },
+      { name: 'Calculate parts', text: 'We analyze the document locally to split it securely without exceeding the limit.' },
+      { name: 'Download ZIP', text: 'Download a ZIP archive containing all the perfectly sized PDF parts.' }
     ]
   },
   tr: {
@@ -1762,9 +1762,9 @@ export const splitbysizeCopy = {
     howToName: 'Split by Size Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Büyük PDF belgenizi bırakın ve istediğiniz maksimum dosya boyutunu MB olarak girin.' },
+      { name: 'Parçaları hesapla', text: 'Belgeyi sınırı aşmayacak şekilde güvenle bölmek için yerel olarak analiz ediyoruz.' },
+      { name: 'ZIP indir', text: 'Tam istediğiniz boyutta parçalara ayrılmış PDF dosyalarınızı içeren ZIP arşivini indirin.' }
     ]
   }
 };
@@ -1778,9 +1778,9 @@ export const addmarginsCopy = {
     howToName: 'How to use Add Margins',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop a PDF document that needs extra padding or binding space.' },
+      { name: 'Adjust margins', text: 'We calculate the new dimensions and add perfect white borders locally.' },
+      { name: 'Download PDF', text: 'Download your perfectly padded document, ready for printing or binding.' }
     ]
   },
   tr: {
@@ -1791,9 +1791,9 @@ export const addmarginsCopy = {
     howToName: 'Add Margins Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Ekstra kenar boşluğuna veya cilt payına ihtiyaç duyan PDF belgenizi bırakın.' },
+      { name: 'Boşlukları ayarla', text: 'Yeni boyutları hesaplayarak sayfaların etrafına yerel olarak beyaz kenarlıklar ekliyoruz.' },
+      { name: 'PDF indir', text: 'Baskı veya ciltleme için mükemmel şekilde ayarlanmış yeni belgenizi indirin.' }
     ]
   }
 };
@@ -1807,9 +1807,9 @@ export const pdftosvgCopy = {
     howToName: 'How to use PDF to SVG',
     howItWorks: 'Upload your file and process it instantly in your browser.',
     steps: [
-      { name: 'Upload', text: 'Select your PDF file.' },
-      { name: 'Process', text: 'Apply the settings.' },
-      { name: 'Download', text: 'Save your file securely.' }
+      { name: 'Add your PDF', text: 'Drop the PDF document you want to convert to vectors.' },
+      { name: 'Convert to SVG', text: 'We locally parse the PDF drawing commands and render them into highly accurate SVG graphics.' },
+      { name: 'Download ZIP', text: 'Download a ZIP archive containing your infinitely scalable vector files.' }
     ]
   },
   tr: {
@@ -1820,9 +1820,9 @@ export const pdftosvgCopy = {
     howToName: 'PDF to SVG Nasıl Kullanılır',
     howItWorks: 'Dosyanızı yükleyin ve tarayıcınızda anında işleyin.',
     steps: [
-      { name: 'Yükle', text: 'PDF dosyanızı seçin.' },
-      { name: 'İşle', text: 'Ayarları uygulayın.' },
-      { name: 'İndir', text: 'Dosyanızı güvenle indirin.' }
+      { name: 'PDF dosyanı ekle', text: 'Vektörel grafiklere dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.' },
+      { name: 'SVG\'ye çevir', text: 'Belgedeki çizim komutlarını yerel olarak ayrıştırıp son derece hassas SVG grafiklerine dönüştürüyoruz.' },
+      { name: 'ZIP indir', text: 'Sonsuz ölçeklenebilir ve kayıpsız vektör dosyalarınızı içeren ZIP arşivini indirin.' }
     ]
   }
 };
@@ -1914,7 +1914,6 @@ export const removeblankpagesCopy = {
   }
 };
 
-
 export const removeAnnotationsCopy = {
   en: {
     title: 'Remove Annotations — clear comments and forms from PDF',
@@ -2001,7 +2000,6 @@ export const autoCropCopy = {
     ],
   }
 };
-
 
 export const extractTocCopy = {
   en: {
@@ -2090,7 +2088,6 @@ export const changeBgCopy = {
   }
 };
 
-
 export const autoRedactCopy = {
   en: {
     title: 'Auto-Redact PII — hide sensitive information',
@@ -2177,7 +2174,6 @@ export const contrastEnhancerCopy = {
     ],
   }
 };
-
 
 export const pdfToHtmlCopy = {
   en: {
@@ -2324,7 +2320,6 @@ export const removeDuplicatesCopy = {
   }
 };
 
-
 export const extractAttachmentsCopy = {
   en: {
     title: 'Extract Attachments — recover embedded files',
@@ -2411,7 +2406,6 @@ export const removeTextCopy = {
     ],
   }
 };
-
 
 export const extractJavascriptCopy = {
   en: {
@@ -2500,7 +2494,6 @@ export const splitBlankCopy = {
   }
 };
 
-
 export const viewerPrefsCopy = {
   en: {
     title: 'Viewer Preferences — PDF auto open settings',
@@ -2587,7 +2580,6 @@ export const wipeBookmarksCopy = {
     ],
   }
 };
-
 
 export const extractTablesCopy = {
   en: {
