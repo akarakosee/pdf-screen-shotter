@@ -33,13 +33,18 @@ const t = {
         href={p === '' ? '/' : '/tr/'}
         class="flex items-center gap-2.5 font-heading text-md font-semibold tracking-tight"
       >
-        <span
-          class="relative flex h-[22px] w-[22px] items-center justify-center rounded-[3px] border-[1.5px] border-amber dark:border-amber-dark"
-        >
-          <span
-            class="h-1.5 w-1.5 rounded-full bg-amber shadow-[0_0_8px_var(--color-amber)] dark:bg-amber-dark dark:shadow-[0_0_8px_var(--color-amber-dark)]"
-          ></span>
-        </span>
+        <svg class="h-6 w-6 shrink-0" viewBox="0 0 256 256" aria-hidden="true">
+          <defs>
+            <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--color-amber-dark, #d69d3a)" />
+              <stop offset="100%" stop-color="var(--color-amber, #b5822f)" />
+            </linearGradient>
+          </defs>
+          <path d="M168,32H72A16,16,0,0,0,56,48V208a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V72Z" fill="none" stroke="url(#headerGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M164,32v40h40" fill="none" stroke="url(#headerGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+          <rect x="96" y="140" width="64" height="48" rx="8" fill="url(#headerGrad)" />
+          <path d="M108,140 V120 A20,20,0,0,1,148,120 V140" fill="none" stroke="url(#headerGrad)" stroke-width="16" stroke-linecap="round" />
+        </svg>
         GoSecurePDF
       </a>
       <nav class="flex items-center gap-1 font-mono">
