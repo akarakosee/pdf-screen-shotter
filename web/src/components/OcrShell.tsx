@@ -184,7 +184,7 @@ export function OcrShell({ t = en }: Props) {
             <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
               Extracting Text via AI...
             </h3>
-            <p className="text-sm font-mono text-ink-muted dark:text-ink-muted-dark max-w-md mx-auto min-h-[40px]">
+            <p className="text-sm font-mono text-ink-muted dark:text-ink-muted-dark w-full min-h-[40px]">
               {progressMsg || 'Processing...'}
             </p>
             <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-4 bg-bg dark:bg-bg-dark p-2 rounded-md border border-zinc-100 dark:">

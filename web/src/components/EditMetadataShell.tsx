@@ -110,7 +110,7 @@ export function EditMetadataShell({ t = en }: Props) {
       )}
 
       {(phase === 'edit' || phase === 'processing') && file && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full">
           <div className="bg-surface dark:bg-surface-dark rounded-2xl p-6 border  shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-lg bg-accent/10 dark:bg-teal-dark/10 flex items-center justify-center text-accent dark:text-teal-dark">

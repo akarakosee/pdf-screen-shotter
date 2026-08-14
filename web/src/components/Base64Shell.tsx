@@ -104,7 +104,7 @@ export function Base64Shell({ t = en }: Props) {
       {toast && <Toast data={toast} onDismiss={() => setToast(null)} />}
       
       {phase === 'choose' && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button 
               onClick={() => setPhase('upload_pdf')}
