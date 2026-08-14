@@ -5,16 +5,24 @@
       <stop offset="100%" stop-color="#b5822f" />
     </linearGradient>
   </defs>
-  <!-- Document body with clean folded corner cutout -->
+
+  <!--
+    Document body: x from 6 to 18, y from 2 to 22
+    Inner area: x 6.8–17.2 / y 2.8–21.2
+    Below fold (y > 8.8): center x=12, center y=(8.8+21.2)/2=15
+    Lock total height: y=11 to y=19  →  center y=15  ✓
+  -->
+
+  <!-- Document outline (Lucide file icon geometry) -->
   <path
-    d="M4 2h10l6 6v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
+    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"
     fill="none"
     stroke="url(#g)"
     stroke-width="1.6"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
-  <!-- Fold crease — single straight line -->
+  <!-- Fold corner -->
   <polyline
     points="14,2 14,8 20,8"
     fill="none"
@@ -23,14 +31,22 @@
     stroke-linecap="round"
     stroke-linejoin="round"
   />
-  <!-- Padlock shackle -->
+
+  <!--
+    Lock centered at (12, 15):
+    Shackle: x 9.5–14.5 (width=5, center=12), top of arc y=11, sides down to y=14
+    Body: x 8.5–15.5 (width=7, center=12), y 13.8–19.3 (height=5.5, center=16.55)
+    Combined: top=11, bottom=19.3 → center=15.15 ≈ 15 ✓
+  -->
+
+  <!-- Padlock shackle: sides from y=14 up to y=12, arc over top -->
   <path
-    d="M9.5 14.5 V12.5 A2.5 2.5 0 0 1 14.5 12.5 V14.5"
+    d="M9.5,14 V12 A2.5,2 0 0 1 14.5,12 V14"
     fill="none"
     stroke="url(#g)"
     stroke-width="1.5"
     stroke-linecap="round"
   />
   <!-- Padlock body -->
-  <rect x="8" y="14" width="8" height="6" rx="1.5" fill="url(#g)" />
+  <rect x="8.5" y="13.8" width="7" height="5.5" rx="1.2" fill="url(#g)" />
 </svg>
