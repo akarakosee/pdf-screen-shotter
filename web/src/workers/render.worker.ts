@@ -92,10 +92,13 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
         post({
           type: doneEvent,
           result: {
-            blobs: [new Blob([fileBuffer], { type: 'application/pdf' })],
-            zipBlob: null,
-            filenames: [fileName],
-            errorCount: 0
+            totalPages: 1,
+            succeeded: 1,
+            failed: [],
+            durationMs: 1000,
+            output: new Blob([fileBuffer], { type: 'application/pdf' }),
+            outputName: fileName,
+            cancelled: false
           }
         });
       }
