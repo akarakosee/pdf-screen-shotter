@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 20 176 220">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="44 24 168 212">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b" />
       <stop offset="100%" stop-color="#b5822f" />
     </linearGradient>
   </defs>
-  <!-- Document outline (medium weight) -->
-  <path d="M155,32 H68 A14,14 0 0 0 54,46 V210 A14,14 0 0 0 68,224 H188 A14,14 0 0 0 202,210 V80 Z" fill="none" stroke="url(#g)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
-  <!-- Fold corner -->
-  <path d="M202,80 H172 A14,14 0 0 1 158,66 V32" fill="none" stroke="url(#g)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
-  <!-- Padlock shackle -->
-  <path d="M110,148 V118 A18,18 0 0 1 146,118 V148" fill="none" stroke="url(#g)" stroke-width="18" stroke-linecap="round" />
-  <!-- Padlock body (solid) -->
-  <rect x="90" y="138" width="76" height="58" rx="12" fill="url(#g)" />
+  <!-- Document outline — thin stroke -->
+  <path d="M156,34 H70 A13,13 0 0 0 57,47 V209 A13,13 0 0 0 70,222 H186 A13,13 0 0 0 199,209 V82 Z" fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Fold -->
+  <path d="M199,82 H173 A13,13 0 0 1 160,69 V34" fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Shackle -->
+  <path d="M113,150 V122 A15,15 0 0 1 143,122 V150" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round" />
+  <!-- Lock body -->
+  <rect x="95" y="141" width="66" height="52" rx="10" fill="url(#g)" />
 </svg>
