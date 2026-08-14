@@ -1,20 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="32 16 192 224">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 20 176 220">
   <defs>
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b" />
       <stop offset="100%" stop-color="#b5822f" />
     </linearGradient>
   </defs>
-  
-  <!-- Bold Document Outline -->
-  <path d="M160,32 H64 A16,16 0 0 0 48,48 V208 A16,16 0 0 0 64,224 H192 A16,16 0 0 0 208,208 V80 Z" fill="none" stroke="url(#headerGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
-  
-  <!-- Bold Fold -->
-  <path d="M208,80 H176 A16,16 0 0 1 160,64 V32" fill="none" stroke="url(#headerGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
-  
-  <!-- Bold Padlock Shackle -->
-  <path d="M104,146 V112 A24,24 0 0 1 152,112 V146" fill="none" stroke="url(#headerGrad)" stroke-width="24" stroke-linecap="round" />
-  
-  <!-- Solid Padlock Body -->
-  <rect x="84" y="136" width="88" height="64" rx="16" fill="url(#headerGrad)" />
+  <!-- Document outline (medium weight) -->
+  <path d="M155,32 H68 A14,14 0 0 0 54,46 V210 A14,14 0 0 0 68,224 H188 A14,14 0 0 0 202,210 V80 Z" fill="none" stroke="url(#g)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Fold corner -->
+  <path d="M202,80 H172 A14,14 0 0 1 158,66 V32" fill="none" stroke="url(#g)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Padlock shackle -->
+  <path d="M110,148 V118 A18,18 0 0 1 146,118 V148" fill="none" stroke="url(#g)" stroke-width="18" stroke-linecap="round" />
+  <!-- Padlock body (solid) -->
+  <rect x="90" y="138" width="76" height="58" rx="12" fill="url(#g)" />
 </svg>

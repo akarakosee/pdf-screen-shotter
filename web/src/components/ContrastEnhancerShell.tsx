@@ -33,7 +33,7 @@ export function ContrastEnhancerShell({ t = en }: Props) {
         setPhase('upload');
       },
       onContrastEnhancerDone: (result) => {
-        if (result.succeeded > 0 && result.output) {
+        if (result.output) {
           setOutput({ blob: result.output, name: result.outputName! });
           setPhase('done');
         } else {

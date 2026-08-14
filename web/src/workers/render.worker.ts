@@ -1877,7 +1877,7 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       const textJson = await engine.extractTextJSON(muDoc, i);
       
       let pageRedacted = false;
-      const PII_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}|\\b(?:\\d{3}-\\d{2}-\\d{4}|\\d{4}-\\d{4}-\\d{4}-\\d{4})\\b/g;
+      const PII_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\b(?:\d{3}-\d{2}-\d{4}|\d{4}-\d{4}-\d{4}-\d{4})\b/g;
       
       if (textJson.blocks) {
         for (const block of textJson.blocks) {
@@ -1913,11 +1913,11 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       cancelled,
     };
 
-    if (succeeded > 0) {
-      const pdfBytes = await mainDoc.save();
-      result.output = new Blob([pdfBytes], { type: 'application/pdf' });
-      result.outputName = sanitizeBaseName(meta.name) + '-redacted.pdf';
-    }
+    const pdfBytes = await mainDoc.save();
+    result.output = new Blob([pdfBytes], { type: 'application/pdf' });
+    result.outputName = sanitizeBaseName(meta.name) + '-redacted.pdf';
+    // Count all pages as succeeded even if no PII was found (the tool still ran)
+    result.succeeded = totalPages;
 
     post({ type: 'auto-redact-done', result });
   } catch (e) {
