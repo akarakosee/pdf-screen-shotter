@@ -99,50 +99,50 @@ export function EditShell({ t = en }: Props) {
 
       {phase === 'edit' && file && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+          <div className="bg-surface dark:bg-surface-dark rounded-2xl p-6 border  shadow-sm">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 dark:bg-teal-dark/10 flex items-center justify-center text-accent dark:text-teal-dark">
                 <Edit3 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">{file.name}</h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Apply Whiteout (Hide Text)</p>
+                <h3 className="font-medium text-ink dark:text-ink-dark line-clamp-1">{file.name}</h3>
+                <p className="text-sm text-ink-muted dark:text-ink-muted-dark">Apply Whiteout (Hide Text)</p>
               </div>
             </div>
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Page Number</label>
-                  <input type="number" min="1" value={pageNumber} onChange={e => setPageNumber(parseInt(e.target.value) || 1)} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" />
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Page Number</label>
+                  <input type="number" min="1" value={pageNumber} onChange={e => setPageNumber(parseInt(e.target.value) || 1)} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">X Position</label>
-                  <input type="number" value={xPos} onChange={e => setXPos(parseInt(e.target.value) || 0)} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" />
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">X Position</label>
+                  <input type="number" value={xPos} onChange={e => setXPos(parseInt(e.target.value) || 0)} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Y Position</label>
-                  <input type="number" value={yPos} onChange={e => setYPos(parseInt(e.target.value) || 0)} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" />
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Y Position</label>
+                  <input type="number" value={yPos} onChange={e => setYPos(parseInt(e.target.value) || 0)} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Width</label>
-                  <input type="number" value={width} onChange={e => setWidth(parseInt(e.target.value) || 0)} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" />
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Width</label>
+                  <input type="number" value={width} onChange={e => setWidth(parseInt(e.target.value) || 0)} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Height</label>
-                  <input type="number" value={height} onChange={e => setHeight(parseInt(e.target.value) || 0)} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" />
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Height</label>
+                  <input type="number" value={height} onChange={e => setHeight(parseInt(e.target.value) || 0)} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" />
                 </div>
               </div>
-              <p className="text-xs text-zinc-500">Note: This will draw an opaque white rectangle over the specified area, hiding any content underneath.</p>
+              <p className="text-xs text-ink-muted dark:text-ink-muted-dark">Note: This will draw an opaque white rectangle over the specified area, hiding any content underneath.</p>
             </div>
 
             <div className="mt-8 flex justify-end gap-3">
-              <button onClick={reset} className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100">
+              <button onClick={reset} className="px-4 py-2 text-sm font-medium text-ink dark:text-ink-dark hover:text-ink dark:hover:text-ink-dark">
                 Cancel
               </button>
-              <button onClick={handleApplyWhiteout} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/20">
+              <button onClick={handleApplyWhiteout} className="flex items-center gap-2 px-4 py-2 bg-accent dark:bg-teal-dark text-white text-sm font-medium rounded-lg hover:opacity-90 focus:ring-4 focus:ring-accent/20">
                 <Download className="w-4 h-4" /> Save Edited PDF
               </button>
             </div>
@@ -152,12 +152,12 @@ export function EditShell({ t = en }: Props) {
 
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-6">
-            <Download className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mb-6">
+            <Download className="w-8 h-8 text-success" />
           </div>
-          <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Done!</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mb-8">Your edited PDF has been downloaded.</p>
-          <button onClick={reset} className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200">
+          <h2 className="text-2xl font-semibold text-ink dark:text-ink-dark mb-2">Done!</h2>
+          <p className="text-ink-muted dark:text-ink-muted-dark mb-8">Your edited PDF has been downloaded.</p>
+          <button onClick={reset} className="inline-flex items-center gap-2 px-4 py-2 bg-ink dark:bg-ink-dark text-white dark:text-bg-dark text-sm font-medium rounded-lg hover:opacity-90">
             <RefreshCw className="w-4 h-4" /> Edit Another
           </button>
         </div>

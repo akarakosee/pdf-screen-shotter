@@ -203,19 +203,19 @@ export function CompareShell({ t = en }: Props) {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Original Document</h3>
+              <h3 className="text-lg font-medium text-ink dark:text-ink-dark">Original Document</h3>
               <DropZone onFiles={addFileA} multiple={false} accept=".pdf" t={t} />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Modified Document</h3>
+              <h3 className="text-lg font-medium text-ink dark:text-ink-dark">Modified Document</h3>
               <DropZone onFiles={addFileB} multiple={false} accept=".pdf" t={t} />
             </div>
           </div>
           <div className="mt-6 flex flex-col items-center gap-4">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">OR</p>
+            <p className="text-sm text-ink-muted dark:text-ink-muted-dark font-medium">OR</p>
             <div className="w-full">
                <DropZone onFiles={addFilesCombo} multiple={true} accept=".pdf" t={t} />
-               <p className="text-center text-xs text-zinc-500 mt-2">Upload exactly 2 files at once</p>
+               <p className="text-center text-xs text-ink-muted dark:text-ink-muted-dark mt-2">Upload exactly 2 files at once</p>
             </div>
             <PrivacyLine t={t} />
           </div>
@@ -225,7 +225,7 @@ export function CompareShell({ t = en }: Props) {
       {phase === 'viewer' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col gap-6 duration-500">
           {/* Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border  bg-white p-4 shadow-sm dark: dark:bg-zinc-900/50">
             <div className="flex items-center gap-2">
                <Button variant="outline" size="sm" onClick={reset}>
                  <X className="mr-2 h-4 w-4" />
@@ -248,14 +248,14 @@ export function CompareShell({ t = en }: Props) {
             <div className="flex items-center gap-2 bg-zinc-100 p-1 rounded-lg dark:bg-zinc-800">
               <button
                 onClick={() => setViewMode('slider')}
-                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'slider' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300'}`}
+                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'slider' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100' : 'text-ink-muted dark:text-ink-muted-dark hover:text-zinc-900 dark:hover:text-zinc-300'}`}
               >
                 <SlidersHorizontal className="h-4 w-4" />
                 Slider
               </button>
               <button
                 onClick={() => setViewMode('overlay')}
-                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'overlay' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300'}`}
+                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'overlay' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100' : 'text-ink-muted dark:text-ink-muted-dark hover:text-zinc-900 dark:hover:text-zinc-300'}`}
               >
                 <Layers className="h-4 w-4" />
                 Overlay
@@ -264,7 +264,7 @@ export function CompareShell({ t = en }: Props) {
           </div>
 
           {/* Viewer Area */}
-          <div className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/20">
+          <div className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden rounded-xl border  bg-zinc-50/50 dark: dark:bg-zinc-900/20">
             {isLoadingImages && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
                 <RefreshCw className="h-8 w-8 animate-spin text-amber-500" />
@@ -272,7 +272,7 @@ export function CompareShell({ t = en }: Props) {
             )}
 
             {!blobA && !blobB && !isLoadingImages && (
-              <p className="text-sm text-zinc-500">Failed to render page {currentPage}</p>
+              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">Failed to render page {currentPage}</p>
             )}
 
             {/* Render comparison only if at least one blob exists */}
@@ -334,7 +334,7 @@ export function CompareShell({ t = en }: Props) {
             )}
           </div>
           
-          <div className="flex items-center justify-between text-xs text-zinc-500 px-2">
+          <div className="flex items-center justify-between text-xs text-ink-muted dark:text-ink-muted-dark px-2">
             <div><span className="font-semibold text-amber-600 dark:text-amber-400">Left:</span> Original Document ({fileA?.name})</div>
             <div><span className="font-semibold text-blue-600 dark:text-blue-400">Right/Overlay:</span> Modified Document ({fileB?.name})</div>
           </div>

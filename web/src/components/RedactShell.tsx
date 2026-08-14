@@ -276,7 +276,7 @@ export function RedactShell({ t = en }: Props) {
           </div>
 
           {/* Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border  bg-white p-4 shadow-sm dark: dark:bg-zinc-900/50">
             <div className="flex items-center gap-2">
                <Button variant="outline" size="sm" onClick={reset}>
                  <X className="mr-2 h-4 w-4" />
@@ -303,9 +303,9 @@ export function RedactShell({ t = en }: Props) {
           </div>
 
           {/* Viewer Area */}
-          <div className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/20">
+          <div className="relative flex min-h-[600px] w-full flex-col items-center justify-center overflow-hidden rounded-xl border  bg-zinc-50/50 dark: dark:bg-zinc-900/20">
             {!blobUrl && (
-              <p className="text-sm text-zinc-500">Loading preview...</p>
+              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">Loading preview...</p>
             )}
 
             {blobUrl && (
@@ -351,7 +351,7 @@ export function RedactShell({ t = en }: Props) {
               </div>
             )}
             
-            <p className="absolute bottom-4 text-xs font-medium text-zinc-500 bg-white/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-full pointer-events-none shadow-sm">
+            <p className="absolute bottom-4 text-xs font-medium text-ink-muted dark:text-ink-muted-dark bg-white/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-full pointer-events-none shadow-sm">
               Click and drag to redact areas
             </p>
           </div>
@@ -364,8 +364,8 @@ export function RedactShell({ t = en }: Props) {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
           </div>
           <div className="text-center">
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Applying Redactions...</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Drawing blackout boxes...</p>
+            <h3 className="text-lg font-medium text-ink dark:text-ink-dark">Applying Redactions...</h3>
+            <p className="text-sm text-ink-muted dark:text-ink-muted-dark mt-1">Drawing blackout boxes...</p>
           </div>
         </div>
       )}

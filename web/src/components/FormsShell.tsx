@@ -130,38 +130,38 @@ export function FormsShell({ t = en }: Props) {
 
       {phase === 'fill' && file && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+          <div className="bg-surface dark:bg-surface-dark rounded-2xl p-6 border  shadow-sm">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 dark:bg-teal-dark/10 flex items-center justify-center text-accent dark:text-teal-dark">
                 <FormInput className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">{file.name}</h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Fill PDF Form</p>
+                <h3 className="font-medium text-ink dark:text-ink-dark line-clamp-1">{file.name}</h3>
+                <p className="text-sm text-ink-muted dark:text-ink-muted-dark">Fill PDF Form</p>
               </div>
             </div>
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
               {fields.map((field) => (
                 <div key={field.name}>
-                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">
                     {field.name}
                   </label>
                   <input 
                     type="text" 
                     value={fieldValues[field.name] || ''} 
                     onChange={e => setFieldValues({...fieldValues, [field.name]: e.target.value})} 
-                    className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100" 
+                    className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark" 
                   />
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-              <button onClick={reset} className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100">
+            <div className="mt-8 flex justify-end gap-3 pt-4 border-t ">
+              <button onClick={reset} className="px-4 py-2 text-sm font-medium text-ink dark:text-ink-dark hover:text-ink dark:hover:text-ink-dark">
                 Cancel
               </button>
-              <button onClick={handleFill} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/20">
+              <button onClick={handleFill} className="flex items-center gap-2 px-4 py-2 bg-accent dark:bg-teal-dark text-white text-sm font-medium rounded-lg hover:opacity-90 focus:ring-4 focus:ring-accent/20">
                 <Download className="w-4 h-4" /> Save Filled PDF
               </button>
             </div>
@@ -171,12 +171,12 @@ export function FormsShell({ t = en }: Props) {
 
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-6">
-            <Download className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mb-6">
+            <Download className="w-8 h-8 text-success" />
           </div>
-          <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Done!</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mb-8">Your filled PDF has been downloaded.</p>
-          <button onClick={reset} className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200">
+          <h2 className="text-2xl font-semibold text-ink dark:text-ink-dark mb-2">Done!</h2>
+          <p className="text-ink-muted dark:text-ink-muted-dark mb-8">Your filled PDF has been downloaded.</p>
+          <button onClick={reset} className="inline-flex items-center gap-2 px-4 py-2 bg-ink dark:bg-ink-dark text-white dark:text-bg-dark text-sm font-medium rounded-lg hover:opacity-90">
             <RefreshCw className="w-4 h-4" /> Fill Another
           </button>
         </div>

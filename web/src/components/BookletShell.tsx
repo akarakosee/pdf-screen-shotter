@@ -147,16 +147,16 @@ export function BookletShell({ t = en }: Props) {
 
       {phase === 'options' && file && (
         <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col gap-6 duration-500">
-          <div className="flex flex-col items-center gap-6 rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="flex flex-col items-center gap-6 rounded-2xl border  bg-white p-8 text-center shadow-sm dark: dark:bg-zinc-900/50">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
               <BookOpen className="h-8 w-8" />
             </div>
             
             <div className="max-w-md space-y-2">
-              <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
                 Ready to create booklet
               </h3>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
                 {file.name} ({totalPages} pages)
               </p>
               <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
@@ -190,13 +190,13 @@ export function BookletShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="animate-in fade-in zoom-in-95 flex min-h-[300px] flex-col items-center justify-center space-y-6 rounded-2xl border border-zinc-200 bg-white p-12 text-center shadow-sm duration-500 dark:border-zinc-800 dark:bg-zinc-900/50">
+        <div className="animate-in fade-in zoom-in-95 flex min-h-[300px] flex-col items-center justify-center space-y-6 rounded-2xl border  bg-white p-12 text-center shadow-sm duration-500 dark: dark:bg-zinc-900/50">
           <RefreshCw className="h-10 w-10 animate-spin text-amber-500" />
           <div className="space-y-2">
-            <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
               Creating Booklet...
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
               Imposing pages and generating print-ready layout
             </p>
           </div>

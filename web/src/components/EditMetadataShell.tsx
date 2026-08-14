@@ -111,37 +111,37 @@ export function EditMetadataShell({ t = en }: Props) {
 
       {(phase === 'edit' || phase === 'processing') && file && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+          <div className="bg-surface dark:bg-surface-dark rounded-2xl p-6 border  shadow-sm">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 dark:bg-teal-dark/10 flex items-center justify-center text-accent dark:text-teal-dark">
                 <Tags className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">{file.name}</h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Edit Metadata</p>
+                <h3 className="font-medium text-ink dark:text-ink-dark line-clamp-1">{file.name}</h3>
+                <p className="text-sm text-ink-muted dark:text-ink-muted-dark">Edit Metadata</p>
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Title</label>
-                <input type="text" value={metadata.title} onChange={e => setMetadata({...metadata, title: e.target.value})} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Title" />
+                <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Title</label>
+                <input type="text" value={metadata.title} onChange={e => setMetadata({...metadata, title: e.target.value})} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Title" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Author</label>
-                <input type="text" value={metadata.author} onChange={e => setMetadata({...metadata, author: e.target.value})} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Author" />
+                <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Author</label>
+                <input type="text" value={metadata.author} onChange={e => setMetadata({...metadata, author: e.target.value})} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Author" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Subject</label>
-                <input type="text" value={metadata.subject} onChange={e => setMetadata({...metadata, subject: e.target.value})} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Subject" />
+                <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Subject</label>
+                <input type="text" value={metadata.subject} onChange={e => setMetadata({...metadata, subject: e.target.value})} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Document Subject" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Keywords</label>
-                <input type="text" value={metadata.keywords} onChange={e => setMetadata({...metadata, keywords: e.target.value})} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Comma separated keywords" />
+                <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Keywords</label>
+                <input type="text" value={metadata.keywords} onChange={e => setMetadata({...metadata, keywords: e.target.value})} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Comma separated keywords" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Creator</label>
-                <input type="text" value={metadata.creator} onChange={e => setMetadata({...metadata, creator: e.target.value})} className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Application used to create PDF" />
+                <label className="block text-sm font-medium text-ink dark:text-ink-dark mb-1">Creator</label>
+                <input type="text" value={metadata.creator} onChange={e => setMetadata({...metadata, creator: e.target.value})} className="w-full rounded-md border  bg-surface dark:bg-surface-dark px-3 py-2 text-sm text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Application used to create PDF" />
               </div>
             </div>
 
@@ -159,11 +159,11 @@ export function EditMetadataShell({ t = en }: Props) {
 
       {phase === 'done' && output && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-6">
-            <Tags className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mb-6">
+            <Tags className="w-8 h-8 text-success" />
           </div>
-          <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Done!</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mb-8">Metadata has been updated successfully.</p>
+          <h2 className="text-2xl font-semibold text-ink dark:text-ink-dark mb-2">Done!</h2>
+          <p className="text-ink-muted dark:text-ink-muted-dark mb-8">Metadata has been updated successfully.</p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Button onClick={() => triggerDownload(output.blob, output.name)} className="flex items-center gap-2">

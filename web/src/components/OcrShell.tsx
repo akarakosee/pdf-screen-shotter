@@ -145,7 +145,7 @@ export function OcrShell({ t = en }: Props) {
       {phase === 'upload' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <DropZone onFiles={addFile} multiple={false} accept=".pdf,.png,.jpg,.jpeg" t={t} />
-          <p className="mt-2 text-center text-sm text-zinc-500">
+          <p className="mt-2 text-center text-sm text-ink-muted dark:text-ink-muted-dark">
             {t.lang === 'tr' ? 'PDF veya Resim dosyalarını destekler (JPG, PNG)' : 'Supports PDF or Image files (JPG, PNG)'}
           </p>
           <PrivacyLine t={t} />
@@ -181,13 +181,13 @@ export function OcrShell({ t = en }: Props) {
             </svg>
           </div>
           <div className="text-center space-y-2">
-            <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
               Extracting Text via AI...
             </h3>
-            <p className="text-sm font-mono text-zinc-500 dark:text-zinc-400 max-w-md mx-auto min-h-[40px]">
+            <p className="text-sm font-mono text-ink-muted dark:text-ink-muted-dark max-w-md mx-auto min-h-[40px]">
               {progressMsg || 'Processing...'}
             </p>
-            <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-4 bg-zinc-50 dark:bg-zinc-900/50 p-2 rounded-md border border-zinc-100 dark:border-zinc-800">
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-4 bg-bg dark:bg-bg-dark p-2 rounded-md border border-zinc-100 dark:">
               {t.lang === 'tr' 
                 ? 'İlk kullanımda yapay zeka dil modellerinin tarayıcınıza indirilmesi birkaç saniye sürebilir. Bu işlem sadece bir kere yapılır.' 
                 : 'The first time you use this, the AI language models must be downloaded to your browser cache. This is a one-time process.'}
@@ -215,9 +215,9 @@ export function OcrShell({ t = en }: Props) {
             onConvertMore={reset}
           />
 
-          <div className="relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
-            <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-900/80">
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <div className="relative flex flex-col overflow-hidden rounded-xl border  bg-white shadow-sm dark: dark:bg-zinc-900/50">
+            <div className="flex items-center justify-between border-b  bg-zinc-50 px-4 py-2 dark: dark:bg-zinc-900/80">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
                 {t.lang === 'tr' ? 'OCR SONUÇLARI' : 'OCR RESULTS'}
               </span>
               <Button variant="ghost" size="sm" className="h-8 text-xs font-medium" onClick={handleCopy}>

@@ -189,12 +189,12 @@ export function ExtractPagesShell({ t = en }: Props) {
 
       {phase === 'grid' && file && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center gap-4 sticky top-4 z-20">
+          <div className="bg-surface dark:bg-surface-dark border  rounded-2xl p-6 shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center gap-4 sticky top-4 z-20">
             <div>
               <h2 className="text-xl font-bold text-zinc-800 dark:text-zinc-100 mb-1">
                 Select Pages to Extract
               </h2>
-              <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+              <p className="text-ink-muted dark:text-ink-muted-dark text-sm">
                 {selectedCount} / {pages.length} pages selected
               </p>
             </div>

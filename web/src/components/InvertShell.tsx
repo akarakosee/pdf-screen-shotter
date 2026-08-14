@@ -126,10 +126,10 @@ export function InvertShell({ t = en }: Props) {
       {phase === 'done' && output && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mb-6">
-            <Moon className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+            <Moon className="w-8 h-8 text-accent dark:text-teal-dark" />
           </div>
-          <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Done!</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mb-8">Your dark mode PDF is ready.</p>
+          <h2 className="text-2xl font-semibold text-ink dark:text-ink-dark mb-2">Done!</h2>
+          <p className="text-ink-muted dark:text-ink-muted-dark mb-8">Your dark mode PDF is ready.</p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Button onClick={() => triggerDownload(output.blob, output.name)} className="flex items-center gap-2">
