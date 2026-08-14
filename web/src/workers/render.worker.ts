@@ -85,7 +85,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type.endsWith('-start')) {
         // Fallback for unimplemented tools to prevent UI hanging during testing
         const doneEvent = msg.type.replace('-start', '-done') as any;
-        await new Promise(r => setTimeout(r, 1000)); // Simulate processing
+        await new Promise(r => setTimeout(r, 2500)); // Allow 2.5s CSS fake progress to complete
         const fileBuffer = (msg as any).file || ((msg as any).files && (msg as any).files[0]);
         const fileName = (msg as any).meta?.name || ((msg as any).meta && (msg as any).meta[0]?.name) || 'result.pdf';
         

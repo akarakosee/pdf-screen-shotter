@@ -81,7 +81,7 @@ export function PdfToJsonShell({ t = en }: Props) {
             <span>{t.converting || 'Processing...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
-            <div className="h-full w-full origin-left animate-custom-pulse bg-brand dark:bg-brand-dark" />
+            <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
           </div>
         </div>
       )}

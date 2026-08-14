@@ -794,6 +794,15 @@
   animation: border-spin 8s linear infinite;
 }
 
+@keyframes fake-progress {
+  0% { transform: scaleX(0); }
+  90% { transform: scaleX(0.95); }
+  100% { transform: scaleX(0.98); }
+}
+.animate-fake-progress {
+  animation: fake-progress 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
 @keyframes dropzone-ping {
   0% {
     inset: 0px;
