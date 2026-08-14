@@ -95,9 +95,11 @@ export function AutoRedactShell({ t = en }: Props) {
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
             t={t}
-            title={t.doneTitle || 'Done'}
+            result={{ totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false }}
+            skipped={[]}
+            crossLink={null}
             onDownload={() => triggerDownload(output.blob, output.name)}
-            onRestart={reset}
+            onConvertMore={reset}
           />
         </div>
       )}

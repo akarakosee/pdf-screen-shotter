@@ -141,7 +141,7 @@ export function ScanToPdfShell({ t = en }: { t?: Strings }) {
 
       {phase === 'done' && output && (
         <div className="animate-in fade-in flex flex-col items-center justify-center py-8">
-          <ResultPanel t={t} title="Scanned PDF Ready" onDownload={() => triggerDownload(output.blob, output.name)} onRestart={reset} />
+          <ResultPanel t={t} result={{ totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false }} skipped={[]} crossLink={null} onDownload={() => triggerDownload(output.blob, output.name)} onConvertMore={reset} />
         </div>
       )}
     </div>
