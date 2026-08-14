@@ -904,6 +904,12 @@ export class JobController {
     for (const { reject } of this.pendingPreviewPages.values()) reject(new Error(message));
     this.pendingPreviewPages.clear();
 
+    if (this.events.onFatal) {
+      this.events.onFatal(message);
+    } else if (this.events.onFileError) {
+      this.events.onFileError('fatal', 'corrupt');
+    }
+
     const now = Date.now();
     this.fatalTimestamps = [...this.fatalTimestamps, now].filter(
       (t) => now - t < JobController.FATAL_WINDOW_MS,
