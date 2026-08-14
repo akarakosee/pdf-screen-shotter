@@ -1,20 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f59e0b" />
       <stop offset="100%" stop-color="#b5822f" />
     </linearGradient>
   </defs>
-  
-  <!-- Document Outline -->
-  <path d="M168,32H72A16,16,0,0,0,56,48V208a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V72Z" fill="none" stroke="url(#amberGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
-  
-  <!-- Document Fold -->
-  <path d="M164,32v40h40" fill="none" stroke="url(#amberGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
-  
-  <!-- Padlock Body -->
-  <rect x="96" y="140" width="64" height="48" rx="8" fill="url(#amberGrad)" />
-  
-  <!-- Padlock Shackle -->
-  <path d="M108,140 V120 A20,20,0,0,1,148,120 V140" fill="none" stroke="url(#amberGrad)" stroke-width="16" stroke-linecap="round" />
+  <path d="M152,32 H72 A16,16 0 0 0 56,48 V208 A16,16 0 0 0 72,224 H184 A16,16 0 0 0 200,208 V80 Z" fill="none" stroke="url(#headerGrad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M200,80 H168 A16,16 0 0 1 152,64 V32" fill="none" stroke="url(#headerGrad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M108,142 V116 A20,20 0 0 1 148,116 V142" fill="none" stroke="url(#headerGrad)" stroke-width="16" stroke-linecap="round" />
+  <path d="M104,136 H152 A12,12 0 0 1 164,148 V176 A12,12 0 0 1 152,188 H104 A12,12 0 0 1 92,176 V148 A12,12 0 0 1 104,136 Z M128,152 A6,6 0 0 0 122,158 C122,160.5 124,162.5 125,164 L123,172 H133 L131,164 C132,162.5 134,160.5 134,158 A6,6 0 0 0 128,152 Z" fill="url(#headerGrad)" fill-rule="evenodd" />
 </svg>
