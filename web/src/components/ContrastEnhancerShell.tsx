@@ -59,19 +59,54 @@ export function ContrastEnhancerShell({ t = en }: Props) {
     setPhase('options');
   }, [t]);
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+    setIsPreviewLoading(true);
+    
+    // We fetch a 150 DPI preview for crisp display
+    controller.current?.previewPage(file, previewPageNum, 150)
+      .then((blob) => {
+        if (!active) return;
+        setPreviewUrl(URL.createObjectURL(blob));
+      })
+      .catch((err) => {
+        console.error('Preview error:', err);
+        // If out of bounds, maybe go back to 1
+        if (previewPageNum > 1 && active) setPreviewPageNum(previewPageNum - 1);
+      })
+      .finally(() => {
+        if (active) setIsPreviewLoading(false);
+      });
+
+    return () => {
+      active = false;
+      // Clean up previous URL to avoid memory leaks
+      setPreviewUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return null;
+      });
+    };
+  }, [file, previewPageNum, phase]);
+
   const reset = useCallback(() => {
     setFile(null);
     setOutput(null);
     setPhase('upload');
+    setBrightness(100);
+    setContrast(100);
+    setPreviewPageNum(1);
   }, []);
 
   return (
     <div className="flex flex-col gap-5">
-      {toast && (
-        <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />
-      )}
-
-      {phase === 'upload' && (
+      {toast && <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />}
+      
+      {phase === 'upload' && !file && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFile} multiple={false} />
           <PrivacyLine t={t} />
@@ -88,17 +123,55 @@ export function ContrastEnhancerShell({ t = en }: Props) {
               <div className="overflow-x-auto whitespace-nowrap scrollbar-thin text-sm font-medium pr-2" title={file.name}>{file.name}</div>
             </div>
           </div>
-          <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-            <label className="text-sm font-medium">{t.lang === 'tr' ? 'Parlaklık (%)' : 'Brightness (%)'}</label>
-            <input type="range" min="50" max="200" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" />
-            <div className="text-xs text-center">{brightness}%</div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark justify-center">
+              <label className="text-sm font-medium">{t.lang === 'tr' ? 'Parlaklık (%)' : 'Brightness (%)'}</label>
+              <input type="range" min="50" max="200" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" />
+              <div className="text-xs text-center text-ink-muted dark:text-ink-muted-dark">{brightness}%</div>
 
-            <label className="text-sm font-medium mt-2">{t.lang === 'tr' ? 'Kontrast (%)' : 'Contrast (%)'}</label>
-            <input type="range" min="100" max="300" value={contrast} onChange={(e) => setContrast(Number(e.target.value))} className="w-full" />
-            <div className="text-xs text-center">{contrast}%</div>
+              <label className="text-sm font-medium mt-2">{t.lang === 'tr' ? 'Kontrast (%)' : 'Contrast (%)'}</label>
+              <input type="range" min="100" max="300" value={contrast} onChange={(e) => setContrast(Number(e.target.value))} className="w-full" />
+              <div className="text-xs text-center text-ink-muted dark:text-ink-muted-dark">{contrast}%</div>
+            </div>
+
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[300px]">
+              {isPreviewLoading && !previewUrl && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
+                </div>
+              )}
+              {previewUrl && (
+                <img 
+                  src={previewUrl} 
+                  alt="PDF Preview" 
+                  className="max-h-[350px] w-auto object-contain shadow-sm border dark:border-ink-faint-dark transition-all duration-75"
+                  style={{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }}
+                />
+              )}
+              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm border">
+                <button 
+                  onClick={() => setPreviewPageNum(p => Math.max(1, p - 1))}
+                  disabled={previewPageNum <= 1}
+                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-bg dark:hover:bg-bg-dark disabled:opacity-30 disabled:hover:bg-transparent text-lg leading-none"
+                >
+                  -
+                </button>
+                <span className="text-xs font-mono min-w-[3rem] text-center">
+                  {t.lang === 'tr' ? 'Sayfa' : 'Page'} {previewPageNum}
+                </span>
+                <button 
+                  onClick={() => setPreviewPageNum(p => p + 1)}
+                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-bg dark:hover:bg-bg-dark text-lg leading-none"
+                >
+                  +
+                </button>
+              </div>
+            </div>
           </div>
+
           <div className="flex justify-end mt-2">
-            <button onClick={() => { setPhase('processing'); controller.current?.runContrastEnhancer(file, brightness, contrast); }} className="rounded-lg bg-indigo px-4 py-2 text-sm font-medium text-white hover:bg-indigo/90 dark:bg-indigo-dark dark:hover:bg-indigo-dark/90 disabled:opacity-50">
+            <button onClick={() => { setPhase('processing'); controller.current?.runContrastEnhancer(file, brightness, contrast); }} className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90 dark:bg-teal-dark disabled:opacity-50">
               {t.lang === 'tr' ? 'Geliştir' : 'Enhance Document'}
             </button>
           </div>
