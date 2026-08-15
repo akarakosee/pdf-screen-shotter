@@ -487,94 +487,44 @@ export const batesCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const nupCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "N-Up PDF — multiple pages per sheet",
-    description:
-      "Combine multiple PDF pages onto a single sheet (2-up, 4-up, 9-up). Perfect for printing slides or saving paper. Fast, free, and totally local.",
-    keywords:
-      "n-up pdf, multiple pages per sheet, print multiple pages, pdf layout, 2-up, 4-up, çoklu sayfa yazdırma",
+    title: "N-Up PDF",
+    description: "Combine multiple pages onto a single sheet (2-up, 4-up, 6-up, or 9-up grid) online for free. Save paper when printing PDFs.",
+    keywords: "n-up pdf, multiple pages per sheet, 2 up pdf, 4 up pdf, print multiple pdf pages on one sheet, save paper pdf",
     h1: "N-Up PDF",
-    tagline: "Shrink and combine multiple pages onto a single sheet instantly.",
-    howToName: "How to combine multiple pages onto one sheet",
+    tagline: "Fit 2, 4, 6, or 9 pages onto a single sheet of paper. Create handout summaries and save printing costs easily.",
+    howToName: "How to fit multiple PDF pages on one sheet",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to format for N-up printing.",
-      },
-      {
-        name: "Select grid",
-        text: "Choose how many pages to print per sheet and arrange them locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly arranged PDF, ready to save paper and ink.",
-      },
+      { name: "Upload PDF", text: "Select the document you want to condense into multi-page sheets." },
+      { name: "Choose Layout", text: "Select 2-up (2 pages/sheet), 4-up (4 pages/sheet), or higher grid density." },
+      { name: "Download Grid PDF", text: "Save your condensed PDF ready for eco-friendly printing." }
     ],
     faq: [
-      {
-        q: "What is N-Up printing?",
-        a: "N-Up refers to printing multiple pages on a single sheet of paper. For example, 4-up prints 4 reduced-size pages on one sheet, saving paper and ink.",
-      },
-      {
-        q: "Does this affect the quality of my PDF?",
-        a: "The content itself is not compressed or blurred, but it is scaled down to fit multiple pages on one sheet. Vector text remains perfectly crisp.",
-      },
-      {
-        q: "Is it safe and private?",
-        a: "Yes. All processing happens locally in your web browser. Your files are never uploaded to our servers.",
-      },
+      { q: "Why use N-Up layout?", a: "N-Up layout allows you to print slide decks, lecture notes, or reference docs on far fewer sheets of paper, reducing printing costs." },
+      { q: "Can I add page borders?", a: "Yes, you can configure subtle boundary borders between the tiled pages for easier reading." }
     ],
-    crossLink: {
-      href: "/compress-pdf",
-      label: "Need to reduce file size instead? Compress PDF.",
-    },
+    crossLink: { href: "/booklet-pdf", label: "Want to create a foldable booklet instead? Try Booklet PDF." }
   },
   tr: {
-    title: "N-Up PDF — tek yaprağa çoklu sayfa",
-    description:
-      "Birden fazla PDF sayfasını tek bir yaprakta birleştirin (2, 4, 9 sayfa vb.). Sunum yazdırmak veya kağıt tasarrufu sağlamak için mükemmel. Hızlı, ücretsiz ve yerel.",
-    keywords:
-      "n-up pdf, tek sayfaya çoklu sayfa, yaprak başına birden fazla sayfa, pdf yazdırma düzeni",
-    h1: "N-Up PDF",
-    tagline:
-      "Birden fazla sayfayı anında küçültüp tek bir yaprakta birleştirin.",
-    howToName: "Birden fazla sayfa tek yaprakta nasıl birleştirilir",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "Tek Sayfaya Çoklu Sayfa (N-Up)",
+    description: "Tek bir kağıda 2, 4, 6 veya 9 sayfa sığdırarak PDF oluşturun. Yazıcı kağıdından tasarruf edin ve sunum notları hazırlayın.",
+    keywords: "n-up pdf, tek sayfaya 2 sayfa basma, tek sayfaya 4 sayfa pdf, kağıt tasarruflu pdf, slaytları tek sayfada toplama",
+    h1: "Tek Sayfaya Çoklu Sayfa (N-Up)",
+    tagline: "Bir kağıt üzerine 2, 4 veya daha fazla sayfayı yan yana dizin. Sunum notları, ders slaytları ve kağıt tasarrufu için idealdir.",
+    howToName: "Tek bir kağıda birden fazla sayfa nasıl sığdırılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "N-up baskı için biçimlendirmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Izgarayı seç",
-        text: "Yaprak başına kaç sayfa yazdırılacağını seçin ve yerel olarak düzenleyin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Kağıt ve mürekkep tasarrufu için mükemmel şekilde düzenlenmiş PDF belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Sıkıştırmak istediğiniz PDF dosyasını seçin." },
+      { name: "Düzeni Seçin", text: "Tek kağıda kaç sayfa basılacağını (2 sayfa, 4 sayfa vb.) belirleyin." },
+      { name: "Baskıya Hazır PDF'i İndirin", text: "Sayfaları yan yana dizilmiş yeni belgenizi cihazınıza kaydedin." }
     ],
     faq: [
-      {
-        q: "N-Up yazdırma nedir?",
-        a: "N-Up, tek bir kağıt yaprağına birden fazla sayfa yazdırmayı ifade eder. Örneğin, 4-up tek bir yaprağa küçültülmüş 4 sayfa yazdırır ve kağıt ve mürekkep tasarrufu sağlar.",
-      },
-      {
-        q: "Bu işlem PDF kalitesini etkiler mi?",
-        a: "İçeriğin kendisi sıkıştırılmaz veya bulanıklaştırılmaz, ancak birden fazla sayfayı bir yaprağa sığdırmak için ölçeklendirilir. Vektörel metinler kusursuz keskinliğini korur.",
-      },
-      {
-        q: "Güvenli ve gizli mi?",
-        a: "Evet. Tüm işlemler web tarayıcınızda yerel olarak gerçekleşir. Dosyalarınız asla sunucularımıza yüklenmez.",
-      },
+      { q: "Yazılar okunabilir kalır mı?", a: "2-up ve 4-up düzenlerinde yazılar genellikle rahatça okunabilir. Çok yoğun metinlerde 2-up düzeni önerilir." },
+      { q: "Kağıt tasarrufu sağlar mı?", a: "Evet! 4-up düzeni kullandığınızda 100 sayfalık bir dokümanı sadece 25 yaprak kağıda basabilirsiniz." }
     ],
-    crossLink: {
-      href: "/tr/compress-pdf",
-      label:
-        "Bunun yerine dosya boyutunu küçültmek mi istiyorsunuz? PDF Sıkıştır.",
-    },
+    crossLink: { href: "/tr/booklet-pdf", label: "Katlanabilir kitapçık hazırlamak istiyorsanız Kitapçık Yapma aracını deneyin." }
   },
 };
 export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1459,56 +1409,46 @@ export const scanCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Booklet PDF — create printable booklets",
-    description:
-      "Convert your PDF into a printable booklet layout. Free and completely local.",
-    keywords:
-      "create booklet, pdf booklet, print booklet, saddle stitch pdf, booklet maker, kitapçık yap, pdf kitapçık",
+    title: "Booklet PDF",
+    description: "Convert standard PDF documents into printable saddle-stitch booklets online for free. Print double-sided and fold in half.",
+    keywords: "booklet pdf, create pdf booklet, booklet maker online, print pdf as booklet, saddle stitch pdf",
     h1: "Booklet PDF",
-    tagline: "Rearrange pages into a saddle-stitch booklet layout.",
-    howToName: "How to create a booklet",
+    tagline: "Reorder and paginate pages into a foldable booklet format. Print double-sided, fold down the center, and create your book.",
+    howToName: "How to make a PDF booklet",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to convert into a printable booklet.",
-      },
-      {
-        name: "Arrange pages",
-        text: "We calculate the folding order and place two pages per sheet locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your document perfectly formatted for double-sided booklet printing.",
-      },
+      { name: "Upload Document", text: "Select the PDF file you want to turn into a booklet." },
+      { name: "Generate Imposition", text: "Our tool automatically calculates 2-up imposition so facing pages match when folded." },
+      { name: "Print & Fold", text: "Download the booklet PDF, print double-sided (short edge flip), and fold down the spine." }
     ],
+    faq: [
+      { q: "How should I print the booklet?", a: "Print with double-sided (duplex) printing enabled, setting the flip option to 'Flip on short edge'." },
+      { q: "What happens if page count is not a multiple of 4?", a: "Our booklet engine automatically appends blank pages to make the total page count a perfect multiple of 4." }
+    ],
+    crossLink: { href: "/n-up-pdf", label: "Want regular tiled pages without booklet ordering? Try N-Up PDF." }
   },
   tr: {
-    title: "Kitapçık PDF — yazdırılabilir kitapçık oluştur",
-    description: "PDF dosyanızı yazdırılabilir kitapçık düzenine dönüştürün.",
-    keywords:
-      "pdf kitapçık, kitapçık yap, kitapçık bastır, booklet maker, create booklet, kitapçık düzeni",
-    h1: "Kitapçık PDF",
-    tagline: "Sayfaları kitapçık düzeninde yeniden sıralayın.",
-    howToName: "Kitapçık nasıl oluşturulur",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Kitapçık Yapma",
+    description: "PDF belgelerinizi ortadan katlanabilir kitapçık (broşür/dergi) formatına dönüştürün. Ücretsiz çift taraflı baskı kitapçık aracı.",
+    keywords: "pdf kitapçık yapma, pdf broşür yapma, çift taraflı kitapçık baskısı, pdf kitap yapma, kitapçık düzeni oluştur",
+    h1: "PDF Kitapçık Yapma",
+    tagline: "Sayfalarınızı ortadan katlandığında kitap gibi okunacak şekilde dizin. Çift taraflı yazdırın, ortadan katlayın ve zımbalayın.",
+    howToName: "PDF belgesi nasıl kitapçık formatına getirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Yazdırılabilir kitapçığa dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları düzenle",
-        text: "Katlama sırasını hesaplıyor ve yerel olarak yaprak başına iki sayfa yerleştiriyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Çift taraflı kitapçık baskısı için mükemmel biçimlendirilmiş belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Kitapçık haline getirmek istediğiniz PDF dosyasını seçin." },
+      { name: "Kitapçık Düzeni Oluştur", text: "Sistemimiz sayfaları katlandığında doğru sıraya gelecek şekilde özel olarak eşleştirir." },
+      { name: "İndirin ve Basın", text: "Oluşan PDF'i çift taraflı yazdırıp ortadan katlayarak kitapçığınızı hazır edin." }
     ],
+    faq: [
+      { q: "Yazıcıdan nasıl çıktı almalıyım?", a: "Yazıcınızın 'Çift Taraflı Yazdırma' (Duplex) ayarını açıp 'Kısa kenardan çevir' seçeneğini işaretlemelisiniz." },
+      { q: "Sayfa sayısı 4'ün katı değilse ne olur?", a: "Kitapçık yapısının bozulmaması için sistem son sayfaya otomatik olarak temiz boş sayfalar ekler." }
+    ],
+    crossLink: { href: "/tr/n-up-pdf", label: "Katlamadan tek sayfaya çoklu sayfa basmak için N-Up aracını deneyin." }
   },
 };
-
 export const compareCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Compare PDF",
@@ -1637,304 +1577,256 @@ export const ocrCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const removeBlankCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Remove Blank Pages — clean up your PDF",
-    description: "Automatically detect and remove blank pages from your PDF.",
-    keywords:
-      "remove blank pages, delete empty pages, clean pdf, erase blank sheets, pdf boş sayfa sil, boş sayfaları kaldır",
+    title: "Remove Blank Pages",
+    description: "Automatically detect and remove blank pages from scanned PDF documents online for free. Clean up empty pages instantly.",
+    keywords: "remove blank pages from pdf, delete empty pages pdf, auto detect blank pages, clean scanned pdf, remove blank sheets",
     h1: "Remove Blank Pages",
-    tagline: "Clean up your documents instantly and locally.",
-    howToName: "How to remove blank pages",
+    tagline: "Scan through multi-page documents to automatically detect and discard accidental blank pages from scanners.",
+    howToName: "How to remove blank pages from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      { name: "Upload PDF", text: "Select the PDF file." },
-      { name: "Process", text: "We detect empty pages." },
-      { name: "Download", text: "Download the cleaned PDF." },
+      { name: "Upload PDF", text: "Select the scanned PDF that contains accidental empty pages." },
+      { name: "Auto-Detect", text: "Our smart analyzer inspects page pixel density and identifies blank sheets." },
+      { name: "Download Clean PDF", text: "Save your streamlined PDF document without any blank pages." }
     ],
+    faq: [
+      { q: "How does it detect blank pages?", a: "It scans for text glyphs, vector lines, and image pixel thresholds to reliably distinguish truly empty pages from light content." },
+      { q: "Can I review before deletion?", a: "Yes, detected blank pages are highlighted so you can confirm before downloading the final file." }
+    ],
+    crossLink: { href: "/remove-pages", label: "Want to manually select pages to delete? Try Remove Pages." }
   },
   tr: {
-    title: "Boş Sayfaları Sil — PDF'inizi temizleyin",
-    description:
-      "PDF'inizdeki boş sayfaları otomatik olarak tespit edip kaldırın.",
-    keywords:
-      "pdf boş sayfa sil, boş sayfaları çıkar, pdf temizle, remove blank pages, delete empty pages",
-    h1: "Boş Sayfaları Sil",
-    tagline: "Belgelerinizi anında ve yerel olarak temizleyin.",
-    howToName: "Boş sayfalar nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "Boş Sayfaları Otomatik Sil",
+    description: "Taranmış PDF dosyalarındaki boş ve beyaz sayfaları otomatik tespit edip silin. Gereksiz sayfaları temizleyin.",
+    keywords: "pdf boş sayfaları silme, otomatik boş sayfa silici, taranmış pdf boş sayfa temizleme, pdf beyaz sayfaları kaldır",
+    h1: "Boş Sayfaları Otomatik Sil",
+    tagline: "Çift taraflı taramalardan kaynaklanan boş, beyaz sayfaları akıllı analizle tek tıkla bulun ve belgenizden ayıklayın.",
+    howToName: "PDF'teki boş sayfalar otomatik nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      { name: "PDF Yükle", text: "PDF dosyasını seçin." },
-      { name: "İşle", text: "Boş sayfaları tespit ediyoruz." },
-      { name: "İndir", text: "Temizlenmiş PDF'i indirin." },
+      { name: "Belgenizi Yükleyin", text: "İçinde boş sayfalar bulunan PDF dosyasını seçin." },
+      { name: "Otomatik Tespit", text: "Aracımız sayfalardaki piksel ve yazı yoğunluğunu tarayarak boş sayfaları işaretler." },
+      { name: "Temiz PDF'i İndirin", text: "Boş sayfalardan arındırılmış tertemiz belgenizi bilgisayarınıza kaydedin." }
     ],
+    faq: [
+      { q: "Çok az yazısı olan sayfalar yanlışlıkla silinir mi?", a: "Hayır. Akıllı eşik değeri sayesinde üzerinde imza, dipnot veya logo bulunan sayfalar korunur, yalnızca tamamen boş sayfalar ayıklanır." },
+      { q: "Silinen sayfaları görebilir miyim?", a: "Evet, silinecek sayfalar ekranda gösterilir; dilerseniz silinmesini istemediğiniz sayfaları koruyabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/remove-pages", label: "Sayfaları elle tek tek seçerek silmek için PDF Sayfa Silme aracını deneyin." }
   },
 };
-
 export const editMetadataCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Edit PDF Metadata — change author, title, and keywords locally",
-    description:
-      "View and edit PDF properties and metadata fields like Author, Title, Subject, and Keywords without uploading your file.",
-    keywords:
-      "edit pdf metadata, change pdf author, modify pdf properties, pdf tags, pdf meta veri düzenle",
-    h1: "Edit PDF Metadata",
-    tagline: "Change document properties locally and instantly.",
+    title: "Edit Metadata",
+    description: "View and edit PDF metadata properties including Title, Author, Subject, and Keywords online for free. 100% private.",
+    keywords: "edit pdf metadata, change pdf author, update pdf title, edit pdf properties, pdf metadata editor online",
+    h1: "Edit Metadata",
+    tagline: "Update document titles, author names, subject tags, and keywords. Fix PDF document properties cleanly.",
     howToName: "How to edit PDF metadata",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document whose metadata you want to modify.",
-      },
-      {
-        name: "Edit properties",
-        text: "Update the title, author, subject, and keywords locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your updated PDF document with correctly modified metadata.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file whose metadata properties you want to modify." },
+      { name: "Update Fields", text: "Type new values for Document Title, Author, Subject, Creator, and Keywords." },
+      { name: "Save & Download", text: "Click save to update internal XMP and Info dictionaries and download the file." }
     ],
+    faq: [
+      { q: "Why should I edit PDF metadata?", a: "Setting an accurate Document Title ensures browsers and search engines display the correct name instead of a random filename." },
+      { q: "Can I remove metadata completely?", a: "Yes, or you can use our dedicated Sanitize PDF tool for one-click total anonymization." }
+    ],
+    crossLink: { href: "/sanitize-pdf", label: "Want to wipe all metadata with one click? Try Sanitize PDF." }
   },
   tr: {
-    title:
-      "PDF Meta Verilerini Düzenle — yazar, başlık ve anahtar kelimeleri yerel olarak değiştir",
-    description:
-      "PDF özelliklerini ve Yazar, Başlık, Konu gibi meta veri alanlarını dosyanızı yüklemeden görüntüleyin ve düzenleyin.",
-    keywords:
-      "pdf meta veri düzenle, pdf yazar değiştir, pdf özelliklerini değiştir, edit metadata pdf",
-    h1: "PDF Meta Verilerini Düzenle",
-    tagline: "Belge özelliklerini anında ve yerel olarak değiştirin.",
-    howToName: "PDF meta verileri nasıl düzenlenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Meta Veri Düzenle",
+    description: "PDF dosyalarınızın Başlık, Yazar, Konu ve Anahtar Kelime gibi dosya özelliklerini ücretsiz ve kolayca düzenleyin.",
+    keywords: "pdf meta veri düzenleme, pdf yazar adı değiştirme, pdf başlık değiştirme, pdf özellikleri düzenle, pdf metadata editor",
+    h1: "PDF Meta Veri Düzenle",
+    tagline: "Belgenizin dosya özelliklerinde görünen Başlık, Yazar, Konu ve Telif bilgilerini profesyonelce güncelleyin.",
+    howToName: "PDF meta verileri ve yazar adı nasıl değiştirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Meta verilerini değiştirmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Özellikleri düzenle",
-        text: "Başlık, yazar, konu ve anahtar kelimeleri yerel olarak güncelleyin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Doğru bir şekilde değiştirilmiş meta verileriyle güncellenmiş PDF belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Özelliklerini değiştirmek istediğiniz PDF dosyasını seçin." },
+      { name: "Bilgileri Güncelleyin", text: "Başlık, Yazar, Konu ve Anahtar Kelime kutularına yeni bilgileri yazın." },
+      { name: "Kaydet ve İndir", text: "Güncellenmiş özelliklere sahip yeni PDF dosyanızı tek tıkla indirin." }
     ],
+    faq: [
+      { q: "PDF başlığını değiştirmek neden önemlidir?", a: "Tarayıcılarda veya arama motorlarında dosya adı yerine burada yazdığınız 'Başlık' görünür. Doğru bir başlık profesyonellik katar." },
+      { q: "Tüm bilgileri tamamen temizlemek mümkün mü?", a: "Evet, dilerseniz alanları boş bırakabilir veya tek tıkla sıfırlamak için PDF Meta Veri Temizle aracımızı kullanabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/sanitize-pdf", label: "Tüm yazar ve bilgisayar izlerini tek tıkla silmek için PDF Meta Veri Temizle aracını deneyin." }
   },
 };
-
 export const base64PdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Base64 to PDF & PDF to Base64 — developer tools",
-    description:
-      "Convert a PDF to a Base64 string for embedding in code, or decode a Base64 string back into a PDF file locally.",
-    keywords:
-      "pdf to base64, base64 to pdf, encode pdf, decode pdf, base64 converter, pdf base64 çevir",
-    h1: "Base64 PDF Converter",
-    tagline: "Encode or decode PDFs to and from Base64 instantly.",
-    howToName: "How to use the Base64 converter",
+    title: "Base64 to PDF",
+    description: "Decode Base64 strings to downloadable PDF files or encode PDF documents to Base64 data URIs online for free.",
+    keywords: "base64 to pdf, decode base64 pdf, pdf to base64, convert base64 string to pdf, base64 pdf viewer",
+    h1: "Base64 to PDF",
+    tagline: "Decode Base64 encoded strings into readable PDF files, or encode your PDF documents into Base64 strings for developer APIs.",
+    howToName: "How to convert Base64 to PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Paste or upload",
-        text: "Paste your Base64 string or upload a PDF document.",
-      },
-      {
-        name: "Convert instantly",
-        text: "We convert between Base64 and PDF formats instantly and locally.",
-      },
-      {
-        name: "Download or copy",
-        text: "Download the generated PDF or copy the Base64 string directly.",
-      },
+      { name: "Paste Base64 String", text: "Paste your raw data:application/pdf;base64 string or binary text." },
+      { name: "Decode & Preview", text: "Our tool parses the Base64 stream and displays a live preview of the PDF." },
+      { name: "Download PDF", text: "Download the decoded binary document directly to your computer." }
     ],
+    faq: [
+      { q: "What is Base64 encoding used for in PDFs?", a: "Base64 is commonly used by developers and REST APIs to transmit binary PDF files as text strings inside JSON payloads." },
+      { q: "Can I convert PDF back to Base64?", a: "Yes, bidirectional conversion is supported: PDF-to-Base64 and Base64-to-PDF." }
+    ],
+    crossLink: { href: "/extract-text", label: "Need to extract readable text instead? Try Extract Text." }
   },
   tr: {
-    title: "Base64'ten PDF'e ve PDF'ten Base64'e — geliştirici araçları",
-    description:
-      "Koda gömmek için PDF'yi Base64 dizgesine dönüştürün veya bir Base64 dizgesini yerel olarak PDF dosyasına çevirin.",
-    keywords:
-      "pdf to base64, base64 to pdf, pdf kodlama, base64 çevirici, pdf encode decode",
-    h1: "Base64 PDF Dönüştürücü",
-    tagline: "PDF'leri anında Base64'e kodlayın veya çözün.",
-    howToName: "Base64 dönüştürücü nasıl kullanılır",
-    howItWorks: "Nasıl çalışır",
+    title: "Base64'ten PDF'e Çevirme",
+    description: "Base64 metin kodlarını PDF dosyasına dönüştürün veya PDF'lerinizi API'ler için Base64 koduna çevirin. Ücretsiz ve güvenli.",
+    keywords: "base64 to pdf, base64 pdf çözücü, pdf to base64, base64 kodunu pdf yapma, base64 pdf decoder online",
+    h1: "Base64'ten PDF'e Çevirme",
+    tagline: "Yazılımcılar ve API entegrasyonları için Base64 kodlarını açılabilir PDF dosyasına dönüştürün veya tam tersini yapın.",
+    howToName: "Base64 metin dizesi nasıl PDF dosyasına dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Yapıştır veya yükle",
-        text: "Base64 dizesini yapıştırın veya bir PDF belgesi yükleyin.",
-      },
-      {
-        name: "Anında dönüştür",
-        text: "Base64 ve PDF formatları arasında anında ve yerel olarak dönüşüm sağlıyoruz.",
-      },
-      {
-        name: "İndir veya kopyala",
-        text: "Oluşturulan PDF'yi indirin veya Base64 dizesini doğrudan kopyalayın.",
-      },
+      { name: "Base64 Kodunu Yapıştırın", text: "data:application/pdf;base64 içeren metni kutuya yapıştırın." },
+      { name: "Çözümleme ve Önizleme", text: "Aracımız metni anında ikili (binary) PDF verisine dönüştürür ve önizler." },
+      { name: "PDF Olarak İndirin", text: "Çözümlenmiş PDF belgenizi tek tıkla bilgisayarınıza indirin." }
     ],
+    faq: [
+      { q: "Base64 PDF nerede kullanılır?", a: "Yazılımcılar web servisleri, API'ler ve JSON veritabanlarında PDF dosyalarını metin olarak aktarmak için Base64 formatını kullanır." },
+      { q: "PDF'i Base64'e de çevirebilir miyim?", a: "Evet! Hem Base64'ten PDF'e hem de PDF'ten Base64'e çift yönlü dönüşüm yapabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Düz yazıları ayıklamak için PDF'ten Metin Çıkarma aracını deneyin." }
   },
 };
-
 export const invertPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Invert PDF Colors — dark mode for PDFs",
-    description:
-      "Invert the colors of your PDF document for easier night reading. All processing is done locally.",
-    keywords:
-      "invert pdf colors, dark mode pdf, negative pdf, reverse colors pdf, pdf renkleri tersine çevir, pdf karanlık mod",
+    title: "Invert PDF Colors",
+    description: "Invert PDF colors to create a comfortable dark mode for reading at night. Free online dark mode PDF converter.",
+    keywords: "invert pdf colors, dark mode pdf, invert pdf online, night mode pdf reader, white text on black background pdf",
     h1: "Invert PDF Colors",
-    tagline: "Turn bright documents into dark mode PDFs.",
-    howToName: "How to invert PDF colors",
+    tagline: "Turn bright white pages into high-contrast black backgrounds with white text. Protect your eyes while reading at night.",
+    howToName: "How to invert PDF colors for dark mode",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to invert.",
-      },
-      {
-        name: "Invert colors",
-        text: "We reverse all colors locally to create a perfect dark mode reading experience.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your inverted, eye-friendly PDF document.",
-      },
+      { name: "Upload Document", text: "Select the bright PDF ebook or paper you want to invert." },
+      { name: "Invert Colors", text: "Our engine flips RGB luminance values, converting white backgrounds to black." },
+      { name: "Download Dark PDF", text: "Save your eye-friendly night mode PDF file." }
     ],
+    faq: [
+      { q: "Why invert PDF colors?", a: "Inverting colors significantly reduces screen glare and eye strain when studying or reading documents in low-light environments." },
+      { q: "What happens to images?", a: "Colors in images are inverted as well, producing a complete high-contrast negative mode." }
+    ],
+    crossLink: { href: "/grayscale-pdf", label: "Prefer standard black-and-white instead? Try Grayscale PDF." }
   },
   tr: {
-    title: "PDF Renklerini Ters Çevir — PDF'ler için karanlık mod",
-    description:
-      "Gece okumasını kolaylaştırmak için PDF belgenizin renklerini tersine çevirin. Tüm işlemler yerel olarak yapılır.",
-    keywords:
-      "pdf karanlık mod, pdf renk tersine çevir, invert pdf, dark mode pdf, negatif pdf",
+    title: "PDF Renklerini Ters Çevir (Gece Modu)",
+    description: "PDF belgelerinizi karanlık moda (siyah arka plan, beyaz yazı) dönüştürün. Gece okumaları için göz yormayan ücretsiz araç.",
+    keywords: "pdf renklerini ters çevir, pdf gece modu, pdf dark mode yapma, siyah arka plan pdf, göz yormayan pdf",
     h1: "PDF Renklerini Ters Çevir",
-    tagline: "Parlak belgeleri karanlık mod PDF'lerine dönüştürün.",
-    howToName: "PDF renkleri nasıl tersine çevrilir",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Parlak beyaz sayfaları yüksek kontrastlı siyah arka plana ve beyaz yazılara dönüştürün. Gece ders çalışırken gözlerinizi koruyun.",
+    howToName: "PDF belgesi karanlık moda (gece moduna) nasıl çevrilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Renklerini tersine çevirmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Renkleri tersine çevir",
-        text: "Mükemmel bir karanlık mod okuma deneyimi için tüm renkleri yerel olarak tersine çeviriyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Tersine çevrilmiş, göz dostu PDF belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Renklerini tersine çevirmek istediğiniz PDF kitabını veya makaleyi yükleyin." },
+      { name: "Karanlık Moda Çevir", text: "Aracımız tüm beyaz alanları siyaha, siyah yazıları ise beyaza dönüştürür." },
+      { name: "Gece Modu PDF'i İndirin", text: "Göz dostu, karanlık modlu yeni belgenizi cihazınıza kaydedin." }
     ],
+    faq: [
+      { q: "Neden gece modu PDF kullanmalıyım?", a: "Karanlık ortamlarda beyaz ekran ışığı gözü ciddi oranda yorar ve baş ağrısı yapabilir. Siyah arka plan okuma konforunu büyük oranda artırır." },
+      { q: "OLED ekranlarda şarj tasarrufu sağlar mı?", a: "Evet! Telefon veya tabletiniz OLED/AMOLED ekrana sahipse siyah arka plan pil tüketimini ciddi oranda azaltır." }
+    ],
+    crossLink: { href: "/tr/grayscale-pdf", label: "Standart siyah beyaz yapmak istiyorsanız PDF Siyah Beyaz Yap aracını kullanın." }
   },
 };
-
 export const markdownPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Markdown to PDF — convert MD files locally",
-    description:
-      "Write or paste Markdown syntax and instantly export it to a beautifully formatted PDF document. Runs 100% in your browser.",
-    keywords:
-      "markdown to pdf, md to pdf, convert markdown, render md as pdf, markdown pdf yap, md çevirici",
+    title: "Markdown to PDF",
+    description: "Convert Markdown (.md) text into beautifully formatted PDF documents online for free. Supports code highlighting and tables.",
+    keywords: "markdown to pdf, convert md to pdf, markdown pdf converter online, render markdown as pdf, md2pdf",
     h1: "Markdown to PDF",
-    tagline: "Convert MD files to styled PDFs instantly.",
+    tagline: "Transform your Markdown notes, README files, and documentation into elegant, publication-ready PDF documents.",
     howToName: "How to convert Markdown to PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add Markdown",
-        text: "Write or paste your Markdown text directly into the editor.",
-      },
-      {
-        name: "Style and preview",
-        text: "Customize the CSS and instantly preview the rendered document locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your beautifully styled, print-ready PDF document.",
-      },
+      { name: "Enter Markdown", text: "Paste your Markdown text or upload an existing .md file." },
+      { name: "Preview & Style", text: "Review the rendered typography, tables, and syntax-highlighted code blocks." },
+      { name: "Export PDF", text: "Download your beautifully styled PDF document in one click." }
     ],
+    faq: [
+      { q: "Are code blocks and syntax highlighting supported?", a: "Yes, programming code blocks with syntax styling, tables, and blockquotes are rendered cleanly." },
+      { q: "Is internet needed for rendering?", a: "No. The Markdown parser runs completely inside your browser." }
+    ],
+    crossLink: { href: "/html-to-pdf", label: "Have raw HTML markup instead? Try HTML to PDF." }
   },
   tr: {
-    title: "Markdown'dan PDF'e — MD dosyalarını yerel olarak dönüştür",
-    description:
-      "Markdown formatında yazın veya yapıştırın, anında şık bir PDF belgesine dönüştürün. %100 tarayıcınızda çalışır.",
-    keywords:
-      "markdown pdf yap, md to pdf, markdown çevirici, convert md to pdf",
-    h1: "Markdown to PDF",
-    tagline: "MD dosyalarını anında şekilli PDF'lere dönüştürün.",
-    howToName: "Markdown PDF'e nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
+    title: "Markdown'dan PDF'e Çevirme",
+    description: "Markdown (.md) notlarınızı, kod bloklarınızı ve tablolarınızı şık bir PDF belgesine dönüştürün. Ücretsiz online MD to PDF.",
+    keywords: "markdown pdf yapma, md to pdf çevirici, markdown dan pdf oluşturma, github readme pdf yap, md2pdf online",
+    h1: "Markdown'dan PDF'e Çevirme",
+    tagline: "Markdown notlarınızı, GitHub README dosyalarınızı ve dökümantasyonlarınızı profesyonel mizanpaja sahip PDF belgelerine dönüştürün.",
+    howToName: "Markdown (.md) dosyası nasıl PDF yapılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Markdown ekle",
-        text: "Markdown metninizi doğrudan düzenleyiciye yazın veya yapıştırın.",
-      },
-      {
-        name: "Biçimlendir ve önizle",
-        text: "CSS'yi özelleştirin ve oluşturulan belgeyi yerel olarak anında önizleyin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Güzel biçimlendirilmiş, baskıya hazır PDF belgenizi indirin.",
-      },
+      { name: "Markdown Yazınızı Ekleyin", text: "Markdown metninizi kutuya yapıştırın veya .md dosyanızı yükleyin." },
+      { name: "Önizleme", text: "Tabloların, başlıkların ve kod bloklarının şık tasarımını anında görün." },
+      { name: "PDF Olarak İndirin", text: "Tek tıkla baskıya ve paylaşıma hazır PDF belgenizi indirin." }
     ],
+    faq: [
+      { q: "Yazılım kod blokları ve tablolar destekleniyor mu?", a: "Evet! Kod renklendirmesi (syntax highlighting), tablolar, alıntılar ve listeler eksiksiz olarak PDF'e aktarılır." },
+      { q: "Notlarım internete aktarılıyor mu?", a: "Hayır. Dönüştürme motoru tamamen tarayıcınızın içinde çalışır; notlarınız güvendedir." }
+    ],
+    crossLink: { href: "/tr/html-to-pdf", label: "Doğrudan HTML kodunu PDF yapmak için HTML'den PDF'e aracını deneyin." }
   },
 };
-
 export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "HTML to PDF — render raw HTML code locally",
-    description:
-      "Paste raw HTML code and convert it directly into a PDF document. Perfect for developers saving web snippets.",
-    keywords:
-      "html to pdf, webpage to pdf, save as pdf, convert html, render html to pdf, html pdf yap",
+    title: "HTML to PDF",
+    description: "Convert HTML code, styled web snippets, and invoices into PDF documents online for free. Fast and accurate rendering.",
+    keywords: "html to pdf, convert html to pdf, web page to pdf, render html as pdf, html2pdf online converter",
     h1: "HTML to PDF",
-    tagline: "Convert raw HTML code to a PDF document.",
+    tagline: "Convert raw HTML code, web templates, invoices, and CSS styling into printable PDF documents in seconds.",
     howToName: "How to convert HTML to PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add HTML",
-        text: "Write or paste your raw HTML and CSS code directly into the editor.",
-      },
-      {
-        name: "Live preview",
-        text: "We render the HTML locally so you can see exactly how it will look.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly rendered PDF document.",
-      },
+      { name: "Paste HTML", text: "Paste your HTML markup and CSS styles or upload an .html file." },
+      { name: "Render Preview", text: "Our rendering engine displays an exact visual representation of your webpage." },
+      { name: "Download PDF", text: "Export your styled HTML layout as a vector PDF document." }
     ],
+    faq: [
+      { q: "Are custom CSS styles supported?", a: "Yes, embedded inline CSS, fonts, flexbox, and grid layouts render accurately into PDF pages." },
+      { q: "Is this suitable for generating invoices?", a: "Absolutely. You can paste HTML invoice templates and generate downloadable PDF receipts instantly." }
+    ],
+    crossLink: { href: "/markdown-to-pdf", label: "Looking for Markdown conversion? Try Markdown to PDF." }
   },
   tr: {
-    title: "HTML'den PDF'e — ham HTML kodunu yerel dönüştür",
-    description:
-      "Ham HTML kodunu yapıştırın ve doğrudan PDF belgesine dönüştürün. Web içeriklerini kaydetmek isteyen geliştiriciler için mükemmeldir.",
-    keywords:
-      "html pdf yap, web sayfasını pdf kaydet, html to pdf, convert html to pdf",
-    h1: "HTML to PDF",
-    tagline: "Ham HTML kodunu PDF belgesine dönüştürün.",
-    howToName: "HTML PDF'e nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
+    title: "HTML'den PDF'e Çevirme",
+    description: "HTML kodlarınızı, web şablonlarınızı ve fatura tasarımlarınızı CSS stilleriyle birlikte ücretsiz PDF belgesine dönüştürün.",
+    keywords: "html pdf yapma, html to pdf çevirici, web kodunu pdf yapma, html fatura pdf oluştur, online html2pdf",
+    h1: "HTML'den PDF'e Çevirme",
+    tagline: "HTML ve CSS kodlarınızı, web sayfalarınızı ve fatura şablonlarınızı tek tıkla şık bir PDF belgesi haline getirin.",
+    howToName: "HTML kodları nasıl PDF dosyasına dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "HTML ekle",
-        text: "Ham HTML ve CSS kodunuzu doğrudan düzenleyiciye yazın veya yapıştırın.",
-      },
-      {
-        name: "Canlı önizleme",
-        text: "Nasıl görüneceğini tam olarak görebilmeniz için HTML'yi yerel olarak oluşturuyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde oluşturulmuş PDF belgenizi indirin.",
-      },
+      { name: "HTML Kodunu Yapıştırın", text: "HTML ve CSS kodlarınızı kutuya yapıştırın veya .html dosyanızı yükleyin." },
+      { name: "Görsel Önizleme", text: "Sayfa tasarımınızı ekranda inceleyin." },
+      { name: "PDF Olarak İndirin", text: "Dönüştür butonuna basarak tüm stilleriyle kusursuz PDF belgenizi indirin." }
     ],
+    faq: [
+      { q: "CSS stilleri ve renkler korunur mu?", a: "Evet! CSS stilleri, renkler, tablolar ve yazı tipleri birebir PDF sayfalarına aktarılır." },
+      { q: "Fatura şablonları için uygun mu?", a: "Kesinlikle! HTML ile tasarlanmış e-ticaret faturalarını veya makbuzları saniyeler içinde PDF yapabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/markdown-to-pdf", label: "Markdown notlarınızı PDF yapmak için Markdown'dan PDF'e aracını kullanın." }
   },
 };
-
 export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Extract PDF Pages — save specific pages",
