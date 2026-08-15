@@ -311,68 +311,59 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const splitCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Split PDF — extract pages in your browser, files never uploaded",
+    title: "Split PDF Pages - Extract PDF Pages Online Free",
     description:
-      "Extract and separate PDF pages into multiple files, free and without limits. Everything runs in your browser — your files never leave your device.",
+      "Split PDF files and extract pages easily without uploading. 100% private, free, and secure PDF page separator tool in your browser.",
     keywords:
-      "split pdf, separate pdf, extract pages from pdf, cut pdf, divide pdf, pdf böl, pdf ayır",
-    h1: "Split PDF",
+      "split pdf, separate pdf, extract pages from pdf, cut pdf, divide pdf, extract pdf pages online, free pdf splitter",
+    h1: "Free PDF Splitter & Page Extractor",
     tagline:
-      "Extract pages from your PDF into new documents — free, unlimited, and 100% private.",
-    howToName: "How to split PDF files in your browser",
+      "Extract pages from your PDF into new documents or split large files — free, unlimited, and 100% private.",
+    howToName: "How to split PDF files",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
     steps: [
       {
-        name: "Add your PDF",
+        name: "Upload Document",
         text: "Drop the PDF document you want to split or extract pages from.",
       },
       {
-        name: "Select pages",
-        text: "Click on the visual grid locally to select the exact pages you need.",
+        name: "Select Pages",
+        text: "Click on the visual grid to select the exact pages you want to keep.",
       },
       {
-        name: "Download PDF",
-        text: "Extract them into a single PDF or download each page separately as a ZIP.",
+        name: "Save as PDF",
+        text: "Download your selected pages as a brand new PDF document instantly.",
       },
     ],
-    faq: [],
+    faq: [
+      { q: "Is it safe to split my PDF here?", a: "Yes! Unlike other tools, we do NOT upload your files to any server. Everything happens securely inside your own web browser." },
+      { q: "Can I extract a single page from a 100-page PDF?", a: "Absolutely. Just click on that single page and download it directly." }
+    ],
     crossLink: {
       href: "/merge-pdf",
-      label: "Need to combine PDFs instead? Merge PDF files.",
+      label: "Want to combine files instead? Try our Merge PDF tool.",
     },
   },
   tr: {
-    title: "PDF Böl — tarayıcında ayır, dosyalar yüklenmeden",
-    description:
-      "PDF sayfalarını çıkart ve ayrı dosyalara böl. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
-    keywords:
-      "pdf böl, pdf bölme, pdf ayır, pdf sayfalarını ayır, sayfaları çıkar, split pdf, cut pdf",
-    h1: "PDF Böl",
-    tagline:
-      "PDF'ten sayfaları çıkarıp yeni belgeler oluşturun — ücretsiz ve %100 yerel.",
-    howToName: "Tarayıcıda PDF dosyalarını bölme",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sık sorulan sorular",
+    title: "PDF Bölme ve Sayfa Ayırma Aracı (Ücretsiz, Şifresiz)",
+    description: "Programsız ve ücretsiz PDF bölme aracı. PDF sayfalarını ayırın, içinden istediğiniz sayfayı tek tıkla çıkarın. Dosyalarınız sunucuya yüklenmeden %100 güvenli.",
+    keywords: "pdf bölme, pdf ayırma, pdf sayfa çıkarma, pdf sayfalarını ayır, pdf'den sayfa alma, pdf kesici, pdf bölücü program",
+    h1: "Ücretsiz PDF Bölme ve Ayırma Aracı",
+    tagline: "Büyük PDF belgelerinizi parçalara ayırın veya içinden sadece istediğiniz sayfaları anında çıkarın. Sunucuya dosya yüklemeden cihazınızda çalışır.",
+    howToName: "PDF sayfaları nasıl ayrılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Bölmek veya sayfalarını çıkarmak istediğiniz PDF belgesini bırakın.",
-      },
-      {
-        name: "Sayfaları seç",
-        text: "Görsel ızgarada yerel olarak tam ihtiyacınız olan sayfaları seçin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Sayfaları tek bir PDF olarak çıkarın veya her sayfayı ZIP arşivi olarak indirin.",
-      },
+      { name: "Dosyanızı Seçin", text: "Bölmek veya içinden sayfa çıkarmak istediğiniz PDF belgesini kutuya sürükleyip bırakın." },
+      { name: "Sayfaları Belirleyin", text: "Ekranda beliren sayfa önizlemelerine tıklayarak almak istediğiniz sayfaları veya aralıkları seçin." },
+      { name: "Anında İndirin", text: "Seçtiğiniz sayfaları tek bir yeni PDF olarak veya ayrı ayrı dosyalar halinde bilgisayarınıza kaydedin." }
     ],
-    faq: [],
-    crossLink: {
-      href: "/tr/merge-pdf",
-      label: "Bölmek yerine birleştirmek mi istiyorsun? PDF Birleştir.",
-    },
+    faq: [
+      { q: "PDF bölerken dosyalarım internete yükleniyor mu?", a: "Hayır. Sitemiz tamamen çevrimdışı (tarayıcı içi) çalışır. Dosyalarınız cihazınızdan dışarı çıkmaz, gizli belgeleriniz için dünyanın en güvenli aracıdır." },
+      { q: "PDF'den tek bir sayfa alabilir miyim?", a: "Evet. Sadece almak istediğiniz o tek sayfaya tıklayıp İndir demeniz yeterlidir." }
+    ],
+    crossLink: { href: "/tr/merge-pdf", label: "Sayfaları çıkardıktan sonra birleştirmek mi istiyorsunuz? PDF Birleştirme aracını deneyin." }
   },
 };
 export const organizeCopy: Record<"en" | "tr", ToolCopy> = {
