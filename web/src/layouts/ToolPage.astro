@@ -128,22 +128,6 @@ function chunk<T>(items: T[], size: number): T[][] {
   </div>
 
 
-  {p.faq && p.faq.length > 0 && (
-    <div class="mx-auto flex max-w-[720px] flex-col px-4 mt-12 pb-0">
-      <h2 class="font-heading text-xl font-semibold mb-6 text-ink dark:text-ink-dark">
-        {p.faqTitle || (p.lang === 'tr' ? 'Sıkça Sorulan Sorular' : 'Frequently Asked Questions')}
-      </h2>
-      <div class="flex flex-col gap-6">
-        {p.faq.map((item) => (
-          <div>
-            <h3 class="text-base font-semibold text-ink dark:text-ink-dark">{item.q}</h3>
-            <p class="mt-2 text-sm text-ink-muted dark:text-ink-muted-dark leading-relaxed">{item.a}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
-
   <div class="mt-11">
 
     <GlobalFaq lang={p.lang} toolFaq={p.faq} />
