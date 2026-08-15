@@ -1085,64 +1085,44 @@ export const unlockCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Rotate PDF — turn pages 90, 180, or 270 degrees locally",
-    description:
-      "Rotate individual PDF pages or all pages at once. Your files stay on your device — free, fast, and secure.",
-    keywords:
-      "rotate pdf, turn pdf, flip pdf, pdf orientation, upside down pdf, pdf döndür, pdf çevir",
+    title: "Rotate PDF",
+    description: "Rotate PDF pages online for free. Turn your PDF documents upside down or sideways, and save the changes permanently.",
+    keywords: "rotate pdf, turn pdf pages, rotate pdf online, flip pdf, fix upside down pdf",
     h1: "Rotate PDF",
-    tagline:
-      "Turn upside-down or sideways pages to the right orientation — free, instant, and 100% private.",
-    howToName: "How to rotate PDF pages in your browser",
+    tagline: "Easily rotate specific pages or your entire document. Turn upside-down pages right-side up permanently.",
+    howToName: "How to rotate a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document containing pages that need rotating.",
-      },
-      {
-        name: "Rotate pages",
-        text: "Rotate individual pages or the entire document instantly and locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your correctly oriented PDF document securely.",
-      },
+      { name: "Upload PDF", text: "Drag and drop the document with the upside-down or sideways pages." },
+      { name: "Rotate Pages", text: "Hover over individual pages to rotate them, or use the buttons to rotate all pages at once." },
+      { name: "Apply & Download", text: "Click apply to permanently save the new orientation and download the file." }
     ],
-    crossLink: {
-      href: "/remove-pages",
-      label: "Need to remove extra pages instead? Remove Pages.",
-    },
+    faq: [
+      { q: "Is the rotation permanent?", a: "Yes! Unlike some PDF readers that only temporarily rotate your view, our tool permanently rewrites the file so it opens correctly on every device." },
+      { q: "Can I rotate just one specific page?", a: "Absolutely. You can choose to rotate all pages at once, or hover over a single sideways page to rotate only that one." }
+    ],
+    crossLink: { href: "/remove-pages", label: "Found a page you don't need? Use our Remove PDF Pages tool." }
   },
   tr: {
-    title: "PDF Döndür — sayfaları 90, 180 veya 270 derece çevir",
-    description:
-      "PDF sayfalarını tek tek veya topluca çevirin. Dosyalarınız cihazınızdan asla çıkmaz — ücretsiz ve güvenli.",
-    keywords:
-      "pdf döndür, pdf yönünü değiştir, ters pdf düzelt, sayfaları çevir, rotate pdf",
-    h1: "PDF Döndür",
-    tagline:
-      "Ters veya yan duran sayfaları doğru açıda hizalayın — ücretsiz, anında ve %100 gizli.",
-    howToName: "Tarayıcıda PDF sayfaları nasıl döndürülür",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Döndürme",
+    description: "Ters veya yan dönmüş PDF sayfalarınızı kalıcı olarak düzeltin. Programsız ve ücretsiz PDF döndürme aracı.",
+    keywords: "pdf döndürme, ters pdf düzeltme, pdf sayfalarını çevir, yan pdf düzeltme, pdf yönünü değiştirme",
+    h1: "PDF Döndürme",
+    tagline: "Ters taranmış veya yan duran sayfalarınızı tek tıkla düzeltin. Değişiklikler belgenize kalıcı olarak işlenir.",
+    howToName: "PDF sayfaları nasıl döndürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Döndürülmesi gereken sayfalar içeren PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları döndür",
-        text: "Tek tek sayfaları veya tüm belgeyi yerel olarak anında döndürün.",
-      },
-      {
-        name: "PDF indir",
-        text: "Doğru yönde ayarlanmış PDF belgenizi güvenle indirin.",
-      },
+      { name: "Ters Belgeyi Yükle", text: "Yönü bozuk olan PDF belgenizi kutuya sürükleyip bırakın." },
+      { name: "Yönünü Düzelt", text: "Fareyle yan duran sayfaların üzerine gelip döndürün veya tüm belgeyi tek tıkla çevirin." },
+      { name: "Kalıcı Olarak İndir", text: "Kaydet butonuna bastığınızda, belge yeni yönüyle kalıcı olarak bilgisayarınıza iner." }
     ],
-    crossLink: {
-      href: "/tr/remove-pages",
-      label: "İstenmeyen sayfaları silmek mi istiyorsunuz? Sayfa Sil.",
-    },
+    faq: [
+      { q: "Bu döndürme işlemi kalıcı mıdır?", a: "Evet! Bazı PDF okuyucular belgeyi sadece o anlık düz gösterir ancak başkasına gönderdiğinizde yine ters açılır. Bu araç ise belgenin kodlarını yeniden yazarak yönünü sonsuza dek kalıcı olarak düzeltir." },
+      { q: "Sadece tek bir sayfayı çevirebilir miyim?", a: "Elbette. İsterseniz tüm sayfaları, isterseniz sadece tarayıcıda ters çıkmış tek bir sayfayı seçerek döndürebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/remove-pages", label: "Belgenizin içinde boş veya gereksiz sayfalar mı var? PDF Sayfa Silme aracını kullanın." }
   },
 };
 export const removeCopy: Record<"en" | "tr", ToolCopy> = {
@@ -2125,55 +2105,46 @@ export const cropCopy: Record<"en" | "tr", ToolCopy> = {
 
 export const ocrCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "OCR PDF — extract text from scanned documents",
-    description: "Convert scanned PDFs into searchable text documents.",
-    keywords:
-      "ocr pdf, optical character recognition, scanned pdf to text, searchable pdf, pdf ocr, metin tanıma, taranmış pdf okuma",
+    title: "OCR PDF",
+    description: "Convert scanned PDFs and images into searchable, selectable text. Free Optical Character Recognition tool.",
+    keywords: "ocr pdf, extract text from image, scanned pdf to text, optical character recognition, convert image to text",
     h1: "OCR PDF",
-    tagline: "Make scanned documents searchable with AI.",
-    howToName: "How to use OCR on a PDF",
+    tagline: "Turn unselectable text in scanned images and documents into fully searchable and copyable text formats.",
+    howToName: "How to OCR a PDF document",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the scanned PDF document you want to make searchable.",
-      },
-      {
-        name: "Run OCR",
-        text: "We locally analyze the images and extract the text using AI models.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download a new, perfectly searchable PDF document with embedded text.",
-      },
+      { name: "Upload Scanned File", text: "Select a PDF or image file that contains scanned, unselectable text." },
+      { name: "Select Language", text: "Choose the language of the document to improve the text recognition accuracy." },
+      { name: "Start OCR", text: "Our AI engine will scan the pixels, recognize the text, and provide you with a copyable text file." }
     ],
+    faq: [
+      { q: "What is OCR?", a: "OCR stands for Optical Character Recognition. It is a technology that analyzes the shapes (pixels) in an image and translates them into machine-readable, copyable text." },
+      { q: "Does it work with handwritten text?", a: "Our tool works incredibly well with printed text (books, receipts, invoices). However, handwritten text recognition depends heavily on how legible the handwriting is." }
+    ],
+    crossLink: { href: "/extract-text", label: "Is your PDF already a text document? Use the faster Extract Text tool instead." }
   },
   tr: {
-    title: "OCR PDF — taranmış belgelerden metin çıkar",
-    description: "Taranmış PDF'leri aranabilir metin belgelerine dönüştürün.",
-    keywords:
-      "pdf ocr, ocr pdf, metin tanıma, resimdeki yazıyı okuma, taranmış pdf çeviri, aranabilir pdf",
-    h1: "OCR PDF",
-    tagline: "Yapay zeka ile taranmış belgeleri aranabilir yapın.",
-    howToName: "PDF'te OCR nasıl kullanılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF OCR",
+    description: "Taranmış belgeleri, kimlikleri veya resimleri OCR teknolojisi ile okunabilir metne (yazıya) dönüştürün. Ücretsiz ve güvenli.",
+    keywords: "ocr pdf, resimdeki yazıyı kopyalama, taranmış pdf i metne çevirme, pdf yazı tanıma, optik karakter tanıma, fotoğraftaki yazıyı alma",
+    h1: "PDF OCR (Yazı Tanıma)",
+    tagline: "Taranmış PDF'ler veya fotoğrafların içindeki seçilemeyen (kopyalanamayan) yazıları tarayıp seçilebilir, kopyalanabilir metinlere dönüştürün.",
+    howToName: "Taranmış bir PDF metne nasıl dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Aranabilir hale getirmek istediğiniz taranmış PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "OCR uygula",
-        text: "Yapay zeka modelleri kullanarak görüntüleri yerel olarak analiz ediyor ve metni çıkarıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "İçine metin gömülmüş, tamamen aranabilir yeni PDF belgenizi indirin.",
-      },
+      { name: "Taranmış Dosyayı Yükle", text: "İçindeki yazıları alamadığınız PDF veya fotoğraf dosyasını seçin." },
+      { name: "Tarama Dili Seçimi", text: "Doğruluğu artırmak için belgenin hangi dilde (örn. Türkçe, İngilizce) yazıldığını seçin." },
+      { name: "OCR'ı Başlat", text: "Akıllı sistemimiz pikselleri analiz edip harfleri tanıyacak ve size kopyalanabilir bir TXT sunacaktır." }
     ],
+    faq: [
+      { q: "OCR nedir ve ne işe yarar?", a: "OCR (Optik Karakter Tanıma), bir resmin veya taranmış bir kağıdın üzerindeki mürekkep lekelerini (pikselleri) bilgisayarın anlayabileceği dijital metin karakterlerine dönüştüren yapay zeka teknolojisidir." },
+      { q: "El yazısını okuyabilir mi?", a: "Makine ile yazılmış (kitap, fatura, fiş, dilekçe) metinlerde %99'a kadar doğru sonuç verir. El yazısında ise yazının ne kadar okunaklı olduğuna bağlı olarak başarı oranı değişir." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Eğer belgeniz taranmış bir fotoğraf değilse, çok daha hızlı olan Metin Çıkarma aracını kullanabilirsiniz." }
   },
 };
-
 export const removeBlankCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Remove Blank Pages — clean up your PDF",
