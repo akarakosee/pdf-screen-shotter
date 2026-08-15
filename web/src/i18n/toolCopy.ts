@@ -403,169 +403,86 @@ export const organizeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Reverse PDF Pages — change page order",
-    description:
-      "Reverse the order of pages in your PDF document instantly. Fast, free, and completely local.",
-    keywords:
-      "reverse pdf, invert page order, flip pdf pages, reverse pdf order, pdf ters çevir, sondan başa pdf",
+    title: "Reverse PDF Pages",
+    description: "Invert the page order of your PDF document online for free. Flip pages from last-to-first instantly in your browser.",
+    keywords: "reverse pdf pages, flip pdf page order, invert pdf pages, last to first pdf, reverse document order",
     h1: "Reverse PDF Pages",
-    tagline: "Reverse your PDF page order from last to first in seconds.",
+    tagline: "Flip your document backwards in a single click. Ideal for reversing documents scanned from back-to-front.",
     howToName: "How to reverse PDF page order",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document whose page order you want to invert.",
-      },
-      {
-        name: "Reverse order",
-        text: "We instantly flip the entire document so the last page becomes the first locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your properly reversed PDF document.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file whose page order is backwards." },
+      { name: "Reverse", text: "Click reverse to automatically invert the sequence from last page to first." },
+      { name: "Download", text: "Download your corrected PDF in the proper sequential order." }
     ],
     faq: [
-      {
-        q: "Why would I need to reverse PDF pages?",
-        a: "This tool is extremely useful if a document was fed backwards into a physical scanner, resulting in the last page appearing first.",
-      },
-      {
-        q: "Are my files uploaded?",
-        a: "No. The entire process runs inside your web browser locally. Your files are never uploaded to our servers.",
-      },
+      { q: "When should I use this tool?", a: "It is perfect when a multi-page scanner scans your physical pages in reverse order (from last page to first page)." },
+      { q: "Is the page quality preserved?", a: "Yes, reversing only changes the index of pages; no re-rendering or loss of quality occurs." }
     ],
-    crossLink: {
-      href: "/organize-pdf",
-      label: "Need to manually reorder pages? Organize PDF.",
-    },
+    crossLink: { href: "/organize-pdf", label: "Need custom manual page sorting? Use Organize PDF." }
   },
   tr: {
-    title: "PDF Sayfalarını Tersine Çevir — sayfa sırasını değiştirin",
-    description:
-      "PDF belgenizdeki sayfaların sırasını anında tersine çevirin. Hızlı, ücretsiz ve tamamen yerel.",
-    keywords:
-      "pdf ters çevir, pdf sayfa sırasını ters çevir, pdf sondan başa, sayfaları tersine çevir",
+    title: "PDF Sayfalarını Tersine Çevir",
+    description: "PDF sayfalarının sırasını sondan başa doğru tersine çevirin. Ters taranmış belgeleri tek tıkla düzeltin.",
+    keywords: "pdf sayfalarını tersine çevir, pdf sayfa sırasını ters yapma, sondan başa pdf, ters taranmış pdf düzeltme",
     h1: "Sayfaları Tersine Çevir",
-    tagline:
-      "PDF sayfa sıranızı saniyeler içinde sondan başa doğru tersine çevirin.",
-    howToName: "PDF sayfa sırası nasıl tersine çevrilir",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    tagline: "Sondan başa taranmış veya sırası karışmış PDF belgelerini tek tıkla tersine çevirin. Sayfa kalitesi %100 korunur.",
+    howToName: "PDF sayfa sırası nasıl tersine çevrilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Sayfa sırasını tersine çevirmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sırayı tersine çevir",
-        text: "Son sayfa ilk sayfa olacak şekilde tüm belgeyi yerel olarak anında ters çeviriyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Düzgün bir şekilde ters çevrilmiş PDF belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Sayfa sırası ters olan belgenizi ekrana bırakın." },
+      { name: "Tersine Çevir", text: "Tek tıkla sayfaların dizilimini sondan başa doğru otomatik çevirin." },
+      { name: "Düzeltilmiş PDF'i İndirin", text: "Doğru sırada dizilmiş yeni belgenizi anında indirin." }
     ],
     faq: [
-      {
-        q: "PDF sayfalarını neden tersine çevirmem gerekir?",
-        a: "Bu araç, fiziksel bir tarayıcıya sayfalar ters yerleştirildiğinde ve son sayfa ilk sırada çıktığında son derece yararlıdır.",
-      },
-      {
-        q: "Dosyalarım sunucuya yükleniyor mu?",
-        a: "Hayır. Tüm işlemler doğrudan tarayıcınızın içinde yerel olarak gerçekleşir. Dosyalarınız asla sunucularımıza yüklenmez.",
-      },
+      { q: "Bu araç ne zaman kullanılır?", a: "Fotokopi makinesi veya tarayıcı sayfaları sondan başa doğru taradığında, tek tek uğraşmadan tek tıkla düzeltmek için idealdir." },
+      { q: "Belgenin kalitesi düşer mi?", a: "Hayır. Yalnızca sayfaların sırası değiştirilir, içindeki metin ve görsellere dokunulmaz." }
     ],
-    crossLink: {
-      href: "/tr/organize-pdf",
-      label: "Sayfaları elle mi sıralamak istiyorsunuz? PDF Düzenle.",
-    },
+    crossLink: { href: "/tr/organize-pdf", label: "Sayfaları tek tek elle sıralamak istiyorsanız PDF Düzenle aracını kullanın." }
   },
 };
 export const batesCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Add Bates Numbering to PDF — professional document stamping",
-    description:
-      "Add Bates numbers to your PDF documents instantly. Perfect for legal professionals. Free, fast, and completely local.",
-    keywords:
-      "bates numbering, bates stamp, legal stamp pdf, add bates number, bates damgası, bates numaralandırma",
+    title: "Bates Numbering",
+    description: "Add legal Bates numbering and custom prefixes to PDF documents online for free. Ideal for law firms, legal discovery, and trials.",
+    keywords: "bates numbering pdf, legal bates stamping, bates stamp pdf online, add bates numbers, legal document indexing",
     h1: "Bates Numbering",
-    tagline: "Stamp your PDF with professional Bates numbers in seconds.",
+    tagline: "Stamp your legal documents with standardized Bates numbers, prefixes, and page digits for court exhibits and evidence.",
     howToName: "How to add Bates numbering to a PDF",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the legal or professional documents you want to stamp.",
-      },
-      {
-        name: "Configure numbering",
-        text: "Set the prefix, suffix, and starting number perfectly locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your legally formatted and Bates stamped PDF document.",
-      },
+      { name: "Upload Legal Documents", text: "Select the PDF files or exhibits you need to index." },
+      { name: "Configure Bates Stamp", text: "Set custom prefix (e.g., CONF-0001), starting number, digit count, and placement." },
+      { name: "Download Bates Stamped PDF", text: "Download your professionally indexed legal document." }
     ],
     faq: [
-      {
-        q: "What is Bates numbering?",
-        a: "Bates numbering (or Bates stamping) is used in the legal, medical, and business fields to place identifying numbers and/or date/time-marks on images and documents as they are scanned or processed.",
-      },
-      {
-        q: "Are my confidential legal files uploaded?",
-        a: "No. The entire process runs inside your web browser locally. Your files are never uploaded to our servers, ensuring complete confidentiality.",
-      },
+      { q: "What is Bates numbering used for?", a: "Bates numbering is a standard method used in the legal and medical fields to uniquely identify and index pages in discovery documents and court evidence." },
+      { q: "Is it safe for confidential client files?", a: "Yes. All stamping is performed strictly in your local browser without transmitting client data across the network." }
     ],
-    crossLink: {
-      href: "/watermark-pdf",
-      label: "Need a custom watermark instead? Watermark PDF.",
-    },
+    crossLink: { href: "/protect-pdf", label: "Need to secure your legal exhibits? Use Protect PDF." }
   },
   tr: {
-    title: "PDF'ye Bates Numaralandırması Ekle — profesyonel belge damgalama",
-    description:
-      "PDF belgelerinize anında Bates numaraları ekleyin. Hukuk profesyonelleri için mükemmeldir. Ücretsiz, hızlı ve tamamen yerel.",
-    keywords:
-      "bates numaralandırma, bates damgası, pdf bates ekle, hukuki damga, bates numbering",
-    h1: "Bates Numaralandırması",
-    tagline:
-      "PDF'inizi saniyeler içinde profesyonel Bates numaralarıyla damgalayın.",
-    howToName: "PDF'ye Bates numaralandırması nasıl eklenir",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "Bates Numaralandırma",
+    description: "Hukuki dava evraklarınıza, sözleşmelere ve delillere profesyonel Bates numarası (Önekli sayfa damgası) ekleyin. Ücretsiz ve güvenli.",
+    keywords: "bates numaralandırma, hukuki pdf damgası, bates no ekleme, dava evrakı numaralandırma, bates stamp pdf",
+    h1: "Bates Numaralandırma",
+    tagline: "Hukuk büroları ve adli süreçler için standart Bates önekleri (Örn: DELİL-0001) ile belgelerinizi resmi olarak indeksleyin.",
+    howToName: "PDF belgesine Bates numarası nasıl eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Damgalamak istediğiniz yasal veya profesyonel belgeleri sayfaya bırakın.",
-      },
-      {
-        name: "Numaralandırmayı ayarla",
-        text: "Önek, sonek ve başlangıç numarasını yerel olarak mükemmel şekilde ayarlayın.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yasal olarak biçimlendirilmiş ve Bates damgası basılmış PDF belgenizi indirin.",
-      },
+      { name: "Hukuki Evrakı Yükleyin", text: "Bates numarası vurmak istediğiniz PDF belgesini seçin." },
+      { name: "Bates Ayarlarını Yapın", text: "Önek (örn: EK-A-), basamak sayısı ve başlangıç numarasını belirleyin." },
+      { name: "Damgalanmış PDF'i İndirin", text: "Mahkemeye ve arşive hazır indekslenmiş belgenizi kaydedin." }
     ],
     faq: [
-      {
-        q: "Bates numaralandırması nedir?",
-        a: "Bates numaralandırması (veya Bates damgalama), hukuk, tıp ve iş alanlarında, görüntü ve belgelere tarandıkları veya işlendikleri sırada tanımlayıcı numaralar ve/veya tarih/saat işaretleri yerleştirmek için kullanılır.",
-      },
-      {
-        q: "Gizli yasal dosyalarım sunucuya yükleniyor mu?",
-        a: "Hayır. Tüm işlemler doğrudan tarayıcınızın içinde yerel olarak gerçekleşir. Dosyalarınız asla sunucularımıza yüklenmez, böylece tam gizlilik sağlanır.",
-      },
+      { q: "Bates numaralandırma nedir ve nerede kullanılır?", a: "Avukatlık büroları, mahkemeler ve hastanelerde yüzlerce sayfalık delil ve dava dosyalarının takibini kolaylaştırmak için kullanılan resmi numaralama sistemidir." },
+      { q: "Müvekkilimin gizli evrakları güvende mi?", a: "Evet. Sayfaların damgalanması tamamen tarayıcınızın kendi içinde yapılır; müvekkil evrakları internete asla sızmaz." }
     ],
-    crossLink: {
-      href: "/tr/watermark-pdf",
-      label:
-        "Bunun yerine özel bir filigrana mı ihtiyacınız var? PDF Filigran Ekle.",
-    },
+    crossLink: { href: "/tr/protect-pdf", label: "Hukuki belgelerinizi şifrelemek için PDF Şifrele aracını kullanın." }
   },
 };
 export const nupCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1235,65 +1152,44 @@ export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Flatten PDF — make form fields and annotations uneditable locally",
-    description:
-      "Convert interactive PDF forms, highlights, and annotations into static page content. 100% private, processed in your browser.",
-    keywords:
-      "flatten pdf, make pdf uneditable, flatten form, lock pdf form, pdf düzleştir, form kilitle",
+    title: "Flatten PDF",
+    description: "Flatten interactive PDF forms, annotations, and layers into a single static background. Free, fast, and secure in your browser.",
+    keywords: "flatten pdf, make pdf non editable, flatten pdf form fields, lock pdf forms, flatten annotations pdf",
     h1: "Flatten PDF",
-    tagline:
-      "Turn PDF form fields and annotations into static content — free and 100% private.",
-    howToName: "How to flatten PDF forms in your browser",
+    tagline: "Lock form fields, signatures, and annotations into the document background so they can never be modified or removed.",
+    howToName: "How to flatten a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF containing forms or annotations you want to flatten.",
-      },
-      {
-        name: "Flatten contents",
-        text: "We merge all interactive fields and annotations into the document permanently locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your uneditable, perfectly flattened PDF document.",
-      },
+      { name: "Upload PDF", text: "Select the interactive PDF form or annotated document you want to lock." },
+      { name: "Flatten", text: "Our tool converts all interactive form fields and notes into permanent page content." },
+      { name: "Download", text: "Download your uneditable, flattened PDF file ready for safe sharing." }
     ],
-    crossLink: {
-      href: "/protect-pdf",
-      label: "Need to password-protect your document? Try Protect PDF.",
-    },
+    faq: [
+      { q: "What does flattening a PDF do?", a: "Flattening merges fillable form fields, checkboxes, and comments directly into the background layer, making the content read-only." },
+      { q: "Can someone unflatten the document later?", a: "No. Once flattened, the interactive fields become permanent raster/vector graphics and cannot be converted back into fillable forms." }
+    ],
+    crossLink: { href: "/protect-pdf", label: "Need to add password protection too? Try Protect PDF." }
   },
   tr: {
-    title: "PDF Düzleştir — form alanlarını ve notları sabit katmana dönüştür",
-    description:
-      "İnteraktif PDF formlarını, açıklamaları ve işaretlemeleri sabit sayfa içeriğine dönüştürün. %100 gizli, tarayıcınızda çalışır.",
-    keywords:
-      "pdf düzleştir, pdf flatten, düzenlenemez pdf yap, pdf formu kilitle, form düzleştirme",
+    title: "PDF Düzleştir",
+    description: "Doldurulabilir PDF formlarını, imzaları ve notları arka planla birleştirerek kilitli, değiştirilemez hale getirin. Ücretsiz ve yerel.",
+    keywords: "pdf düzleştirme, pdf form kilitleme, pdf düzenlenemez yapma, pdf flatten, değiştirilemez pdf yap",
     h1: "PDF Düzleştir",
-    tagline:
-      "PDF form alanlarını sabit ve düzenlenemez içeriğe dönüştürün — ücretsiz ve %100 gizli.",
-    howToName: "PDF formları tarayıcıda nasıl düzleştirilir",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Form alanlarını, dijital imzaları ve ek açıklamaları kalıcı hale getirin. Belgenizin başkaları tarafından değiştirilmesini engelleyin.",
+    howToName: "PDF nasıl düzleştirilir (değiştirilemez yapılır)?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Düzleştirmek istediğiniz form veya açıklamalar içeren PDF belgesini bırakın.",
-      },
-      {
-        name: "İçerikleri düzleştir",
-        text: "Etkileşimli tüm alanları ve açıklamaları belgeye kalıcı ve yerel olarak birleştiriyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Düzenlenemez, mükemmel şekilde düzleştirilmiş PDF belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Düzleştirmek (kilitlemek) istediğiniz form veya imzalı belgeyi seçin." },
+      { name: "Düzleştirme", text: "Aracımız tüm doldurulmuş kutucukları ve notları kalıcı sayfa içeriğine dönüştürür." },
+      { name: "Kilitli PDF'i İndirin", text: "Artık kimsenin içeriğini bozamayacağı düzleştirilmiş PDF'inizi indirin." }
     ],
-    crossLink: {
-      href: "/tr/protect-pdf",
-      label:
-        "Belgenizi şifreyle mi korumak istiyorsunuz? PDF Şifrele aracını deneyin.",
-    },
+    faq: [
+      { q: "PDF düzleştirme ne işe yarar?", a: "Doldurduğunuz resmi formların, imzaların veya notların başkaları tarafından değiştirilmesini, silinmesini veya kutucukların kaymasını önler." },
+      { q: "Düzleştirilen form tekrar açılabilir mi?", a: "Hayır. Düzleştirme işlemi form alanlarını kalıcı birer görüntü haline getirdiği için sonradan geri alınamaz." }
+    ],
+    crossLink: { href: "/tr/protect-pdf", label: "Belgenizi tamamen şifrelemek için PDF Şifrele aracını kullanabilirsiniz." }
   },
 };
 export const signCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1424,238 +1320,128 @@ export const compressCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const redactCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Redact PDF — hide sensitive information",
-    description:
-      "Permanently black out sensitive text, images, or graphics in your PDF. 100% private and fast.",
-    keywords:
-      "redact pdf, blackout text in pdf, hide pdf text, censor pdf, secure redact, pdf karart, pdf sansür",
+    title: "Redact PDF",
+    description: "Permanently black out and redact sensitive text, ID numbers, and confidential data from PDF files online for free.",
+    keywords: "redact pdf, black out text in pdf, censor pdf, remove sensitive data pdf, permanently redact pdf",
     h1: "Redact PDF",
-    tagline:
-      "Black out sensitive content in your PDF documents in seconds — free and completely local.",
-    howToName: "How to redact a PDF file",
+    tagline: "Black out private information, credit card numbers, or confidential terms permanently. 100% private in your browser.",
+    howToName: "How to redact a PDF",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document containing sensitive information you need to hide.",
-      },
-      {
-        name: "Blackout text",
-        text: "Draw completely opaque redaction boxes over sensitive areas locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your redacted PDF document, perfectly sanitized and secure.",
-      },
+      { name: "Upload Document", text: "Select the PDF containing confidential information you want to sanitize." },
+      { name: "Draw Blackout Boxes", text: "Drag redaction boxes over sensitive text, figures, or names." },
+      { name: "Apply & Download", text: "Click redact to permanently scrub the underlying data and download the safe file." }
     ],
     faq: [
-      {
-        q: "Are my files uploaded?",
-        a: "No. The redaction happens entirely on your device. Your files are completely private.",
-      },
+      { q: "Can someone select the text behind the black box?", a: "No! Unlike drawing shapes in basic viewers, our redaction completely scrubs the underlying text data from the file stream." },
+      { q: "Are my confidential files secure?", a: "Yes, redaction is executed purely on your local machine. Your confidential files never touch our servers." }
     ],
-    crossLink: {
-      href: "/sanitize-pdf",
-      label: "Want to remove hidden metadata too? Try Sanitize PDF.",
-    },
+    crossLink: { href: "/sanitize-pdf", label: "Want to strip hidden metadata and attachments too? Try Sanitize PDF." }
   },
   tr: {
-    title: "PDF Karartma — hassas bilgileri gizleyin",
-    description:
-      "PDF'inizdeki hassas bilgileri gizlemek için üzerlerine siyah kutular çizin. %100 gizli ve hızlı.",
-    keywords:
-      "pdf karart, pdf sansürle, pdf gizli metin, redact pdf, pdf blackout, metin sansürleme",
-    h1: "PDF Karartma",
-    tagline:
-      "PDF belgelerinizdeki hassas içerikleri saniyeler içinde karartın — ücretsiz ve %100 gizli.",
-    howToName: "Bir PDF dosyası nasıl karartılır",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "PDF Sansürle / Karart",
+    description: "PDF belgelerinizdeki T.C. kimlik no, hesap numarası gibi gizli bilgileri kalıcı siyah kutularla sansürleyin ve gizleyin.",
+    keywords: "pdf sansürleme, pdf yazı karartma, pdf tc gizleme, pdf siyah şerit çekme, pdf gizli bilgileri silme",
+    h1: "PDF Sansürle (Karart)",
+    tagline: "Hassas kişisel verileri, isimleri ve gizli rakamları kalıcı olarak karartın. Altındaki metinler tamamen kazınır, kopyalanamaz.",
+    howToName: "PDF belgesindeki yazılar nasıl sansürlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Gizlemeniz gereken hassas bilgiler içeren PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Metni karart",
-        text: "Hassas alanların üzerine yerel olarak tamamen opak karartma kutuları çizin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde temizlenmiş ve güvenli hale getirilmiş karartılmış PDF belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Gizlemek istediğiniz bilgileri içeren PDF belgesini yükleyin." },
+      { name: "Karartma Alanını Seçin", text: "Gizlenecek yazıların, kimlik no veya hesapların üzerine fareyle siyah kutu çizin." },
+      { name: "Kalıcı Olarak İndir", text: "Sansürle butonuna basarak altındaki metin verisi tamamen silinmiş güvenli PDF'i indirin." }
     ],
     faq: [
-      {
-        q: "Dosyalarım bir yere yükleniyor mu?",
-        a: "Hayır. Karartma işlemi tamamen cihazınızda gerçekleşir. Dosyalarınız %100 gizli kalır.",
-      },
+      { q: "Siyah kutunun arkasındaki yazı kopyalanabilir mi?", a: "Kesinlikle hayır! Basit çizim araçlarının aksine, bu araç siyah kutunun altındaki metin kodlarını dosyadan tamamen siler." },
+      { q: "Hassas bilgilerim sunucunuza gider mi?", a: "Hayır. Karartma işlemi tamamen tarayıcınızın içinde yapılır, gizli evraklarınız cihazınızda kalır." }
     ],
-    crossLink: {
-      href: "/tr/sanitize-pdf",
-      label: "Gizli meta verilerini de temizlemek ister misiniz? PDF Temizle.",
-    },
+    crossLink: { href: "/tr/sanitize-pdf", label: "Belgedeki gizli meta verileri ve yazar bilgilerini de temizlemek için PDF Temizle aracını deneyin." }
   },
 };
 export const repairCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Repair PDF — fix corrupted documents locally",
-    description:
-      "Fix and recover corrupted or broken PDF files instantly in your browser. 100% private, no uploads.",
-    keywords:
-      "repair pdf, fix pdf, recover pdf, corrupt pdf, broken pdf, pdf onar, bozuk pdf düzelt",
+    title: "Repair PDF",
+    description: "Repair corrupted, damaged, or unreadable PDF files online for free. Recover content from broken PDF documents.",
+    keywords: "repair pdf, fix corrupted pdf, recover broken pdf, damaged pdf fixer, open broken pdf online",
     h1: "Repair PDF",
-    tagline:
-      "Fix corrupted PDF files and recover data instantly — free and completely local.",
-    howToName: "How to repair a PDF file",
+    tagline: "Fix broken cross-reference tables, structural errors, and salvage readable pages from corrupted PDF documents.",
+    howToName: "How to repair a corrupted PDF",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the corrupted or damaged PDF document you want to repair.",
-      },
-      {
-        name: "Repair file",
-        text: "We scan and reconstruct the PDF structure locally to recover its contents.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your fully repaired and usable PDF document securely.",
-      },
+      { name: "Upload Damaged PDF", text: "Select the corrupted PDF that fails to open properly." },
+      { name: "Analyze & Fix", text: "Our parser reconstructs the PDF internal catalog and xref tables." },
+      { name: "Download Restored PDF", text: "Save the repaired and readable PDF file to your device." }
     ],
     faq: [
-      {
-        q: "Are my files uploaded?",
-        a: "No. The repair happens entirely on your device using WebAssembly technology. Your files are completely private.",
-      },
+      { q: "Can every broken PDF be fixed?", a: "If the underlying page streams exist, our tool can rebuild the index and restore the file. If the file is 100% empty or truncated to zero bytes, recovery is not possible." },
+      { q: "Is the repair done privately?", a: "Yes. Reconstruction happens entirely inside your browser's WebAssembly sandbox." }
     ],
-    crossLink: {
-      href: "/sanitize-pdf",
-      label: "Want to clean hidden metadata? Try Sanitize PDF.",
-    },
+    crossLink: { href: "/compress-pdf", label: "Is the repaired file too large? Try Compress PDF." }
   },
   tr: {
-    title: "PDF Onar — bozuk belgeleri tarayıcıda düzelt",
-    description:
-      "Bozuk veya açılmayan PDF dosyalarınızı tarayıcınızda anında onarın ve kurtarın. %100 gizli, yükleme yok.",
-    keywords:
-      "pdf onar, bozuk pdf kurtar, pdf tamir et, hasarlı pdf aç, repair pdf, fix corrupt pdf",
-    h1: "PDF Onar",
-    tagline:
-      "Bozuk PDF dosyalarınızı onarın ve verilerinizi kurtarın — ücretsiz ve tamamen yerel.",
-    howToName: "Bozuk bir PDF dosyası nasıl onarılır",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "PDF Onar",
+    description: "Açılmayan, bozuk veya hasarlı PDF dosyalarını ücretsiz onarın. Bozulmuş PDF belgelerindeki sayfaları kurtarın.",
+    keywords: "pdf onarma, bozuk pdf açma, hasarlı pdf düzeltme, pdf tamir etme, açılmayan pdf kurtarma",
+    h1: "PDF Onar (Kurtarma)",
+    tagline: "Açılırken hata veren veya yapısı bozulan PDF belgelerinin iç indeksini yeniden inşa ederek okunabilir hale getirin.",
+    howToName: "Bozuk veya hasarlı PDF nasıl onarılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Onarmak istediğiniz bozuk veya hasarlı PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Dosyayı onar",
-        text: "İçerikleri kurtarmak için PDF yapısını yerel olarak tarıyor ve yeniden oluşturuyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Tamamen onarılmış ve kullanılabilir PDF belgenizi güvenle indirin.",
-      },
+      { name: "Hasarlı Belgeyi Yükleyin", text: "Açılmayan veya hata veren PDF dosyasını kutuya bırakın." },
+      { name: "Onarım ve Yeniden Yapılandırma", text: "Sistemimiz belgenin hasarlı iç indeksini ve sayfa ağacını onarır." },
+      { name: "Kurtarılan PDF'i İndirin", text: "Düzeltilmiş ve tekrar açılabilir hale gelmiş PDF belgenizi indirin." }
     ],
     faq: [
-      {
-        q: "Dosyalarım bir yere yükleniyor mu?",
-        a: "Hayır. Onarım işlemi WebAssembly teknolojisi kullanılarak tamamen cihazınızda gerçekleşir. Dosyalarınız %100 gizli kalır.",
-      },
+      { q: "Her bozuk PDF kurtarılabilir mi?", a: "Sayfa verileri dosya içinde mevcutsa aracımız indeksi yeniden yazarak dosyayı kurtarır. Dosya tamamen boş veya 0 bayt ise kurtarılamaz." },
+      { q: "İşlem sırasında belgem güvenli mi?", a: "Evet, tüm onarım algoritması tarayıcınızda yerel çalışır, dosyalarınız üçüncü şahıslara iletilmez." }
     ],
-    crossLink: {
-      href: "/tr/sanitize-pdf",
-      label: "Gizli meta verilerini temizlemek ister misiniz? PDF Temizle.",
-    },
+    crossLink: { href: "/tr/compress-pdf", label: "Onarılan belge çok büyükse PDF Küçültme aracını kullanabilirsiniz." }
   },
 };
 export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Grayscale PDF — convert to black & white locally",
-    description:
-      "Convert your PDF documents to grayscale to save ink and reduce file size. Fast, local, and private.",
-    keywords:
-      "grayscale pdf, black and white pdf, b&w pdf, remove colors from pdf, pdf siyah beyaz, renksiz pdf",
+    title: "Grayscale PDF",
+    description: "Convert color PDF documents to black and white (grayscale) online for free. Save printer ink and toner easily.",
+    keywords: "grayscale pdf, black and white pdf, convert pdf to b&w, remove color from pdf, save printer ink pdf",
     h1: "Grayscale PDF",
-    tagline:
-      "Remove colors from your PDF files to create black and white documents — free and completely local.",
-    howToName: "How to convert PDF to grayscale",
+    tagline: "Turn vibrant color documents into crisp black and white PDFs. Perfect for saving colored printer ink and creating official copies.",
+    howToName: "How to convert a PDF to grayscale",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the colored PDF document you want to convert.",
-      },
-      {
-        name: "Apply grayscale",
-        text: "We instantly convert all colored text, images, and backgrounds to black & white locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly grayscaled PDF document.",
-      },
+      { name: "Upload Color PDF", text: "Select the colored PDF file you want to convert to black and white." },
+      { name: "Convert to Grayscale", text: "Our engine maps all color channels into balanced grayscale luminance." },
+      { name: "Download B&W PDF", text: "Save your black and white PDF file instantly." }
     ],
     faq: [
-      {
-        q: "Why convert to grayscale?",
-        a: "Grayscale PDFs are perfect for printing text documents, saving you expensive color ink and reducing file sizes in some cases.",
-      },
-      {
-        q: "Will the text remain selectable?",
-        a: "No. The grayscale process rasterizes the pages as images, so text will no longer be selectable.",
-      },
+      { q: "Does converting to grayscale reduce file size?", a: "Yes, in many cases removing color channel information significantly reduces document file size." },
+      { q: "Will images look too dark?", a: "We use standard luminance weighting (ITU-R BT.601) so colored photos convert to natural, readable shades of gray." }
     ],
-    crossLink: {
-      href: "/compress-pdf",
-      label: "Want to reduce PDF size? Try Compress PDF.",
-    },
+    crossLink: { href: "/compress-pdf", label: "Want to shrink your document size even further? Try Compress PDF." }
   },
   tr: {
-    title: "Siyah Beyaz PDF — yerel olarak dönüştür",
-    description:
-      "Mürekkep tasarrufu yapmak ve dosya boyutunu küçültmek için PDF'lerinizi gri tonlamaya çevirin. Hızlı, yerel ve gizli.",
-    keywords:
-      "pdf siyah beyaz yap, siyah beyaz pdf, gri tonlama pdf, grayscale pdf, renksiz pdf",
-    h1: "Siyah Beyaz PDF",
-    tagline:
-      "PDF dosyalarınızdan renkleri kaldırarak siyah beyaz belgeler oluşturun — ücretsiz ve tamamen yerel.",
-    howToName: "PDF siyah beyaza nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "PDF Siyah Beyaz Yap",
+    description: "Renkli PDF belgelerinizi ücretsiz ve programsız siyah beyaz (gri tonlamalı) yapın. Yazıcı mürekkebinden ve toneri tasarruf edin.",
+    keywords: "pdf siyah beyaz yapma, renkli pdf i siyah beyaza çevirme, pdf grayscale yapma, yazıcı dostu pdf, pdf renklerini sil",
+    h1: "PDF Siyah Beyaz Yap",
+    tagline: "Renkli belgeleri, kitapları ve grafikleri net gri tonlamalı (siyah-beyaz) PDF'e dönüştürün. Yazıcı kartuşundan tasarruf edin.",
+    howToName: "Renkli PDF nasıl siyah beyaz yapılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Dönüştürmek istediğiniz renkli PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Siyah beyaz yap",
-        text: "Tüm renkli metin, görüntü ve arka planları yerel olarak anında siyah beyaza dönüştürüyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde siyah beyaz yapılmış PDF belgenizi indirin.",
-      },
+      { name: "Renkli PDF'i Seçin", text: "Siyah beyaza dönüştürmek istediğiniz renkli belgeyi yükleyin." },
+      { name: "Gri Tonlamaya Çevir", text: "Aracımız tüm renk kanallarını dengeli gri tonlarına dönüştürür." },
+      { name: "Siyah Beyaz PDF'i İndirin", text: "Yazıcı dostu, mürekkep tasarruflu yeni belgenizi kaydedin." }
     ],
     faq: [
-      {
-        q: "Neden siyah beyaza çevirmeliyim?",
-        a: "Siyah beyaz PDF'ler metin belgelerini yazdırmak için mükemmeldir; pahalı renkli mürekkepten tasarruf etmenizi sağlar ve bazen dosya boyutunu küçültür.",
-      },
-      {
-        q: "Metinler seçilebilir kalacak mı?",
-        a: "Hayır. Gri tonlama işlemi belgeleri resim olarak tarar, bu yüzden metinler seçilemez hale gelir.",
-      },
+      { q: "Siyah beyaz yapmak dosya boyutunu düşürür mü?", a: "Evet, renk kanalları ayıklandığı için belgenin dosya boyutu genellikle ciddi oranda azalır." },
+      { q: "Resimler çok karanlık çıkar mı?", a: "Hayır. Doğal gri tonlama algoritması kullanıldığı için fotoğraflar ve renkli grafikler dengeli ve net görünür." }
     ],
-    crossLink: {
-      href: "/tr/compress-pdf",
-      label: "PDF boyutunu küçültmek mi istiyorsunuz? PDF Sıkıştır.",
-    },
+    crossLink: { href: "/tr/compress-pdf", label: "Boyutu daha da küçültmek istiyorsanız PDF Küçült aracını deneyin." }
   },
 };
 export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
