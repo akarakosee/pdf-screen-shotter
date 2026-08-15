@@ -1020,64 +1020,44 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const protectCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Protect PDF — encrypt your file locally with a password",
-    description:
-      "Encrypt and protect your PDF document with a strong password. Processed securely in your browser.",
-    keywords:
-      "secure pdf, secret pdf, safe pdf, lock pdf, protect pdf with password, encrypt pdf, password protect pdf",
-    h1: "Protect PDF",
-    tagline:
-      "Lock your confidential documents with password encryption — free and 100% private.",
-    howToName: "How to password-protect a PDF online",
+    title: "Protect PDF - Add Password to PDF Online Securely",
+    description: "Encrypt and protect your PDF files with a strong password. Lock your sensitive documents locally in your browser for ultimate privacy.",
+    keywords: "protect pdf, password protect pdf, encrypt pdf, lock pdf file, secure pdf, add password to pdf",
+    h1: "Password Protect PDF",
+    tagline: "Keep your sensitive documents safe by locking them with a highly secure, unbreakable password. 100% offline and private.",
+    howToName: "How to add a password to a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to secure with a password.",
-      },
-      {
-        name: "Set password",
-        text: "Enter a strong password. We encrypt your document securely and locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your encrypted PDF. The password is required to open it.",
-      },
+      { name: "Upload Document", text: "Drag and drop the PDF you want to protect into the box." },
+      { name: "Set a Password", text: "Type a strong password to lock your file. Make sure you don't forget it!" },
+      { name: "Encrypt & Save", text: "Click protect and download your newly encrypted PDF document." }
     ],
-    crossLink: {
-      href: "/unlock-pdf",
-      label: "Need to remove a password? Unlock PDF.",
-    },
+    faq: [
+      { q: "Can you recover my password if I forget it?", a: "No. The encryption happens on your device and we do not store your passwords. If you lose your password, the file cannot be opened." },
+      { q: "How strong is the encryption?", a: "We use industry-standard AES encryption to guarantee that your file cannot be brute-forced easily." }
+    ],
+    crossLink: { href: "/unlock-pdf", label: "Need to remove a password instead? Try Unlock PDF." }
   },
   tr: {
-    title: "PDF Şifrele — belgeni parolayla kilitle ve koru",
-    description:
-      "PDF dosyanızı güçlü bir şifreyle koruma altına alın. Tüm şifreleme tarayıcınızda ve gizlilikle yapılır.",
-    keywords:
-      "pdf şifrele, gizli pdf, pdf kilitle, güvenli pdf, pdf parola koy, protect pdf, secure pdf, lock pdf",
-    h1: "PDF Şifrele",
-    tagline:
-      "Gizli belgelerinizi saniyeler içinde parola ile kilitleyin — ücretsiz ve %100 yerel.",
-    howToName: "PDF dosyası nasıl şifrelenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Şifreleme ve Koruma Aracı - PDF Dosyasına Şifre Koy",
+    description: "Özel PDF belgelerinize güçlü bir şifre (parola) koyarak kilitleyin. İşlemler sunucuya yüklenmeden %100 güvenli şekilde tarayıcınızda yapılır.",
+    keywords: "pdf şifreleme, pdf şifre koyma, pdf parola ekle, pdf kilitleme, güvenli pdf yap, pdf dosyasını şifrele",
+    h1: "Ücretsiz PDF Şifreleme Aracı",
+    tagline: "Hassas ve gizli belgelerinizi kırılamaz bir şifre ile kilitleyerek yetkisiz kişilerin açmasını engelleyin. Tamamen güvenli ve yerel.",
+    howToName: "PDF belgesine nasıl şifre koyulur?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Parola ile güvence altına almak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Parola belirle",
-        text: "Güçlü bir parola girin. Belgenizi yerel ve güvenli bir şekilde şifreliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Şifrelenmiş PDF belgenizi indirin. Açmak için parola gerekecektir.",
-      },
+      { name: "Belgenizi Ekleyin", text: "Korumak ve kilitlemek istediğiniz PDF dosyasını sisteme yükleyin." },
+      { name: "Güçlü Bir Şifre Girin", text: "Belgenizi açmak için kullanılacak parolayı yazın. Bu şifreyi unutmamaya dikkat edin!" },
+      { name: "Şifrele ve İndir", text: "Tek tıkla dosyanızı AES şifrelemesi ile kilitleyin ve bilgisayarınıza indirin." }
     ],
-    crossLink: {
-      href: "/tr/unlock-pdf",
-      label: "Bir dosyanın şifresini mi kaldıracaksınız? PDF Şifre Kaldır.",
-    },
+    faq: [
+      { q: "Şifremi unutursam belgeyi siz açabilir misiniz?", a: "Kesinlikle hayır. Verileriniz sunucularımıza gitmediği için şifrelerinizi bilmiyoruz. Şifrenizi kaybederseniz dosyayı bir daha asla açamazsınız." },
+      { q: "Dosyam başkalarının eline geçerse ne olur?", a: "Dosyanız 128/256-bit AES standartlarıyla şifrelendiği için parolayı bilmeyen birinin dosyanın içeriğini okuması imkansızdır." }
+    ],
+    crossLink: { href: "/tr/unlock-pdf", label: "Şifresini bildiğiniz bir PDF'in şifresini temelli kaldırmak için PDF Şifre Kaldırma aracını kullanın." }
   },
 };
 export const unlockCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1583,70 +1563,46 @@ export const extractImagesCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const compressCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title:
-      "Compress PDF — reduce file size in your browser, files never uploaded",
-    description:
-      "Compress and reduce PDF file size with zero quality loss. Remove unused objects and optimize streams locally in your browser. 100% private.",
-    keywords:
-      "compress pdf, reduce pdf size, shrink pdf, small pdf, optimize pdf, pdf küçült, pdf sıkıştır",
-    h1: "Compress PDF",
-    tagline:
-      "Shrink your PDF file size in seconds — free, instant, and 100% private.",
-    howToName: "How to compress a PDF file in your browser",
+    title: "Compress PDF - Reduce PDF File Size Online for Free",
+    description: "Compress large PDF files without losing quality. Reduce PDF size for email attachments fast and securely right in your browser.",
+    keywords: "compress pdf, reduce pdf size, make pdf smaller, shrink pdf, pdf compressor, compress pdf without losing quality, resize pdf",
+    h1: "Free PDF Compressor",
+    tagline: "Reduce the file size of your PDF documents drastically while keeping the original layout and quality intact.",
+    howToName: "How to compress a PDF file",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the large PDF document you want to shrink in size.",
-      },
-      {
-        name: "Compress file",
-        text: "We optimize images and remove unnecessary data locally to reduce file size.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your beautifully compressed PDF without noticeable quality loss.",
-      },
+      { name: "Upload your PDF", text: "Select the large PDF file you want to shrink from your device." },
+      { name: "Choose Compression", text: "Select your preferred compression level (Recommended, Maximum, or Low)." },
+      { name: "Download", text: "Save the highly compressed PDF file instantly to your device." }
     ],
-    crossLink: {
-      href: "/merge-pdf",
-      label: "Want to combine multiple PDFs after compressing? Try Merge PDF.",
-    },
+    faq: [
+      { q: "Will the quality of my PDF drop?", a: "Our smart compression engine optimizes images and removes unnecessary background data while keeping your text sharp and 100% readable." },
+      { q: "Is this secure?", a: "Yes. The compression runs entirely on your device. We do not upload your sensitive documents to any cloud server." }
+    ],
+    crossLink: { href: "/protect-pdf", label: "Want to secure your newly compressed file? Try Protect PDF." }
   },
   tr: {
-    title:
-      "PDF Küçült / Sıkıştır — tarayıcında dosya boyutunu azalt, gizli ve ücretsiz",
-    description:
-      "PDF dosya boyutunu kalite kaybı olmadan küçültün. Kullanılmayan nesneleri ve çift akışları temizleyin. %100 gizli, dosyalar cihazınızdan çıkmaz.",
-    keywords:
-      "pdf sıkıştır, pdf boyutu küçült, dosya küçültme, compress pdf, shrink pdf, pdf optimize et",
-    h1: "PDF Sıkıştır",
-    tagline:
-      "PDF dosyanızın boyutunu saniyeler içinde küçültün — ücretsiz, hızlı ve %100 gizli.",
-    howToName: "PDF dosya boyutu tarayıcıda nasıl küçültülür",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Küçültme - Kaliteyi Bozmadan Dosya Boyutu Düşür",
+    description: "Büyük PDF dosyalarınızı ücretsiz ve programsız sıkıştırın. WhatsApp ve E-posta için PDF boyutunu anında MB'tan KB'a düşürün.",
+    keywords: "pdf küçültme, pdf sıkıştırma, pdf boyutu küçültme, pdf mb düşürme, büyük pdf küçült, pdf dosya boyutu azaltma",
+    h1: "Ücretsiz PDF Küçültme ve Sıkıştırma Aracı",
+    tagline: "E-postaya veya WhatsApp'a sığmayan büyük PDF dosyalarınızı saniyeler içinde sıkıştırın. Metin kalitesi asla bozulmaz.",
+    howToName: "PDF dosya boyutu nasıl küçültülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Boyutunu küçültmek istediğiniz büyük PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Dosyayı sıkıştır",
-        text: "Dosya boyutunu küçültmek için yerel olarak görüntüleri optimize ediyor ve gereksiz verileri kaldırıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Gözle görülür bir kalite kaybı yaşamadan mükemmel şekilde sıkıştırılmış PDF belgenizi indirin.",
-      },
+      { name: "Belgeyi Yükleyin", text: "Boyutunu küçültmek (mb düşürmek) istediğiniz PDF dosyasını kutuya bırakın." },
+      { name: "Sıkıştırma Seviyesini Seçin", text: "Önerilen, Maksimum veya Düşük sıkıştırma seçeneklerinden birini belirleyin." },
+      { name: "Küçültülmüş PDF'i İndirin", text: "Optimize edilmiş ve boyutu ciddi oranda azalmış yeni dosyanızı cihazınıza kaydedin." }
     ],
-    crossLink: {
-      href: "/tr/merge-pdf",
-      label:
-        "Küçülttükten sonra belgeleri birleştirmek mi istiyorsunuz? PDF Birleştir.",
-    },
+    faq: [
+      { q: "PDF dosyam ne kadar küçülür?", a: "Dosyanın içindeki görsel yoğunluğuna bağlı olarak %40 ile %80 arasında bir boyut düşüşü yaşanır." },
+      { q: "Metinler okunmaz hale gelir mi?", a: "Kesinlikle hayır. Akıllı sistemimiz sadece arka plan verilerini ve aşırı büyük görselleri optimize eder. Metinler ve vektörler %100 net kalır." }
+    ],
+    crossLink: { href: "/tr/protect-pdf", label: "Küçülttüğünüz belgeye şifre koymak ister misiniz? PDF Şifrele aracını deneyin." }
   },
 };
-
 export const redactCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Redact PDF — hide sensitive information",
