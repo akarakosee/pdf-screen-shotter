@@ -1829,318 +1829,256 @@ export const htmlPdfCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const extractPagesCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Extract PDF Pages — save specific pages",
-    description:
-      "Visually select specific pages from a PDF document and save them as a brand new PDF file.",
-    keywords:
-      "extract pdf pages, separate pages, pull out pages, pdf split, pdf sayfa çıkar, pdf sayfa al",
-    h1: "Extract Pages",
-    tagline: "Pick the pages you want to keep.",
-    howToName: "How to extract PDF pages",
+    title: "Extract PDF Pages",
+    description: "Extract specific pages from a PDF into a new standalone document online for free. Fast, precise page extraction.",
+    keywords: "extract pdf pages, pull pages from pdf, save specific pages pdf, export single pdf page, split selected pages",
+    h1: "Extract PDF Pages",
+    tagline: "Select exact page numbers or ranges (e.g. 1-3, 7, 12) and extract them instantly into a brand new PDF document.",
+    howToName: "How to extract pages from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to extract specific pages from.",
-      },
-      {
-        name: "Select pages",
-        text: "Click the exact pages you want to keep using the local visual grid.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download a new PDF containing only your selected pages securely.",
-      },
+      { name: "Upload Document", text: "Select the PDF file containing pages you want to pull out." },
+      { name: "Select Page Range", text: "Click on thumbnail previews or enter page numbers (e.g., 2, 5-8) to extract." },
+      { name: "Download Extracted PDF", text: "Save your new compact document containing only the selected pages." }
     ],
+    faq: [
+      { q: "What is the difference between Extract and Split?", a: "'Extract' lets you cherry-pick specific pages into a single new document. 'Split' cuts an entire document into individual one-page files or intervals." },
+      { q: "Is original formatting preserved?", a: "Yes, fonts, vector graphics, and embedded images on extracted pages remain 100% untouched." }
+    ],
+    crossLink: { href: "/split-pdf", label: "Want to split every page into separate files? Try Split PDF." }
   },
   tr: {
-    title: "Sayfaları Çıkar — belirli sayfaları yeni bir PDF yap",
-    description:
-      "Bir PDF belgesindeki belirli sayfaları görsel olarak seçin ve bunları yepyeni bir PDF dosyası olarak kaydedin.",
-    keywords:
-      "pdf sayfa çıkar, pdf içinden sayfa al, sayfaları ayır, extract pages from pdf",
-    h1: "Sayfaları Çıkar",
-    tagline: "Sadece tutmak istediğiniz sayfaları seçin.",
-    howToName: "PDF sayfaları nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Sayfalarını Ayıkla",
+    description: "PDF belgenizden sadece istediğiniz belirli sayfaları (Örn: 2-5, 12) seçip yepyeni bir PDF dosyası olarak kaydedin.",
+    keywords: "pdf sayfa ayıklama, pdf ten belirli sayfaları alma, pdf sayfa seçip kaydetme, pdf tek sayfa çıkarma",
+    h1: "PDF Sayfalarını Ayıkla",
+    tagline: "Yüzlerce sayfalık belgenin içinden sadece ihtiyacınız olan 2-3 sayfayı cımbızla çeker gibi ayıklayıp tek dosyada toplayın.",
+    howToName: "PDF belgesinden belirli sayfalar nasıl ayıklanır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Belirli sayfaları çıkarmak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları seç",
-        text: "Yerel görsel ızgarayı kullanarak saklamak istediğiniz sayfaları seçin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yalnızca seçtiğiniz sayfaları içeren yeni PDF belgenizi güvenle indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "İçinden sayfa seçmek istediğiniz PDF dosyasını yükleyin." },
+      { name: "Sayfaları Seçin", text: "Görsellere tıklayarak veya sayfa aralığı yazarak (örn: 1-5, 10) istediğiniz sayfaları belirleyin." },
+      { name: "Ayıklanan PDF'i İndirin", text: "Yalnızca seçtiğiniz sayfalardan oluşan yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "PDF Bölme ile Sayfa Ayıklama arasındaki fark nedir?", a: "'Bölme' tüm belgeyi parçalara ayırır. 'Sayfa Ayıklama' ise 100 sayfalık bir rapordan sadece istediğiniz 5 sayfayı çekip tek dosya yapmanızı sağlar." },
+      { q: "Ayıklanan sayfaların kalitesi düşer mi?", a: "Hayır. Sayfalar hiçbir sıkıştırmaya veya kalite kaybına uğramadan orijinal netliğinde aktarılır." }
+    ],
+    crossLink: { href: "/tr/split-pdf", label: "Tüm sayfaları ayrı dosyalara bölmek için PDF Böl aracını kullanın." }
   },
 };
-
 export const annotatePdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Annotate PDF — draw and add text to your PDF files",
-    description:
-      "Add text annotations and highlights to your PDF documents entirely in your browser.",
-    keywords:
-      "annotate pdf, highlight pdf, add notes to pdf, draw on pdf, pdf not al, pdf çiz, pdf vurgula",
+    title: "Annotate PDF",
+    description: "Highlight text, draw arrows, insert sticky notes, and markup PDF files online for free. Ideal for grading and proofreading.",
+    keywords: "annotate pdf, highlight pdf text, markup pdf, add sticky notes to pdf, draw on pdf online",
     h1: "Annotate PDF",
-    tagline: "Add text and notes to your documents.",
-    howToName: "How to annotate a PDF",
+    tagline: "Mark up documents with colorful highlighters, sticky notes, arrows, and freehand pens. Perfect for student notes and document reviews.",
+    howToName: "How to annotate and markup a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to review or annotate.",
-      },
-      {
-        name: "Add annotations",
-        text: "Highlight text, add sticky notes, or draw directly on the pages locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your fully annotated and reviewed PDF document.",
-      },
+      { name: "Upload PDF", text: "Choose the PDF document you want to markup or review." },
+      { name: "Add Annotations", text: "Use highlighter pens, rectangle boxes, comment pins, and text notes." },
+      { name: "Download Annotated PDF", text: "Save your fully annotated PDF ready for sharing with colleagues or teachers." }
     ],
+    faq: [
+      { q: "Are annotations compatible with Adobe Acrobat?", a: "Yes, our annotations follow standard PDF ISO specifications and display seamlessly in Adobe Reader, Apple Preview, and browsers." },
+      { q: "Can I erase annotations?", a: "You can click on any annotation to delete, resize, or change its color before saving." }
+    ],
+    crossLink: { href: "/edit-pdf", label: "Need to insert full text blocks? Try Edit PDF." }
   },
   tr: {
-    title: "PDF Not Ekle — PDF dosyalarına metin ve çizim ekle",
-    description:
-      "Tamamen tarayıcınızda PDF belgelerinize metin ve notlar ekleyin.",
-    keywords:
-      "pdf not al, pdf üstünü çiz, pdf highlight, pdf vurgula, annotate pdf",
-    h1: "PDF Not Ekle",
-    tagline: "Belgelerinize metin ve notlar ekleyin.",
-    howToName: "PDF'e nasıl not eklenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Not Ekle & Çizim",
+    description: "PDF makalelerine ve ders notlarına fosforlu kalemle vurgular yapın, oklar çizin ve yapışkan notlar ekleyin. Ücretsiz inceleme aracı.",
+    keywords: "pdf not ekleme, pdf fosforlu kalemle çizme, pdf metin vurgulama, pdf üzerine çizim yapma, pdf ders notu alma",
+    h1: "PDF Not Ekle & Çizim",
+    tagline: "Ders kitaplarınıza ve makalelerinize renkli fosforlu kalemlerle notlar alın, oklar ve şekiller çizerek önemli yerleri işaretleyin.",
+    howToName: "PDF belgesine nasıl not ve çizim eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İncelemek veya not eklemek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Notlar ekle",
-        text: "Yerel olarak metni vurgulayın, yapışkan notlar ekleyin veya doğrudan sayfalara çizin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Tamamen notlandırılmış ve incelenmiş PDF belgenizi indirin.",
-      },
+      { name: "Ders Notunu veya Makaleyi Yükleyin", text: "İşaretleme yapmak istediğiniz PDF dosyasını yükleyin." },
+      { name: "Çizim ve Vurgu Yapın", text: "Fosforlu kalem, tükenmez kalem veya yapışkan not araçlarını kullanarak sayfaları işaretleyin." },
+      { name: "Notlu PDF'i İndirin", text: "Tüm notlarınızın işlendiği yeni PDF dosyasını kaydedin." }
     ],
+    faq: [
+      { q: "Eklediğim notlar Adobe Reader'da açılır mı?", a: "Evet! Eklediğiniz tüm vurgu ve notlar uluslararası standartlara uygundur; telefonda, tablette ve tüm PDF okuyucularda görünür." },
+      { q: "Yanlış çizdiğim bir yeri silebilir miyim?", a: "Evet, çizdiğiniz herhangi bir çizgiye veya nota tıklayarak çöp kutusu simgesiyle silebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/edit-pdf", label: "Doğrudan yeni metin blokları yazmak istiyorsanız PDF Düzenle aracını kullanın." }
   },
 };
-
 export const editPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Edit PDF — modify and hide text in your PDF files",
-    description:
-      "Apply whiteout and hide sensitive information in your PDFs directly in your browser.",
-    keywords:
-      "edit pdf, modify pdf, change pdf text, replace pdf image, free pdf editor, pdf düzenle, pdf yazı değiştir",
+    title: "Edit PDF",
+    description: "Add text, shapes, highlights, and comments to PDF documents online for free. Full-featured client-side PDF editor.",
+    keywords: "edit pdf, edit pdf online free, add text to pdf, write on pdf, pdf editor online, modify pdf document",
     h1: "Edit PDF",
-    tagline: "Hide sensitive information with whiteout.",
-    howToName: "How to edit a PDF",
+    tagline: "Type new text, draw shapes, highlight sentences, and insert images onto any PDF document directly in your browser.",
+    howToName: "How to edit a PDF document",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to edit or whiteout.",
-      },
-      {
-        name: "Edit content",
-        text: "Add new text, shapes, or use whiteout to hide unwanted information locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your completely updated and edited PDF document.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file you want to edit." },
+      { name: "Add Elements", text: "Click to insert text boxes, draw freehand annotations, or highlight paragraphs." },
+      { name: "Save Changes", text: "Download your updated and edited PDF document instantly." }
     ],
+    faq: [
+      { q: "Can I add text anywhere on the page?", a: "Yes, click the text tool and click anywhere on the canvas to type with custom fonts, colors, and sizes." },
+      { q: "Are existing texts modified?", a: "You can overlay new text and whiteout/redact existing sections without losing document structure." }
+    ],
+    crossLink: { href: "/sign-pdf", label: "Need to add a signature too? Try Sign PDF." }
   },
   tr: {
-    title: "PDF Düzenle — PDF dosyalarında metin gizle ve düzenle",
-    description:
-      "Tarayıcınızda doğrudan PDF dosyalarınızdaki hassas bilgileri gizleyin (whiteout).",
-    keywords:
-      "pdf düzenle, pdf metin değiştir, pdf editör, pdf yazı ekle, ücretsiz pdf düzenleyici",
+    title: "PDF Düzenle",
+    description: "PDF dosyalarınızın üzerine yeni yazılar yazın, şekiller çizin, metinleri vurgulayın ve resim ekleyin. Ücretsiz PDF düzenleyici.",
+    keywords: "pdf düzenleme, pdf üzerine yazı yazma, pdf editleme, pdf düzenleyici online, pdf e metin ekleme",
     h1: "PDF Düzenle",
-    tagline: "Hassas bilgileri beyazlatarak (whiteout) gizleyin.",
-    howToName: "PDF nasıl düzenlenir",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Belgenizin üzerine tıklayıp istediğiniz yere yeni yazılar ekleyin, önemli cümleleri sarıyla vurgulayın ve şekiller çizin.",
+    howToName: "PDF belgesi üzerine nasıl yazı yazılır ve düzenlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Düzenlemek veya silmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "İçeriği düzenle",
-        text: "İstenmeyen bilgileri gizlemek için yeni metin veya şekiller ekleyin, veya düzeltici kullanın.",
-      },
-      {
-        name: "PDF indir",
-        text: "Tamamen güncellenmiş ve düzenlenmiş PDF belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Düzenlemek istediğiniz PDF dosyasını seçin." },
+      { name: "Yazı ve Çizim Ekleyin", text: "Metin aracını seçip dilediğiniz yere tıklayarak yazın veya fosforlu kalemle vurgulayın." },
+      { name: "Düzenlenmiş PDF'i İndirin", text: "Kaydet butonuna basarak yeni belgenizi bilgisayarınıza kaydedin." }
     ],
+    faq: [
+      { q: "İstediğim yazı tipini ve boyutunu seçebilir miyim?", a: "Evet! Eklediğiniz metinlerin font boyutunu, rengini ve konumunu dilediğiniz gibi ayarlayabilirsiniz." },
+      { q: "Orijinal dosyamın düzeni bozulur mu?", a: "Hayır, yeni eklemeler temiz bir katman olarak belgenize eklenir ve orijinal düzen korunur." }
+    ],
+    crossLink: { href: "/tr/sign-pdf", label: "Belgenizi imzalamak için PDF İmzala aracını kullanabilirsiniz." }
   },
 };
-
 export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "PDF Forms — fill and manage PDF forms",
-    description:
-      "Fill interactive PDF forms quickly and easily, right in your browser.",
-    keywords:
-      "fill pdf form, interactive pdf, type in pdf, complete pdf form, fill and sign, pdf form doldur",
-    h1: "PDF Forms",
-    tagline: "Fill interactive PDF forms quickly.",
-    howToName: "How to fill PDF forms",
+    title: "Fill PDF Forms",
+    description: "Fill out interactive PDF forms and sign fillable fields online for free. 100% private client-side form filler.",
+    keywords: "fill pdf forms, fillable pdf form, complete pdf form online, fill tax form pdf, sign pdf forms",
+    h1: "Fill PDF Forms",
+    tagline: "Fill text fields, check boxes, select radio buttons, and complete fillable government, tax, or employment PDF forms.",
+    howToName: "How to fill out a PDF form",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the interactive PDF form you need to complete.",
-      },
-      {
-        name: "Fill form",
-        text: "Type directly into form fields and select checkboxes locally and securely.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your filled PDF form, ready to print or email.",
-      },
+      { name: "Upload Fillable PDF", text: "Select the interactive form (AcroForm or XFA) you need to complete." },
+      { name: "Fill Out Fields", text: "Type your responses into the highlighted form fields and tick checkboxes." },
+      { name: "Save Completed Form", text: "Download your completed form, with options to keep fields editable or flatten them." }
     ],
+    faq: [
+      { q: "Are sensitive tax/financial details protected?", a: "Yes! The entire form filling engine operates in local memory. None of your entered personal details are uploaded to any server." },
+      { q: "Can I lock the form after filling?", a: "Yes, you can use our Flatten PDF tool to prevent further editing before submitting." }
+    ],
+    crossLink: { href: "/flatten-pdf", label: "Want to lock your filled form answers permanently? Try Flatten PDF." }
   },
   tr: {
-    title: "PDF Formları — PDF formlarını doldurun ve yönetin",
-    description:
-      "Etkileşimli PDF formlarını tarayıcınızda hızlıca ve kolayca doldurun.",
-    keywords:
-      "pdf form doldur, pdf yazı yaz, etkileşimli pdf, fill and sign pdf, pdf doldurma aracı",
-    h1: "PDF Formları",
-    tagline: "Etkileşimli PDF formlarını hızlıca doldurun.",
-    howToName: "PDF formları nasıl doldurulur",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Form Doldurucu",
+    description: "Doldurulabilir resmi PDF formlarını, başvuru evraklarını ve dilekçeleri tarayıcınızda ücretsiz doldurun ve kaydedin.",
+    keywords: "pdf form doldurma, interaktif pdf formu doldurucu, resmi evrak pdf doldur, dilekçe pdf formu doldurma",
+    h1: "PDF Form Doldurucu",
+    tagline: "Vize, iş başvurusu ve resmi vergi formlarını kutucuklara tıklayarak bilgisayarınızdan doldurun. Çıktı alıp elle yazmaya son.",
+    howToName: "İnteraktif PDF formu nasıl doldurulur?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Doldurmanız gereken etkileşimli PDF formunu sayfaya bırakın.",
-      },
-      {
-        name: "Formu doldur",
-        text: "Doğrudan form alanlarına yazın ve onay kutularını yerel olarak güvenle seçin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yazdırmaya veya e-postayla göndermeye hazır, doldurulmuş PDF formunuzu indirin.",
-      },
+      { name: "Form Belgesini Yükleyin", text: "Doldurmak istediğiniz interaktif PDF formunu seçin." },
+      { name: "Kutucukları Doldurun", text: "Vurgulanan metin kutularına bilgilerinizi yazın ve onay kutularını işaretleyin." },
+      { name: "Doldurulmuş Formu İndirin", text: "Tüm alanları doldurulmuş belgenizi tek tıkla kaydedin." }
     ],
+    faq: [
+      { q: "Kişisel ve finansal bilgilerim güvende mi?", a: "Kesinlikle evet. Form doldurma işlemi tamamen tarayıcınızın içinde çalışır, girdiğiniz hiçbir kişisel bilgi sunucularımıza gitmez." },
+      { q: "Doldurduktan sonra başkalarının değiştirmesini nasıl engellerim?", a: "Formu doldurduktan sonra 'PDF Düzleştir' aracımızı kullanarak kutucukları kilitli hale getirebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/flatten-pdf", label: "Doldurduğunuz formu değiştirilemez yapmak için PDF Düzleştir aracını deneyin." }
   },
 };
-
-export const mixpdfCopy = {
+export const mixpdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Alternate & Mix PDF",
-    description: "Interleave pages from two PDFs.",
-    keywords:
-      "mix pdf, alternate pdf pages, interleave pdf, blend pdf, pdf sayfalarını karıştır, pdf harmanla",
+    description: "Interleave and alternate pages from two PDF files into one sequential document online for free. Perfect for double-sided scanner scans.",
+    keywords: "mix pdf, alternate pdf pages, interleave pdf, merge odd and even pages, combine duplex scans",
     h1: "Alternate & Mix PDF",
-    tagline: "Interleave pages from two PDFs.",
-    howToName: "How to use Alternate & Mix PDF",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    tagline: "Combine odd and even page scans automatically. Interleave two separate PDF documents into a perfect sequential flow.",
+    howToName: "How to alternate and mix PDF pages",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add PDFs",
-        text: "Drop the two PDF documents you want to interleave onto the page.",
-      },
-      {
-        name: "Mix pages",
-        text: "We locally alternate pages from both documents to create a single, merged file.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly mixed document securely.",
-      },
+      { name: "Upload Both PDFs", text: "Upload the odd-pages PDF document and the even-pages PDF document." },
+      { name: "Set Interleave Rules", text: "Choose standard 1-1 alternating order and reverse the even stack if scanned backwards." },
+      { name: "Download Mixed PDF", text: "Download your perfectly interleaved, single sequential document." }
     ],
+    faq: [
+      { q: "Why use the Mix PDF tool?", a: "When scanning double-sided pages with a single-sided feeder, you end up with one file of front pages and one file of back pages. This tool stitches them together in alternating order (1, 2, 3, 4...)." },
+      { q: "Can it handle reversed back pages?", a: "Yes, you can enable 'Reverse second document' to automatically flip back-to-front scans." }
+    ],
+    crossLink: { href: "/merge-pdf", label: "Want to append files end-to-end instead? Try Merge PDF." }
   },
   tr: {
-    title: "Alternate & Mix PDF",
-    description: "Interleave pages from two PDFs.",
-    keywords:
-      "pdf sayfalarını karıştır, pdf harmanla, sırayla birleştir, mix pdf pages",
-    h1: "Alternate & Mix PDF",
-    tagline: "Interleave pages from two PDFs.",
-    howToName: "Alternate & Mix PDF Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "PDF Sayfalarını Karıştır (Tek/Çift)",
+    description: "İki ayrı PDF dosyasındaki sayfaları tek-çift (1, 2, 3, 4...) sırasıyla otomatik harmanlayıp birleştirin. Çift taraflı taramalar için idealdir.",
+    keywords: "pdf sayfalarını karıştır, tek çift sayfa birleştirme, interleave pdf, arkalı önlü tarama birleştirme, pdf harmanlama",
+    h1: "PDF Sayfalarını Karıştır (Tek/Çift)",
+    tagline: "Tek taraflı tarayıcılarla taranmış ön ve arka sayfaları tek tıkla 1, 2, 3, 4 sırasıyla harmanlayıp kusursuz tek dosya yapın.",
+    howToName: "Ön ve arka yüz taranmış PDF sayfaları nasıl sırayla birleştirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF'leri ekle",
-        text: "Sayfalarını harmanlamak istediğiniz iki PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları karıştır",
-        text: "Tek bir belge oluşturmak için her iki dosyanın sayfalarını yerel olarak sırayla birleştiriyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel bir şekilde harmanlanmış yeni belgenizi güvenle indirin.",
-      },
+      { name: "İki Belgeyi Yükleyin", text: "Ön yüzleri içeren birinci PDF ile arka yüzleri içeren ikinci PDF'i seçin." },
+      { name: "Sıralama Kuralını Seçin", text: "Sayfaların tek-çift şeklinde birbiri ardına dizilmesini ayarlayın." },
+      { name: "Harmanlanmış PDF'i İndirin", text: "Tüm sayfaların doğru sırada birleştiği tek PDF dosyasını indirin." }
     ],
+    faq: [
+      { q: "Bu araç en çok ne zaman işe yarar?", a: "Arkalı-önlü taranması gereken evrakları tek yönlü tarayıcıyla önce önleri sonra arkaları taradığınızda, sayfaları elle tek tek taşımadan otomatik sıraya sokmak için kullanılır." },
+      { q: "Arka sayfalar tersten tarandıysa düzelir mi?", a: "Evet! 'İkinci dosyayı tersten sırala' seçeneğiyle sondan başa taranmış arka sayfaları otomatik düzeltir." }
+    ],
+    crossLink: { href: "/tr/merge-pdf", label: "Belgeleri uç uca eklemek istiyorsanız PDF Birleştir aracını kullanın." }
   },
 };
-
-export const splithalfpdfCopy = {
+export const splithalfpdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Split PDF in Half",
-    description: "Split 2-up spreads into 1-up pages.",
-    keywords:
-      "split pdf in half, divide page, cut page in middle, split scanned book, pdf ikiye böl, sayfayı ortadan kes",
-    h1: "Split PDF in Half",
-    tagline: "Split 2-up spreads into 1-up pages.",
-    howToName: "How to use Split PDF in Half",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    title: "Split Pages in Half",
+    description: "Split two-page scanned PDF spreads into individual single pages (vertically or horizontally) online for free.",
+    keywords: "split pdf pages in half, split two page scans, cut pdf in half, split book scan pdf, horizontal vertical pdf split",
+    h1: "Split Pages in Half",
+    tagline: "Cut two-page side-by-side book scans or double spreads down the middle into individual single pages.",
+    howToName: "How to split scanned double-page PDFs in half",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF containing scanned 2-up spreads or side-by-side pages.",
-      },
-      {
-        name: "Split spreads",
-        text: "We calculate the center locally and cut each spread into two separate pages.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly separated, 1-up page document.",
-      },
+      { name: "Upload Scanned Spread", text: "Select the PDF with side-by-side two-page scans." },
+      { name: "Select Cut Direction", text: "Choose Vertical cut (for side-by-side book spreads) or Horizontal cut." },
+      { name: "Download Split PDF", text: "Download your clean PDF where every book page is now a separate single sheet." }
     ],
+    faq: [
+      { q: "Is this ideal for book scans?", a: "Yes! Scanning an open book creates one file page containing both left and right book pages. This tool splits them into proper single-page reading order." },
+      { q: "Is the resolution maintained?", a: "Yes, pages are split precisely down the vector/raster coordinate grid without loss of sharpness." }
+    ],
+    crossLink: { href: "/split-pdf", label: "Want standard page splitting? Try Split PDF." }
   },
   tr: {
-    title: "Split PDF in Half",
-    description: "Split 2-up spreads into 1-up pages.",
-    keywords:
-      "pdf ikiye böl, sayfayı ortadan kes, split pdf in half, kitap taraması ayır",
-    h1: "Split PDF in Half",
-    tagline: "Split 2-up spreads into 1-up pages.",
-    howToName: "Split PDF in Half Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "Sayfaları Ortadan İkiye Böl",
+    description: "Kitap taramalarındaki yan yana iki sayfayı (sol ve sağ) ortadan ikiye bölerek tek tek sayfalara dönüştürün. Ücretsiz ve yerel.",
+    keywords: "pdf sayfalarını ikiye bölme, kitap taramasını bölme, yan yana iki sayfayı ayırma, pdf ortadan kesme",
+    h1: "Sayfaları Ortadan İkiye Böl",
+    tagline: "Açık kitap taramalarındaki sol ve sağ sayfaları tam ortasından keserek her sayfayı ayrı birer yaprak haline getirin.",
+    howToName: "Taranmış iki sayfalık PDF'ler ortadan nasıl bölünür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Yan yana taranmış kitap veya dergi sayfaları içeren PDF belgesini bırakın.",
-      },
-      {
-        name: "Sayfaları ayır",
-        text: "Merkez noktasını yerel olarak hesaplayıp her sayfayı tam ortadan ikiye bölüyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde ayrılmış ve tekli sayfalara dönüştürülmüş belgenizi indirin.",
-      },
+      { name: "Kitap Taramasını Yükleyin", text: "Yan yana iki sayfa içeren taranmış PDF belgenizi seçin." },
+      { name: "Bölme Yönünü Seçin", text: "Dikey kesim (Sol-Sağ kitap sayfaları) veya Yatay kesimi belirleyin." },
+      { name: "Ayrılmış PDF'i İndirin", text: "Her sayfanın tek tek sıralandığı düzenli e-kitap PDF'inizi indirin." }
     ],
+    faq: [
+      { q: "E-Kitap okuyucular için uygun mu?", a: "Evet! Kindle veya tabletlerde yan yana duran küçük kitap taramalarını tam ekran rahat okunabilir tek sayfalara dönüştürür." },
+      { q: "Yazılar kesilir mi?", a: "Sayfaları tam orta ekseninden böler, böylece sol ve sağ sayfalar kusursuz ayrılır." }
+    ],
+    crossLink: { href: "/tr/split-pdf", label: "Standart sayfa ayırma için PDF Böl aracını kullanın." }
   },
 };
-
 export const extractbykeywordCopy = {
   en: {
     title: "Extract by Keyword",
@@ -2192,57 +2130,48 @@ export const extractbykeywordCopy = {
   },
 };
 
-export const splitbysizeCopy = {
+export const splitbysizeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Split by Size",
-    description: "Split PDF into smaller parts by MB size.",
-    keywords:
-      "split pdf by size, divide pdf size, chunk pdf, reduce file size split, pdf boyuta göre böl, mb a göre pdf böl",
-    h1: "Split by Size",
-    tagline: "Split PDF into smaller parts by MB size.",
-    howToName: "How to use Split by Size",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    title: "Split PDF by File Size",
+    description: "Split large PDF files into smaller chunks based on maximum megabyte (MB) size limits online for free.",
+    keywords: "split pdf by size, split pdf by mb, split pdf for email attachment, chunk large pdf, divide pdf by size limit",
+    h1: "Split PDF by File Size",
+    tagline: "Divide massive PDF documents into multiple smaller files that stay strictly under your specified MB limit (e.g. 10MB or 25MB).",
+    howToName: "How to split a PDF by MB size limit",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a large PDF document and specify your maximum desired file size in MB.",
-      },
-      {
-        name: "Calculate parts",
-        text: "We analyze the document locally to split it securely without exceeding the limit.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download a ZIP archive containing all the perfectly sized PDF parts.",
-      },
+      { name: "Upload Massive PDF", text: "Select the large PDF document you need to break down." },
+      { name: "Set MB Limit", text: "Enter your target maximum size per file (e.g., 20 MB for email attachment limits)." },
+      { name: "Download Chunks", text: "Download your collection of smaller PDF files, each strictly within the size budget." }
     ],
+    faq: [
+      { q: "Why split by size instead of page count?", a: "Email providers (like Gmail or Outlook) and government portals enforce hard file-size limits (e.g. 25MB). This tool ensures each piece can be sent safely." },
+      { q: "Are pages torn or split in half?", a: "No, files are split cleanly at whole page boundaries." }
+    ],
+    crossLink: { href: "/compress-pdf", label: "Want to shrink the file without splitting? Try Compress PDF." }
   },
   tr: {
-    title: "Split by Size",
-    description: "Split PDF into smaller parts by MB size.",
-    keywords:
-      "pdf boyuta göre böl, dosya boyutuna göre ayır, parçalara böl, split pdf by size",
-    h1: "Split by Size",
-    tagline: "Split PDF into smaller parts by MB size.",
-    howToName: "Split by Size Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "PDF'i Boyuta Göre Böl (MB Sınırı)",
+    description: "Büyük PDF dosyalarınızı e-posta veya yükleme sınırlarına uygun olarak belirlediğiniz MB boyutunda parçalara bölün.",
+    keywords: "pdf mb ye göre bölme, boyuta göre pdf parçalama, eposta için pdf bölme, büyük pdf parçalara ayır",
+    h1: "PDF'i Boyuta Göre Böl (MB Sınırı)",
+    tagline: "E-posta veya portal sınırlarına takılan büyük PDF'leri istediğiniz maksimum boyuta (örn: 10MB, 25MB) göre otomatik parçalayın.",
+    howToName: "PDF dosyası megabayt (MB) sınırına göre nasıl bölünür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Büyük PDF belgenizi bırakın ve istediğiniz maksimum dosya boyutunu MB olarak girin.",
-      },
-      {
-        name: "Parçaları hesapla",
-        text: "Belgeyi sınırı aşmayacak şekilde güvenle bölmek için yerel olarak analiz ediyoruz.",
-      },
-      {
-        name: "ZIP indir",
-        text: "Tam istediğiniz boyutta parçalara ayrılmış PDF dosyalarınızı içeren ZIP arşivini indirin.",
-      },
+      { name: "Büyük Belgeyi Yükleyin", text: "Parçalamak istediğiniz büyük PDF dosyasını seçin." },
+      { name: "Maksimum Boyutu Girin", text: "Her bir parçanın en fazla kaç MB olacağını (örn: 15 MB) belirleyin." },
+      { name: "Parçaları İndirin", text: "Belirlediğiniz MB sınırını aşmayan parçalanmış PDF dosyalarınızı indirin." }
     ],
+    faq: [
+      { q: "Neden sayfa sayısı yerine boyuta göre bölmeliyim?", a: "Gmail, Outlook veya resmi yükleme portalları 'en fazla 25 MB' gibi katı dosya boyutu sınırları koyar. Bu araç her parçanın sınırı aşmamasını garanti eder." },
+      { q: "Sayfalar bozulur mu?", a: "Hayır. Bölme işlemi tam sayfa sınırlarından yapılır, hiçbir sayfa ortadan kesilmez." }
+    ],
+    crossLink: { href: "/tr/compress-pdf", label: "Bölmek yerine dosyayı küçültmek istiyorsanız PDF Küçült aracını deneyin." }
   },
 };
-
 export const addmarginsCopy = {
   en: {
     title: "Add Margins",
@@ -3525,59 +3454,48 @@ export const splitBookmarksCopy = {
   },
 };
 
-export const splitBlankCopy = {
+export const splitBlankCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Split by Blank Page — auto scanner split",
-    description:
-      "Automatically divide a large scanned PDF into multiple documents whenever a blank page is detected.",
-    keywords:
-      "split at blank pages, divide by empty page, scan separator, pdf boş sayfada böl, ayırıcı sayfa",
+    title: "Split PDF by Blank Page",
+    description: "Automatically split a continuous batch of scanned documents into separate files wherever a blank separator page is detected.",
+    keywords: "split pdf by blank page, batch scan separator, split on blank page, scan barcode separator pdf, split batch scans",
     h1: "Split PDF by Blank Page",
-    tagline: "A lifesaver for batch scanning and archiving.",
-    howToName: "How to split PDF by blank pages",
+    tagline: "Use blank divider sheets during batch scanning. Our tool automatically splits the batch into separate documents at every blank page.",
+    howToName: "How to split batch scans using blank divider pages",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop your batch-scanned PDF file onto the page.",
-      },
-      {
-        name: "Scan for blanks",
-        text: "We analyze every pixel locally to detect completely blank separator pages.",
-      },
-      {
-        name: "Split and download",
-        text: "Download a ZIP archive containing your perfectly separated individual documents.",
-      },
+      { name: "Upload Batch Scan", text: "Select the single large PDF containing multiple documents separated by blank sheets." },
+      { name: "Auto-Detect Dividers", text: "Our analyzer finds blank divider pages and creates split boundary markers." },
+      { name: "Download Separate PDFs", text: "Download all distinct documents extracted from the batch into a single ZIP file." }
     ],
+    faq: [
+      { q: "How do blank separator sheets work?", a: "In high-volume office scanning, inserting a blank sheet between different paper documents allows this tool to automatically split them into separate files." },
+      { q: "Are the blank divider sheets kept in the output?", a: "No, the blank divider pages are automatically discarded so your final documents are clean." }
+    ],
+    crossLink: { href: "/remove-blank-pages", label: "Want to just delete blank pages without splitting? Try Remove Blank Pages." }
   },
   tr: {
-    title: "Boş Sayfadan Parçala — Tarayıcı Ayırıcı",
-    description:
-      "Tarayıcıdan toplu olarak taranmış büyük bir belgeyi, aradaki boş sayfaları tespit ederek otomatik olarak ayrı PDF'lere bölün.",
-    keywords:
-      "pdf boş sayfada böl, tarama ayırıcı, boş sayfadan sonra ayır, split at blank page",
-    h1: "Boş Sayfalardan Böl",
-    tagline: "Arşivciler ve fotokopi merkezleri için devrim niteliğinde.",
-    howToName: "PDF boş sayfalara göre nasıl bölünür",
-    howItWorks: "Nasıl çalışır",
+    title: "Boş Sayfaya Göre PDF Böl",
+    description: "Toplu taranmış evrakları aralarına koyduğunuz boş ayraç sayfalarını tespit ederek otomatik olarak ayrı dosyalara bölün.",
+    keywords: "boş sayfaya göre pdf bölme, toplu tarama ayırıcı, boş kağıtla evrak bölme, otomatik dosya ayırıcı pdf",
+    h1: "Boş Sayfaya Göre PDF Böl",
+    tagline: "Toplu evrak taramalarında araya koyduğunuz boş beyaz kağıtları ayraç olarak kullanın; sistem belgeleri otomatik ayrı dosyalara bölsün.",
+    howToName: "Toplu taranmış belgeler boş sayfalarla nasıl ayrılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Toplu olarak taranmış PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Boş sayfaları tara",
-        text: "Belgeyi ayıran tamamen boş sayfaları bulmak için her pikseli yerel olarak analiz ediyoruz.",
-      },
-      {
-        name: "Böl ve indir",
-        text: "Kusursuzca ayrılmış bireysel evraklarınızı tek bir ZIP arşivi halinde indir.",
-      },
+      { name: "Toplu Taramayı Yükleyin", text: "Aralarında boş ayraç sayfaları bulunan büyük PDF dosyasını seçin." },
+      { name: "Boş Sayfaları Algıla", text: "Sistemimiz ayraç olarak kullanılan boş sayfaları otomatik tespit eder." },
+      { name: "Ayrı Belgeleri İndirin", text: "Her evrakın ayrı bir PDF haline getirildiği dosyaları tek tıkla indirin." }
     ],
+    faq: [
+      { q: "Ofislerde toplu tarama için nasıl kullanılır?", a: "Onlarca farklı faturayı veya sözleşmeyi aralarına birer boş kağıt koyup tek seferde tarayıcıya atabilirsiniz. Bu araç hepsini tek tek faturaya böler." },
+      { q: "Araya koyduğum boş kağıtlar çıktı dosyasında kalır mı?", a: "Hayır. Boş ayraç sayfaları otomatik olarak çöpe atılır, elinize sadece temiz evraklar kalır." }
+    ],
+    crossLink: { href: "/tr/remove-blank-pages", label: "Bölmeden sadece boş sayfaları silmek istiyorsanız Boş Sayfaları Otomatik Sil aracını deneyin." }
   },
 };
-
 export const viewerPrefsCopy = {
   en: {
     title: "Viewer Preferences — PDF auto open settings",
