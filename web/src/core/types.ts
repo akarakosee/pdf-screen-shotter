@@ -154,6 +154,7 @@ export type UiToWorkerMessage =
   | { type: 'smart-markdown-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'contrast-enhancer-start'; file: ArrayBuffer; meta: FileMeta; brightness: number; contrast: number }
   | { type: 'pdf-to-html-start'; file: ArrayBuffer; meta: FileMeta }
+
   | { type: 'extract-fonts-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'remove-images-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'extract-urls-start'; file: ArrayBuffer; meta: FileMeta }

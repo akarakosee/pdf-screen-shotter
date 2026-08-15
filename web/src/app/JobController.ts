@@ -927,4 +927,21 @@ export class JobController {
     this.ensureWorker(); // respawn — most fatals are a one-off (e.g. WASM OOM)
     this.events.onFatal?.(message);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

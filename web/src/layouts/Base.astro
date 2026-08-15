@@ -40,6 +40,16 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={finalKeywords} />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={`${origin}/og-image.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${origin}/og-image.png`} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
@@ -60,6 +70,31 @@ const origin = Astro.site?.origin ?? Astro.url.origin;
           (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.classList.toggle('dark', dark);
       })();
+    </script>
+
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "GoSecurePDF",
+        "url": "https://gosecurepdf.com",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4JBV7V8LYM" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4JBV7V8LYM');
     </script>
   </head>
   <body class="min-h-screen flex flex-col bg-bg text-ink dark:bg-bg-dark dark:text-ink-dark">

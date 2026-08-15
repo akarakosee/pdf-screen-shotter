@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://example.pages.dev', // replaced with the real domain before launch
+  site: 'https://www.gosecurepdf.com', // replaced with the real domain before launch
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
