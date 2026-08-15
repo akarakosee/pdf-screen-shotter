@@ -246,67 +246,60 @@ const mergeStepsTr: Step[] = [
 ];
 export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Merge PDF — combine files in your browser, files never uploaded",
+    title: "Merge PDF Files - Combine PDFs Online for Free",
     description:
-      "Combine multiple PDF files into one document, free and without limits. Everything runs in your browser — your files never leave your device.",
+      "Combine multiple PDF files into one document instantly. 100% free, no file size limits, and processed securely in your browser.",
     keywords:
-      "merge pdf, combine pdf, join pdf, bind pdf together, pdf birleştir, merge multiple pdfs, combine files",
-    h1: "Merge PDF",
+      "merge pdf, combine pdf, join pdf, bind pdf together, merge multiple pdfs, combine pdf files online, free pdf merger",
+    h1: "Free Online PDF Merger",
     tagline:
-      "Combine multiple PDFs into one document — free, no limits, and your files stay on your device.",
-    howToName: "How to merge PDF files in your browser",
+      "Combine multiple PDFs into a single document. Fast, free, unlimited, and your files never leave your device.",
+    howToName: "How to merge PDF files",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
     steps: [
       {
-        name: "Add PDFs",
-        text: "Drop the PDF documents you want to merge onto the page.",
+        name: "Upload PDFs",
+        text: "Drag and drop the PDF documents you want to merge onto the page.",
       },
       {
-        name: "Arrange pages",
-        text: "Drag and drop the files locally to arrange them in the correct order.",
+        name: "Arrange Order",
+        text: "Drag the files locally to arrange them in the exact order you want them to appear.",
       },
       {
-        name: "Download PDF",
-        text: "Download your perfectly combined, single PDF document securely.",
+        name: "Combine & Download",
+        text: "Click merge to download your perfectly combined, single PDF document securely.",
       },
     ],
+    faq: [
+      { q: "Is there a limit to how many files I can merge?", a: "No! Since the files are processed directly on your computer (not on a server), you can merge as many large PDF files as your device can handle." },
+      { q: "Will the quality of my PDF decrease?", a: "Not at all. Your documents are stitched together without any compression, keeping the original quality 100% intact." }
+    ],
     crossLink: {
-      href: "/pdf-to-png",
-      label: "Need to turn PDF pages into images instead? Convert PDF to PNG.",
+      href: "/compress-pdf",
+      label: "Is your merged PDF too large? Compress your PDF size here.",
     },
   },
   tr: {
-    title: "PDF Birleştir — tarayıcında birleştir, dosyalar yüklenmeden",
-    description:
-      "Birden çok PDF dosyasını ücretsiz ve sınırsız biçimde tek bir belgede birleştir. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
-    keywords:
-      "pdf birleştirme, pdf birleştir, çoklu pdf birleştir, pdf dosyalarını birleştir, combine pdf, merge pdf",
-    h1: "PDF Birleştir",
-    tagline:
-      "Birden çok PDF'i tek bir belgede birleştir — ücretsiz, sınırsız ve dosyaların cihazında kalır.",
-    howToName: "Tarayıcıda PDF dosyalarını birleştirme",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sık sorulan sorular",
+    title: "PDF Birleştirme — Ücretsiz ve Programsız İki PDF'i Birleştir",
+    description: "Birden fazla PDF dosyasını tek bir belgede birleştirin. Sınır yok, yükleme yok. Tamamen cihazınızda çalışan güvenli PDF birleştirici.",
+    keywords: "pdf birleştirme, pdf birleştirici, iki pdf birleştirme, toplu pdf birleştirme, pdf sayfalarını birleştir, online pdf birleştir, pdf birleştirme programı",
+    h1: "Ücretsiz PDF Birleştirme Aracı",
+    tagline: "Parça parça olan belgelerinizi tek bir dosyada toplayın. Çok hızlı, tamamen ücretsiz ve verileriniz cihazınızdan asla çıkmaz.",
+    howToName: "İki veya daha fazla PDF nasıl birleştirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF'leri ekle",
-        text: "Birleştirmek istediğiniz PDF belgelerini sayfaya bırakın.",
-      },
-      {
-        name: "Dosyaları sırala",
-        text: "Dosyaları doğru sırada birleştirmek için yerel olarak sürükleyip bırakın.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel bir şekilde birleştirilmiş tek PDF belgenizi güvenle indirin.",
-      },
+      { name: "PDF'lerinizi Yükleyin", text: "Birleştirmek istediğiniz tüm PDF belgelerini ekrana sürükleyip bırakın." },
+      { name: "Sıralamayı Ayarlayın", text: "Yüklediğiniz belgeleri fareyle sürükleyerek (aşağı-yukarı) istediğiniz sıraya sokun." },
+      { name: "Birleştir ve İndir", text: "Tek tıkla tüm belgeleri saniyeler içinde bütün bir PDF dosyası olarak indirin." }
     ],
-    crossLink: {
-      href: "/tr/pdf-to-png",
-      label:
-        "PDF sayfalarını görüntüye çevirmek mi istiyorsun? PDF'i PNG'ye çevir.",
-    },
+    faq: [
+      { q: "Boyut veya dosya sayısı sınırı var mı?", a: "Kesinlikle hayır. Herhangi bir sunucu kullanmadığımız için dilediğiniz kadar büyük dosyayı, istediğiniz sayıda PDF ile birleştirebilirsiniz." },
+      { q: "Sayfaların kalitesi veya çözünürlüğü düşer mi?", a: "Hayır. Belgeleriniz sadece arka planda birbirine dikilir, kalite veya çözünürlük kaybına uğramadan orijinal netliğinde birleştirilir." },
+      { q: "Birleştirdiğim dosyaları başkaları görebilir mi?", a: "Hayır, birleştirme işlemi sadece sizin bilgisayarınızın RAM'inde gerçekleşir. Dosyalarınız hiçbir bulut sunucusuna gönderilmez." }
+    ],
+    crossLink: { href: "/tr/compress-pdf", label: "Birleştirdiğiniz belge çok mu büyük oldu? PDF Küçültme aracını deneyin." }
   },
 };
 export const splitCopy: Record<"en" | "tr", ToolCopy> = {
