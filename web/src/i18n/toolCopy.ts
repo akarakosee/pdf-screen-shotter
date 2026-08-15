@@ -2174,105 +2174,88 @@ export const splitbysizeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const addmarginsCopy = {
   en: {
-    title: "Add Margins",
-    description: "Add white padding around PDF pages.",
-    keywords:
-      "add margins to pdf, increase white space, padding pdf, resize margins, pdf boşluk ekle, pdf kenar boşluğu",
-    h1: "Add Margins",
-    tagline: "Add white padding around PDF pages.",
-    howToName: "How to use Add Margins",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    title: "Add Margins to PDF",
+    description: "Add white margins and extra padding to PDF pages for hole punching or binding online for free. Custom margin sizes.",
+    keywords: "add margins to pdf, add padding to pdf, extra margins for hole punching, gutter margin pdf, widen pdf margins",
+    h1: "Add Margins to PDF",
+    tagline: "Add extra white padding around your PDF pages. Perfect for ring binders, spiral binding, and booklet margins.",
+    howToName: "How to add margins to a PDF",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF document that needs extra padding or binding space.",
-      },
-      {
-        name: "Adjust margins",
-        text: "We calculate the new dimensions and add perfect white borders locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly padded document, ready for printing or binding.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file that needs extra border space." },
+      { name: "Set Margin Sizes", text: "Specify top, bottom, left, and right margin padding (in millimeters or inches)." },
+      { name: "Download Padded PDF", text: "Download your document with extra margin spacing applied to all pages." }
     ],
+    faq: [
+      { q: "Why add margins to a PDF?", a: "Adding left gutter margins ensures text is not obscured when binding documents in folders, spiral binders, or books." },
+      { q: "Is the page scaled down?", a: "Content is proportionally scaled down inside the new margin boundaries without clipping." }
+    ],
+    crossLink: { href: "/crop-pdf", label: "Need to remove margins instead? Try Crop PDF." }
   },
   tr: {
-    title: "Add Margins",
-    description: "Add white padding around PDF pages.",
-    keywords:
-      "pdf kenar boşluğu ekle, pdf marj ekle, beyaz boşluk ekle, add margins to pdf",
-    h1: "Add Margins",
-    tagline: "Add white padding around PDF pages.",
-    howToName: "Add Margins Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "PDF Kenar Boşluğu Ekle",
+    description: "PDF sayfalarına delgeç, ciltleme veya spiral payı için ekstra beyaz kenar boşlukları ekleyin. Ücretsiz ve pratik.",
+    keywords: "pdf kenar boşluğu ekleme, ciltleme payı pdf, delgeç payı bırakma, pdf e pay ekle, kenar boşluğu genişletme",
+    h1: "PDF Kenar Boşluğu Ekle",
+    tagline: "Sayfaların kenarlarına delgeç veya spiral ciltleme boşluğu bırakın. Yazıların ciltte kaybolmasını önleyin.",
+    howToName: "PDF sayfalarına kenar boşluğu nasıl eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Ekstra kenar boşluğuna veya cilt payına ihtiyaç duyan PDF belgenizi bırakın.",
-      },
-      {
-        name: "Boşlukları ayarla",
-        text: "Yeni boyutları hesaplayarak sayfaların etrafına yerel olarak beyaz kenarlıklar ekliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Baskı veya ciltleme için mükemmel şekilde ayarlanmış yeni belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Kenar boşluğu eklemek istediğiniz PDF dosyasını seçin." },
+      { name: "Boşluk Ölçüsünü Girin", text: "Sol, sağ, üst veya alt kenarlar için kaç mm boşluk bırakılacağını belirleyin." },
+      { name: "Genişletilmiş PDF'i İndirin", text: "Ciltlemeye ve delgeçle delmeye hazır yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "Yazılar sayfa dışına taşar mı?", a: "Hayır. Eklenen boşluğa göre sayfa içeriği orantılı olarak yeniden boyutlandırılır, hiçbir yazı kesilmez." },
+      { q: "Spiral ciltleme için hangi kenara boşluk bırakmalıyım?", a: "Standart kitap ve tez ciltlemelerinde genellikle Sol (Left) kenara 15-20 mm boşluk eklenir." }
+    ],
+    crossLink: { href: "/tr/crop-pdf", label: "Kenar boşluklarını silmek istiyorsanız PDF Kırp aracını deneyin." }
   },
 };
-
 export const pdftosvgCopy = {
   en: {
     title: "PDF to SVG",
-    description: "Convert PDF pages to SVG vectors.",
-    keywords:
-      "pdf to svg, vectorise pdf, convert to svg, pdf vektör yap, pdf svg çevir",
+    description: "Convert PDF pages and vector graphics into scalable SVG vector files online for free. Infinitely zoomable output.",
+    keywords: "pdf to svg, convert pdf to vector, vector pdf converter, export pdf as svg, scalable vector graphics pdf",
     h1: "PDF to SVG",
-    tagline: "Convert PDF pages to SVG vectors.",
-    howToName: "How to use PDF to SVG",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    tagline: "Turn PDF diagrams, CAD drawings, and logos into scalable SVG vector graphics without losing any resolution.",
+    howToName: "How to convert PDF to SVG vector graphics",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to convert to vectors.",
-      },
-      {
-        name: "Convert to SVG",
-        text: "We locally parse the PDF drawing commands and render them into highly accurate SVG graphics.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download a ZIP archive containing your infinitely scalable vector files.",
-      },
+      { name: "Upload PDF", text: "Select the vector PDF document or logo you want to convert." },
+      { name: "Vector Conversion", text: "Our renderer translates PDF vector paths, bezier curves, and fonts into SVG markup." },
+      { name: "Download SVG", text: "Download your scalable vector (.svg) graphics ready for web and design tools." }
     ],
+    faq: [
+      { q: "Why convert PDF to SVG?", a: "SVG files are infinitely scalable vectors that never pixelate, making them perfect for websites, Figma, Illustrator, and cutting machines." },
+      { q: "Are vector paths preserved?", a: "Yes, text outlines, curves, and strokes are converted directly into clean SVG path elements." }
+    ],
+    crossLink: { href: "/pdf-to-png", label: "Need a raster PNG image instead? Try PDF to PNG." }
   },
   tr: {
-    title: "PDF to SVG",
-    description: "Convert PDF pages to SVG vectors.",
-    keywords: "pdf svg çevir, pdf to svg, vektörel pdf, svg dönüştürücü",
-    h1: "PDF to SVG",
-    tagline: "Convert PDF pages to SVG vectors.",
-    howToName: "PDF to SVG Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "PDF'ten SVG'ye Çevirme (Vektör)",
+    description: "PDF çizimlerini, logoları ve mimari planları kalitesi hiç bozulmayan ölçeklenebilir SVG vektör formatına dönüştürün.",
+    keywords: "pdf to svg, pdf vektör yapma, pdf i svg ye çevirme, figma için pdf aktarma, çizimi svg yapma",
+    h1: "PDF'ten SVG'ye Çevirme (Vektör)",
+    tagline: "PDF logolarınızı, CAD çizimlerinizi ve grafiklerinizi kalitesi asla bozulmayan SVG vektör dosyalarına dönüştürün.",
+    howToName: "PDF belgesi SVG vektör formatına nasıl dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Vektörel grafiklere dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "SVG'ye çevir",
-        text: "Belgedeki çizim komutlarını yerel olarak ayrıştırıp son derece hassas SVG grafiklerine dönüştürüyoruz.",
-      },
-      {
-        name: "ZIP indir",
-        text: "Sonsuz ölçeklenebilir ve kayıpsız vektör dosyalarınızı içeren ZIP arşivini indirin.",
-      },
+      { name: "PDF Çizimini Yükleyin", text: "Vektöre dönüştürmek istediğiniz PDF dosyasını seçin." },
+      { name: "Vektörel Dönüşüm", text: "Aracımız tüm çizgileri ve eğrileri kusursuz SVG kodlarına dönüştürür." },
+      { name: "SVG Dosyasını İndirin", text: "İllustrator veya Figma'da düzenlenebilir vektör dosyanızı indirin." }
     ],
+    faq: [
+      { q: "SVG formatının avantajı nedir?", a: "SVG vektörel bir formattır; ne kadar yakınlaştırırsanız yakınlaştırın asla bulanıklaşmaz veya pikselleşmez." },
+      { q: "Figma ve Adobe Illustrator'da açılır mı?", a: "Evet! Çıktı olarak aldığınız SVG dosyalarını Figma, Canva ve Illustrator'da doğrudan düzenleyebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/pdf-to-png", label: "Standart görsel almak istiyorsanız PDF'ten PNG'ye aracını deneyin." }
   },
 };
-
 export const extractimagesCopy = {
   en: {
     title: "Extract Images",
@@ -2424,167 +2407,130 @@ export const removeblankpagesCopy = {
 
 export const removeAnnotationsCopy = {
   en: {
-    title: "Remove Annotations — clear comments and forms from PDF",
-    description:
-      "Instantly strip all highlights, sticky notes, comments, and form fields from your PDF.",
-    keywords:
-      "remove annotations, delete pdf comments, clear highlights, clean pdf, pdf notları sil, açıklamaları kaldır",
-    h1: "Remove Annotations",
-    tagline: "Remove all annotations, comments, and form fields from your PDF.",
-    howToName: "How to remove annotations from a PDF",
+    title: "Remove Annotations from PDF",
+    description: "Strip all sticky notes, comments, highlights, and markup stamps from PDF documents online for free. 100% clean output.",
+    keywords: "remove annotations from pdf, delete pdf comments, strip pdf highlights, clean markup pdf, remove sticky notes pdf",
+    h1: "Remove Annotations from PDF",
+    tagline: "Erase all personal notes, teacher markings, review highlights, and drawing stamps to restore a pristine clean document.",
+    howToName: "How to remove annotations and comments from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF filled with sticky notes, highlights, or form fields.",
-      },
-      {
-        name: "Clean document",
-        text: "We safely strip all interactive annotations and comments directly within your browser.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download a completely clean, read-only version of your original document.",
-      },
+      { name: "Upload Marked PDF", text: "Select the PDF file containing unwanted comments, highlights, or review marks." },
+      { name: "Strip Annotations", text: "Our tool purges all annotation dictionary objects from the PDF structure." },
+      { name: "Download Clean PDF", text: "Download your completely clean, unannotated document." }
     ],
+    faq: [
+      { q: "Will the original document text be damaged?", a: "No. Only the annotation overlay layers (comments, highlights, stamps) are removed; original document text remains intact." },
+      { q: "Can I remove specific annotations only?", a: "You can strip all annotations automatically, or use our Annotate PDF tool to selectively delete individual notes." }
+    ],
+    crossLink: { href: "/annotate-pdf", label: "Need to add new notes instead? Try Annotate PDF." }
   },
   tr: {
-    title: "Açıklamaları Sil — PDF yorumlarını ve formlarını temizle",
-    description:
-      "PDF belgenizdeki tüm vurguları, yapışkan notları, yorumları ve form alanlarını tek tıkla silin.",
-    keywords:
-      "pdf notları sil, pdf yorumları kaldır, açıklamaları temizle, remove annotations",
-    h1: "Açıklamaları Sil",
-    tagline:
-      "PDF belgenizdeki tüm açıklamaları, yorumları ve form alanlarını temizleyin.",
-    howToName: "PDF açıklamaları nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Not ve Çizimleri Temizle",
+    description: "PDF belgelerindeki tüm ek açıklamaları, sarı vurguları, yapışkan notları ve çizimleri tek tıkla silerek belgeyi tertemiz yapın.",
+    keywords: "pdf notları silme, pdf sarı vurguları temizleme, pdf ek açıklamaları kaldır, temiz pdf yap",
+    h1: "PDF Not ve Çizimleri Temizle",
+    tagline: "Başkalarının aldığı notları, karalamaları, sarı vurguları ve yorumları tek tıkla temizleyip orijinal temiz haline döndürün.",
+    howToName: "PDF belgesindeki notlar ve çizimler nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Vurgular, yorumlar veya doldurulmuş form alanları içeren PDF belgesini bırakın.",
-      },
-      {
-        name: "Belgeyi temizle",
-        text: "Tüm etkileşimli açıklamaları ve yorumları tarayıcınızın içinde güvenli bir şekilde siliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Orijinal belgenizin tamamen temizlenmiş, salt okunur yeni versiyonunu indirin.",
-      },
+      { name: "Notlu Belgeyi Yükleyin", text: "İçinde çizim ve notlar bulunan PDF dosyasını seçin." },
+      { name: "Notları Temizle", text: "Aracımız tüm ek açıklama ve vurgu katmanlarını belgeden temizler." },
+      { name: "Tertemiz PDF'i İndirin", text: "Tüm karalamalardan arındırılmış pürüzsüz belgenizi kaydedin." }
     ],
+    faq: [
+      { q: "Orijinal yazılarım silinir mi?", a: "Hayır! Yalnızca sonradan eklenmiş olan notlar, fosforlu kalem vurguları ve yorumlar silinir; ana metinler korunur." },
+      { q: "Tek tek silmek mümkün mü?", a: "Hepsini tek tıkla temizleyebilir veya 'PDF Not Ekle & Çizim' aracımızdan dilediğiniz notu tek tek silebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/annotate-pdf", label: "Yeni notlar eklemek için PDF Not Ekle & Çizim aracını kullanın." }
   },
 };
-
 export const pdfToWebpCopy = {
   en: {
-    title: "PDF to WebP — convert in your browser",
-    description:
-      "Convert PDF pages to WebP format for 30% smaller file sizes with no loss in quality.",
-    keywords:
-      "pdf to webp, webp converter, convert pdf to image, pdf resim yap, pdf webp çevir",
+    title: "PDF to WebP",
+    description: "Convert PDF pages into lightweight, high-quality next-gen WebP images online for free. Boost website loading speeds.",
+    keywords: "pdf to webp, convert pdf to webp, next gen image converter, pdf page to webp, compress pdf to webp",
     h1: "PDF to WebP",
-    tagline:
-      "Convert PDF pages to modern, lightweight WebP images directly in your browser.",
-    howToName: "How to convert PDF to WebP",
+    tagline: "Convert PDF pages into next-generation WebP images. Enjoy superior compression and smaller file sizes for your website.",
+    howToName: "How to convert PDF to WebP images",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to convert into images.",
-      },
-      {
-        name: "Convert pages",
-        text: "We render each page locally into a high-quality, lightweight WebP image.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download a ZIP archive containing your fast-loading, web-optimized image files.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file you want to convert to web-optimized images." },
+      { name: "Choose Quality", text: "Select resolution and compression quality for optimal web performance." },
+      { name: "Download WebP", text: "Download your ultra-lightweight WebP image package." }
     ],
+    faq: [
+      { q: "Why use WebP instead of JPG?", a: "WebP images are typically 30% smaller than JPG files at the same visual quality, dramatically speeding up web page load times." },
+      { q: "Are all modern browsers compatible?", a: "Yes, WebP is supported across Chrome, Safari, Firefox, Edge, and mobile browsers." }
+    ],
+    crossLink: { href: "/pdf-to-jpg", label: "Need universal JPG format instead? Try PDF to JPG." }
   },
   tr: {
-    title: "PDF to WebP — tarayıcınızda dönüştürün",
-    description:
-      "Kalite kaybı olmadan %30 daha küçük dosya boyutları için PDF sayfalarını WebP formatına dönüştürün.",
-    keywords: "pdf webp çevir, pdf to webp, pdf resim yap, webp dönüştürücü",
-    h1: "PDF to WebP",
-    tagline:
-      "PDF sayfalarını tarayıcınızda doğrudan modern ve hafif WebP görüntülerine dönüştürün.",
-    howToName: "PDF WebP formatına nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'ten WebP'ye Çevirme",
+    description: "PDF sayfalarını web siteleri için optimize edilmiş, ultra hafif yeni nesil WebP görsel formatına dönüştürün.",
+    keywords: "pdf to webp, pdf webp dönüştürücü, web sitesi için pdf resim yapma, hafif görsel formatı webp",
+    h1: "PDF'ten WebP'ye Çevirme",
+    tagline: "PDF sayfalarınızı JPG'den %30 daha hafif olan yeni nesil WebP formatına çevirin. Web sitenizin açılış hızını artırın.",
+    howToName: "PDF belgesi WebP fotoğraf formatına nasıl çevrilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Görüntü dosyalarına dönüştürmek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları çevir",
-        text: "Her sayfayı yerel olarak yüksek kaliteli ve çok hafif WebP görsellerine dönüştürüyoruz.",
-      },
-      {
-        name: "ZIP indir",
-        text: "Web için optimize edilmiş, süper hızlı yüklenen görsellerinizi tek bir ZIP arşivinde indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Görsele dönüştürmek istediğiniz PDF dosyasını seçin." },
+      { name: "Kalite Ayarını Yapın", text: "Web siteniz için en uygun çözünürlüğü ve sıkıştırma oranını belirleyin." },
+      { name: "WebP Dosyalarını İndirin", text: "Hızlı yüklenen yeni nesil WebP resimlerinizi ZIP olarak indirin." }
     ],
+    faq: [
+      { q: "WebP formatının JPG'den farkı nedir?", a: "WebP aynı görüntü kalitesini JPG'ye göre %30 daha az dosya boyutuyla sunar; sitenizin Google PageSpeed puanını yükseltir." },
+      { q: "Tüm tarayıcılarda açılır mı?", a: "Evet! Chrome, Safari, iPhone ve Android tüm modern cihazlar WebP formatını sorunsuz destekler." }
+    ],
+    crossLink: { href: "/tr/pdf-to-jpg", label: "Standart JPG fotoğrafı almak için PDF to JPG aracını kullanın." }
   },
 };
-
 export const autoCropCopy = {
   en: {
-    title: "Auto-Crop PDF — remove white margins automatically",
-    description:
-      "Automatically detect and crop out unnecessary white margins from your PDF pages.",
-    keywords:
-      "auto crop pdf, smart crop, remove white margins, auto trim pdf, pdf otomatik kırp, kenar boşluklarını sil",
+    title: "Auto-Crop PDF",
+    description: "Automatically detect and trim white margins from PDF pages online for free. Tight crop to readable content.",
+    keywords: "auto crop pdf, automatic pdf margin trimmer, remove white borders pdf, tight crop pdf online",
     h1: "Auto-Crop PDF",
-    tagline:
-      "Smart detection automatically removes white borders and margins from every page.",
-    howToName: "How to auto-crop a PDF",
+    tagline: "Detect empty whitespace around text and automatically crop every page to its exact content boundaries.",
+    howToName: "How to auto-crop white borders from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a scanned document or a PDF with large white borders.",
-      },
-      {
-        name: "Detect margins",
-        text: "We analyze each page locally to detect the exact content bounding box.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your mobile-friendly document with all unnecessary white margins perfectly cropped.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file with excessive white borders." },
+      { name: "Auto-Detect Bounds", text: "Our algorithm scans each page to calculate the tightest bounding box around the text." },
+      { name: "Download Trimmed PDF", text: "Save your cleanly cropped PDF with all unnecessary borders removed." }
     ],
+    faq: [
+      { q: "Is this helpful for Kindle/E-readers?", a: "Yes! Removing wide white borders allows small e-ink screens and tablets to zoom in text much larger for easier reading." },
+      { q: "Does it crop pages with different content sizes?", a: "Yes, our engine dynamically detects content bounds page-by-page." }
+    ],
+    crossLink: { href: "/crop-pdf", label: "Want manual control over crop areas? Try Crop PDF." }
   },
   tr: {
-    title: "Otomatik Kırp — beyaz boşlukları otomatik kaldır",
-    description:
-      "PDF sayfalarınızdaki gereksiz beyaz boşlukları ve kenar boşluklarını otomatik olarak tespit edip kırpın.",
-    keywords:
-      "pdf otomatik kırp, akıllı kırpma, boşlukları sil, beyaz marj sil, auto crop pdf",
-    h1: "Otomatik Kırp",
-    tagline:
-      "Akıllı tarama sistemi sayesinde tüm sayfalardaki gereksiz beyaz çerçeveleri otomatik olarak kırpın.",
-    howToName: "PDF otomatik olarak nasıl kırpılır",
-    howItWorks: "Nasıl çalışır",
+    title: "Otomatik PDF Kırpma",
+    description: "PDF sayfalarındaki gereksiz beyaz kenarlıkları otomatik analizle tespit edip kırpın. E-kitap okuyucular için idealdir.",
+    keywords: "otomatik pdf kırpma, pdf kenar boşluklarını otomatik sil, akıllı pdf crop, e kitap için pdf kırpma",
+    h1: "Otomatik PDF Kırpma",
+    tagline: "Yazıların etrafındaki boş beyaz alanları yapay zeka ile otomatik algılayıp kırpın. Kindle ve tabletlerde tam ekran okuyun.",
+    howToName: "PDF kenar boşlukları otomatik olarak nasıl kırpılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Geniş beyaz kenarlıkları olan veya taranmış PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Sınırları bul",
-        text: "Asıl içerik alanını bulmak için her sayfayı yerel olarak tek tek analiz ediyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Gereksiz beyaz boşlukları mükemmel şekilde kırpılmış, mobilde okunması kolay belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Gereksiz beyaz kenarlıkları olan PDF dosyasını seçin." },
+      { name: "Akıllı Algılama", text: "Sistemimiz sayfadaki metin ve görsellerin sınırlarını otomatik hesaplar." },
+      { name: "Kırpılmış PDF'i İndirin", text: "Beyaz fazlalıkları atılmış tam ekran PDF belgenizi indirin." }
     ],
+    faq: [
+      { q: "E-Kitap ve tablet okumalarında ne fayda sağlar?", a: "Beyaz boşluklar temizlendiğinde yazılar ekrana çok daha büyük ve okunaklı oturur; gözleriniz yorulmaz." },
+      { q: "Her sayfa farklı kırpılabilir mi?", a: "Evet! Sistemimiz her sayfadaki metin yoğunluğuna göre dinamik kırpma uygular." }
+    ],
+    crossLink: { href: "/tr/crop-pdf", label: "Elle manuel kırpmak için PDF Kırp aracını kullanın." }
   },
 };
-
 export const extractTocCopy = {
   en: {
     title: "Extract Bookmarks — export PDF Table of Contents",
@@ -2752,59 +2698,46 @@ export const changeBgCopy = {
 
 export const autoRedactCopy = {
   en: {
-    title: "Auto-Redact PII — hide sensitive information",
-    description:
-      "Automatically detect and censor Emails, Phone Numbers, and Credit Cards from your PDF using client-side AI.",
-    keywords:
-      "auto redact pdf, smart redact, hide sensitive info, auto censor pdf, otomatik sansür, pdf hassas veri gizle",
+    title: "Auto-Redact PDF",
+    description: "Automatically find and redact credit cards, emails, SSNs, and phone numbers in PDF files online for free.",
+    keywords: "auto redact pdf, automatic pii redaction, redact credit cards pdf, redact ssn pdf, scrub private data pdf",
     h1: "Auto-Redact PDF",
-    tagline:
-      "Black out Personally Identifiable Information (PII) with zero uploads.",
-    howToName: "How to auto-redact a PDF",
+    tagline: "Automatically detect sensitive PII (Social Security numbers, credit card numbers, email addresses) and black them out in one click.",
+    howToName: "How to auto-redact sensitive data in a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the document containing personally identifiable information (PII) onto the page.",
-      },
-      {
-        name: "Scan and redact",
-        text: "Our local AI scans the text to detect and draw black boxes over sensitive data.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download the safely censored document, completely redacting sensitive information.",
-      },
+      { name: "Upload PDF", text: "Select the document containing private customer or patient information." },
+      { name: "Select PII Patterns", text: "Choose patterns to scrub: Credit Cards, SSN/ID numbers, Emails, or Phone Numbers." },
+      { name: "Apply Redaction", text: "Download your scrubbed PDF with all detected private data permanently blacked out." }
     ],
+    faq: [
+      { q: "Is the underlying text data removed?", a: "Yes. Our engine completely scrubs the underlying character vectors from the PDF code stream." },
+      { q: "Is sensitive customer data sent to a cloud server?", a: "No! Pattern matching and redaction run 100% locally inside your web browser." }
+    ],
+    crossLink: { href: "/redact-pdf", label: "Want to manually black out custom text? Try Redact PDF." }
   },
   tr: {
-    title: "Otomatik Sansür — kişisel verileri gizleyin",
-    description:
-      "PDF'nizdeki E-posta, Telefon ve Kredi Kartı gibi kişisel verileri (PII) otomatik olarak tespit edip sansürleyin.",
-    keywords:
-      "otomatik sansür, pdf hassas veri karart, akıllı redact, otomatik gizle, auto redact pdf",
-    h1: "Otomatik PDF Sansür",
-    tagline:
-      "Kişisel verilerinizi %100 gizlilikle otomatik siyah kutulara alın.",
-    howToName: "PDF nasıl otomatik sansürlenir",
-    howItWorks: "Nasıl çalışır",
+    title: "Otomatik PDF Sansürleme (KVKK)",
+    description: "PDF belgelerindeki T.C. Kimlik No, Kredi Kartı, Telefon ve E-posta bilgilerini otomatik tespit edip kalıcı olarak karartın.",
+    keywords: "otomatik tc sansürleme, kvkk pdf temizleme, kredi kartı karartma pdf, otomatik pdf sansürleyici, pii gizleme",
+    h1: "Otomatik PDF Sansürleme (KVKK)",
+    tagline: "T.C. Kimlik Numarası, IBAN, kredi kartı ve e-posta gibi hassas KVKK verilerini tek tıkla otomatik bulup kalıcı karartın.",
+    howToName: "PDF belgesindeki kişisel veriler otomatik nasıl sansürlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Kişisel veri veya gizli bilgiler (PII) içeren belgeyi sayfaya bırak.",
-      },
-      {
-        name: "Tara ve sansürle",
-        text: "Yapay zekamız metni tarayıp hassas verilerin üzerine siyah kutular çizer.",
-      },
-      {
-        name: "PDF olarak indir",
-        text: "Hassas bilgileri tamamen sansürlenmiş güvenli PDF belgenizi indirin.",
-      },
+      { name: "Hassas Belgeyi Yükleyin", text: "Gizlenmesi gereken müşteri veya personel evrakını seçin." },
+      { name: "Gizlenecek Veri Tipini Seçin", text: "T.C. Kimlik, Kredi Kartı, Telefon veya E-posta kalıplarını işaretleyin." },
+      { name: "Sansürlenmiş PDF'i İndirin", text: "Tüm hassas verilerin kalıcı siyah şeritle örtüldüğü güvenli PDF'i indirin." }
     ],
+    faq: [
+      { q: "KVKK ve GDPR uyumlu mu?", a: "Evet! Veriler siyah kutuların arkasından kopyalanamayacak şekilde dosyadan tamamen kazınır." },
+      { q: "Müşteri bilgilerim internete yüklenir mi?", a: "Kesinlikle hayır! Tarama işlemi tamamen tarayıcınızın içinde yerel çalışır." }
+    ],
+    crossLink: { href: "/tr/redact-pdf", label: "Elle serbest seçimle karartma yapmak için PDF Sansürle aracını deneyin." }
   },
 };
-
 export const smartMarkdownCopy = {
   en: {
     title: "Smart PDF to Markdown — AI-ready export",
@@ -2916,58 +2849,46 @@ export const contrastEnhancerCopy = {
 
 export const pdfToHtmlCopy = {
   en: {
-    title: "PDF to HTML — export as web page",
-    description:
-      "Convert your PDF documents into clean, semantic HTML files directly in your browser.",
-    keywords:
-      "pdf to html, convert pdf to web page, pdf to code, pdf html yap, web sayfası yap, pdf i koda çevir",
-    h1: "PDF to HTML Converter",
-    tagline:
-      "Publish your PDFs on the web easily without losing text formatting.",
-    howToName: "How to convert PDF to HTML",
+    title: "PDF to HTML",
+    description: "Convert PDF documents into clean, responsive HTML web pages online for free. Preserves layout, fonts, and images.",
+    keywords: "pdf to html, convert pdf to webpage, pdf to html5 converter, extract html from pdf, pdf to responsive html",
+    h1: "PDF to HTML",
+    tagline: "Turn your PDF documents into responsive HTML web pages with clean CSS styling. Publish PDF content directly to the web.",
+    howToName: "How to convert a PDF into an HTML web page",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to publish on the web.",
-      },
-      {
-        name: "Convert layout",
-        text: "We locally parse the text and layout to create a semantic, responsive web page.",
-      },
-      {
-        name: "Download HTML",
-        text: "Download a clean HTML file that maintains your original text formatting.",
-      },
+      { name: "Upload PDF", text: "Select the document you want to publish as a web page." },
+      { name: "Convert to HTML", text: "Our engine maps paragraphs, font styles, and images into clean HTML5 markup." },
+      { name: "Download HTML", text: "Download your ready-to-publish HTML and CSS package." }
     ],
+    faq: [
+      { q: "Is the generated HTML mobile-friendly?", a: "Yes, text reflows and scales cleanly for desktop and mobile screens." },
+      { q: "Are embedded images included?", a: "Yes, images are exported or encoded inline as data URIs within the HTML structure." }
+    ],
+    crossLink: { href: "/html-to-pdf", label: "Want to do the reverse (HTML to PDF)? Try HTML to PDF." }
   },
   tr: {
-    title: "PDF to HTML — web sayfası yap",
-    description:
-      "PDF belgelerinizi doğrudan tarayıcınızda temiz ve anlamsal (semantic) HTML dosyalarına dönüştürün.",
-    keywords:
-      "pdf html yap, pdf ten web sayfasına, pdf to html, web uymulu pdf, kodu html çevir",
-    h1: "PDF HTML Çevirici",
-    tagline: "PDF'lerinizi web'de kolayca yayınlayın.",
-    howToName: "PDF HTML'e nasıl çevrilir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'ten HTML'e Çevirme (Web Sayfası)",
+    description: "PDF belgelerinizi internette yayınlanabilir temiz HTML5 ve CSS web sayfası kodlarına dönüştürün. Ücretsiz ve pratik.",
+    keywords: "pdf to html, pdf i web sitesi yapma, pdf html dönüştürücü, pdf den web sayfası oluşturma",
+    h1: "PDF'ten HTML'e Çevirme",
+    tagline: "PDF dökümanlarınızı web sitenize doğrudan ekleyebileceğiniz temiz HTML ve CSS kodlarına dönüştürün.",
+    howToName: "PDF belgesi nasıl HTML web sayfasına dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İnternette sayfa olarak yayınlamak istediğiniz PDF belgesini buraya bırakın.",
-      },
-      {
-        name: "Düzeni dönüştür",
-        text: "Anlamsal (semantic) bir web sayfası oluşturmak için metni ve düzeni yerel olarak ayrıştırıyoruz.",
-      },
-      {
-        name: "HTML indir",
-        text: "Orijinal metin formatınızı koruyan, web uyumlu temiz HTML dosyasını indirin.",
-      },
+      { name: "PDF Dosyanızı Seçin", text: "Web sayfası haline getirmek istediğiniz PDF belgesini yükleyin." },
+      { name: "HTML5 Dönüşümü", text: "Sistemimiz yazıları ve resimleri temiz web kodlarına dönüştürür." },
+      { name: "HTML Dosyasını İndirin", text: "Web sitenize yüklemeye hazır HTML kodlarınızı indirin." }
     ],
+    faq: [
+      { q: "Mobil cihazlarla uyumlu mu?", a: "Evet! Oluşturulan HTML kodları telefon ve bilgisayar ekranlarına uyum sağlar." },
+      { q: "İçindeki fotoğraflar kaybolur mu?", a: "Hayır, fotoğraflar HTML kodunun içine eksiksiz olarak gömülür." }
+    ],
+    crossLink: { href: "/tr/html-to-pdf", label: "Tam tersini yapıp HTML kodunu PDF yapmak için HTML'den PDF'e aracını deneyin." }
   },
 };
-
 export const extractFontsCopy = {
   en: {
     title: "Extract Fonts from PDF — recover TTF/OTF",
@@ -3135,58 +3056,46 @@ export const extractUrlsCopy = {
 
 export const removeDuplicatesCopy = {
   en: {
-    title: "Remove Duplicate Pages — de-duplicator",
-    description:
-      "Automatically find and delete visually identical pages from your PDF.",
-    keywords:
-      "remove duplicate pages, delete repeated pages, clean pdf, mükerrer sayfa sil, aynı sayfaları sil, kopya sayfa kaldır",
+    title: "Remove Duplicate Pages",
+    description: "Automatically detect and remove duplicate or identical pages from PDF documents online for free.",
+    keywords: "remove duplicate pages from pdf, delete duplicate pdf pages, find identical pages in pdf, clean duplicate scans",
     h1: "Remove Duplicate Pages",
-    tagline:
-      "Clean up merged or poorly scanned documents by eliminating double pages.",
-    howToName: "How to remove duplicate PDF pages",
+    tagline: "Scan multi-page documents to automatically detect identical or repeated pages from accidental double scanning.",
+    howToName: "How to remove duplicate pages from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a poorly scanned or merged document with duplicate pages.",
-      },
-      {
-        name: "Compare pages",
-        text: "We perform a fast, local pixel-hash comparison to identify visually identical pages.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download a clean, de-duplicated document free of any double pages.",
-      },
+      { name: "Upload PDF", text: "Select the document containing repeated or duplicate pages." },
+      { name: "Scan for Duplicates", text: "Our algorithm calculates content hashes and visual similarity across all pages." },
+      { name: "Download Unique PDF", text: "Download your streamlined PDF file with all duplicate sheets removed." }
     ],
+    faq: [
+      { q: "How are duplicate pages detected?", a: "Our tool compares character streams and visual raster hashes to accurately identify identical pages without false positives." },
+      { q: "Is the first occurrence of the page preserved?", a: "Yes, the original first occurrence is kept, and only subsequent exact duplicates are removed." }
+    ],
+    crossLink: { href: "/remove-pages", label: "Want to manually select specific pages to delete? Try Remove Pages." }
   },
   tr: {
-    title: "Kopya Sayfaları Sil — Tekilleştirici",
-    description:
-      "PDF'nizdeki görsel olarak tamamen aynı olan kopya sayfaları otomatik bulup silin.",
-    keywords:
-      "kopya sayfa sil, mükerrer sayfaları kaldır, aynı sayfaları çıkar, remove duplicate pages",
-    h1: "Kopya Sayfaları Sil",
-    tagline: "Hatalı taranmış belgelerdeki çifte sayfaları yok edin.",
-    howToName: "PDF'deki çift sayfalar nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Çift Sayfaları Sil (Yinelenen)",
+    description: "PDF dosyalarınızdaki birbirinin aynısı olan mükerrer (çift) sayfaları otomatik olarak tespit edip temizleyin.",
+    keywords: "pdf çift sayfaları silme, yinelenen sayfaları kaldırma, mükerrer pdf sayfa silici, aynı sayfaları sil pdf",
+    h1: "PDF Çift Sayfaları Sil",
+    tagline: "Yanlışlıkla iki kere taranmış veya tekrarlayan aynı sayfaları otomatik analizle bulun ve belgenizden ayıklayın.",
+    howToName: "PDF belgesindeki aynı (mükerrer) sayfalar nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Çift çekilmiş veya kopya sayfalar barındıran belgeyi sayfaya bırak.",
-      },
-      {
-        name: "Sayfaları kıyasla",
-        text: "Görsel olarak tamamen aynı olan sayfaları bulmak için hızlı bir piksel karşılaştırması yapıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Kopya sayfalardan tamamen arındırılmış temiz ve tekilleştirilmiş belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "İçinde mükerrer sayfalar olan PDF dosyasını seçin." },
+      { name: "Çift Sayfaları Tara", text: "Sistemimiz sayfaları karşılaştırarak birebir aynı olanları işaretler." },
+      { name: "Tekil PDF'i İndirin", text: "Tekrarlayan sayfalardan arındırılmış temiz belgenizi cihazınıza indirin." }
     ],
+    faq: [
+      { q: "Sayfanın ilk kopyası korunur mu?", a: "Evet! Sayfanın orijinal ilk hali korunur, yalnızca sonradan tekrar eden kopyaları silinir." },
+      { q: "Çok benzer ama farklı sayfalar silinir mi?", a: "Hayır. Yalnızca içeriği %100 birebir aynı olan mükerrer sayfalar temizlenir." }
+    ],
+    crossLink: { href: "/tr/remove-pages", label: "Sayfaları elle tek tek silmek için PDF Sayfa Silme aracını deneyin." }
   },
 };
-
 export const extractAttachmentsCopy = {
   en: {
     title: "Extract Attachments — recover embedded files",
@@ -3657,110 +3566,88 @@ export const wipeBookmarksCopy = {
 
 export const extractTablesCopy = {
   en: {
-    title: "Extract Tables — PDF to CSV",
-    description:
-      "Mathematically analyze bounding boxes to extract tabular data from PDF into an Excel-ready CSV format.",
-    keywords:
-      "extract tables pdf, pdf to csv, pdf to excel, get grid data, pdf tablo çıkar, pdf excel yap, tablo ayıkla",
-    h1: "PDF to CSV Converter",
-    tagline: "Automated tabular data extraction for analysts.",
-    howToName: "How to extract PDF tables",
+    title: "Extract Tables from PDF",
+    description: "Extract structured tabular data from PDF files into CSV or Excel formats online for free. Fast table extractor.",
+    keywords: "extract tables from pdf, pdf table to excel, pdf to csv, extract data from pdf table, convert pdf table to spreadsheet",
+    h1: "Extract Tables from PDF",
+    tagline: "Extract grid tables, financial statements, and invoice rows from PDF documents directly into clean CSV spreadsheets.",
+    howToName: "How to extract tables from a PDF into Excel/CSV",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF document containing tabular data onto the page.",
-      },
-      {
-        name: "Analyze layout",
-        text: "We mathematically calculate text alignments and bounding boxes to reconstruct rows and columns.",
-      },
-      {
-        name: "Download CSV",
-        text: "Download the extracted data as an Excel-ready CSV file.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file containing financial tables or data grids." },
+      { name: "Detect Tables", text: "Our parser detects cell boundaries, rows, and headers across the document." },
+      { name: "Export CSV/Excel", text: "Download your structured table data ready for Excel or Google Sheets." }
     ],
+    faq: [
+      { q: "Can I open the extracted CSV in Microsoft Excel?", a: "Yes, the extracted CSV files open seamlessly in Excel, Google Sheets, Numbers, or any database." },
+      { q: "Are complex multi-column tables supported?", a: "Yes, our engine analyzes cell coordinates to maintain row and column alignment." }
+    ],
+    crossLink: { href: "/extract-text", label: "Need raw unformatted text instead? Try Extract Text." }
   },
   tr: {
-    title: "Tablo Çıkarıcı — PDF to CSV",
-    description:
-      "PDF içindeki metin hizalamalarını matematiksel analiz ederek verileri Excel (CSV) formatına dökün.",
-    keywords:
-      "pdf tablo çıkar, pdf excel yap, pdf to csv, tablo ayıkla, extract tables",
-    h1: "PDF Tablo Çıkarıcı (CSV)",
-    tagline: "Fatura ve veri analizleri için birebir.",
-    howToName: "PDF içindeki tablolar nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'ten Tablo Çıkarma (Excel/CSV)",
+    description: "PDF belgelerindeki tabloları, fiyat listelerini ve finansal verileri ayıklayıp Excel veya CSV formatında indirin.",
+    keywords: "pdf ten tablo çıkarma, pdf tablo excel yapma, pdf to csv, pdf teki tabloyu kopyalama, bilanço pdf excel aktar",
+    h1: "PDF'ten Tablo Çıkarma (Excel/CSV)",
+    tagline: "Fatura, bilanço ve fiyat listelerindeki tabloları tek tıkla Excel ve Google E-Tablolar'da düzenlenebilir CSV formatına aktarın.",
+    howToName: "PDF tablosu Excel veya CSV formatına nasıl aktarılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İçinde tablolar bulunan PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Düzeni analiz et",
-        text: "Satır ve sütunları yeniden oluşturmak için metin hizalamalarını matematiksel olarak hesaplıyoruz.",
-      },
-      {
-        name: "CSV olarak indir",
-        text: "Çıkarılan tüm tablo verilerini Excel'de açılabilir bir CSV dosyası olarak indir.",
-      },
+      { name: "Tablolu PDF'i Yükleyin", text: "İçinde tablo bulunan PDF dosyasını seçin." },
+      { name: "Tabloyu Algıla", text: "Aracımız satır ve sütun çizgilerini tespit ederek hücreleri ayıklar." },
+      { name: "Excel/CSV Olarak İndirin", text: "Excel'de doğrudan açılabilir tertemiz veri dosyanızı indirin." }
     ],
+    faq: [
+      { q: "Satırlar ve sütunlar birbirine karışır mı?", a: "Hayır. Hücre koordinatları taranarak satır ve sütun hizalamaları eksiksiz korunur." },
+      { q: "Finansal verilerim güvende mi?", a: "Evet, tüm ayıklama işlemi tarayıcınızda yerel çalışır, mali verileriniz sunuculara gitmez." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Düz metinleri kopyalamak istiyorsanız PDF'ten Metin Çıkarma aracını kullanın." }
   },
 };
-
 export const pdfToJsonCopy = {
   en: {
-    title: "PDF to JSON — for developers",
-    description:
-      "Convert a PDF into a structured JSON payload containing text, fonts, and bounding box coordinates.",
-    keywords:
-      "pdf to json, structured pdf data, parse pdf, extract data json, pdf json yap, verileri json al",
-    h1: "PDF to JSON Converter",
-    tagline: "A developer tool for AI pipelines and parsing.",
-    howToName: "How to convert PDF to JSON",
+    title: "PDF to JSON",
+    description: "Extract text, metadata, page dimensions, and structural objects from PDF files into structured JSON for developers.",
+    keywords: "pdf to json, parse pdf to json, extract pdf json, pdf data parser developer, pdf structure to json online",
+    h1: "PDF to JSON",
+    tagline: "Parse PDF pages into structured JSON data trees. Extract text blocks, bounding boxes, font metadata, and document hierarchies.",
+    howToName: "How to parse a PDF into structured JSON",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to parse onto the page.",
-      },
-      {
-        name: "Parse structure",
-        text: "We process the document locally to build a complete structural tree with exact coordinates.",
-      },
-      {
-        name: "Download JSON",
-        text: "Download the raw JSON data, ready to be used in AI pipelines or developer tools.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file you want to parse for programmatic use." },
+      { name: "JSON Parsing", text: "Our parser extracts page tree hierarchies, text spans, coordinates, and metadata." },
+      { name: "Download JSON", text: "Download your clean, formatted JSON file ready for software development." }
     ],
+    faq: [
+      { q: "What data fields are included in the JSON?", a: "The JSON includes document metadata, total page counts, page dimensions, text content, font styling, and word bounding-box coordinates." },
+      { q: "Is this suitable for AI and LLM pipelines?", a: "Yes! Structured JSON simplifies feeding document context into AI embedding and Retrieval-Augmented Generation (RAG) models." }
+    ],
+    crossLink: { href: "/extract-text", label: "Looking for plain text output instead? Try Extract Text." }
   },
   tr: {
-    title: "PDF to JSON — Yazılımcılar İçin",
-    description:
-      "Yazılımcılar ve AI projeleri için PDF belgelerini tüm yapısal haritası ve koordinatlarıyla JSON formatına çevirin.",
-    keywords:
-      "pdf json yap, verileri json al, pdf to json, parse pdf, yapılandırılmış veri",
-    h1: "PDF to JSON Çevirici",
-    tagline: "Geliştiricilerin aradığı o eşsiz araç.",
-    howToName: "PDF JSON formatına nasıl çevrilir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'ten JSON'a Çevirme (Geliştirici)",
+    description: "PDF dosyalarının sayfa hiyerarşisini, koordinatlarını ve metin bloklarını yazılımcılar için yapılandırılmış JSON verisine dönüştürün.",
+    keywords: "pdf to json, pdf json çevirici, pdf parse etme, yapay zeka için pdf json, yazılımcı pdf araçları",
+    h1: "PDF'ten JSON'a Çevirme",
+    tagline: "Yazılımcılar ve yapay zeka (LLM/RAG) sistemleri için PDF belgelerini yapılandırılmış, temiz JSON veri ağacına dönüştürün.",
+    howToName: "PDF belgesi nasıl JSON verisine dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Ayrıştırmak (parse) istediğin PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Yapıyı ayrıştır",
-        text: "Tam koordinatları içeren yapısal bir veri haritası oluşturmak için belgeyi yerel olarak işliyoruz.",
-      },
-      {
-        name: "JSON olarak indir",
-        text: "Yapay zeka veya yazılım projelerinde kullanılmaya hazır ham JSON verisini indir.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Ayrıştırmak (parse etmek) istediğiniz PDF dosyasını seçin." },
+      { name: "JSON Çözümleme", text: "Sistemimiz sayfa ağacını, koordinatları ve metin bloklarını JSON nesnelerine döker." },
+      { name: "JSON Dosyasını İndirin", text: "Projelerinizde kullanabileceğiniz formatlanmış JSON dosyanızı indirin." }
     ],
+    faq: [
+      { q: "JSON dosyasında hangi bilgiler yer alır?", a: "Belge meta verileri, sayfa boyutları, metin blokları, font aileleri ve kelime koordinatları eksiksiz yer alır." },
+      { q: "Yapay zeka (RAG) projeleri için uygun mu?", a: "Evet! LLM ve RAG sistemlerine veri beslerken JSON formatı en yüksek doğruluğu sağlar." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Düz metin almak istiyorsanız PDF'ten Metin Çıkarma aracını deneyin." }
   },
 };
-
 export const scanToPdfCopy = {
   en: {
     title: "Scan to PDF — camera scanner",
