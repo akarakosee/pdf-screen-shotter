@@ -2081,52 +2081,44 @@ export const splithalfpdfCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const extractbykeywordCopy = {
   en: {
-    title: "Extract by Keyword",
-    description: "Extract pages containing specific text.",
-    keywords:
-      "extract pdf by keyword, search and extract pdf, filter pdf pages, find text extract page, kelimeye göre sayfa çıkar",
-    h1: "Extract by Keyword",
-    tagline: "Extract pages containing specific text.",
-    howToName: "How to use Extract by Keyword",
-    howItWorks: "Upload your file and process it instantly in your browser.",
+    title: "Extract Pages by Keyword",
+    description: "Search and extract only the PDF pages that contain specific keywords or phrases into a new document online for free.",
+    keywords: "extract pdf pages by keyword, search and split pdf, filter pdf pages by word, extract pages containing text",
+    h1: "Extract Pages by Keyword",
+    tagline: "Search a massive PDF for specific terms (e.g., 'Invoice', 'Confidential', 'Tax') and save only matching pages to a new PDF.",
+    howToName: "How to extract PDF pages by keyword",
+    howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a large PDF document and enter the specific keyword you are looking for.",
-      },
-      {
-        name: "Search text",
-        text: "We scan all pages locally to locate every instance of your exact keyword.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download a new PDF containing only the pages that matched your search.",
-      },
+      { name: "Upload PDF", text: "Select the large multi-page document you want to filter." },
+      { name: "Enter Keyword", text: "Type the target word, phrase, or regular expression you are searching for." },
+      { name: "Download Filtered PDF", text: "Download a clean new PDF containing only the pages where your keyword was found." }
     ],
+    faq: [
+      { q: "Is keyword matching case-sensitive?", a: "You can toggle between case-sensitive and case-insensitive matching." },
+      { q: "What if a keyword appears multiple times on the same page?", a: "The page is included once in the filtered result, preserving correct document order." }
+    ],
+    crossLink: { href: "/extract-pages", label: "Want to select pages by number instead? Try Extract Pages." }
   },
   tr: {
-    title: "Extract by Keyword",
-    description: "Extract pages containing specific text.",
-    keywords:
-      "kelimeye göre sayfa çıkar, pdf içinde ara ve çıkar, metne göre pdf böl, extract by keyword",
-    h1: "Extract by Keyword",
-    tagline: "Extract pages containing specific text.",
-    howToName: "Extract by Keyword Nasıl Kullanılır",
-    howItWorks: "Dosyanızı yükleyin ve tarayıcınızda anında işleyin.",
+    title: "Kelimeye Göre Sayfa Ayıkla (Arama)",
+    description: "Belirli bir kelimenin (Örn: 'Fatura', 'Madde 5', 'Sözleşme') geçtiği PDF sayfalarını otomatik bulup ayrı bir dosya yapın.",
+    keywords: "kelimeye göre pdf sayfa çıkarma, aranan kelimenin sayfalarını ayırma, pdf te arama yapıp sayfaları bölme",
+    h1: "Kelimeye Göre Sayfa Ayıkla",
+    tagline: "Yüzlerce sayfalık arşivde aradığınız kelimenin geçtiği tüm sayfaları saniyeler içinde tespit edip tek bir PDF'te toplayın.",
+    howToName: "Belirli bir kelimenin geçtiği PDF sayfaları nasıl ayıklanır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Büyük boyutlu PDF belgenizi bırakın ve aradığınız anahtar kelimeyi yazın.",
-      },
-      {
-        name: "Metni ara",
-        text: "Anahtar kelimenizin geçtiği yerleri bulmak için tüm sayfaları yerel olarak tarıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yalnızca aramanızla eşleşen sayfaları içeren yeni PDF belgenizi indirin.",
-      },
+      { name: "Büyük Belgeyi Yükleyin", text: "İçinde arama yapmak istediğiniz çok sayfalı PDF'i seçin." },
+      { name: "Aranacak Kelimeyi Girin", text: "Bulmak istediğiniz kelimeyi veya ifadeyi (örn: 'Bilanço') yazın." },
+      { name: "Filtrelenmiş PDF'i İndirin", text: "Sadece bu kelimenin yer aldığı sayfalardan oluşan yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "Büyük-küçük harf duyarlı mı?", a: "Dilerseniz büyük/küçük harf duyarlılığını açıp kapatabilirsiniz." },
+      { q: "Hukuk ve muhasebe arşivleri için nasıl kullanılır?", a: "Bin sayfalık dava veya muhasebe dosyasında sadece müvekkilinizin adının geçtiği sayfaları anında çekip ayıklayabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/extract-pages", label: "Sayfa numarasına göre ayıklamak için PDF Sayfalarını Ayıkla aracını deneyin." }
   },
 };
 
@@ -2533,166 +2525,130 @@ export const autoCropCopy = {
 };
 export const extractTocCopy = {
   en: {
-    title: "Extract Bookmarks — export PDF Table of Contents",
-    description:
-      "Instantly extract the Table of Contents (Bookmarks) from any PDF and save it as a Markdown file.",
-    keywords:
-      "extract toc, get pdf bookmarks, extract table of contents, pdf içindekiler çıkar, pdf menü al",
-    h1: "Extract Bookmarks (TOC)",
-    tagline:
-      "Export your PDF's outline tree structure to a structured text file in one click.",
-    howToName: "How to extract bookmarks from a PDF",
+    title: "Extract Table of Contents (Bookmarks)",
+    description: "Extract the Table of Contents (Bookmarks outline tree) from any PDF into Markdown, text, or JSON format online for free.",
+    keywords: "extract table of contents from pdf, export pdf bookmarks, pdf outline to markdown, extract pdf toc, pdf index exporter",
+    h1: "Extract Table of Contents",
+    tagline: "Export the structured bookmark outline, chapter hierarchy, and page references from any PDF into clean Markdown text.",
+    howToName: "How to extract a PDF Table of Contents",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF document containing a table of contents or bookmarks.",
-      },
-      {
-        name: "Parse outlines",
-        text: "We scan the internal document structure locally to extract the entire bookmark hierarchy.",
-      },
-      {
-        name: "Download Markdown",
-        text: "Download a neatly structured text file containing your complete table of contents.",
-      },
+      { name: "Upload PDF", text: "Select the PDF book or report with structured bookmarks." },
+      { name: "Extract Outline", text: "Our parser reads the internal PDF bookmark catalog and nesting levels." },
+      { name: "Download Markdown TOC", text: "Save your Table of Contents as clean Markdown or text." }
     ],
+    faq: [
+      { q: "Are page numbers included?", a: "Yes, every chapter heading is exported with its corresponding target page number." },
+      { q: "What if the PDF has no bookmarks?", a: "If the file lacks an embedded outline catalog, no TOC can be extracted." }
+    ],
+    crossLink: { href: "/split-bookmarks", label: "Want to split the PDF at each chapter bookmark? Try Split by Bookmarks." }
   },
   tr: {
-    title: "İçindekileri Çıkar — PDF Başlık Ağacını Dışa Aktar",
-    description:
-      "Herhangi bir PDF'in İçindekiler Tablosunu (Yer İmlerini) anında çıkarın ve Markdown dosyası olarak kaydedin.",
-    keywords:
-      "pdf içindekiler çıkar, pdf toc al, yer imlerini al, extract table of contents, extract bookmarks",
-    h1: "İçindekileri Çıkar",
-    tagline:
-      "PDF belgenizin başlık hiyerarşisini tek tıkla yapılandırılmış bir metin dosyasına aktarın.",
-    howToName: "PDF'ten içindekiler nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF İçindekiler Tablosunu Çıkar (Yer İmleri)",
+    description: "PDF kitaplarının ve raporlarının içindekiler tablosunu ve bölüm başlıklarını Markdown veya metin olarak dışa aktarın.",
+    keywords: "pdf içindekiler tablosu çıkarma, pdf yer imlerini kaydetme, pdf fihrist çıkarma, kitap içindekiler markdown yapma",
+    h1: "PDF İçindekiler Tablosunu Çıkar",
+    tagline: "Kitap ve tezlerdeki içindekiler ağacını, bölüm başlıklarını ve sayfa numaralarını tek tıkla düzenli Markdown metni olarak kaydedin.",
+    howToName: "PDF içindekiler tablosu nasıl dışa aktarılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İçindekiler tablosu veya yer imleri içeren PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Başlıkları çıkar",
-        text: "Tüm yer imi hiyerarşisini çıkarmak için belgenin iç yapısını yerel olarak tarıyoruz.",
-      },
-      {
-        name: "Markdown indir",
-        text: "Tüm içindekiler tablosunu içeren düzenli ve yapılandırılmış metin dosyasını indirin.",
-      },
+      { name: "PDF Kitabını Yükleyin", text: "İçindekiler ağacı olan PDF dosyasını seçin." },
+      { name: "Fihristi Ayıkla", text: "Aracımız tüm bölüm başlıklarını ve sayfa numaralarını hiyerarşik olarak okur." },
+      { name: "Markdown/Metin Olarak İndirin", text: "İçindekiler tablonuzu not uygulamalarınızda kullanmak üzere indirin." }
     ],
+    faq: [
+      { q: "Sayfa numaraları yer alır mı?", a: "Evet! Her bölüm başlığının yanında kitabın hangi sayfasında olduğu net olarak listelenir." },
+      { q: "Notion ve Obsidian ile uyumlu mu?", a: "Evet! Çıktı Markdown formatında olduğu için Notion, Obsidian ve Word'e doğrudan yapıştırılabilir." }
+    ],
+    crossLink: { href: "/tr/split-bookmarks", label: "Belgeyi bölümlere göre ayrı dosyalara bölmek için Yer İmlerine Göre Böl aracını deneyin." }
   },
 };
 
 export const overlayPdfCopy = {
   en: {
-    title: "Add Letterhead — overlay a template behind your PDF",
-    description:
-      "Stamp a company letterhead or invoice template to the background of every page in your PDF document.",
-    keywords:
-      "overlay pdf, superimpose pdf, merge layers, pdf üst üste koy, pdf katman birleştir, şeffaf pdf ekle",
-    h1: "Add Letterhead (Overlay)",
-    tagline:
-      "Seamlessly embed a template PDF into the background of your target document.",
-    howToName: "How to add a letterhead to a PDF",
+    title: "Overlay PDF (Letterhead & Stamp)",
+    description: "Overlay or superimpose two PDF documents together online for free. Add letterhead templates and background stamps easily.",
+    keywords: "overlay pdf, superimpose pdf, add letterhead to pdf, pdf background stamp, merge pdf layers",
+    h1: "Overlay PDF",
+    tagline: "Superimpose a transparent letterhead, company stationery, or background stamp over your multi-page documents.",
+    howToName: "How to overlay a letterhead onto a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add target PDF",
-        text: "Select the main PDF document you want to stamp with a letterhead.",
-      },
-      {
-        name: "Add template",
-        text: "Select your 1-page letterhead or design template PDF to use as the background.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your newly branded document with the template seamlessly applied to every page.",
-      },
+      { name: "Upload Main PDF", text: "Select your content document (invoices, reports, or letters)." },
+      { name: "Upload Letterhead PDF", text: "Select the background stationery or header template." },
+      { name: "Download Merged PDF", text: "Save your document with the professional letterhead stamped behind every page." }
     ],
+    faq: [
+      { q: "Can I place the overlay in the background or foreground?", a: "Yes, you can choose whether the overlay appears under your text (as stationery) or over it (as a stamp)." },
+      { q: "Is it applied to every page?", a: "Yes, the template repeats across all document pages automatically." }
+    ],
+    crossLink: { href: "/watermark-pdf", label: "Need a text watermark instead? Try Watermark PDF." }
   },
   tr: {
-    title: "Antet Ekle — PDF'inizin arka planına şablon ekleyin",
-    description:
-      "Şirket antetli kağıdınızı veya fatura şablonunuzu PDF belgenizin her sayfasının arka planına ekleyin.",
-    keywords:
-      "pdf üst üste bindir, pdf katman birleştir, overlay pdf, şeffaf katman ekle, antetli kağıt pdf",
-    h1: "Antet / Şablon Ekle",
-    tagline:
-      "Şablon bir PDF'i, hedef belgenizin tüm sayfalarının arka planına kusursuzca gömün.",
-    howToName: "PDF'e antet veya şablon nasıl eklenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Üst Üste Bindir (Antetli Kağıt)",
+    description: "PDF fatura ve yazılarınıza antetli kağıt şablonu, kurumsal çerçeve veya arka plan damgası ekleyin. Ücretsiz ve pratik.",
+    keywords: "pdf antetli kağıt ekleme, pdf üst üste bindirme, kurumsal antet pdf yapma, pdf arka plan şablonu",
+    h1: "PDF Üst Üste Bindir",
+    tagline: "Şirket antetli kağıdınızı fatura veya yazılarınızın altına şablon olarak yerleştirin. Matbaa baskısı kalitesinde evraklar üretin.",
+    howToName: "PDF belgesine antetli kağıt şablonu nasıl eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Ana PDF'i ekle",
-        text: "Antet veya şablon eklemek istediğiniz asıl PDF belgesini seçin.",
-      },
-      {
-        name: "Şablonu ekle",
-        text: "Arka plan olarak kullanılacak tek sayfalık tasarım veya antetli kağıdınızı seçin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Şablonun tüm sayfalara kusursuzca uygulandığı yeni kurumsal belgenizi indirin.",
-      },
+      { name: "Metin Belgenizi Yükleyin", text: "Fatura veya yazı içeren ana PDF dosyanızı seçin." },
+      { name: "Antetli Şablonu Ekleyin", text: "Şirket logonuzu içeren antetli kağıt PDF'ini seçin." },
+      { name: "Birleştirilmiş PDF'i İndirin", text: "Antetli kağıt üzerine basılmış gibi görünen yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "Antet yazının arkasında mı kalır?", a: "Evet! Şablon arka plan olarak yerleştirilir, böylece metinlerinizin okunurluğu asla bozulmaz." },
+      { q: "Tüm sayfalara otomatik uygulanır mı?", a: "Evet, antetli şablon belgenin tüm sayfalarına otomatik olarak giydirilir." }
+    ],
+    crossLink: { href: "/tr/watermark-pdf", label: "Metin damgası basmak için PDF Filigran Ekle aracını kullanın." }
   },
 };
 
 export const changeBgCopy = {
   en: {
-    title: "Change PDF Background — Dark Mode & Sepia",
-    description:
-      "Change the background color of your transparent or white PDFs. Perfect for Dark Mode reading or eye protection.",
-    keywords:
-      "change pdf background, add background color, remove background pdf, pdf arka plan değiştir, pdf renk değiştir",
-    h1: "Change Background Color",
-    tagline:
-      "Instantly set a custom background color for your PDF pages to reduce eye strain.",
-    howToName: "How to change the background color of a PDF",
+    title: "Change PDF Background Color",
+    description: "Change the background color of your PDF pages to sepia, dark mode, or custom pastel tones online for free.",
+    keywords: "change pdf background color, sepia pdf reader, eye care pdf background, tinted pdf pages, custom pdf background",
+    h1: "Change PDF Background Color",
+    tagline: "Tint page backgrounds with warm sepia, paper cream, or eye-friendly pastel colors for comfortable reading.",
+    howToName: "How to change PDF background color",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a transparent or white PDF document onto the page.",
-      },
-      {
-        name: "Select color",
-        text: "Choose a soothing color like Dark Gray or Sepia to reduce eye strain.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your newly recolored document, perfectly optimized for nighttime reading.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file whose background you want to colorize." },
+      { name: "Select Tint Color", text: "Choose Sepia, Warm Cream, Pastel Green, or enter a custom hex color." },
+      { name: "Download Tinted PDF", text: "Save your eye-friendly colorized document." }
     ],
+    faq: [
+      { q: "Why use sepia or cream backgrounds?", a: "Warm tones reduce blue light emission and eye fatigue during long reading sessions." },
+      { q: "Are images affected?", a: "No, text and images retain their original colors while the page canvas color is updated." }
+    ],
+    crossLink: { href: "/invert-pdf", label: "Looking for full dark mode? Try Invert PDF Colors." }
   },
   tr: {
-    title: "Arka Plan Rengini Değiştir — Gece Modu & Sepya",
-    description:
-      "Şeffaf veya beyaz PDF'lerinizin arka plan rengini değiştirin. Gece okuması ve göz koruması için mükemmeldir.",
-    keywords:
-      "pdf arka plan değiştir, pdf arka plan rengi, pdf renk değiştir, pdf arkaplan sil, change pdf background",
-    h1: "Arka Plan Rengini Değiştir",
-    tagline:
-      "Göz yorgunluğunu azaltmak için PDF sayfalarınızın arka planına anında özel bir renk atayın.",
-    howToName: "PDF arka plan rengi nasıl değiştirilir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Arka Plan Rengini Değiştir",
+    description: "PDF sayfalarının arka planını göz yormayan sepya, krem veya özel renklere dönüştürün. Ücretsiz ve pratik.",
+    keywords: "pdf arka plan rengi değiştirme, sepya pdf okuyucu, göz dinlendirici pdf arka planı, krem rengi pdf yap",
+    h1: "PDF Arka Plan Rengini Değiştir",
+    tagline: "Parlak beyaz sayfaları sıcak sepya, kitap kağıdı kremi veya pastel tonlara boyayarak uzun okumalarda gözlerinizi koruyun.",
+    howToName: "PDF arka plan rengi nasıl değiştirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Şeffaf veya beyaz arka planlı PDF belgenizi sayfaya bırakın.",
-      },
-      {
-        name: "Rengi seç",
-        text: "Göz yorgunluğunu azaltmak için Koyu Gri veya Sepya gibi dinlendirici bir renk belirleyin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Gece okuması veya uzun çalışmalar için mükemmel hale getirilmiş yeni belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Arka planını değiştirmek istediğiniz PDF kitabını seçin." },
+      { name: "Rengi Belirleyin", text: "Sepya, Krem, Pastel Yeşil veya dilediğiniz özel bir renk tonunu seçin." },
+      { name: "Renklendirilmiş PDF'i İndirin", text: "Göz dostu yeni arka plana sahip belgenizi cihazınıza kaydedin." }
     ],
+    faq: [
+      { q: "Göz sağlığı için hangi renk önerilir?", a: "Sıcak sepya ve hafif sarı/krem tonları mavi ışığı kırarak göz yorgunluğunu en aza indirir." },
+      { q: "Resimler ve yazılar bozulur mu?", a: "Hayır. Yalnızca beyaz kağıt arka planı boyanır, yazılar ve fotoğraflar net kalır." }
+    ],
+    crossLink: { href: "/tr/invert-pdf", label: "Tamamen siyah gece modu için PDF Renklerini Ters Çevir aracını deneyin." }
   },
 };
 
@@ -2740,110 +2696,87 @@ export const autoRedactCopy = {
 };
 export const smartMarkdownCopy = {
   en: {
-    title: "Smart PDF to Markdown — AI-ready export",
-    description:
-      "Convert PDFs to structured Markdown. Infers headings (H1, H2, H3) based on font sizes automatically.",
-    keywords:
-      "smart markdown, ai pdf to md, structured markdown converter, akıllı markdown, pdf ten markdown a",
+    title: "Smart PDF to Markdown (AI)",
+    description: "Convert complex PDF documents into structured, LLM-ready Markdown (.md) with table and header hierarchy recognition.",
+    keywords: "pdf to markdown ai, convert pdf to md, smart pdf markdown converter, rag pdf to markdown, llm ready pdf parser",
     h1: "Smart PDF to Markdown",
-    tagline:
-      "Perfect for LLMs and AI agents. Get structured MD files instantly.",
-    howToName: "How to convert PDF to Markdown",
+    tagline: "Structure headings, preserve data tables, and extract clean, readable Markdown syntax from complex PDF layouts.",
+    howToName: "How to convert PDF to structured Markdown",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a text-heavy PDF document or report onto the page.",
-      },
-      {
-        name: "Analyze structure",
-        text: "We analyze font sizes locally to accurately infer document hierarchy and headings.",
-      },
-      {
-        name: "Download Markdown",
-        text: "Download a clean, structured Markdown (.md) file ready for AI agents or text editors.",
-      },
+      { name: "Upload Document", text: "Select the PDF book, research paper, or report." },
+      { name: "Smart Extraction", text: "Our layout engine analyzes font weights and spacing to detect H1-H6 headers and tables." },
+      { name: "Download Markdown", text: "Download your clean .md file formatted perfectly for Obsidian, Notion, or AI models." }
     ],
+    faq: [
+      { q: "Is this optimized for LLMs and AI pipelines?", a: "Yes! Clean Markdown headers (#, ##), bullet points, and tables (|---|) maximize semantic understanding for AI RAG systems." },
+      { q: "Are tables converted to Markdown format?", a: "Yes, tabular data is structured into standard GitHub-flavored Markdown grid tables." }
+    ],
+    crossLink: { href: "/extract-text", label: "Need raw unformatted text instead? Try Extract Text." }
   },
   tr: {
-    title: "Akıllı PDF to Markdown — Yapay Zeka Çıktısı",
-    description:
-      "PDF'leri yapılandırılmış Markdown formatına dönüştürün. Başlıkları font boyutlarına göre otomatik algılar.",
-    keywords:
-      "akıllı markdown, pdf to md, yapılandırılmış md, smart markdown converter, pdf ten md ye",
-    h1: "PDF to Markdown",
-    tagline:
-      "LLM ve yapay zeka ajanları için kusursuz. Anında yapılandırılmış MD dosyaları alın.",
-    howToName: "PDF Markdown'a nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
+    title: "Akıllı PDF'ten Markdown Yapıcı (Yapay Zeka)",
+    description: "Karmaşık PDF belgelerini başlık hiyerarşisi (#, ##) ve tablolarıyla birlikte yapay zeka dostu Markdown (.md) formatına dönüştürün.",
+    keywords: "pdf markdown yapma, pdf to md ai, yapay zeka için pdf metne çevirme, obsidian pdf markdown, notion pdf aktarma",
+    h1: "Akıllı PDF'ten Markdown Yapıcı",
+    tagline: "Başlıkları (#, ##), listeleri ve tabloları akıllıca algılayarak PDF'lerinizi Notion, Obsidian ve LLM'ler için kusursuz Markdown'a çevirin.",
+    howToName: "PDF belgesi akıllı Markdown formatına nasıl çevrilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Metin ağırlıklı PDF belgenizi veya makalenizi sayfaya bırak.",
-      },
-      {
-        name: "Yapıyı analiz et",
-        text: "Belge hiyerarşisini ve başlıkları doğru çıkarmak için font boyutlarını yerel olarak analiz ediyoruz.",
-      },
-      {
-        name: "Markdown indir",
-        text: "Yapay zeka araçları için hazır, yapılandırılmış temiz Markdown (.md) dosyanızı indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Dönüştürmek istediğiniz makale veya raporu seçin." },
+      { name: "Akıllı Yapılandırma", text: "Sistemimiz başlık büyüklüklerini ve tabloları analiz ederek Markdown sözdizimine döker." },
+      { name: "Markdown Dosyasını İndirin", text: "Obsidian veya Notion'da doğrudan kullanabileceğiniz .md dosyasını indirin." }
     ],
+    faq: [
+      { q: "Yapay zeka (ChatGPT/Claude/RAG) sistemleri için neden Markdown?", a: "Markdown, başlık ve tablo yapısını koruduğu için yapay zeka modelleri tarafından en yüksek doğrulukla anlaşılan formattır." },
+      { q: "Tablolar düzgün çevrilir mi?", a: "Evet! PDF'teki tablolar standart GitHub Markdown tablo formatına (|---|) dönüştürülür." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Düz metin almak istiyorsanız PDF'ten Metin Çıkarma aracını deneyin." }
   },
 };
 
 export const contrastEnhancerCopy = {
   en: {
-    title: "Enhance PDF — adjust contrast & brightness",
-    description:
-      "Fix bad scans by increasing contrast and brightness. Make faded text crisp and readable again.",
-    keywords:
-      "enhance pdf contrast, darken pdf text, readable pdf, improve scan quality, pdf kontrast artır, soluk yazıyı koyulaştır",
-    h1: "Enhance Scanned PDF",
-    tagline: "Adjust brightness and contrast of poor PDF scans effortlessly.",
-    howToName: "How to enhance a scanned PDF",
+    title: "PDF Contrast Enhancer",
+    description: "Enhance faded text, darken washed-out scans, and increase contrast of poorly scanned PDF files online for free.",
+    keywords: "enhance pdf contrast, darken faded pdf text, fix light scan pdf, sharpen scanned document, boost pdf readability",
+    h1: "PDF Contrast Enhancer",
+    tagline: "Darken faint text and increase sharpness on old or low-quality document scans for crystal-clear readability.",
+    howToName: "How to enhance PDF contrast and darken text",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the poorly scanned or faded PDF document onto the page.",
-      },
-      {
-        name: "Enhance contrast",
-        text: "We locally process image filters to increase brightness and adjust contrast for perfect readability.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download the enhanced, crisp, and clear document instantly.",
-      },
+      { name: "Upload Faded Scan", text: "Select the light, washed-out PDF document." },
+      { name: "Adjust Contrast Level", text: "Boost contrast and adjust black-point threshold to sharpen text strokes." },
+      { name: "Download Sharpened PDF", text: "Save your clean, high-contrast readable PDF." }
     ],
+    faq: [
+      { q: "Can it fix faint photocopy scans?", a: "Yes! The contrast enhancer recalibrates gamma and pixel luminance to turn light gray text into bold black." },
+      { q: "Is file size increased?", a: "No, optimizing contrast often reduces background noise and compression artifacts." }
+    ],
+    crossLink: { href: "/ocr-pdf", label: "Want to extract text from the scan? Try OCR PDF." }
   },
   tr: {
-    title: "PDF Netleştir — kontrast ve parlaklık artır",
-    description:
-      "Kötü taranmış soluk belgelerin kontrastını artırarak metinleri cam gibi net hale getirin.",
-    keywords:
-      "pdf kontrast artır, soluk yazıyı netleştir, tarama kalitesi artır, enhance pdf contrast, darken text",
-    h1: "Taranmış PDF Netleştir",
-    tagline:
-      "Soluk PDF taramalarının parlaklığını ve kontrastını zahmetsizce ayarlayın.",
-    howToName: "Taranmış PDF nasıl netleştirilir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Kontrast Artırıcı (Soluk Yazı Düzeltme)",
+    description: "Soluk çıkmış fotokopileri, silik taranmış evrakları ve açık gri yazıları koyulaştırarak netleştirin. Ücretsiz netleştirici.",
+    keywords: "pdf kontrast artırma, silik pdf koyulaştırma, soluk fotokopi netleştirme, taranmış evrakı belirginleştirme",
+    h1: "PDF Kontrast Artırıcı",
+    tagline: "Okunması zor olan silik fotokopileri ve soluk taranmış evrakları koyulaştırıp pırıl pırıl, net bir hale getirin.",
+    howToName: "Silik taranmış PDF yazıları nasıl koyulaştırılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Kötü taranmış veya soluk görünen PDF belgenizi sayfaya bırakın.",
-      },
-      {
-        name: "Kontrastı artır",
-        text: "Mükemmel okunabilirlik için parlaklık ve kontrast filtrelerini yerel olarak uyguluyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Metinlerin cam gibi netleştiği, geliştirilmiş belgenizi anında indirin.",
-      },
+      { name: "Silik Belgeyi Yükleyin", text: "Yazıları soluk olan PDF dosyasını seçin." },
+      { name: "Kontrast Ayarını Yükseltin", text: "Koyulaştırma seviyesini ayarlayarak harflerin belirginleşmesini sağlayın." },
+      { name: "Netleşmiş PDF'i İndirin", text: "Okunabilirliği artırılmış net belgenizi bilgisayarınıza kaydedin." }
     ],
+    faq: [
+      { q: "Eski dilekçe ve kimlik fotokopilerinde işe yarar mı?", a: "Evet! Gri tonlu gürültüyü temizleyip soluk harfleri koyu siyaha çevirerek evrakları okunur kılar." },
+      { q: "Yazıcıdan çıktı alırken faydası olur mu?", a: "Kesinlikle. Silik sayfaları koyulaştırıp bastığınızda yazıcıdan çok daha net çıktılar alırsınız." }
+    ],
+    crossLink: { href: "/tr/ocr-pdf", label: "Belgedeki yazıları kopyalamak istiyorsanız PDF OCR aracını kullanın." }
   },
 };
 
@@ -2891,166 +2824,130 @@ export const pdfToHtmlCopy = {
 };
 export const extractFontsCopy = {
   en: {
-    title: "Extract Fonts from PDF — recover TTF/OTF",
-    description:
-      "Find and extract embedded TrueType (TTF) and OpenType (OTF) font files from any PDF.",
-    keywords:
-      "extract fonts, get pdf fonts, download pdf font, pdf font çıkar, font ayıkla, pdf yazı tipi al",
+    title: "Extract PDF Fonts",
+    description: "Identify and extract embedded TTF, OTF, and WOFF font files from PDF documents online for free. Typography inspector.",
+    keywords: "extract fonts from pdf, what font is in pdf, download pdf fonts, extract ttf from pdf, pdf font finder",
     h1: "Extract PDF Fonts",
-    tagline:
-      "A lifesaver for graphic designers. Recover original fonts instantly.",
-    howToName: "How to extract fonts from PDF",
+    tagline: "Identify font families used in any PDF document and extract embedded TrueType (TTF) and OpenType (OTF) font files.",
+    howToName: "How to extract and identify fonts from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF document containing custom embedded typography.",
-      },
-      {
-        name: "Extract fonts",
-        text: "We scan the resource dictionaries locally to recover raw TTF and OTF font files.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download a ZIP archive containing all the original font files used in the document.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file whose typography you want to inspect." },
+      { name: "Inspect Typefaces", text: "Our parser lists every embedded font name, encoding, and format." },
+      { name: "Download Fonts", text: "Download extracted embedded font files to your computer." }
     ],
+    faq: [
+      { q: "Can subsetted fonts be extracted?", a: "Our tool extracts embedded font descriptors and subsetted glyph programs where permissible." },
+      { q: "Is font identification accurate?", a: "Yes, PostScript font names and internal font dictionaries are read directly from the PDF catalog." }
+    ],
+    crossLink: { href: "/extract-colors", label: "Want to extract color palettes too? Try Extract Colors." }
   },
   tr: {
-    title: "PDF Font Çıkarıcı — TTF/OTF Kurtar",
-    description:
-      "Herhangi bir PDF içine gömülmüş TrueType (TTF) ve OpenType (OTF) font dosyalarını bulup çıkarın.",
-    keywords:
-      "pdf font çıkar, yazı tipi al, font ayıkla, pdf içindeki fontu bul, extract fonts",
-    h1: "PDF Font Kurtarıcı",
-    tagline:
-      "Tasarımcılar için hayat kurtarıcı. Orijinal fontları saniyeler içinde geri alın.",
-    howToName: "PDF'den font nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Yazı Tiplerini Çıkar (Font Bulucu)",
+    description: "PDF belgelerinde hangi fontların (yazı tiplerinin) kullanıldığını öğrenin ve gömülü TTF/OTF font dosyalarını indirin.",
+    keywords: "pdf font bulma, pdf te hangi yazı tipi kullanılmış, pdf font çıkarma, pdf yazı fontunu öğrenme, ttf çıkarma",
+    h1: "PDF Yazı Tiplerini Çıkar",
+    tagline: "Beğendiğiniz bir PDF tasarımında hangi fontların kullanıldığını anında tespit edin ve gömülü yazı tipi dosyalarını bilgisayarınıza indirin.",
+    howToName: "PDF içindeki yazı tipleri ve fontlar nasıl bulunur?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Özel tipografi ve gömülü fontlar içeren PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Fontları ayıkla",
-        text: "TTF ve OTF font dosyalarını kurtarmak için PDF kaynak sözlüklerini yerel olarak tarıyoruz.",
-      },
-      {
-        name: "ZIP indir",
-        text: "Belgede kullanılan tüm orijinal font dosyalarını içeren tek bir ZIP arşivi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Fontlarını öğrenmek istediğiniz PDF dosyasını seçin." },
+      { name: "Yazı Tiplerini Tara", text: "Aracımız belgedeki tüm gömülü font isimlerini ve formatlarını listeler." },
+      { name: "Fontları İndirin", text: "Gömülü TTF veya OTF font dosyalarını bilgisayarınıza kaydedin." }
     ],
+    faq: [
+      { q: "Hangi font olduğunu kesin söyler mi?", a: "Evet! PDF'in teknik başlıklarına bakarak fontun tam adını (örn: Helvetica Bold, Roboto) kesin olarak gösterir." },
+      { q: "Gömülü fontları bilgisayarıma kurabilir miyim?", a: "Belgeye tam gömülmüş (embedded) fontları indirip bilgisayarınıza yazı tipi olarak yükleyebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/extract-colors", label: "Renk paletini de çıkarmak için PDF Renk Paleti Çıkarıcı aracını deneyin." }
   },
 };
 
 export const removeImagesCopy = {
   en: {
-    title: "Remove Images from PDF — ink saver",
-    description:
-      "Strip all images, photos, and heavy graphics from your PDF to save 90% printer ink.",
-    keywords:
-      "remove images from pdf, delete pictures, text only pdf, strip images, pdf resimleri sil, grafik sil",
+    title: "Remove Images from PDF",
+    description: "Strip and delete all embedded raster images and photos from PDF files online for free. Produce text-only documents.",
+    keywords: "remove images from pdf, delete all photos in pdf, text only pdf, strip pictures from pdf, ink saver pdf",
     h1: "Remove Images from PDF",
-    tagline:
-      "Create text-only documents instantly. Perfect for printing long slides.",
-    howToName: "How to remove images from PDF",
+    tagline: "Purge all photos, banners, and bitmap graphics from your PDF documents to drastically reduce file size and save printing ink.",
+    howToName: "How to remove all images from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a heavy PDF filled with photos or graphics onto the page.",
-      },
-      {
-        name: "Strip images",
-        text: "We safely locate and delete all heavy image objects directly within the browser.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download an ink-saving, text-only document that prints instantly.",
-      },
+      { name: "Upload PDF", text: "Select the image-heavy PDF file you want to convert to text-only." },
+      { name: "Strip Images", text: "Our tool purges all XObject raster image streams while preserving text and layout." },
+      { name: "Download Clean PDF", text: "Save your ultra-lightweight text-only PDF file." }
     ],
+    faq: [
+      { q: "Will text and formatting be preserved?", a: "Yes! All fonts, typography, tables, and vector layout lines remain 100% intact; only pixel photos are removed." },
+      { q: "Does this drastically reduce file size?", a: "Yes, stripping heavy images often shrinks documents by 80% to 95%." }
+    ],
+    crossLink: { href: "/remove-text", label: "Want to do the opposite (remove all text)? Try Remove Text." }
   },
   tr: {
-    title: "Görselleri Sil — Mürekkep Tasarrufu",
-    description:
-      "Yazıcı mürekkebinden %90 tasarruf etmek için PDF'nizdeki tüm resimleri ve ağır grafikleri silin.",
-    keywords:
-      "pdf resimleri sil, grafikleri kaldır, sadece metin pdf, resimsiz pdf, remove pdf images",
-    h1: "PDF Resimlerini Sil",
-    tagline:
-      "Saniyeler içinde sadece-metin belgeleri oluşturun. Slayt yazdırmak için ideal.",
-    howToName: "PDF'den resimler nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'teki Tüm Resimleri Sil (Salt Metin)",
+    description: "PDF belgelerindeki tüm fotoğrafları ve görselleri silerek salt metin haline getirin. Dosya boyutunu küçültün ve mürekkep tasarrufu yapın.",
+    keywords: "pdf teki resimleri silme, pdf fotoğrafları kaldırma, salt metin pdf yapma, yazıcı dostu pdf resimsiz",
+    h1: "PDF'teki Tüm Resimleri Sil",
+    tagline: "Ağır görselleri, reklamları ve fotoğrafları belgenizden temizleyin. Yalnızca yazıları bırakarak dosya boyutunu %90 düşürün.",
+    howToName: "PDF içindeki tüm fotoğraflar nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Fotoğraflar ve ağır grafiklerle dolu PDF belgenizi sayfaya bırakın.",
-      },
-      {
-        name: "Resimleri sil",
-        text: "Tarayıcı içinde tüm ağır görsel nesneleri güvenli bir şekilde bulup kalıcı olarak siliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yazıcıdan anında çıkan, mürekkep tasarruflu, yalnızca metinden oluşan belgenizi indirin.",
-      },
+      { name: "Görselli Belgeyi Yükleyin", text: "İçindeki fotoğrafları silmek istediğiniz PDF dosyasını seçin." },
+      { name: "Görselleri Temizle", text: "Aracımız tüm raster görsel akışlarını belgeden ayıklar." },
+      { name: "Salt Metin PDF'i İndirin", text: "Fotoğraflardan arındırılmış hafif ve temiz PDF'inizi indirin." }
     ],
+    faq: [
+      { q: "Yazılar ve tablolar silinir mi?", a: "Hayır! Tüm yazılar, fontlar ve sayfa düzeni aynen korunur; sadece fotoğraf ve resimler silinir." },
+      { q: "Baskı alırken mürekkep tasarrufu sağlar mı?", a: "Evet! Arka plan resimlerini ve fotoğrafları silerek yazıcı tonerinden devasa tasarruf edebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/remove-text", label: "Yazıları silip sadece görselleri bırakmak için PDF'teki Tüm Yazıları Sil aracını deneyin." }
   },
 };
 
 export const extractUrlsCopy = {
   en: {
-    title: "Extract URLs from PDF — link parser",
-    description:
-      "Find all clickable links, URLs, and external references inside a PDF and export them.",
-    keywords:
-      "extract urls, get pdf links, find hyperlinks, pdf linkleri çıkar, bağlantıları al, url ayıkla",
-    h1: "Extract Links from PDF",
-    tagline:
-      "Parse academic papers and reports for external references in one click.",
-    howToName: "How to extract links from PDF",
+    title: "Extract URLs from PDF",
+    description: "Extract and list all clickable hyperlinks, web URLs, and email addresses from PDF files online for free.",
+    keywords: "extract urls from pdf, get links from pdf, list all links in pdf, export hyperlinks pdf, extract email addresses pdf",
+    h1: "Extract URLs from PDF",
+    tagline: "Extract all clickable hyperlinks, web references, and email addresses from your PDF documents in one organized list.",
+    howToName: "How to extract all links and URLs from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop an academic paper or report containing hyperlinks.",
-      },
-      {
-        name: "Parse links",
-        text: "We scan through all pages locally to locate click annotations and external references.",
-      },
-      {
-        name: "Download TXT",
-        text: "Download a clean text file listing all the URLs found in your document.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file containing web links and resources." },
+      { name: "Scan Annotations", text: "Our parser detects URI link annotations and plain-text URLs across all pages." },
+      { name: "Export Link List", text: "Copy the extracted URLs or download them as a clean text file." }
     ],
+    faq: [
+      { q: "Does it find both clickable links and plain text URLs?", a: "Yes, it parses active PDF link annotations as well as unlinked http/https web addresses in text." },
+      { q: "Can I export as CSV?", a: "Yes, you can copy the list with page numbers for easy auditing." }
+    ],
+    crossLink: { href: "/extract-text", label: "Want to extract full document text? Try Extract Text." }
   },
   tr: {
-    title: "Linkleri Çıkar — URL Ayrıştırıcı",
-    description:
-      "Bir PDF'in içindeki tüm tıklanabilir bağlantıları, URL'leri ve harici referansları bulup dışa aktarın.",
-    keywords:
-      "pdf linkleri çıkar, url ayıkla, bağlantıları al, extract links, get pdf urls",
-    h1: "PDF'den Link Çıkar",
-    tagline:
-      "Akademik makaleler ve raporlardaki bağlantıları tek tıkla listeleyin.",
-    howToName: "PDF'den linkler nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Linklerini ve URL'leri Çıkar",
+    description: "PDF belgelerinin içindeki tüm tıklanabilir web bağlantılarını, internet sitelerini ve e-posta adreslerini tek bir listede toplayın.",
+    keywords: "pdf link çıkarma, pdf teki linkleri bulma, pdf url ayıklama, pdf web sitelerini listeleme, pdf link toplayıcı",
+    h1: "PDF Linklerini ve URL'leri Çıkar",
+    tagline: "Makale, katalog ve raporların içindeki tüm web sitesi linklerini ve kaynak bağlantılarını tek tıkla toplu liste halinde çıkarın.",
+    howToName: "PDF içindeki tüm web bağlantıları nasıl listelenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Tıklanabilir bağlantılar içeren makale veya raporu sayfaya bırakın.",
-      },
-      {
-        name: "Linkleri bul",
-        text: "Bağlantı noktalarını ve harici referansları bulmak için tüm sayfaları yerel olarak tarıyoruz.",
-      },
-      {
-        name: "TXT indir",
-        text: "Belgenizde bulunan tüm URL'leri listeleyen temiz bir metin dosyasını indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "İçinde bağlantılar olan PDF dosyasını seçin." },
+      { name: "Bağlantıları Tara", text: "Sistemimiz sayfadaki tüm tıklanabilir linkleri ve internet adreslerini ayıklar." },
+      { name: "Link Listesini İndirin", text: "Tüm bağlantıların sayfa numaralarıyla listelendiği dosyayı kopyalayın veya indirin." }
     ],
+    faq: [
+      { q: "Tıklanamayan düz metin linkleri de bulur mu?", a: "Evet! Hem tıklanabilir mavi linkleri hem de metin olarak yazılmış 'www...' veya 'http...' adreslerini yakalar." },
+      { q: "Hangi sayfada olduğu yazar mı?", a: "Evet, her linkin belgenin kaçıncı sayfasında yer aldığı yanında belirtilir." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Tüm metinleri almak istiyorsanız PDF'ten Metin Çıkarma aracını kullanın." }
   },
 };
 
@@ -3098,268 +2995,216 @@ export const removeDuplicatesCopy = {
 };
 export const extractAttachmentsCopy = {
   en: {
-    title: "Extract Attachments — recover embedded files",
-    description:
-      "Find and extract hidden XML, Word, Excel, or other files embedded inside a PDF.",
-    keywords:
-      "extract attachments, download embedded files, pdf attachments, pdf eklerini çıkar, gömülü dosya al",
+    title: "Extract PDF Attachments",
+    description: "Extract and download all embedded file attachments (ZIP, XML, images, audio) from PDF documents online for free.",
+    keywords: "extract pdf attachments, download files from pdf, extract embedded files pdf, get pdf attachment, save pdf files",
     h1: "Extract PDF Attachments",
-    tagline: "Recover hidden files and portfolios instantly.",
-    howToName: "How to extract attachments from PDF",
+    tagline: "Unpack embedded files, invoices, XML schemas, and audio attachments packaged inside your PDF documents.",
+    howToName: "How to extract attachments from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF containing portfolios or embedded e-invoice XML files.",
-      },
-      {
-        name: "Extract files",
-        text: "We scan the embedded files dictionary locally to securely recover all attachments.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download a single ZIP archive containing all the hidden attached files.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file containing embedded attachments." },
+      { name: "List Files", text: "Our tool parses the embedded file tree and lists every attached asset." },
+      { name: "Download Attachments", text: "Download all embedded files individually or packed in a single ZIP." }
     ],
+    faq: [
+      { q: "What types of attachments can be extracted?", a: "Any file type embedded in the PDF: XML e-invoices (ZUGFeRD/Factur-X), ZIP archives, Word docs, spreadsheets, or images." },
+      { q: "Is it safe to unpack confidential attachments?", a: "Yes, file extraction happens entirely client-side without sending attachment data across the web." }
+    ],
+    crossLink: { href: "/extract-images", label: "Need embedded page images instead? Try Extract Images." }
   },
   tr: {
-    title: "Ek Dosyaları Sök — Gömülü dosyaları kurtar",
-    description:
-      "PDF içine gizlenmiş XML, Word, Excel gibi gömülü ek dosyaları (attachments) bulup çıkarın.",
-    keywords:
-      "pdf eklerini çıkar, gömülü dosyaları al, ek dosya indir, extract attachments pdf",
-    h1: "PDF Ek Dosyası Çıkarıcı",
-    tagline:
-      "E-faturalardaki veya kurum belgelerindeki gizli dosyaları kurtarın.",
-    howToName: "PDF'den ekler nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Dosya Eklerini Çıkar (Ekler)",
+    description: "PDF dosyalarının içine gömülmüş e-fatura XML dosyalarını, ZIP arşivlerini ve ek belgeleri tek tıkla bilgisayarınıza indirin.",
+    keywords: "pdf eklerini çıkarma, pdf dosya eki indir, e fatura xml çıkarma, pdf içine gömülü dosyaları alma",
+    h1: "PDF Dosya Eklerini Çıkar",
+    tagline: "PDF içerisine gömülmüş e-fatura XML dosyalarını, sözleşme eklerini ve sıkıştırılmış dosyaları kolayca ayıklayın.",
+    howToName: "PDF içindeki gömülü dosya ekleri nasıl indirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İçinde e-fatura XML'i veya ekli portfolyo dosyaları bulunan belgeyi bırak.",
-      },
-      {
-        name: "Dosyaları ayıkla",
-        text: "Tüm ekleri güvenle kurtarmak için gömülü dosyalar bölümünü yerel olarak tarıyoruz.",
-      },
-      {
-        name: "ZIP indir",
-        text: "Belge içine gizlenmiş tüm ek dosyaları içeren tek bir ZIP arşivini indirin.",
-      },
+      { name: "Ekli Belgeyi Yükleyin", text: "İçinde dosya eki bulunan PDF belgesini seçin." },
+      { name: "Ekleri Listele", text: "Aracımız belgedeki tüm gömülü dosyaları tespit edip listeler." },
+      { name: "Ekleri İndirin", text: "İstediğiniz dosyayı tek tek veya tüm ekleri ZIP olarak indirin." }
     ],
+    faq: [
+      { q: "E-Fatura XML dosyalarını çıkarabilir mi?", a: "Evet! UBL-TR ve ZUGFeRD standartlarındaki e-fatura PDF'lerinin içindeki orijinal XML verisini anında ayıklar." },
+      { q: "Hangi dosya türlerini destekler?", a: "Word, Excel, ZIP, ses, görsel veya PDF içine eklenmiş her türlü dosya formatını başarıyla çıkarır." }
+    ],
+    crossLink: { href: "/tr/extract-images", label: "Sayfadaki fotoğrafları almak için PDF'ten Görselleri Çıkar aracını deneyin." }
   },
 };
 
 export const extractColorsCopy = {
   en: {
-    title: "Extract Color Palette — find HEX codes",
-    description:
-      "Scan your PDF to extract a complete color palette of all HEX codes used in vectors, backgrounds, and fonts.",
-    keywords:
-      "extract colors, pdf color palette, get hex codes, find pdf colors, pdf renk paleti çıkar, renk kodlarını al",
-    h1: "PDF Color Palette Extractor",
-    tagline: "The ultimate tool for graphic designers and brand managers.",
-    howToName: "How to extract colors from PDF",
+    title: "Extract PDF Color Palette",
+    description: "Extract dominant color palettes, brand colors, and HEX/RGB codes from PDF designs and brochures online for free.",
+    keywords: "extract colors from pdf, pdf color palette generator, get hex codes from pdf, brand colors pdf extractor",
+    h1: "Extract PDF Color Palette",
+    tagline: "Analyze PDF artwork and brand guidelines to extract dominant HEX, RGB, and CMYK color palettes in seconds.",
+    howToName: "How to extract a color palette from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a beautifully designed PDF or vector graphic onto the page.",
-      },
-      {
-        name: "Scan colors",
-        text: "We locally analyze all raw drawing operations to extract the exact HEX color codes.",
-      },
-      {
-        name: "Download Palette",
-        text: "Download a comprehensive text file containing the entire document color palette.",
-      },
+      { name: "Upload PDF", text: "Select the design brochure, brand guideline, or presentation." },
+      { name: "Analyze Swatches", text: "Our algorithm clusters vector fills, text colors, and image swatches." },
+      { name: "Copy HEX Codes", text: "Copy color HEX values or export the full palette swatch sheet." }
     ],
+    faq: [
+      { q: "Can I use these colors in Figma/Photoshop?", a: "Yes, you can copy the exact HEX codes (#FFFFFF) directly into design applications." },
+      { q: "Does it detect vector fill colors?", a: "Yes, it parses vector fills, strokes, and dominant raster image colors." }
+    ],
+    crossLink: { href: "/extract-fonts", label: "Want to identify typography too? Try Extract Fonts." }
   },
   tr: {
-    title: "Renk Paleti Çıkarıcı — HEX Kodlarını Bul",
-    description:
-      "Vektörlerde, arka planlarda ve metinlerde kullanılan tüm HEX renk kodlarını çıkarıp tam bir renk paleti oluşturun.",
-    keywords:
-      "pdf renk paleti çıkar, hex kodları al, renkleri bul, extract pdf colors, get color palette",
-    h1: "PDF Renk Hırsızı",
-    tagline: "Grafikerler ve tasarımcılar için bulunmaz bir araç.",
-    howToName: "PDF'den renkler nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Renk Paleti Çıkarıcı (HEX Kodları)",
+    description: "PDF katalog ve tasarımlarındaki kurumsal renk paletlerini, baskı renklerini ve HEX/RGB kodlarını tek tıkla çıkarın.",
+    keywords: "pdf renk paleti bulma, pdf hex kodu alma, kurumsal renkleri çıkarma, pdf renk analizi, tasarım renkleri pdf",
+    h1: "PDF Renk Paleti Çıkarıcı",
+    tagline: "Katalog, logo ve broşürlerdeki baskı renklerini analiz edin. Tasarımcılar için birebir HEX ve RGB kodlarını anında kopyalayın.",
+    howToName: "PDF tasarımından renk kodları (HEX) nasıl alınır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Güzel tasarlanmış bir PDF veya vektörel grafik belgesini sayfaya bırak.",
-      },
-      {
-        name: "Renkleri tara",
-        text: "Tam HEX kodlarını çıkarmak için tüm ham çizim operasyonlarını yerel olarak analiz ediyoruz.",
-      },
-      {
-        name: "Paleti indir",
-        text: "Belgede kullanılan tüm renk paletini içeren kapsamlı metin dosyasını indirin.",
-      },
+      { name: "Tasarım PDF'ini Yükleyin", text: "Renklerini öğrenmek istediğiniz PDF broşürünü seçin." },
+      { name: "Renkleri Analiz Et", text: "Sistemimiz sayfadaki hakim renkleri ve vektör tonlarını ayıklar." },
+      { name: "HEX Kodlarını Kopyalayın", text: "Figma ve Photoshop'ta kullanmak için renk kodlarını tek tıkla kopyalayın." }
     ],
+    faq: [
+      { q: "Tasarımcılar için ne fayda sağlar?", a: "Müşterinin gönderdiği PDF kılavuzundaki tam kurumsal renk kodlarını saniyeler içinde almanızı sağlar." },
+      { q: "HEX ve RGB değerleri doğru çıkar mı?", a: "Evet! PDF içindeki vektör dolguları taranarak %100 birebir renk değerleri verilir." }
+    ],
+    crossLink: { href: "/tr/extract-fonts", label: "Yazı tiplerini de öğrenmek istiyorsanız PDF Yazı Tiplerini Çıkar aracını kullanın." }
   },
 };
 
 export const removeTextCopy = {
   en: {
-    title: "Remove Text from PDF — template mode",
-    description:
-      "Strip all text from a PDF, leaving only images, graphics, and backgrounds intact.",
-    keywords:
-      "remove text from pdf, delete text, image only pdf, clear text, pdf metin sil, yazıları kaldır",
+    title: "Remove Text from PDF",
+    description: "Strip all readable text layers from PDF documents online for free. Keep only pictures, diagrams, and artwork.",
+    keywords: "remove text from pdf, delete text layer pdf, image only pdf, strip words from pdf, make pdf pictures only",
     h1: "Remove Text from PDF",
-    tagline:
-      "Perfect for stealing templates or preparing documents for translation.",
-    howToName: "How to remove text from PDF",
+    tagline: "Erase all typography and text content while preserving embedded photos, illustrations, and background artwork.",
+    howToName: "How to remove all text from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the document you want to use as a visual template.",
-      },
-      {
-        name: "Strip text",
-        text: "We safely delete all text drawing operators locally, leaving backgrounds intact.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your text-free document, perfectly prepped for translation or recreation.",
-      },
+      { name: "Upload PDF", text: "Select the document whose text you want to erase." },
+      { name: "Strip Text Streams", text: "Our parser removes all font glyphs and text rendering commands." },
+      { name: "Download Image-Only PDF", text: "Save your clean PDF containing only visual graphics and photos." }
     ],
+    faq: [
+      { q: "Why remove text from a PDF?", a: "It is ideal for extracting pure visual artwork, coloring pages, architectural drawings, or stripping confidential text." },
+      { q: "Are vector drawings preserved?", a: "Yes, non-text vector paths and raster images are completely untouched." }
+    ],
+    crossLink: { href: "/remove-images", label: "Want to remove images instead? Try Remove Images." }
   },
   tr: {
-    title: "Metinleri Sil — Sadece Görsel/Şablon",
-    description:
-      "Sadece resimlerin ve arka planların kalması için PDF'teki tüm metinleri tamamen silin.",
-    keywords:
-      "pdf metin sil, yazıları tamamen kaldır, sadece resim pdf, remove text from pdf",
-    h1: "PDF Yazılarını Sil",
-    tagline: "Şablonları kopyalamak veya çeviri altlığı hazırlamak için ideal.",
-    howToName: "PDF'den metin nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'teki Tüm Yazıları Sil (Salt Görsel)",
+    description: "PDF belgelerindeki tüm yazıları ve metin katmanlarını silerek geriye sadece çizimleri ve fotoğrafları bırakın.",
+    keywords: "pdf yazılarını silme, pdf metin katmanını temizleme, sadece resim kalsın pdf, boyama sayfası pdf metin sil",
+    h1: "PDF'teki Tüm Yazıları Sil",
+    tagline: "Belgedeki tüm yazıları ve başlıkları temizleyin; mimari çizimleri, fotoğrafları ve grafik şablonlarını saf halde tutun.",
+    howToName: "PDF içindeki tüm yazılar nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Görsel şablon olarak kullanmak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Metni sil",
-        text: "Arka planlara dokunmadan, sadece metin çizim komutlarını yerel olarak güvenle siliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Çeviri veya yeniden tasarım için hazır, metinden arındırılmış şablonunuzu indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Yazılarını silmek istediğiniz PDF dosyasını seçin." },
+      { name: "Metinleri Temizle", text: "Sistemimiz tüm karakter ve yazı komutlarını belgeden kaldırır." },
+      { name: "Salt Görsel PDF'i İndirin", text: "Yazısız, sadece görsellerden oluşan yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "Mimari çizimler ve boyama sayfaları için uygun mu?", a: "Evet! Çizimlerin üzerindeki ölçü ve açıklamaları silerek temiz şablonlar elde etmek için idealdir." },
+      { q: "Fotoğraflar silinir mi?", a: "Hayır! Tüm fotoğraf ve şekiller orijinal yerinde korunur, yalnızca yazılar temizlenir." }
+    ],
+    crossLink: { href: "/tr/remove-images", label: "Resimleri silip sadece yazıları bırakmak için PDF'teki Tüm Resimleri Sil aracını kullanın." }
   },
 };
 
 export const extractJavascriptCopy = {
   en: {
-    title: "Extract JavaScript — malware analysis",
-    description:
-      "Scan and extract embedded JavaScript code from PDF documents for security and malware analysis.",
-    keywords:
-      "extract javascript, find pdf scripts, get embedded js, pdf js çıkar, pdf script ayıkla, güvenlik analizi",
-    h1: "PDF JavaScript Extractor",
-    tagline: "The ultimate tool for cyber security analysts.",
-    howToName: "How to extract JavaScript from PDF",
+    title: "Extract PDF JavaScript",
+    description: "Audit, inspect, and extract embedded JavaScript code from PDF documents online for free. Security analysis tool.",
+    keywords: "extract javascript from pdf, inspect pdf js, pdf malware analysis, detect pdf scripts, security audit pdf",
+    h1: "Extract PDF JavaScript",
+    tagline: "Inspect embedded Acrobat JavaScript code, action triggers, and form scripts to audit document security and safety.",
+    howToName: "How to extract and audit JavaScript in a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a potentially malicious PDF document onto the page.",
-      },
-      {
-        name: "Scan and extract",
-        text: "We parse the document structure locally to find and extract all embedded JavaScript code.",
-      },
-      {
-        name: "Download JS",
-        text: "Download a clean .js file to safely analyze the code.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file you want to audit for embedded scripts." },
+      { name: "Inspect Scripts", text: "Our parser scans document open actions, form field triggers, and script dictionaries." },
+      { name: "Review Code", text: "View and copy all extracted JavaScript code blocks securely in a sandbox." }
     ],
+    faq: [
+      { q: "Why check for JavaScript in PDFs?", a: "Malicious PDFs often use embedded JavaScript for exploits. Checking scripts lets you verify document safety before opening in desktop readers." },
+      { q: "Is the JavaScript executed?", a: "No! The code is statically extracted and displayed as inert text without executing in your browser." }
+    ],
+    crossLink: { href: "/sanitize-pdf", label: "Want to strip all scripts automatically? Try Sanitize PDF." }
   },
   tr: {
-    title: "JS Sökücü — Malware Analizi",
-    description:
-      "Siber güvenlik ve zararlı yazılım analizi için PDF belgelerine gizlenmiş JavaScript kodlarını tespit edip çıkarın.",
-    keywords:
-      "pdf js çıkar, pdf javascript al, betikleri ayıkla, gömülü kodu bul, extract pdf javascript",
-    h1: "PDF JavaScript Sökücü",
-    tagline: "Siber güvenlik uzmanları için eşsiz bir araç.",
-    howToName: "PDF'den JavaScript nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF JavaScript Kodlarını Ayıkla (Güvenlik)",
+    description: "PDF belgelerinin içine gömülmüş JavaScript kodlarını, form makrolarını ve şüpheli yazılımları güvenle inceleyin ve ayıklayın.",
+    keywords: "pdf javascript çıkarma, pdf virüs analizi, zararlı pdf kod kontrolü, pdf script ayıklama, siber güvenlik pdf",
+    h1: "PDF JavaScript Kodlarını Ayıkla",
+    tagline: "PDF içerisindeki gizli form betiklerini, otomatik açılış kodlarını ve güvenlik risklerini çalıştırmadan güvenle inceleyin.",
+    howToName: "PDF içindeki JavaScript kodları nasıl incelenir ve çıkarılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Şüpheli olabilecek PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Tara ve ayıkla",
-        text: "Tüm belge yapısını yerel olarak tarayıp gizlenmiş JavaScript kodlarını tespit ediyoruz.",
-      },
-      {
-        name: "JS dosyasını indir",
-        text: "Kodları güvenle analiz edebilmek için temiz bir .js dosyası olarak indir.",
-      },
+      { name: "Şüpheli PDF'i Yükleyin", text: "İçinde kod olduğundan şüphelendiğiniz PDF dosyasını seçin." },
+      { name: "Statik Analiz", text: "Sistemimiz belgeyi çalıştırmadan içindeki tüm JavaScript kod bloklarını tarar." },
+      { name: "Kodları İnceleyin", text: "Bulunan tüm betikleri güvenli bir şekilde ekranda inceleyin veya dışa aktarın." }
     ],
+    faq: [
+      { q: "PDF dosyalarında virüs veya zararlı kod olabilir mi?", a: "Evet, bazı zararlı PDF'ler arka planda çalışan JavaScript kodları barındırabilir. Bu araç kodu çalıştırmadan metin olarak görmenizi sağlar." },
+      { q: "Kodlar bilgisayarıma zarar verir mi?", a: "Hayır! Kodlar kesinlikle çalıştırılmaz; yalnızca zararsız düz metin olarak ekranda gösterilir." }
+    ],
+    crossLink: { href: "/tr/sanitize-pdf", label: "Tüm zararlı kodları ve izleri tek tıkla silmek için PDF Meta Veri Temizle aracını kullanın." }
   },
 };
 
 export const splitBookmarksCopy = {
   en: {
-    title: "Split by Bookmarks — auto chapter split",
-    description:
-      "Automatically split large textbooks or reports into multiple PDFs based on their Table of Contents (TOC) bookmarks.",
-    keywords:
-      "split by bookmarks, divide by chapters, split pdf sections, pdf yer imlerine göre böl, bölümlere ayır",
+    title: "Split PDF by Bookmarks (Chapters)",
+    description: "Automatically split a large PDF book or catalog into separate chapter files based on embedded Table of Contents bookmarks.",
+    keywords: "split pdf by bookmarks, split pdf by chapter, split ebook by toc, split document by outline, bookmark chapter splitter",
     h1: "Split PDF by Bookmarks",
-    tagline: "Instantly break down textbooks into chapters.",
-    howToName: "How to split PDF by TOC",
+    tagline: "Automatically carve books, manuals, and reports into separate PDF files for every major chapter bookmark.",
+    howToName: "How to split a PDF by bookmarks and chapters",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a large textbook or report that contains a Table of Contents.",
-      },
-      {
-        name: "Detect chapters",
-        text: "We instantly read the bookmarks to identify all chapter breakpoints.",
-      },
-      {
-        name: "Split and download",
-        text: "Extract and download a ZIP file containing each chapter as a separate PDF.",
-      },
+      { name: "Upload PDF with Bookmarks", text: "Select the ebook or manual containing bookmark outlines." },
+      { name: "Select Bookmark Level", text: "Choose which bookmark hierarchy level (e.g. Top-level Chapters) to split on." },
+      { name: "Download Chapter Files", text: "Download all individual chapter PDFs neatly named and organized in a ZIP archive." }
     ],
+    faq: [
+      { q: "Are output files named after chapters?", a: "Yes! Each split PDF file is automatically named using the title of its corresponding bookmark." },
+      { q: "What if my PDF doesn't have bookmarks?", a: "If your file has no embedded bookmark catalog, use our Split by Page Count or Split by Size tools instead." }
+    ],
+    crossLink: { href: "/extract-toc", label: "Want to view the bookmark outline first? Try Extract Table of Contents." }
   },
   tr: {
-    title: "Bölümlere Göre Parçala — İçindekiler Ayırıcı",
-    description:
-      "Büyük ders kitaplarını veya raporları, İçindekiler (TOC) tablosundaki bölüm başlıklarına göre otomatik olarak ayrı PDF'lere bölün.",
-    keywords:
-      "pdf yer imlerine göre böl, bölümlere göre ayır, split by bookmarks pdf, chapter split",
-    h1: "İçindekiler Tablosuna Göre Böl",
-    tagline: "Yüzlerce sayfalık kitapları saniyeler içinde bölümlere ayırın.",
-    howToName: "PDF bölümlere göre nasıl ayrılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'i Yer İmlerine (Bölümlere) Göre Böl",
+    description: "PDF kitaplarını ve raporlarını içindekiler tablosundaki yer imlerine göre otomatik olarak bölüm bölüm ayrı dosyalara bölün.",
+    keywords: "yer imlerine göre pdf bölme, pdf kitap bölümlere ayırma, fihriste göre pdf kesme, bölüm bölüm pdf yapma",
+    h1: "PDF'i Yer İmlerine Göre Böl",
+    tagline: "Yüzlerce sayfalık e-kitapları ve kullanım kılavuzlarını her bir ana bölüm başlığına (yer imine) göre otomatik ayrı dosyalara ayırın.",
+    howToName: "PDF kitapları bölümlerine göre nasıl ayrılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İçindekiler tablosu (TOC) bulunan büyük bir ders kitabı veya raporu sayfaya bırak.",
-      },
-      {
-        name: "Bölümleri algıla",
-        text: "İçindekiler listesini anında okuyarak bölüm başlangıç noktalarını belirliyoruz.",
-      },
-      {
-        name: "Böl ve indir",
-        text: "Her bir bölümü ayrı bir PDF'e ayırıp tek bir ZIP arşivi olarak indir.",
-      },
+      { name: "Kitap PDF'ini Yükleyin", text: "İçinde yer imleri bulunan PDF kitabını seçin." },
+      { name: "Bölüm Seviyesini Belirleyin", text: "Hangi ana başlık seviyesinden bölüneceğini seçin." },
+      { name: "Bölüm Dosyalarını İndirin", text: "Her bölümün kendi başlığıyla adlandırıldığı ayrı PDF'leri ZIP olarak indirin." }
     ],
+    faq: [
+      { q: "Dosya adları bölüm ismi mi olur?", a: "Evet! Her ayrılan PDF dosyası otomatik olarak ilgili bölümün adını (örn: 'Bölüm 1 - Giriş.pdf') alır." },
+      { q: "Yer imi olmayan dosyalarda çalışır mı?", a: "Yer imi yoksa 'PDF Böl' veya 'Boyuta Göre Böl' araçlarımızı kullanabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/extract-toc", label: "Önce içindekiler tablosunu görmek için İçindekileri Çıkar aracını deneyin." }
   },
 };
 
@@ -3407,160 +3252,130 @@ export const splitBlankCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const viewerPrefsCopy = {
   en: {
-    title: "Viewer Preferences — PDF auto open settings",
-    description:
-      "Configure how your PDF behaves when opened. Force full screen mode, hide toolbars, or center the window automatically.",
-    keywords:
-      "edit viewer preferences, pdf initial view, fullscreen pdf, pdf görünüm ayarları, başlangıç görünümü düzenle",
-    h1: "Set PDF Viewer Preferences",
-    tagline: "Professional presentation settings for eBooks and reports.",
-    howToName: "How to set PDF initial view",
+    title: "Edit PDF Viewer Preferences",
+    description: "Configure default PDF open behavior: start in full screen, hide toolbars, set single/two-page spread, and zoom levels.",
+    keywords: "pdf viewer preferences, set pdf default zoom, hide toolbars pdf, open pdf full screen, pdf display settings",
+    h1: "Edit PDF Viewer Preferences",
+    tagline: "Control how PDF readers display your document upon opening. Set default page layout, full-screen mode, and zoom level.",
+    howToName: "How to configure PDF viewer preferences",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to configure.",
-      },
-      {
-        name: "Set preferences",
-        text: "Choose to force full-screen mode, hide toolbars, or center the window automatically.",
-      },
-      {
-        name: "Save settings",
-        text: "Download the modified PDF with your new professional presentation settings applied.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file whose opening display mode you want to customize." },
+      { name: "Configure Preferences", text: "Select Two-Page Spread, Fit Window Zoom, Full Screen, or Hide Menubars." },
+      { name: "Save Preferences", text: "Download your updated PDF file with embedded viewer preferences." }
     ],
+    faq: [
+      { q: "Do these settings work in Adobe Reader and Apple Preview?", a: "Yes, standard PDF ViewerPreferences dictionary tags are respected by major desktop readers." },
+      { q: "Can I force full-screen presentation mode?", a: "Yes, you can enable 'Open in Full Screen' for presentation slide decks." }
+    ],
+    crossLink: { href: "/edit-metadata", label: "Want to change title and author info too? Try Edit Metadata." }
   },
   tr: {
-    title: "Açılış Ayarları — PDF görünümünü ayarla",
-    description:
-      "PDF'iniz açıldığında nasıl davranacağını kodlayın. Tam ekranda açmaya zorlayın veya menü çubuklarını gizleyin.",
-    keywords:
-      "pdf görünüm ayarları, tam ekran açılış, pdf başlangıç görünümü, edit viewer preferences",
-    h1: "PDF Açılış Ayarları (ViewerPrefs)",
-    tagline: "E-kitaplar ve profesyonel sunumlar için olmazsa olmaz.",
-    howToName: "PDF açılış ayarları nasıl yapılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Açılış ve Görünüm Tercihleri",
+    description: "PDF dosyanız açıldığında tam ekran başlama, çift sayfa gösterme, menüleri gizleme ve varsayılan yakınlaştırma ayarlarını yapın.",
+    keywords: "pdf açılış ayarları, pdf tam ekran açma, pdf varsayılan yakınlaştırma, çift sayfa pdf açılış, pdf görünüm tercihleri",
+    h1: "PDF Açılış ve Görünüm Tercihleri",
+    tagline: "Belgenizin kullanıcılar tarafından açıldığında nasıl görüneceğini belirleyin. Tam ekran, çift sayfa kitap görünümü veya menü gizleme.",
+    howToName: "PDF açılış tercihleri ve görünüm ayarları nasıl yapılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Açılış ayarlarını değiştirmek istediğin PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Tercihleri belirle",
-        text: "Tam ekran moduna zorlamayı, araç çubuklarını gizlemeyi veya pencereyi ortalamayı seç.",
-      },
-      {
-        name: "Ayarları kaydet",
-        text: "Profesyonel sunum ayarlarının uygulandığı yeni PDF belgesini indir.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Görünüm ayarlarını düzenlemek istediğiniz PDF dosyasını seçin." },
+      { name: "Açılış Modunu Seçin", text: "Tam Ekran, Yan Yana Çift Sayfa, Sayfayı Ekrana Sığdır gibi seçenekleri belirleyin." },
+      { name: "Ayarları Kaydedip İndirin", text: "Açılış tercihleri işlenmiş yeni belgenizi indirin." }
     ],
+    faq: [
+      { q: "Sunumlar için tam ekran yapılabilir mi?", a: "Evet! 'Tam Ekranda Başlat' seçeneğiyle belgenin bir slayt gibi doğrudan tam ekran açılmasını sağlayabilirsiniz." },
+      { q: "Adobe Reader ve telefonda çalışır mı?", a: "Evet, uluslararası PDF ViewerPreferences standardı tüm modern PDF okuyucularda geçerlidir." }
+    ],
+    crossLink: { href: "/tr/edit-metadata", label: "Başlık ve yazar bilgisini de düzenlemek için PDF Meta Veri Düzenle aracını kullanın." }
   },
 };
 
 export const extractHiddenTextCopy = {
   en: {
-    title: "Extract Hidden Text — forensics tool",
-    description:
-      "A forensics tool to detect and extract invisible or white-on-white text hidden inside a PDF document.",
-    keywords:
-      "extract hidden text, find invisible text, get ocr layer, pdf gizli metin çıkar, görünmez yazıları bul",
-    h1: "Hidden Text Detector",
-    tagline: "Uncover hidden trackers, SEO spam, or steganography.",
-    howToName: "How to detect hidden text in PDF",
+    title: "Extract Hidden Text from PDF",
+    description: "Find and uncover invisible text, OCR layers, white-on-white text, and obscured data in PDF files online for free.",
+    keywords: "extract hidden text pdf, find invisible text in pdf, uncover white on white text, pdf hidden layer reader, audit hidden pdf text",
+    h1: "Extract Hidden Text from PDF",
+    tagline: "Detect invisible OCR layers, white-colored text on white backgrounds, and obscured content hidden in document streams.",
+    howToName: "How to extract hidden and invisible text from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a suspicious PDF document onto the page.",
-      },
-      {
-        name: "Scan for forensics",
-        text: "We analyze raw content streams locally to detect invisible rendering modes and hidden text.",
-      },
-      {
-        name: "Download report",
-        text: "Download a text file containing all the hidden trackers, SEO spam, or steganography we found.",
-      },
+      { name: "Upload PDF", text: "Select the document you want to audit for hidden or invisible content." },
+      { name: "Scan Layers", text: "Our forensic analyzer flags text with zero opacity, hidden render modes, or covered layers." },
+      { name: "Review Hidden Content", text: "Inspect and copy all discovered hidden text strings directly." }
     ],
+    faq: [
+      { q: "Why would a PDF have hidden text?", a: "Scanned PDFs often contain an invisible OCR text layer behind images. Some documents may also contain hidden metadata or whiteout text." },
+      { q: "Is this useful for document audits?", a: "Yes, compliance and legal teams use hidden text inspection to ensure sensitive data hasn't been improperly masked." }
+    ],
+    crossLink: { href: "/sanitize-pdf", label: "Want to permanently wipe hidden data? Try Sanitize PDF." }
   },
   tr: {
-    title: "Gizli Yazı Dedektörü — Forensics aracı",
-    description:
-      "Adli bilişim (forensics) amaçlı olarak PDF içine gizlenmiş, görünmez kodlu veya beyaz metinleri tespit edip çıkarın.",
-    keywords:
-      "pdf gizli metin çıkar, görünmez yazıları al, ocr katmanını bul, extract hidden text",
-    h1: "Gizli Metin Sökücü",
-    tagline: "SEO spamlarnı veya görünmez filigranları ortaya çıkarın.",
-    howToName: "PDF'den gizli metin nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Gizli Metinleri Bul (Görünmeyen Yazılar)",
+    description: "PDF belgelerinde beyaz üstüne beyaz yazılmış, gizlenmiş veya görünmez OCR katmanlarında kalmış gizli metinleri ortaya çıkarın.",
+    keywords: "pdf gizli metin bulma, görünmeyen yazıları çıkarma, beyaz üstüne beyaz yazı pdf, pdf gizli katman okuyucu",
+    h1: "PDF Gizli Metinleri Bul",
+    tagline: "Görsellerin arkasında gizlenen OCR yazılarını, saydam metinleri ve maskelenmiş gizli bilgileri tek tıkla tespit edin.",
+    howToName: "PDF içindeki gizli ve görünmez yazılar nasıl bulunur?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Şüpheli gördüğün PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Adli analiz yap",
-        text: "Görünmez katmanları ve gizli metinleri bulmak için belgenin ham veri akışını yerel olarak tarıyoruz.",
-      },
-      {
-        name: "Raporu indir",
-        text: "Bulduğumuz tüm gizli SEO spam'lerini ve takipçileri içeren metin dosyasını indir.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "İçinde gizli yazı olduğundan şüphelendiğiniz PDF dosyasını seçin." },
+      { name: "Gizli Katmanları Tara", text: "Sistemimiz şeffaf, görünmez ve üzeri kapatılmış tüm metinleri analiz eder." },
+      { name: "Gizli Yazıları İnceleyin", text: "Ortaya çıkarılan gizli metinleri ekranda okuyun ve kopyalayın." }
     ],
+    faq: [
+      { q: "Bir PDF'te neden gizli metin olur?", a: "Taranmış evrakların arkasında görünmez arama katmanları bulunur veya bazı kişiler yazıları beyaz renge boyayarak gizlemeye çalışır." },
+      { q: "Hukuki incelemeler için uygun mu?", a: "Evet! Adli ve hukuki belge incelemelerinde gizlenmiş veya üzeri örtülmüş bilgileri yakalamak için idealdir." }
+    ],
+    crossLink: { href: "/tr/sanitize-pdf", label: "Gizli bilgileri tamamen temizlemek için PDF Meta Veri Temizle aracını deneyin." }
   },
 };
 
 export const wipeBookmarksCopy = {
   en: {
-    title: "Wipe Bookmarks — remove TOC",
-    description:
-      "Completely delete the Table of Contents (Bookmarks) structure from a PDF for privacy or file size reduction.",
-    keywords:
-      "remove bookmarks, wipe outlines, delete toc, pdf yer imlerini sil, içindekiler tablosunu temizle",
-    h1: "Remove PDF Bookmarks",
-    tagline: "Hide your document structure before publishing.",
-    howToName: "How to delete PDF bookmarks",
+    title: "Wipe PDF Bookmarks",
+    description: "Remove all bookmarks, outlines, and chapter table of contents links from PDF files online for free.",
+    keywords: "wipe pdf bookmarks, delete all bookmarks pdf, remove pdf outline tree, strip table of contents pdf",
+    h1: "Wipe PDF Bookmarks",
+    tagline: "Cleanly remove the entire bookmark navigation tree and outline hierarchy from your PDF document in one click.",
+    howToName: "How to remove all bookmarks from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop a PDF document that contains a Table of Contents or bookmarks.",
-      },
-      {
-        name: "Destroy outlines",
-        text: "We safely remove the entire outlines hierarchy and document structure locally.",
-      },
-      {
-        name: "Download clean PDF",
-        text: "Download your cleaned document, free of any internal structural metadata.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file with bookmarks you want to wipe." },
+      { name: "Wipe Outlines", text: "Our tool purges the internal /Outlines root catalog dictionary." },
+      { name: "Download Clean PDF", text: "Save your streamlined PDF without any bookmark navigation panel." }
     ],
+    faq: [
+      { q: "Will page contents or text be changed?", a: "No. Only the left-side bookmark outline tree is removed; visible pages remain completely untouched." },
+      { q: "Why wipe bookmarks?", a: "To remove outdated chapter hierarchies or clean up documents before official archival." }
+    ],
+    crossLink: { href: "/extract-toc", label: "Want to export the bookmarks before wiping? Try Extract Table of Contents." }
   },
   tr: {
-    title: "İçindekiler Silici — Outline Yok Et",
-    description:
-      'Gizlilik veya boyut tasarrufu amacıyla PDF içindeki "İçindekiler" (Bookmarks/Outlines) ağacını tamamen yok edin.',
-    keywords:
-      "pdf yer imlerini sil, outline temizle, içindekileri kaldır, remove pdf bookmarks",
-    h1: "PDF İçindekiler Silici",
-    tagline: "Belgenizin iskeletini ve başlık hiyerarşisini gizleyin.",
-    howToName: "PDF içindekiler nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Yer İmlerini ve Fihristi Sil",
+    description: "PDF belgelerindeki tüm yer imlerini, içindekiler ağacını ve bölüm bağlantılarını tek tıkla tamamen silin ve temizleyin.",
+    keywords: "pdf yer imlerini silme, pdf içindekiler ağacını kaldırma, pdf fihrist silici, temiz yer imsiz pdf",
+    h1: "PDF Yer İmlerini ve Fihristi Sil",
+    tagline: "Belgenizin sol tarafında açılan gereksiz veya hatalı yer imi fihrist ağacını tek tıkla tamamen kaldırın.",
+    howToName: "PDF içindeki tüm yer imleri nasıl silinir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "İçindekiler tablosu veya yer imleri (bookmarks) olan PDF belgesini sayfaya bırak.",
-      },
-      {
-        name: "Yapıyı yok et",
-        text: "Belgenin tüm iskelet yapısını ve içindekiler hiyerarşisini güvenli bir şekilde tamamen siliyoruz.",
-      },
-      {
-        name: "Temiz PDF'i indir",
-        text: "İç yapısal meta verilerden tamamen arındırılmış temiz belgenizi indir.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "İçindeki yer imlerini silmek istediğiniz PDF dosyasını seçin." },
+      { name: "Yer İmlerini Temizle", text: "Sistemimiz iç fihrist kataloğunu belgeden tamamen kazır." },
+      { name: "Temiz PDF'i İndirin", text: "Yer imi paneli kaldırılmış temiz PDF belgenizi indirin." }
     ],
+    faq: [
+      { q: "Sayfalardaki metinler silinir mi?", a: "Hayır! Sayfa içeriklerine kesinlikle dokunulmaz, yalnızca sol paneldeki yer imi fihristi kaldırılır." },
+      { q: "Neden yer imlerini silmek isteyebilirim?", a: "Eski, bozuk veya yanlış sayfalara giden yer imi ağaçlarını temizleyip belgeyi sadeleştirmek için kullanılır." }
+    ],
+    crossLink: { href: "/tr/extract-toc", label: "Silmeden önce içindekiler listesini kaydetmek için İçindekileri Çıkar aracını deneyin." }
   },
 };
 
@@ -3703,44 +3518,45 @@ export const scanToPdfCopy = {
 
 export const audioReaderCopy = {
   en: {
-    title: "Audio Reader — Text to Speech",
-    description:
-      "Extract raw text from a PDF optimized for audio reading (Text-to-Speech) software and audiobooks.",
-    keywords:
-      "listen to pdf, read pdf aloud, pdf text to speech, tts pdf, sesli pdf okuma, pdf dinle, metin seslendirme",
-    h1: "PDF Audio Reader Prep",
-    tagline: "Prepare your documents for smooth listening.",
-    howToName: "How to make a PDF ready for audio",
+    title: "PDF Audio Reader",
+    description: "Listen to your PDF documents with natural text-to-speech audio reader online for free. Read aloud PDF papers and ebooks.",
+    keywords: "pdf audio reader, read pdf aloud, pdf text to speech, listen to pdf online, tts pdf reader",
+    h1: "PDF Audio Reader",
+    tagline: "Turn your PDF ebooks, research papers, and documents into spoken audio using browser speech synthesis.",
+    howToName: "How to listen to a PDF with text-to-speech",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to listen to onto the page.",
-      },
-      {
-        name: "Extract flowing text",
-        text: "We extract and clean the raw text locally, removing page numbers and weird line breaks.",
-      },
-      {
-        name: "Download TXT",
-        text: "Download a clean text file perfectly optimized for Text-to-Speech (TTS) engines.",
-      },
+      { name: "Upload PDF", text: "Select the document you want to listen to." },
+      { name: "Choose Voice & Speed", text: "Select your preferred voice language, pitch, and playback speed." },
+      { name: "Listen", text: "Click play to listen to your document read aloud seamlessly." }
     ],
+    faq: [
+      { q: "Is internet needed for speech synthesis?", a: "No! It uses your device's built-in Web Speech API engine completely offline." },
+      { q: "Can I adjust playback speed?", a: "Yes, you can slow down or speed up the narration (0.5x to 2x speed)." }
+    ],
+    crossLink: { href: "/extract-text", label: "Want to read text manually? Try Extract Text." }
   },
   tr: {
-    title: "Sesli Okuma — TTS Hazırlık",
-    description:
-      "PDF belgelerindeki metinleri Sesli Kitap (Text-to-Speech) uygulamalarının pürüzsüz okuyabilmesi için saf txt formatına dökün.",
-    keywords:
-      "sesli pdf okuma, pdf dinle, metin seslendirme, tts pdf, listen to pdf, read aloud pdf",
-    h1: "Sesli Okuyucu Hazırlığı",
-    tagline: "Belgelerinizi dinlemek için en temiz formata çevirin.",
-    howToName: "PDF sese nasıl çevrilir",
-    howItWorks: "Nasıl çalışır",
+    title: "Sesli PDF Okuyucu (Metinden Sese)",
+    description: "PDF kitaplarınızı ve makalelerinizi sesli dinleyin. Doğal ses tonuyla Türkçe ve İngilizce metin okuma aracı.",
+    keywords: "sesli pdf okuma, pdf i seslendir, pdf text to speech, sesli kitap yapma, pdf dinleme programı",
+    h1: "Sesli PDF Okuyucu",
+    tagline: "Makaleleri, kitapları ve ders notlarını ekrana bakmadan sesli olarak dinleyin. Gözlerinizi dinlendirin.",
+    howToName: "PDF belgesi sesli olarak nasıl dinlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      { name: "Yükle", text: "Okunabilir bir PDF seçin." },
-      { name: "Ayıkla", text: "Sayfa numaraları ve kırılmalar temizlenir." },
-      { name: "İndir", text: "Ses motorları için pürüzsüz bir metin indirin." },
+      { name: "PDF Belgenizi Yükleyin", text: "Dinlemek istediğiniz PDF kitabını veya makaleyi seçin." },
+      { name: "Ses ve Hız Ayarı Yapın", text: "Okuma hızını (1x, 1.5x) ve ses tonunu belirleyin." },
+      { name: "Dinlemeye Başlayın", text: "Oynat butonuna basarak sayfaların sesli okunmasını dinleyin." }
     ],
+    faq: [
+      { q: "Türkçe dil desteği var mı?", a: "Evet! Cihazınızın Türkçe ses sentezleyicisini kullanarak akıcı ve doğal sesle okuma yapar." },
+      { q: "Yurtdışındayken veya internetsiz dinlenebilir mi?", a: "Evet! Tarayıcınızın kendi yerel ses motorunu kullandığı için internet kotası harcamaz." }
+    ],
+    crossLink: { href: "/tr/extract-text", label: "Düz metin olarak kopyalamak için PDF'ten Metin Çıkarma aracını deneyin." }
   },
 };
+
+
