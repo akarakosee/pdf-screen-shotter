@@ -579,95 +579,44 @@ export const nupCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Convert to PDF/A — archive your documents safely",
-    description:
-      "Convert your PDF to PDF/A format for long-term archiving. Fast, free, and completely local processing.",
-    keywords:
-      "pdf to pdf/a, pdf/a converter, archive pdf, iso compliant pdf, long term pdf, pdfa, pdf/a",
-    h1: "Convert to PDF/A",
-    tagline:
-      "Ensure your documents are ready for long-term archiving and standard compliance.",
-    howToName: "How to convert to PDF/A format",
+    title: "PDF to PDF/A",
+    description: "Convert standard PDF documents into PDF/A ISO archival format online for free. Ideal for government and legal long-term preservation.",
+    keywords: "pdf to pdf/a, convert pdf to pdfa, pdfa converter, archive pdf, iso 19005 compliant pdf",
+    h1: "PDF to PDF/A",
+    tagline: "Transform your documents into ISO-standard PDF/A format for official government submissions, court archives, and lifetime storage.",
+    howToName: "How to convert PDF to PDF/A",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to convert for long-term archiving.",
-      },
-      {
-        name: "Convert to PDF/A",
-        text: "We locally embed all fonts and strip incompatible features to meet ISO standards.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your compliant PDF/A file, perfectly preserved for the future.",
-      },
+      { name: "Upload PDF", text: "Select the standard PDF document you need to archive." },
+      { name: "Convert to PDF/A", text: "Our tool embeds all fonts, sets color profiles, and conforms to ISO archival standards." },
+      { name: "Download PDF/A", text: "Download your certified archival PDF document." }
     ],
     faq: [
-      {
-        q: "What is PDF/A?",
-        a: "PDF/A is an ISO-standardized version of the Portable Document Format (PDF) specialized for use in the archiving and long-term preservation of electronic documents.",
-      },
-      {
-        q: "Is this a full strict compliance conversion?",
-        a: "This tool performs a basic conversion (setting required metadata and flattening object streams) which satisfies many archiving systems, but it does not embed color profiles or missing fonts automatically.",
-      },
-      {
-        q: "Are my files uploaded?",
-        a: "No. The entire process runs inside your web browser locally. Your files are never uploaded to our servers.",
-      },
+      { q: "What is PDF/A?", a: "PDF/A is an ISO-standardized version of the PDF format designed specifically for the digital preservation and archiving of electronic documents." },
+      { q: "Why do government portals require PDF/A?", a: "Because PDF/A guarantees that fonts and formatting will render identically on any device, decades into the future." }
     ],
-    crossLink: {
-      href: "/flatten-pdf",
-      label: "Need to flatten annotations instead? Flatten PDF.",
-    },
+    crossLink: { href: "/flatten-pdf", label: "Want to lock form fields too? Try Flatten PDF." }
   },
   tr: {
-    title: "PDF/A'ya Dönüştür — belgelerinizi güvenle arşivleyin",
-    description:
-      "Uzun süreli arşivleme için PDF'inizi PDF/A formatına dönüştürün. Hızlı, ücretsiz ve tamamen yerel işlem.",
-    keywords:
-      "pdf/a dönüştürücü, pdf i pdf/a yap, arşiv pdf, uzun süreli pdf, iso pdf, pdf to pdf/a",
-    h1: "PDF/A'ya Dönüştür",
-    tagline:
-      "Belgelerinizin uzun vadeli arşivlemeye ve standartlara uygun olduğundan emin olun.",
-    howToName: "PDF/A formatına nasıl dönüştürülür",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "PDF'ten PDF/A'ya Çevirme",
+    description: "PDF belgelerinizi resmi arşivleme standardı olan PDF/A formatına dönüştürün. E-Devlet, mahkeme ve kurumsal arşivler için uygundur.",
+    keywords: "pdf to pdfa, pdf a yapma, pdf a dönüştürücü, e devlet pdf a, mahkeme pdf a formatı, pdf a çevirme",
+    h1: "PDF'ten PDF/A'ya Çevirme",
+    tagline: "Belgelerinizi ISO standartlarında PDF/A arşiv formatına dönüştürün. Resmi kurumlara ve UYAP/E-Devlet sistemlerine sorunsuz yükleyin.",
+    howToName: "PDF belgesi PDF/A formatına nasıl çevrilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Uzun süreli arşivleme için dönüştürmek istediğiniz PDF belgesini bırakın.",
-      },
-      {
-        name: "PDF/A'ya dönüştür",
-        text: "ISO standartlarını karşılamak için tüm yazı tiplerini gömüyor ve uyumsuz özellikleri yerel olarak kaldırıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Gelecek için mükemmel şekilde korunmuş, uyumlu PDF/A dosyanızı indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "PDF/A'ya dönüştürmek istediğiniz standart PDF dosyasını seçin." },
+      { name: "Dönüştürme", text: "Aracımız tüm yazı tiplerini (fontları) ve renk profillerini ISO standartlarına uygun gömer." },
+      { name: "PDF/A Dosyasını İndirin", text: "Resmi kurumlara yüklemeye hazır arşiv dosyanızı cihazınıza kaydedin." }
     ],
     faq: [
-      {
-        q: "PDF/A nedir?",
-        a: "PDF/A, Taşınabilir Belge Formatının (PDF) elektronik belgelerin arşivlenmesi ve uzun süreli korunması amacıyla özel olarak ISO standartlarında geliştirilmiş bir sürümüdür.",
-      },
-      {
-        q: "Bu tam ve katı bir standart dönüştürmesi mi?",
-        a: "Bu araç, temel bir dönüştürme (gerekli meta verileri ayarlama ve nesne akışlarını düzleştirme) gerçekleştirir. Çoğu arşivleme sistemi için yeterlidir, ancak renk profillerini veya eksik yazı tiplerini otomatik olarak gömmez.",
-      },
-      {
-        q: "Dosyalarım sunucuya yükleniyor mu?",
-        a: "Hayır. Tüm işlemler doğrudan tarayıcınızın içinde yerel olarak gerçekleşir. Dosyalarınız asla sunucularımıza yüklenmez.",
-      },
+      { q: "PDF/A formatı neden istenir?", a: "E-Devlet, mahkemeler ve resmi arşivler, belgenin 20 yıl sonra bile aynı font ve tasarımla bozulmadan açılabilmesi için PDF/A standardını zorunlu tutar." },
+      { q: "Dönüştürme ücretli mi?", a: "Hayır. Diğer programların aksine sitemizde tamamen ücretsiz ve sınırsız şekilde PDF/A oluşturabilirsiniz." }
     ],
-    crossLink: {
-      href: "/tr/flatten-pdf",
-      label:
-        "Bunun yerine açıklamaları düzleştirmek mi istiyorsunuz? PDF Düzleştir.",
-    },
+    crossLink: { href: "/tr/flatten-pdf", label: "Form kutularını kalıcı kilitlemek için PDF Düzleştir aracını deneyin." }
   },
 };
 export const extractCopy: Record<"en" | "tr", ToolCopy> = {
@@ -734,64 +683,44 @@ export const extractCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const sanitizeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Sanitize PDF — remove metadata, files never uploaded",
-    description:
-      "Remove author, creation date, and all hidden metadata from your PDF file for maximum privacy. No servers involved.",
-    keywords:
-      "sanitize pdf, clean pdf metadata, remove pdf properties, secure pdf, clear metadata, pdf temizle",
+    title: "Sanitize PDF",
+    description: "Remove hidden metadata, author information, revision history, and GPS tags from PDF files online for free.",
+    keywords: "sanitize pdf, remove pdf metadata, strip pdf metadata, clean pdf, anonymize pdf online, remove author from pdf",
     h1: "Sanitize PDF",
-    tagline:
-      "Strip hidden metadata and digital footprints from your PDF — free and 100% private.",
-    howToName: "How to remove metadata from a PDF file in your browser",
+    tagline: "Wipe hidden author details, creation dates, camera GPS tags, and embedded software traces from your PDF documents.",
+    howToName: "How to sanitize and remove metadata from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to cleanse of digital footprints.",
-      },
-      {
-        name: "Clean data",
-        text: "We completely strip author names, dates, and all hidden metadata locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your sanitized, perfectly clean PDF file for maximum privacy.",
-      },
+      { name: "Upload Document", text: "Select the PDF file you want to anonymize and scrub." },
+      { name: "Sanitize", text: "Our tool wipes document info dictionary, XMP metadata, and private creator metadata." },
+      { name: "Download Clean PDF", text: "Download your completely anonymized PDF ready for safe public distribution." }
     ],
-    crossLink: {
-      href: "/protect-pdf",
-      label: "Need even more privacy? Protect PDF.",
-    },
+    faq: [
+      { q: "What metadata is removed?", a: "Author names, company names, creation/modification dates, software tools used, PDF producer tags, and embedded geolocation info are completely stripped." },
+      { q: "Will the visible content change?", a: "No. The visual layout and readable text remain 100% intact; only the hidden background metadata is wiped." }
+    ],
+    crossLink: { href: "/redact-pdf", label: "Need to black out visible text too? Try Redact PDF." }
   },
   tr: {
-    title: "PDF Temizle — meta verileri sil, dosyalar cihazında kalsın",
-    description:
-      "PDF dosyanızdaki yazar, oluşturulma tarihi ve gizli meta verilerini silerek tam gizlilik sağlayın. Sunucu kullanılmaz.",
-    keywords:
-      "pdf temizle, pdf meta veri sil, pdf yazar sil, pdf arındır, sanitize pdf, remove metadata",
-    h1: "PDF Temizle (Meta Veri Sil)",
-    tagline:
-      "PDF'teki gizli meta verileri ve dijital izleri temizleyin — ücretsiz ve yerel.",
-    howToName: "Tarayıcıda PDF dosyasından meta veriler nasıl silinir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Meta Veri Temizle",
+    description: "PDF dosyalarındaki gizli yazar, şirket adı, oluşturulma tarihi ve GPS meta verilerini kalıcı olarak silin ve anonimleştirin.",
+    keywords: "pdf meta veri temizleme, pdf yazar bilgisini silme, pdf gizli bilgileri temizle, pdf anonymize, pdf metadata sil",
+    h1: "PDF Meta Veri Temizle",
+    tagline: "Belgenizin arkasında gizlenen yazar adını, bilgisayar bilgilerini ve oluşturma geçmişini tek tıkla silerek tam gizlilik sağlayın.",
+    howToName: "PDF belgesinden meta veriler nasıl temizlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Dijital ayak izlerinden arındırmak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Verileri temizle",
-        text: "Yazar isimlerini, tarihleri ve tüm gizli meta verileri yerel olarak tamamen siliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Maksimum gizlilik için temizlenmiş ve arındırılmış PDF belgenizi güvenle indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Meta verilerini temizlemek istediğiniz PDF dosyasını seçin." },
+      { name: "Temizleme", text: "Sistemimiz yazar adı, yazılım bilgisi ve gizli etiketleri belgeden kazır." },
+      { name: "Anonim PDF'i İndirin", text: "Artık kimseye ait bilgi içermeyen tertemiz PDF dosyanızı indirin." }
     ],
-    crossLink: {
-      href: "/tr/protect-pdf",
-      label: "Daha fazla gizlilik mi lazım? PDF Şifrele.",
-    },
+    faq: [
+      { q: "Hangi bilgiler silinir?", a: "Yazar adı, şirketi, dosyanın oluşturulduğu bilgisayar programı, düzenleme tarihleri ve gizli meta veri etiketleri tamamen silinir." },
+      { q: "Sayfadaki yazılar veya tasarım bozulur mu?", a: "Hayır. Sayfa içeriği ve görseller aynen kalır; sadece dosya özelliklerinde yer alan gizli veriler temizlenir." }
+    ],
+    crossLink: { href: "/tr/redact-pdf", label: "Görünen hassas yazıları da karartmak için PDF Sansürle aracını deneyin." }
   },
 };
 export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1446,173 +1375,88 @@ export const grayscaleCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const resizeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Resize PDF — change page size and add margins",
-    description:
-      "Scale your PDF pages to standard sizes like A4 or Letter, and add uniform margins. 100% private.",
-    keywords:
-      "resize pdf, change pdf size, add margins to pdf, scale pdf, pdf boyutlandır, pdf kenarlık ekle",
+    title: "Resize PDF",
+    description: "Resize PDF page dimensions to standard sizes like A4, A3, Letter, or Legal online for free. Adjust page scale easily.",
+    keywords: "resize pdf, change pdf page size, scale pdf pages, convert pdf to a4, resize pdf to letter",
     h1: "Resize PDF",
-    tagline:
-      "Scale PDF pages to standard dimensions and add beautiful margins — free and completely local.",
-    howToName: "How to resize a PDF file",
+    tagline: "Change the physical paper size of your PDF pages. Scale documents to A4, US Letter, A3, or custom dimensions.",
+    howToName: "How to resize PDF pages",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to resize or add margins to.",
-      },
-      {
-        name: "Set dimensions",
-        text: "Adjust the page size and margins locally to fit your exact requirements.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly resized PDF document.",
-      },
+      { name: "Upload PDF", text: "Select the document you want to resize." },
+      { name: "Choose Paper Size", text: "Select standard formats like A4, A3, Letter, Legal, or enter custom dimensions." },
+      { name: "Download Resized PDF", text: "Save your document scaled perfectly to the new paper size." }
     ],
     faq: [
-      {
-        q: "Does this distort my images?",
-        a: "No, the original pages are scaled down proportionally and centered on the new canvas, preserving aspect ratios.",
-      },
-      {
-        q: "Will this reduce the resolution?",
-        a: "No. Your pages are scaled to the new dimensions without any loss of quality.",
-      },
+      { q: "Will my content be distorted when resizing?", a: "Our scaling engine preserves original aspect ratios, fitting your content proportionally without stretching." },
+      { q: "Can I convert US Letter to European A4?", a: "Yes, converting between US Letter and standard international A4 is fully supported." }
     ],
-    crossLink: {
-      href: "/crop-pdf",
-      label: "Need to cut a part of the page? Try Crop PDF.",
-    },
+    crossLink: { href: "/crop-pdf", label: "Need to cut off margins instead? Try Crop PDF." }
   },
   tr: {
-    title: "PDF Boyutlandır — boyut değiştir ve boşluk ekle",
-    description:
-      "PDF sayfalarınızı A4 veya Letter gibi standart boyutlara ölçeklendirin ve kenar boşlukları ekleyin. %100 gizli.",
-    keywords:
-      "pdf boyutlandır, pdf yeniden boyutlandır, pdf kenar boşluğu ekle, resize pdf, change pdf dimensions",
+    title: "PDF Boyutlandır (Kağıt Boyutu)",
+    description: "PDF sayfalarının kağıt boyutunu A4, A3, Letter veya Legal standartlarına dönüştürün. Ücretsiz ve programsız sayfa ölçekleyici.",
+    keywords: "pdf boyutlandırma, pdf a4 yapma, pdf kağıt boyutu değiştirme, pdf letter to a4, pdf sayfa ölçüsü değiştir",
     h1: "PDF Boyutlandır",
-    tagline:
-      "PDF sayfalarını standart boyutlara ölçeklendirin ve kenar boşlukları ekleyin — ücretsiz ve tamamen yerel.",
-    howToName: "Bir PDF dosyası nasıl boyutlandırılır",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    tagline: "Belgelerinizin kağıt boyutunu standart A4, A3, US Letter veya özel ölçülere ölçekleyin. Yazdırma sorunlarına son verin.",
+    howToName: "PDF kağıt boyutu nasıl değiştirilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Yeniden boyutlandırmak veya kenar boşlukları eklemek istediğiniz PDF belgesini bırakın.",
-      },
-      {
-        name: "Boyutları ayarla",
-        text: "Tam gereksinimlerinize uyması için sayfa boyutunu ve kenar boşluklarını yerel olarak ayarlayın.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde yeniden boyutlandırılmış PDF belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Ölçülerini değiştirmek istediğiniz PDF dosyasını seçin." },
+      { name: "Yeni Boyutu Seçin", text: "A4, A3, US Letter gibi standart kağıt boyutlarından birini belirleyin." },
+      { name: "Ölçeklenmiş PDF'i İndirin", text: "Yeni kağıt standartlarına uygun belgenizi cihazınıza indirin." }
     ],
     faq: [
-      {
-        q: "Bu işlem görsellerimi bozar mı?",
-        a: "Hayır, orijinal sayfalar orantılı olarak küçültülür ve yeni tuvalin ortasına yerleştirilir, en-boy oranları korunur.",
-      },
-      {
-        q: "Bu işlem çözünürlüğü düşürür mü?",
-        a: "Hayır. Sayfalarınız herhangi bir kalite kaybı olmadan yeni boyutlara ölçeklenir.",
-      },
+      { q: "Yazılar ve fotoğraflar basık veya yamuk görünür mü?", a: "Hayır. En-boy oranı korunarak orantılı bir şekilde ölçekleme yapılır, içerikler yamulmaz." },
+      { q: "Amerikan Letter formatındaki belgeyi A4 yapabilir miyim?", a: "Evet! Yurt dışından gelen Letter boyutundaki belgeleri tek tıkla standart Türk/Avrupa A4 boyutuna getirebilirsiniz." }
     ],
-    crossLink: {
-      href: "/tr/crop-pdf",
-      label: "Sayfanın bir kısmını mı kesmek istiyorsunuz? PDF Kırp.",
-    },
+    crossLink: { href: "/tr/crop-pdf", label: "Kenar boşluklarını kırpmak istiyorsanız PDF Kırp aracını kullanın." }
   },
 };
 export const scanCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Scan to PDF — scan physical documents",
-    description:
-      "Use your device camera to scan physical documents and create high-quality PDFs instantly. 100% private.",
-    keywords:
-      "scan to pdf, document scanner, scan pages, digitalize document, paper to pdf, pdf tarayıcı, belge tara",
+    title: "Scan to PDF",
+    description: "Scan documents using your webcam or phone camera into a crisp PDF file online for free. 100% private document scanner.",
+    keywords: "scan to pdf, web scanner, document scanner online, camera to pdf, scan paper to pdf free",
     h1: "Scan to PDF",
-    tagline:
-      "Turn your device into a document scanner and generate PDF files directly in your browser.",
-    howToName: "How to scan documents to PDF",
+    tagline: "Turn your device camera or webcam into a portable document scanner. Capture, enhance contrast, and export clean PDFs.",
+    howToName: "How to scan documents to PDF using a camera",
     howItWorks: "How it works",
-    faqTitle: "Frequently Asked Questions",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Grant Camera Access",
-        text: "Allow the browser to access your camera to begin scanning.",
-      },
-      {
-        name: "Capture Pages",
-        text: "Take photos of your physical documents one by one.",
-      },
-      {
-        name: "Create PDF",
-        text: "Click Create PDF to combine all captured pages into a single document.",
-      },
+      { name: "Open Camera", text: "Allow camera access to capture physical documents or receipts." },
+      { name: "Snap Pages", text: "Take photos of each page. Our tool auto-detects document edges and improves readability." },
+      { name: "Export PDF", text: "Download your multi-page scanned document as a polished PDF file." }
     ],
     faq: [
-      {
-        q: "Is my camera feed private?",
-        a: "Absolutely. Everything happens on your device locally. Your camera feed and photos are never uploaded or sent anywhere.",
-      },
-      {
-        q: "Are my photos uploaded?",
-        a: "No. Everything runs directly on your device. We never upload any photos.",
-      },
+      { q: "Are camera photos saved on your servers?", a: "Never. Camera frames and captures are processed strictly in your local browser memory." },
+      { q: "Can I scan multiple pages into one file?", a: "Yes, keep snapping consecutive pages and export them all together into one single PDF." }
     ],
-    crossLink: {
-      href: "/img-to-pdf",
-      label: "Have images already? Convert Images to PDF.",
-    },
+    crossLink: { href: "/ocr-pdf", label: "Want to extract text from your scan? Try OCR PDF." }
   },
   tr: {
-    title: "Kameradan PDF — fiziksel belgeleri tarayın",
-    description:
-      "Fiziksel belgeleri taramak ve anında PDF oluşturmak için cihazınızın kamerasını kullanın. %100 gizli.",
-    keywords:
-      "pdf tara, belge tara, kağıt tarayıcı, scan to pdf, pdf tarama aracı, tarayıcıdan pdf yap",
-    h1: "Kameradan PDF",
-    tagline:
-      "Cihazınızı bir tarayıcıya dönüştürün ve doğrudan tarayıcınızda PDF dosyaları oluşturun.",
-    howToName: "Belgeler PDF'e nasıl taranır",
-    howItWorks: "Nasıl çalışır",
-    faqTitle: "Sıkça Sorulan Sorular",
+    title: "Kameradan PDF Tara",
+    description: "Kameranızı veya web kameranızı kullanarak fatura ve evraklarınızı anında PDF belgesine dönüştürün. Ücretsiz mobil ve web tarayıcı.",
+    keywords: "kameradan pdf yapma, evrak tarama online, telefon kamerasını tarayıcı yapma, kağıdı pdf yap, mobil pdf tarayıcı",
+    h1: "Kameradan PDF Tara",
+    tagline: "Telefon veya bilgisayar kameranızı taşınabilir bir tarayıcıya dönüştürün. Sözleşme, fiş ve kimlikleri anında PDF yapın.",
+    howToName: "Kamera ile evraklar nasıl PDF olarak taranır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Kamera İzni Verin",
-        text: "Taramaya başlamak için tarayıcının kameranıza erişmesine izin verin.",
-      },
-      {
-        name: "Sayfaları Çekin",
-        text: "Fiziksel belgelerinizin fotoğraflarını sırayla çekin.",
-      },
-      {
-        name: "PDF Oluştur",
-        text: "Tüm çekilen sayfaları tek bir belgeye dönüştürmek için PDF Oluştur butonuna tıklayın.",
-      },
+      { name: "Kamerayı Başlatın", text: "Kamera iznini onaylayarak kağıt evraklarınızı vizöre yerleştirin." },
+      { name: "Sayfaları Çekin", text: "İstediğiniz kadar sayfa çekin; sistemimiz kontrastı artırıp yazıları netleştirir." },
+      { name: "PDF Olarak Kaydedin", text: "Tek tıkla tüm çekilen sayfaları birleşik, temiz bir PDF olarak indirin." }
     ],
     faq: [
-      {
-        q: "Kamera görüntüm gizli mi?",
-        a: "Kesinlikle. Her şey cihazınızda yerel olarak gerçekleşir. Kamera görüntünüz ve fotoğraflarınız hiçbir yere yüklenmez veya gönderilmez.",
-      },
-      {
-        q: "Fotoğraflarım yükleniyor mu?",
-        a: "Hayır. Her şey cihazınızda çalışır, fotoğraflarınız asla yüklenmez.",
-      },
+      { q: "Kameramdan çekilen fotoğraflar sunucuya yüklenir mi?", a: "Hayır! Kamera akışı ve çekilen görüntüler sadece sizin cihazınızda işlenir, sunucuya hiçbir şey iletilmez." },
+      { q: "Birden fazla sayfayı tek PDF yapabilir miyim?", a: "Evet! Arka arkaya dilediğiniz kadar sayfa çekebilir ve hepsini tek bir PDF dosyasında toplayabilirsiniz." }
     ],
-    crossLink: {
-      href: "/tr/img-to-pdf",
-      label: "Fotoğraflarınız hazır mı? Görselleri PDF Yap.",
-    },
+    crossLink: { href: "/tr/ocr-pdf", label: "Taranan evraktaki yazıları kopyalamak için PDF OCR aracını kullanın." }
   },
 };
-
 export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Booklet PDF — create printable booklets",
@@ -1667,106 +1511,88 @@ export const bookletCopy: Record<"en" | "tr", ToolCopy> = {
 
 export const compareCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Compare PDF — find differences between documents",
-    description: "Visually compare two PDF files side by side.",
-    keywords:
-      "compare pdf, diff pdf, pdf comparison, find differences pdf, compare documents, pdf karşılaştır, pdf fark bul",
+    title: "Compare PDF",
+    description: "Compare two PDF documents and highlight text differences visually online for free. Spot changes between document versions easily.",
+    keywords: "compare pdf, compare two pdf files, diff pdf, pdf difference checker, compare contracts pdf",
     h1: "Compare PDF",
-    tagline: "Spot differences between two documents instantly.",
-    howToName: "How to compare PDFs",
+    tagline: "Easily compare two PDF documents side-by-side. Highlight added, modified, or deleted text between contract revisions.",
+    howToName: "How to compare two PDF files",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add PDFs",
-        text: "Drop the two PDF documents you want to visually compare side-by-side.",
-      },
-      {
-        name: "Highlight differences",
-        text: "We instantly overlay the pages locally to highlight any visual changes.",
-      },
-      {
-        name: "Review files",
-        text: "Review the diff perfectly without uploading any sensitive documents.",
-      },
+      { name: "Upload Both PDFs", text: "Select the original PDF and the revised version you want to check." },
+      { name: "Analyze Differences", text: "Our visual diff engine scans both files and highlights all modified lines in color." },
+      { name: "Review Changes", text: "Inspect changes side-by-side directly in your browser." }
     ],
+    faq: [
+      { q: "Can it detect small word changes in contracts?", a: "Yes, our comparison tool highlights additions, deletions, and subtle word swaps between versions." },
+      { q: "Are sensitive legal files uploaded?", a: "No. The comparison runs purely client-side inside your browser." }
+    ],
+    crossLink: { href: "/edit-pdf", label: "Need to fix errors found during comparison? Try Edit PDF." }
   },
   tr: {
-    title: "PDF Karşılaştır — belgeler arası farkları bul",
-    description: "İki PDF dosyasını yan yana görsel olarak karşılaştırın.",
-    keywords:
-      "pdf karşılaştır, pdf fark bul, iki pdf kıyasla, compare pdf, belge karşılaştırma aracı",
-    h1: "PDF Karşılaştır",
-    tagline: "İki belge arasındaki farkları anında tespit edin.",
-    howToName: "PDF'ler nasıl karşılaştırılır",
-    howItWorks: "Nasıl çalışır",
+    title: "İki PDF Karşılaştır",
+    description: "İki PDF dosyasını yan yana karşılaştırın ve metin farklarını renkli olarak görün. Sözleşme ve evrak revizyonlarını kolayca denetleyin.",
+    keywords: "pdf karşılaştırma, iki pdf farkını bulma, pdf diff aracı, sözleşme karşılaştır, pdf metin farkı bul",
+    h1: "İki PDF Karşılaştır",
+    tagline: "İki PDF belgesini yan yana koyup eklenen, silinen ve değiştirilen tüm yazıları renkli olarak anında tespit edin.",
+    howToName: "İki PDF dosyası nasıl karşılaştırılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF'leri ekle",
-        text: "Yan yana görsel olarak karşılaştırmak istediğiniz iki PDF belgesini bırakın.",
-      },
-      {
-        name: "Farkları vurgula",
-        text: "Tüm görsel değişiklikleri vurgulamak için sayfaları yerel olarak anında üst üste bindiriyoruz.",
-      },
-      {
-        name: "Dosyaları incele",
-        text: "Hassas belgeleri hiçbir yere yüklemeden farklılıkları mükemmel bir şekilde inceleyin.",
-      },
+      { name: "Her İki Belgeyi Yükleyin", text: "Orijinal PDF ile revize edilmiş ikinci PDF dosyasını ekrana bırakın." },
+      { name: "Farkları Tara", text: "Akıllı sistemimiz iki belge arasındaki değişen kelimeleri tespit eder." },
+      { name: "Değişiklikleri İnceleyin", text: "Eklenen ve silinen yazıları renkli vurgularla tarayıcınızda görün." }
     ],
+    faq: [
+      { q: "Sözleşmedeki küçük kelime hilelerini yakalar mı?", a: "Evet! İki evrak arasındaki tek bir harf veya rakam değişikliğini dahi renkli olarak önünüze çıkarır." },
+      { q: "Müvekkil sözleşmelerini karşılaştırmak güvenli mi?", a: "Evet, belgeleriniz sunucuya yüklenmez, tamamen bilgisayarınızın RAM'inde karşılaştırılır." }
+    ],
+    crossLink: { href: "/tr/edit-pdf", label: "Fark ettiğiniz hataları düzeltmek için PDF Düzenle aracını kullanabilirsiniz." }
   },
 };
-
 export const cropCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Crop PDF — remove margins",
-    description: "Crop your PDF pages to remove unnecessary margins.",
-    keywords:
-      "crop pdf, trim pdf margins, cut pdf borders, resize page area, pdf kırp, pdf sayfa kes",
+    title: "Crop PDF",
+    description: "Crop PDF margins and trim unwanted page borders online for free. Adjust visible page areas easily in your browser.",
+    keywords: "crop pdf, trim pdf margins, cut pdf borders, crop pdf pages online, adjust pdf margins",
     h1: "Crop PDF",
-    tagline: "Trim PDF margins quickly and locally.",
-    howToName: "How to crop a PDF",
+    tagline: "Trim wide margins, remove unwanted headers or footers, and crop your PDF pages to the exact visible area.",
+    howToName: "How to crop a PDF file",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to trim or adjust margins for.",
-      },
-      {
-        name: "Crop area",
-        text: "Draw a rectangle over the pages to define the exact visible area locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your perfectly cropped PDF document.",
-      },
+      { name: "Upload PDF", text: "Select the PDF file with borders or margins you want to trim." },
+      { name: "Select Crop Area", text: "Drag the bounding box around the content you want to keep." },
+      { name: "Download Cropped PDF", text: "Save your trimmed PDF document instantly." }
     ],
+    faq: [
+      { q: "Can I apply the same crop to all pages?", a: "Yes, you can choose to apply your crop box to all pages at once or adjust individual pages separately." },
+      { q: "Is content permanently deleted?", a: "The page bounding box is adjusted so only your selected area is visible and printed." }
+    ],
+    crossLink: { href: "/auto-crop", label: "Want to automatically trim blank margins? Try Auto-Crop PDF." }
   },
   tr: {
-    title: "PDF Kırp — kenar boşluklarını kaldır",
-    description: "PDF sayfalarınızı kırparak gereksiz boşlukları temizleyin.",
-    keywords:
-      "pdf kırp, pdf kes, sayfa kırpma, boşlukları al, crop pdf, trim pdf",
+    title: "PDF Kırp",
+    description: "PDF sayfalarındaki gereksiz beyaz kenar boşluklarını ve kenarlıkları ücretsiz kırpın. Görünür sayfa alanını kolayca ayarlayın.",
+    keywords: "pdf kırpma, pdf kenar boşluğu silme, pdf kenarlık kırp, pdf sayfa kırpıcı, online pdf crop",
     h1: "PDF Kırp",
-    tagline: "Kenar boşluklarını hızlıca kesin.",
-    howToName: "PDF nasıl kırpılır",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Geniş kenar boşluklarını, gereksiz alt/üst bilgileri kırpın ve PDF sayfalarınızı tam metne göre hizalayın.",
+    howToName: "PDF sayfası nasıl kırpılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Kırpmak veya kenar boşluklarını ayarlamak istediğiniz PDF belgesini bırakın.",
-      },
-      {
-        name: "Alanı kırp",
-        text: "Görünür alanı yerel olarak tam tanımlamak için sayfaların üzerine bir dikdörtgen çizin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Mükemmel şekilde kırpılmış PDF belgenizi indirin.",
-      },
+      { name: "PDF Belgenizi Yükleyin", text: "Kenarlarını kırpmak istediğiniz PDF belgesini seçin." },
+      { name: "Kırpma Alanını Belirleyin", text: "Tutmak istediğiniz alanın etrafına fareyle bir çerçeve çizin." },
+      { name: "Kırpılmış PDF'i İndirin", text: "Kenar fazlalıkları atılmış yeni belgenizi cihazınıza indirin." }
     ],
+    faq: [
+      { q: "Tüm sayfalara aynı kırpma uygulanabilir mi?", a: "Evet, tek bir çerçeve çizip 'Tüm sayfalara uygula' diyerek tüm belgeyi saniyeler içinde hizalayabilirsiniz." },
+      { q: "Dosya kalitesi düşer mi?", a: "Hayır. Sayfa alanı daraltılırken içindeki metin ve görsellerin orijinal çözünürlüğü %100 korunur." }
+    ],
+    crossLink: { href: "/tr/auto-crop", label: "Boşlukları otomatik kırpmak için Otomatik PDF Kırpma aracını deneyin." }
   },
 };
-
 export const ocrCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "OCR PDF",
