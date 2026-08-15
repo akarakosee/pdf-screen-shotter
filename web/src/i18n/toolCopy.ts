@@ -246,12 +246,12 @@ const mergeStepsTr: Step[] = [
 ];
 export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Merge PDF Files - Combine PDFs Online for Free",
+    title: "Merge PDF",
     description:
       "Combine multiple PDF files into one document instantly. 100% free, no file size limits, and processed securely in your browser.",
     keywords:
       "merge pdf, combine pdf, join pdf, bind pdf together, merge multiple pdfs, combine pdf files online, free pdf merger",
-    h1: "Free Online PDF Merger",
+    h1: "Merge PDF",
     tagline:
       "Combine multiple PDFs into a single document. Fast, free, unlimited, and your files never leave your device.",
     howToName: "How to merge PDF files",
@@ -281,10 +281,10 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
     },
   },
   tr: {
-    title: "PDF Birleştirme — Ücretsiz ve Programsız İki PDF'i Birleştir",
+    title: "PDF Birleştir",
     description: "Birden fazla PDF dosyasını tek bir belgede birleştirin. Sınır yok, yükleme yok. Tamamen cihazınızda çalışan güvenli PDF birleştirici.",
     keywords: "pdf birleştirme, pdf birleştirici, iki pdf birleştirme, toplu pdf birleştirme, pdf sayfalarını birleştir, online pdf birleştir, pdf birleştirme programı",
-    h1: "Ücretsiz PDF Birleştirme Aracı",
+    h1: "PDF Birleştir",
     tagline: "Parça parça olan belgelerinizi tek bir dosyada toplayın. Çok hızlı, tamamen ücretsiz ve verileriniz cihazınızdan asla çıkmaz.",
     howToName: "İki veya daha fazla PDF nasıl birleştirilir?",
     howItWorks: "Nasıl çalışır?",
@@ -304,12 +304,12 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const splitCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Split PDF Pages - Extract PDF Pages Online Free",
+    title: "Split PDF",
     description:
       "Split PDF files and extract pages easily without uploading. 100% private, free, and secure PDF page separator tool in your browser.",
     keywords:
       "split pdf, separate pdf, extract pages from pdf, cut pdf, divide pdf, extract pdf pages online, free pdf splitter",
-    h1: "Free PDF Splitter & Page Extractor",
+    h1: "Split PDF",
     tagline:
       "Extract pages from your PDF into new documents or split large files — free, unlimited, and 100% private.",
     howToName: "How to split PDF files",
@@ -339,10 +339,10 @@ export const splitCopy: Record<"en" | "tr", ToolCopy> = {
     },
   },
   tr: {
-    title: "PDF Bölme ve Sayfa Ayırma Aracı (Ücretsiz, Şifresiz)",
+    title: "PDF Böl",
     description: "Programsız ve ücretsiz PDF bölme aracı. PDF sayfalarını ayırın, içinden istediğiniz sayfayı tek tıkla çıkarın. Dosyalarınız sunucuya yüklenmeden %100 güvenli.",
     keywords: "pdf bölme, pdf ayırma, pdf sayfa çıkarma, pdf sayfalarını ayır, pdf'den sayfa alma, pdf kesici, pdf bölücü program",
-    h1: "Ücretsiz PDF Bölme ve Ayırma Aracı",
+    h1: "PDF Böl",
     tagline: "Büyük PDF belgelerinizi parçalara ayırın veya içinden sadece istediğiniz sayfaları anında çıkarın. Sunucuya dosya yüklemeden cihazınızda çalışır.",
     howToName: "PDF sayfaları nasıl ayrılır?",
     howItWorks: "Nasıl çalışır?",
@@ -1020,10 +1020,10 @@ export const numberCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const protectCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Protect PDF - Add Password to PDF Online Securely",
+    title: "Protect PDF",
     description: "Encrypt and protect your PDF files with a strong password. Lock your sensitive documents locally in your browser for ultimate privacy.",
     keywords: "protect pdf, password protect pdf, encrypt pdf, lock pdf file, secure pdf, add password to pdf",
-    h1: "Password Protect PDF",
+    h1: "Protect PDF",
     tagline: "Keep your sensitive documents safe by locking them with a highly secure, unbreakable password. 100% offline and private.",
     howToName: "How to add a password to a PDF",
     howItWorks: "How it works",
@@ -1040,10 +1040,10 @@ export const protectCopy: Record<"en" | "tr", ToolCopy> = {
     crossLink: { href: "/unlock-pdf", label: "Need to remove a password instead? Try Unlock PDF." }
   },
   tr: {
-    title: "PDF Şifreleme ve Koruma Aracı - PDF Dosyasına Şifre Koy",
+    title: "PDF Şifrele",
     description: "Özel PDF belgelerinize güçlü bir şifre (parola) koyarak kilitleyin. İşlemler sunucuya yüklenmeden %100 güvenli şekilde tarayıcınızda yapılır.",
     keywords: "pdf şifreleme, pdf şifre koyma, pdf parola ekle, pdf kilitleme, güvenli pdf yap, pdf dosyasını şifrele",
-    h1: "Ücretsiz PDF Şifreleme Aracı",
+    h1: "PDF Şifrele",
     tagline: "Hassas ve gizli belgelerinizi kırılamaz bir şifre ile kilitleyerek yetkisiz kişilerin açmasını engelleyin. Tamamen güvenli ve yerel.",
     howToName: "PDF belgesine nasıl şifre koyulur?",
     howItWorks: "Nasıl çalışır?",
@@ -1563,10 +1563,10 @@ export const extractImagesCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const compressCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Compress PDF - Reduce PDF File Size Online for Free",
+    title: "Compress PDF",
     description: "Compress large PDF files without losing quality. Reduce PDF size for email attachments fast and securely right in your browser.",
     keywords: "compress pdf, reduce pdf size, make pdf smaller, shrink pdf, pdf compressor, compress pdf without losing quality, resize pdf",
-    h1: "Free PDF Compressor",
+    h1: "Compress PDF",
     tagline: "Reduce the file size of your PDF documents drastically while keeping the original layout and quality intact.",
     howToName: "How to compress a PDF file",
     howItWorks: "How it works",
@@ -1583,10 +1583,10 @@ export const compressCopy: Record<"en" | "tr", ToolCopy> = {
     crossLink: { href: "/protect-pdf", label: "Want to secure your newly compressed file? Try Protect PDF." }
   },
   tr: {
-    title: "PDF Küçültme - Kaliteyi Bozmadan Dosya Boyutu Düşür",
+    title: "PDF Küçült",
     description: "Büyük PDF dosyalarınızı ücretsiz ve programsız sıkıştırın. WhatsApp ve E-posta için PDF boyutunu anında MB'tan KB'a düşürün.",
     keywords: "pdf küçültme, pdf sıkıştırma, pdf boyutu küçültme, pdf mb düşürme, büyük pdf küçült, pdf dosya boyutu azaltma",
-    h1: "Ücretsiz PDF Küçültme ve Sıkıştırma Aracı",
+    h1: "PDF Küçült",
     tagline: "E-postaya veya WhatsApp'a sığmayan büyük PDF dosyalarınızı saniyeler içinde sıkıştırın. Metin kalitesi asla bozulmaz.",
     howToName: "PDF dosya boyutu nasıl küçültülür?",
     howItWorks: "Nasıl çalışır?",
