@@ -361,63 +361,44 @@ export const splitCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const organizeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Organize PDF — reorder, rotate, or delete pages locally",
-    description:
-      "Sort, reorder, rotate, or delete pages in your PDF document. Processed securely on your device without server uploads.",
-    keywords:
-      "organize pdf, reorder pdf pages, arrange pdf, sort pdf pages, pdf düzenle, pdf sayfalarını sırala",
+    title: "Organize PDF",
+    description: "Sort, rearrange, delete, and rotate PDF pages easily. Manage your document structure visually right in your browser.",
+    keywords: "organize pdf, rearrange pdf pages, sort pdf, delete pdf pages, rotate pdf pages, pdf page manager",
     h1: "Organize PDF",
-    tagline:
-      "Rearrange, rotate, or trim pages in your PDF document — free, fast, and 100% private.",
-    howToName: "How to organize PDF pages in your browser",
+    tagline: "Take full control of your document. Drag and drop to rearrange pages, rotate them, or delete the ones you don't need.",
+    howToName: "How to organize PDF pages",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to reorder, rotate, or trim.",
-      },
-      {
-        name: "Organize pages",
-        text: "Drag to reorder, click to rotate, or remove unwanted pages locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your newly organized and perfectly structured PDF document.",
-      },
+      { name: "Upload Document", text: "Select the PDF file you want to organize." },
+      { name: "Sort & Edit", text: "Drag pages to reorder them, hover to delete unnecessary pages, or rotate them." },
+      { name: "Save Changes", text: "Click apply and download your perfectly organized PDF document." }
     ],
-    crossLink: {
-      href: "/rotate-pdf",
-      label: "Need to only rotate pages? Rotate PDF.",
-    },
+    faq: [
+      { q: "Can I delete multiple pages at once?", a: "You can quickly click the delete icon on any page you don't need. The page will be instantly removed from your final document." },
+      { q: "Does rearranging pages affect the original file?", a: "No. Your original file remains untouched. You will download a brand new PDF with the updated page order." }
+    ],
+    crossLink: { href: "/split-pdf", label: "Need to cut a PDF into separate files? Try Split PDF." }
   },
   tr: {
-    title: "PDF Düzenle — sayfaları sırala, döndür veya sil",
-    description:
-      "PDF dosyanızdaki sayfaları sıralayın, çevirin veya silin. Tamamen tarayıcınızda ve gizlilik garantisiyle çalışır.",
-    keywords:
-      "pdf düzenle, pdf sayfalarını sırala, pdf sırala, sayfaların yerini değiştir, organize pdf",
+    title: "PDF Düzenle",
+    description: "PDF sayfalarınızın sırasını değiştirin, gereksiz sayfaları silin veya döndürün. Ücretsiz ve görsel PDF sayfa yöneticisi.",
+    keywords: "pdf düzenle, pdf sayfalarını sırala, pdf sayfa silme, pdf sayfalarını yer değiştirme, pdf düzenleyici, pdf sayfa döndür",
     h1: "PDF Düzenle",
-    tagline: "Sayfaları sırala, döndür veya sil — ücretsiz ve %100 yerel.",
-    howToName: "Tarayıcıda PDF sayfaları nasıl düzenlenir",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Belgenizin tam kontrolünü elinize alın. Sayfaları sürükleyerek yerlerini değiştirin, döndürün veya istemediğiniz sayfaları kolayca çöpe atın.",
+    howToName: "PDF sayfaları nasıl düzenlenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Sıralamak, döndürmek veya kırpmak istediğiniz PDF belgesini bırakın.",
-      },
-      {
-        name: "Sayfaları düzenle",
-        text: "Yerel olarak sürükleyip sıralayın, sayfalara tıklayıp döndürün veya silin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yeniden düzenlenmiş ve mükemmel şekilde yapılandırılmış belgenizi indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Sayfalarını düzenlemek istediğiniz PDF dosyasını seçin." },
+      { name: "Sırala ve Yönet", text: "Sayfaları fareyle sürükleyip yerlerini değiştirin. Gereksizleri silin veya ters olanları döndürün." },
+      { name: "Yeni Belgeyi İndirin", text: "Kaydet butonuna basarak yepyeni ve düzenlenmiş PDF'inizi cihazınıza indirin." }
     ],
-    crossLink: {
-      href: "/tr/rotate-pdf",
-      label: "Sadece sayfaları döndürmek mi istiyorsunuz? PDF Döndür.",
-    },
+    faq: [
+      { q: "Orijinal PDF dosyam bozulur mu?", a: "Hayır, bilgisayarınızdaki orijinal dosyanıza hiçbir zarar gelmez. Yaptığınız değişiklikler sonucunda bilgisayarınıza yepyeni bir dosya indirilir." },
+      { q: "Gizli şirket belgelerimi düzenlemem güvenli mi?", a: "Evet, belgeleriniz %100 güvendedir. Tüm sayfa sıralama ve silme işlemleri yalnızca sizin tarayıcınızda gerçekleşir, hiçbir veriniz internete aktarılmaz." }
+    ],
+    crossLink: { href: "/tr/merge-pdf", label: "Birden fazla PDF belgesini tek dosyada toplamak için PDF Birleştir aracını kullanabilirsiniz." }
   },
 };
 export const reverseCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1062,64 +1043,44 @@ export const protectCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const unlockCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Unlock PDF — remove password protection locally",
-    description:
-      "Remove passwords and security restrictions from your PDF files in seconds. Completely local and private.",
-    keywords:
-      "unlock pdf, remove pdf password, unprotect pdf, decrypt pdf, open secure pdf, pdf kilit aç",
+    title: "Unlock PDF",
+    description: "Remove passwords from your PDF files instantly. Unlock secure PDFs locally in your browser without uploading to any server.",
+    keywords: "unlock pdf, remove pdf password, pdf password remover, crack pdf, decrypt pdf, remove security from pdf",
     h1: "Unlock PDF",
-    tagline:
-      "Strip password protection from PDF documents — free, fast, and secure.",
-    howToName: "How to remove a password from a PDF online",
+    tagline: "Easily remove passwords and security restrictions from your PDF documents. 100% free and processed completely offline.",
+    howToName: "How to unlock a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the password-protected PDF document you want to unlock.",
-      },
-      {
-        name: "Enter password",
-        text: "Provide the correct password once. We decrypt the file entirely locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your unlocked PDF document, permanently free of password restrictions.",
-      },
+      { name: "Upload Secure PDF", text: "Drag and drop your password-protected PDF document." },
+      { name: "Enter Password", text: "Enter the correct password to unlock the file (required for encrypted files)." },
+      { name: "Download Unlocked PDF", text: "Click unlock and download your PDF completely free of password restrictions." }
     ],
-    crossLink: {
-      href: "/protect-pdf",
-      label: "Need to lock a document? Protect PDF.",
-    },
+    faq: [
+      { q: "Can I unlock a PDF without knowing the password?", a: "No. Our tool is designed for legitimate users who know their document's password but want to remove it permanently so they don't have to type it every time. We do not provide brute-force cracking tools." },
+      { q: "Is it safe to unlock my bank statements here?", a: "Yes, it is the safest option available. Since the decryption happens entirely in your local browser, your sensitive financial documents are never uploaded to the internet." }
+    ],
+    crossLink: { href: "/protect-pdf", label: "Want to lock a document instead? Use our Protect PDF tool." }
   },
   tr: {
-    title: "PDF Şifre Kaldır — parolayı ve korumayı kaldır",
-    description:
-      "PDF dosyalarınızdaki şifreleri ve kısıtlamaları saniyeler içinde kaldırın. %100 gizli ve tarayıcınızda.",
-    keywords:
-      "pdf kilit aç, pdf şifre kaldır, korumalı pdf aç, unlock pdf, pdf parolası kaldır",
-    h1: "PDF Şifre Kaldır",
-    tagline:
-      "PDF belgelerinizdeki şifre korumasını temizleyin — ücretsiz, hızlı ve güvenli.",
-    howToName: "PDF dosyasının şifresi nasıl kaldırılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Şifre Kırma",
+    description: "PDF dosyalarınızdaki parola korumasını tamamen kaldırın. Banka ekstreleri veya kilitli belgelerinizi programsız ve güvenle açın.",
+    keywords: "pdf şifre kırma, pdf şifre kaldırma, pdf parola kaldır, kilitli pdf açma, pdf şifre çözücü, şifreli pdf",
+    h1: "PDF Şifre Kırma",
+    tagline: "Şifresini bildiğiniz kilitli PDF dosyalarından parola korumasını tamamen silin. İşlemleriniz %100 gizlilikle, sadece cihazınızda gerçekleşir.",
+    howToName: "PDF şifresi nasıl kaldırılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Kilidini açmak istediğiniz parola korumalı PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Parolayı gir",
-        text: "Doğru parolayı bir kez sağlayın. Dosyanın şifresini yerel olarak tamamen kaldırıyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Parola kısıtlamalarından kalıcı olarak kurtarılmış PDF belgenizi indirin.",
-      },
+      { name: "Kilitli PDF'i Yükle", text: "Şifresini kaldırmak istediğiniz PDF belgesini kutuya sürükleyin." },
+      { name: "Parolayı Girin", text: "Belgenin mevcut şifresini yazarak dosyanın kilidini açın." },
+      { name: "Şifresiz PDF'i İndir", text: "Şifre Kaldır butonuna tıklayın ve belgenizin parolasız yeni halini indirin." }
     ],
-    crossLink: {
-      href: "/tr/protect-pdf",
-      label: "Bir belgeyi şifrelemek mi istiyorsunuz? PDF Şifrele.",
-    },
+    faq: [
+      { q: "Şifreyi hiç bilmiyorsam belgeyi kırabilir misiniz?", a: "Hayır. Bu araç, yasadışı şifre kırıcı (brute-force) bir yazılım değildir. Kendi şifrenizi girerek, belgeyi her açtığınızda tekrar tekrar şifre sormasını engellemek (şifreyi temelli silmek) için kullanılır." },
+      { q: "Banka veya maaş bordromu yüklemem güvenli mi?", a: "Kesinlikle! Diğer bulut tabanlı sitelerin aksine, sitemizde belgeleriniz hiçbir sunucuya (internete) yüklenmez. Şifre kaldırma işlemi bilgisayarınızın içinde (çevrimdışı) yapılır." }
+    ],
+    crossLink: { href: "/tr/protect-pdf", label: "Tam tersini yapıp bir belgeyi kilitlemek mi istiyorsunuz? PDF Şifrele aracını deneyin." }
   },
 };
 export const rotateCopy: Record<"en" | "tr", ToolCopy> = {
