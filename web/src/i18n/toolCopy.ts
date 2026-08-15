@@ -879,124 +879,86 @@ export const sanitizeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const watermarkCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Add Watermark to PDF — free, secure, local",
-    description:
-      "Stamp your PDF with a custom text watermark. Protect your documents from unauthorized use. Processed completely in your browser.",
-    keywords:
-      "watermark pdf, add watermark, stamp pdf, pdf logo, protect pdf, pdf filigran, filigran ekle",
+    title: "Watermark PDF",
+    description: "Add text or image watermarks to your PDF documents for free. Protect copyright and sensitive documents securely in your browser.",
+    keywords: "watermark pdf, add watermark to pdf, stamp pdf, pdf watermark creator, brand pdf online, watermark document",
     h1: "Watermark PDF",
-    tagline:
-      "Add a diagonal watermark to every page of your document in seconds.",
-    howToName: "How to add a watermark to a PDF online",
+    tagline: "Stamp your documents with custom text, copyright notices, or confidentiality markers. Fast, customizable, and 100% private.",
+    howToName: "How to add a watermark to a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to stamp with a watermark.",
-      },
-      {
-        name: "Customize watermark",
-        text: "Type your text, adjust the opacity, and rotate it perfectly locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your professionally watermarked PDF document securely.",
-      },
+      { name: "Upload Document", text: "Select the PDF file you want to protect with a watermark." },
+      { name: "Customize Watermark", text: "Type your watermark text, adjust opacity, rotation, font size, and position." },
+      { name: "Download Watermarked PDF", text: "Click apply to permanently stamp all pages and download your document." }
     ],
-    crossLink: {
-      href: "/protect-pdf",
-      label: "Want to lock the file? Protect PDF.",
-    },
+    faq: [
+      { q: "Can someone remove the watermark later?", a: "Our tool bakes the watermark directly into the PDF rendering stream, making it very difficult to remove without specialized software." },
+      { q: "Is my document uploaded to a server?", a: "No. The watermark stamping happens completely inside your web browser using local processing." }
+    ],
+    crossLink: { href: "/protect-pdf", label: "Want to lock your PDF with a password too? Try Protect PDF." }
   },
   tr: {
-    title: "PDF'e Filigran Ekle — ücretsiz, güvenli, yerel",
-    description:
-      "PDF'inize özel metin filigranı (damga) ekleyin. Belgelerinizi izinsiz kullanıma karşı koruyun. Tamamen tarayıcınızda işlenir.",
-    keywords:
-      "pdf filigran ekle, filigran oluştur, pdf damga, watermark pdf, pdf arkasına yazı yaz",
-    h1: "Filigran Ekle",
-    tagline:
-      "Belgenizin her sayfasına saniyeler içinde damga (filigran) vurun.",
-    howToName: "PDF dosyasına nasıl filigran eklenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Filigran Ekle",
+    description: "PDF dosyalarınıza ücretsiz ve programsız filigran (watermark), telif yazısı veya logo damgası ekleyin. %100 güvenli ve yerel.",
+    keywords: "pdf filigran ekle, pdf watermark ekleme, pdf damga basma, pdf telif yazısı ekle, pdf gizli damgası, online pdf filigran",
+    h1: "PDF Filigran Ekle",
+    tagline: "Belgelerinize 'GİZLİDİR', şirket adı, telif veya özel yazı damgaları ekleyerek izinsiz kullanımı engelleyin. Verileriniz cihazınızda kalır.",
+    howToName: "PDF dosyasına filigran nasıl eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Filigran damgalamak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Filigranı özelleştir",
-        text: "Metninizi yazın, opaklığını ayarlayın ve yerel olarak mükemmel şekilde döndürün.",
-      },
-      {
-        name: "PDF indir",
-        text: "Profesyonelce filigran eklenmiş PDF belgenizi güvenle indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "Filigran eklemek istediğiniz PDF belgesini kutuya bırakın." },
+      { name: "Filigranı Özelleştirin", text: "Yazınızı girin, opaklığı (şeffaflığı), açıyı, yazı boyutunu ve konumunu ayarlayın." },
+      { name: "Filigranlı PDF'i İndirin", text: "Tek tıkla tüm sayfalara damganızı basın ve yeni belgenizi anında indirin." }
     ],
-    crossLink: {
-      href: "/tr/protect-pdf",
-      label: "Dosyayı kilitlemek mi istiyorsunuz? PDF Şifrele.",
-    },
+    faq: [
+      { q: "Eklediğim filigran sonradan kolayca silinebilir mi?", a: "Hayır. Filigran belgenin görsel katmanlarına doğrudan işlenir, bu sayede izinsiz kopyalama ve paylaşımı büyük oranda önler." },
+      { q: "Belgelerim internete yükleniyor mu?", a: "Asla. Damgalama işlemi tamamen tarayıcınızın belleğinde gerçekleşir, belgeleriniz sunucularımıza gitmez." }
+    ],
+    crossLink: { href: "/tr/protect-pdf", label: "Belgenize şifre de koymak ister misiniz? PDF Şifrele aracını deneyin." }
   },
 };
 export const numberCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Add Page Numbers to PDF — free, fast, local",
-    description:
-      "Easily add page numbers to your PDF documents. Customize format and position. Processed securely on your device.",
-    keywords:
-      "add page numbers to pdf, number pdf pages, paginate pdf, pdf page numbers, pdf sayfa numarası",
+    title: "Add Page Numbers",
+    description: "Add page numbers to your PDF documents easily. Customize numbering format, font, size, and position for free online.",
+    keywords: "add page numbers to pdf, number pdf pages, paginate pdf, pdf page numbering online, stamp page numbers",
     h1: "Add Page Numbers",
-    tagline: "Organize your documents by adding page numbers instantly.",
-    howToName: "How to add page numbers to a PDF online",
+    tagline: "Number your PDF pages with clean, customizable formatting. Choose positions, numbering styles, and margins easily.",
+    howToName: "How to add page numbers to a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to add page numbers to.",
-      },
-      {
-        name: "Format numbers",
-        text: "Choose the exact position and style for your page numbers locally.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your properly paginated and numbered PDF document.",
-      },
+      { name: "Upload PDF", text: "Choose the PDF document that needs page numbers." },
+      { name: "Choose Position & Format", text: "Select bottom-right, bottom-center, header, and choose format like 'Page X of Y'." },
+      { name: "Apply & Download", text: "Click apply to number every page and download your numbered PDF." }
     ],
-    crossLink: {
-      href: "/watermark-pdf",
-      label: "Want to stamp every page? Add Watermark.",
-    },
+    faq: [
+      { q: "Can I skip numbering the cover page?", a: "Yes, you can set the starting page number or choose from which page to begin numbering." },
+      { q: "Are existing text and margins overwritten?", a: "No, numbers are stamped into the document margins without interfering with your original content." }
+    ],
+    crossLink: { href: "/bates-numbering", label: "Need legal Bates stamping instead? Try Bates Numbering." }
   },
   tr: {
-    title: "PDF'e Sayfa Numarası Ekle — ücretsiz, hızlı, yerel",
-    description:
-      "PDF belgelerinize kolayca sayfa numarası ekleyin. Formatı ve konumu ayarlayın. Tamamen cihazınızda güvenle işlenir.",
-    keywords:
-      "pdf sayfa numarası ekle, sayfa numaralandırma, pdf numaralandır, add page numbers to pdf",
-    h1: "Sayfa Numarası Ekle",
-    tagline: "Belgelerinizi anında numaralandırarak daha düzenli hale getirin.",
-    howToName: "PDF dosyasına nasıl sayfa numarası eklenir",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF Sayfa Numarası Ekle",
+    description: "PDF belgelerinize ücretsiz ve kolayca sayfa numarası ekleyin. Numaraların konumunu, yazı tipini ve stilini dilediğiniz gibi özelleştirin.",
+    keywords: "pdf sayfa numarası ekle, pdf sayfaları numaralandırma, pdf sayfa no verme, pdf numaralandır, online pdf sayfa numarası",
+    h1: "PDF Sayfa Numarası Ekle",
+    tagline: "Raporlarınıza, tezlerinize veya sözleşmelerinize profesyonel sayfa numaraları ekleyin. Alt-orta, sağ-üst gibi tüm konumları destekler.",
+    howToName: "PDF belgesine sayfa numarası nasıl eklenir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Sayfa numarası eklemek istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "Numaraları biçimlendir",
-        text: "Sayfa numaralarınızın tam konumunu ve stilini yerel olarak seçin.",
-      },
-      {
-        name: "PDF indir",
-        text: "Düzgün bir şekilde numaralandırılmış PDF belgenizi indirin.",
-      },
+      { name: "PDF Dosyanızı Seçin", text: "Numaralandırmak istediğiniz PDF belgesini yükleyin." },
+      { name: "Konum ve Formatı Ayarlayın", text: "Numaranın sayfanın neresinde duracağını (alt, üst, sağ, sol) ve biçimini seçin." },
+      { name: "Numaralı PDF'i İndirin", text: "Numaralandırılmış ve düzenlenmiş yeni belgenizi tek tıkla kaydedin." }
     ],
-    crossLink: {
-      href: "/tr/watermark-pdf",
-      label: "Her sayfaya damga mı vurmak istiyorsunuz? Filigran Ekle.",
-    },
+    faq: [
+      { q: "Kapak sayfasını numarasız bırakabilir miyim?", a: "Evet, başlangıç sayfasını seçerek ilk sayfayı (kapak) numarasız bırakabilirsiniz." },
+      { q: "Mevcut yazılarımın üstüne biner mi?", a: "Numaralar sayfa kenar boşluklarına yerleştirilir, orijinal metinlerinizin okunurluğu bozulmaz." }
+    ],
+    crossLink: { href: "/tr/bates-numbering", label: "Hukuki evraklar için Bates numaralama mı lazım? Bates Numaralandırma aracını deneyin." }
   },
 };
 export const protectCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1189,128 +1151,86 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "JPG to PDF — convert images to PDF document locally",
-    description:
-      "Convert JPG, PNG, and WebP images into a single PDF document in your browser. Organize, adjust orientation and margin, 100% private.",
-    keywords:
-      "image to pdf, jpg to pdf, jpeg to pdf, pictures to pdf, photo to pdf, resimden pdf, jpg pdf yap",
+    title: "JPG to PDF",
+    description: "Convert JPG, JPEG, PNG, and WebP images into a single PDF file instantly. Free image to PDF converter with no limits.",
+    keywords: "jpg to pdf, convert image to pdf, jpeg to pdf, photos to pdf, merge images into pdf, pictures to pdf online",
     h1: "JPG to PDF",
-    tagline:
-      "Turn your images into a clean PDF document — free, instant, and 100% private.",
-    howToName: "How to convert JPG images to PDF online",
+    tagline: "Combine multiple photos and images into one clean PDF document. Adjust orientation, margins, and order visually.",
+    howToName: "How to convert JPG images to PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your images",
-        text: "Drop one or more JPG/JPEG photos you want to combine into a document.",
-      },
-      {
-        name: "Arrange pages",
-        text: "We instantly process your images locally to assemble them into a structured file.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your high-quality, multi-page PDF document securely.",
-      },
+      { name: "Upload Images", text: "Drag and drop your JPG, JPEG, or PNG images onto the page." },
+      { name: "Reorder & Adjust", text: "Drag images into the desired order and select page orientation (portrait or landscape)." },
+      { name: "Create PDF", text: "Click convert to stitch your photos into a single, high-resolution PDF document." }
     ],
-    crossLink: {
-      href: "/pdf-to-jpg",
-      label: "Need to extract images from a PDF? Convert PDF to JPG.",
-    },
+    faq: [
+      { q: "Is there a limit on how many images I can convert?", a: "No. Since conversion runs locally in your browser, you can merge dozens of photos without hitting server size caps." },
+      { q: "Will the image resolution be reduced?", a: "No, images are embedded in their full original resolution unless you choose a compression option." }
+    ],
+    crossLink: { href: "/pdf-to-jpg", label: "Need to convert PDF pages back to images? Use PDF to JPG." }
   },
   tr: {
-    title: "JPG'den PDF'e — fotoğrafları ve görselleri PDF'e dönüştür",
-    description:
-      "JPG, PNG ve WebP görsellerinizi tarayıcınızda tek bir PDF belgesine dönüştürün. Sayfa yapısı ve kenar boşluklarını ayarlayın, %100 gizli.",
-    keywords:
-      "resimden pdf yap, fotoğraftan pdf, jpg to pdf, jpeg to pdf, image to pdf, resimleri pdf yap",
-    h1: "JPG'den PDF'e",
-    tagline:
-      "Görsellerinizi anında PDF belgesine dönüştürün — ücretsiz, sınırsız ve tarayıcınızda.",
-    howToName: "Görsellerden PDF nasıl oluşturulur",
-    howItWorks: "Nasıl çalışır",
+    title: "JPG'den PDF'e Çevirme",
+    description: "JPG, JPEG ve PNG fotoğraflarınızı tek bir PDF dosyasına dönüştürün. Ücretsiz, sınırsız ve programsız fotoğraf PDF yapma aracı.",
+    keywords: "jpg pdf yapma, fotoğrafları pdf yapma, resimleri tek pdf yap, jpg to pdf dönüştürücü, resimden pdf oluştur",
+    h1: "JPG'den PDF'e Çevirme",
+    tagline: "Birden fazla fotoğrafı veya taranmış evrak görselini tek bir düzenli PDF belgesi haline getirin. Sayfa sırasını ve yönünü kolayca ayarlayın.",
+    howToName: "Fotoğraflar nasıl tek bir PDF dosyası yapılır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Resimleri ekle",
-        text: "Tek bir belgede birleştirmek istediğiniz bir veya daha fazla JPG/JPEG fotoğrafını bırakın.",
-      },
-      {
-        name: "Sayfaları düzenle",
-        text: "Fotoğraflarınızı düzgün yapılandırılmış bir belgede toplamak için yerel olarak anında işliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yüksek kaliteli ve çok sayfalı yeni PDF belgenizi güvenle indirin.",
-      },
+      { name: "Fotoğrafları Yükleyin", text: "PDF yapmak istediğiniz JPG veya PNG resimlerini sürükleyip bırakın." },
+      { name: "Sıralamayı Düzenleyin", text: "Görselleri sürükleyerek istediğiniz sayfa sırasına koyun, dikey/yatay yönü seçin." },
+      { name: "PDF Olarak İndirin", text: "Tek tıkla tüm resimlerin birleştiği yüksek kaliteli PDF belgenizi indirin." }
     ],
-    crossLink: {
-      href: "/tr/pdf-to-jpg",
-      label:
-        "PDF içindeki görselleri dışarı mı çıkarmak istiyorsunuz? PDF'ten JPG'ye.",
-    },
+    faq: [
+      { q: "Kaç tane fotoğraf ekleyebilirim?", a: "Herhangi bir sınır yoktur. İşlem kendi bilgisayarınızda çalıştığı için onlarca fotoğrafı tek seferde birleştirebilirsiniz." },
+      { q: "Fotoğrafların netliği bozulur mu?", a: "Hayır. Fotoğraflar orijinal netlik ve çözünürlükleri korunarak PDF sayfalarına yerleştirilir." }
+    ],
+    crossLink: { href: "/tr/pdf-to-jpg", label: "PDF sayfalarını tekrar fotoğrafa dönüştürmek için PDF to JPG aracını kullanın." }
   },
 };
 export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "PNG to PDF — convert PNG images to PDF document locally",
-    description:
-      "Convert PNG, JPG, and WebP images into a high-quality PDF document in your browser. Maintain transparency and sharp edges, 100% private.",
-    keywords:
-      "png to pdf, convert png to pdf, transparent image to pdf, png pdf yap, png den pdf",
+    title: "PNG to PDF",
+    description: "Convert PNG images with transparency to PDF documents online for free. Fast, high quality, and 100% private.",
+    keywords: "png to pdf, convert png to pdf, png image to pdf document, high quality png to pdf online",
     h1: "PNG to PDF",
-    tagline:
-      "Turn your PNG images into a clean PDF document — free, instant, and 100% private.",
-    howToName: "How to convert PNG images to PDF online",
+    tagline: "Turn your transparent PNG graphics, screenshots, or drawings into crisp PDF documents in seconds.",
+    howToName: "How to convert PNG to PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your images",
-        text: "Drop one or more PNG image files you want to combine into a document.",
-      },
-      {
-        name: "Arrange pages",
-        text: "We instantly process your images locally to assemble them into a structured file.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your high-quality, multi-page PDF document securely.",
-      },
+      { name: "Select PNG Files", text: "Drag and drop the PNG images you want to turn into a PDF." },
+      { name: "Configure Layout", text: "Arrange page order, select margins, and choose orientation." },
+      { name: "Download PDF", text: "Click convert to download your newly generated PDF file." }
     ],
-    crossLink: {
-      href: "/pdf-to-png",
-      label: "Need to extract lossless PNGs from a PDF? Convert PDF to PNG.",
-    },
+    faq: [
+      { q: "What happens to transparent backgrounds?", a: "Transparent areas in PNGs are rendered on clean white PDF pages by default." },
+      { q: "Can I combine PNG and JPG images together?", a: "Yes! Our image converter supports mixed image formats in the same document." }
+    ],
+    crossLink: { href: "/pdf-to-png", label: "Need to extract PDF pages as PNG? Try PDF to PNG." }
   },
   tr: {
-    title: "PNG'den PDF'e — PNG görsellerini ve şemalarını PDF'e dönüştür",
-    description:
-      "PNG, JPG ve WebP görsellerinizi tarayıcınızda tek bir PDF belgesine dönüştürün. Şeffaflık ve keskin kenarları koruyun, %100 gizli.",
-    keywords:
-      "png to pdf, png pdf yap, png dönüştürücü, resim pdf çevir, png to pdf converter",
-    h1: "PNG'den PDF'e",
-    tagline:
-      "PNG görsellerinizi anında PDF belgesine dönüştürün — ücretsiz, sınırsız ve tarayıcınızda.",
-    howToName: "PNG görsellerinden PDF nasıl oluşturulur",
-    howItWorks: "Nasıl çalışır",
+    title: "PNG'den PDF'e Çevirme",
+    description: "PNG formatındaki görsellerinizi, logolarınızı ve ekran görüntülerinizi ücretsiz PDF belgesine dönüştürün.",
+    keywords: "png pdf yapma, png to pdf çevirici, png yi pdf yapma, şeffaf png pdf yap",
+    h1: "PNG'den PDF'e Çevirme",
+    tagline: "Ekran görüntülerinizi, grafiklerinizi veya çizimlerinizi saniyeler içinde yüksek kaliteli bir PDF belgesine dönüştürün.",
+    howToName: "PNG görseli PDF'e nasıl dönüştürülür?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "Resimleri ekle",
-        text: "Tek bir belgede birleştirmek istediğiniz bir veya daha fazla PNG dosyasını sayfaya bırakın.",
-      },
-      {
-        name: "Sayfaları düzenle",
-        text: "Resimlerinizi düzgün yapılandırılmış bir belgede toplamak için yerel olarak anında işliyoruz.",
-      },
-      {
-        name: "PDF indir",
-        text: "Yüksek çözünürlüklü ve çok sayfalı yeni PDF belgenizi güvenle indirin.",
-      },
+      { name: "PNG Görsellerini Seçin", text: "Dönüştürmek istediğiniz PNG dosyalarını ekrana bırakın." },
+      { name: "Sayfa Düzenini Seçin", text: "Sayfaların sırasını ve kenar boşluklarını isteğinize göre ayarlayın." },
+      { name: "PDF'i İndirin", text: "Dönüştür butonuna basarak tertemiz PDF dosyanızı cihazınıza kaydedin." }
     ],
-    crossLink: {
-      href: "/tr/pdf-to-png",
-      label:
-        "PDF içindeki sayfaları kayıpsız PNG olarak mı çıkarmak istiyorsunuz? PDF'ten PNG'ye.",
-    },
+    faq: [
+      { q: "Şeffaf (transparent) alanlar ne olur?", a: "PNG'deki saydam alanlar PDF'te otomatik olarak temiz beyaz arka plan üzerine oturtulur." },
+      { q: "PNG ve JPG resimleri aynı anda ekleyebilir miyim?", a: "Evet! Farklı formatlardaki fotoğrafları aynı anda yükleyip tek bir PDF'te toplayabilirsiniz." }
+    ],
+    crossLink: { href: "/tr/pdf-to-png", label: "PDF sayfalarını kaliteli PNG formatında kaydetmek için PDF'ten PNG'ye aracını kullanın." }
   },
 };
 export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
@@ -1378,128 +1298,86 @@ export const flattenCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const signCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Sign PDF — add signatures locally without uploading",
-    description:
-      "Sign PDF documents with your drawn, typed, or uploaded signature. 100% private, your files and signature never leave your device.",
-    keywords:
-      "sign pdf, e-sign pdf, electronic signature, draw signature, pdf imza, pdf imzala, e-imza pdf",
+    title: "Sign PDF",
+    description: "Sign PDF documents online for free. Draw, type, or upload your signature securely in your browser without cloud uploads.",
+    keywords: "sign pdf, electronic signature pdf, add signature to pdf, esign pdf free, draw signature pdf, sign contract online",
     h1: "Sign PDF",
-    tagline:
-      "Stamp your signature onto any PDF document — free, instant, and 100% private.",
-    howToName: "How to sign a PDF online for free",
+    tagline: "Add your electronic signature to agreements, contracts, and forms. 100% private — your signature never leaves your computer.",
+    howToName: "How to sign a PDF document",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Add your PDF",
-        text: "Drop the PDF document you want to electronically sign.",
-      },
-      {
-        name: "Add signature",
-        text: "Draw, type, or upload your signature locally and position it securely.",
-      },
-      {
-        name: "Download PDF",
-        text: "Download your signed and finalized PDF document.",
-      },
+      { name: "Upload Document", text: "Select the PDF contract or form that requires your signature." },
+      { name: "Create Signature", text: "Draw your signature with your mouse/touchscreen, type your name, or upload an image." },
+      { name: "Place & Download", text: "Position and resize your signature on the exact page line, then download the signed document." }
     ],
-    crossLink: {
-      href: "/flatten-pdf",
-      label: "Want to lock your form fields after signing? Try Flatten PDF.",
-    },
+    faq: [
+      { q: "Is my signature saved on your servers?", a: "Never. The signature is created and stamped entirely inside your browser's local memory for strict privacy." },
+      { q: "Can I add initials or the date as well?", a: "Yes, you can place signatures, initials, dates, and text anywhere on your PDF." }
+    ],
+    crossLink: { href: "/protect-pdf", label: "Want to lock your signed contract with a password? Use Protect PDF." }
   },
   tr: {
-    title: "PDF İmzala — tarayıcında güvenle imza ekle",
-    description:
-      "PDF belgelerine çizdiğiniz, yazdığınız veya yüklediğiniz imzanızı ekleyin. %100 gizli, dosyanız ve imzanız cihazınızdan çıkmaz.",
-    keywords:
-      "pdf imzala, pdf imza ekle, e-imza pdf, dijital imza, elektronik imza, sign pdf",
+    title: "PDF İmzala",
+    description: "PDF sözleşmelerinizi ve evraklarınızı ücretsiz imzalayın. İmzanızı çizin, yazın veya yükleyin. %100 gizli ve güvenli e-imza aracı.",
+    keywords: "pdf imzala, pdf e imza ekleme, pdf imzalama programı, sözleşme imzalama online, ücretsiz pdf imza",
     h1: "PDF İmzala",
-    tagline:
-      "PDF belgelerinizi tarayıcınızda güvenle imzalayın — ücretsiz ve %100 gizli.",
-    howToName: "PDF belgesine internetten imza nasıl eklenir",
-    howItWorks: "Nasıl çalışır",
+    tagline: "Dilekçe, sözleşme ve formlarınıza kolayca e-imza ekleyin. Çıktı alıp tarama derdine son. İmzanız cihazınızdan asla dışarı çıkmaz.",
+    howToName: "PDF belgesi nasıl imzalanır?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF dosyanı ekle",
-        text: "Elektronik olarak imzalamak istediğiniz PDF belgesini sayfaya bırakın.",
-      },
-      {
-        name: "İmza ekle",
-        text: "İmzanızı yerel olarak çizin, yazın veya yükleyin ve güvenle konumlandırın.",
-      },
-      {
-        name: "PDF indir",
-        text: "İmzalanmış ve son halini almış PDF belgenizi indirin.",
-      },
+      { name: "Belgeyi Yükleyin", text: "İmzalamak istediğiniz PDF sözleşmesini veya formunu ekleyin." },
+      { name: "İmzanızı Oluşturun", text: "Fareyle veya parmağınızla çizin, adınızı yazın veya ıslak imzanızın fotoğrafını yükleyin." },
+      { name: "Konumlandır ve İndir", text: "İmzanızı ilgili satıra yerleştirip boyutunu ayarlayın, imzalı belgenizi anında indirin." }
     ],
-    crossLink: {
-      href: "/tr/flatten-pdf",
-      label:
-        "İmzaladıktan sonra form alanlarını kilitlemek mi istiyorsunuz? PDF Düzleştir.",
-    },
+    faq: [
+      { q: "İmzam veya belgem sunucularınıza kaydediliyor mu?", a: "Kesinlikle hayır. İmzanız ve belgeniz sadece sizin tarayıcınızın içinde işlenir, hiçbir yere kaydedilmez veya gönderilmez." },
+      { q: "İmzanın yanına tarih ve isim ekleyebilir miyim?", a: "Evet, imzanızın yanına metin aracıyla tarih ve unvan bilgisi de ekleyebilirsiniz." }
+    ],
+    crossLink: { href: "/tr/protect-pdf", label: "İmzaladığınız sözleşmeyi şifreyle kilitlemek için PDF Şifrele aracını deneyin." }
   },
 };
 export const extractImagesCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Extract Images from PDF — download embedded JPG and PNG",
-    description:
-      "Extract all embedded raster images from PDF documents in original quality. 100% private, files never leave your device.",
-    keywords:
-      "extract images from pdf, pdf to jpg, pdf pictures, save pdf images, pdf resim çıkar, pdf foto al",
+    title: "Extract Images",
+    description: "Extract all embedded photos and images from any PDF in their original quality. Free online image ripper.",
+    keywords: "extract images from pdf, rip images from pdf, get photos from pdf, save images from pdf, download pictures from pdf",
     h1: "Extract Images",
-    tagline:
-      "Extract embedded JPG and PNG images from your PDF — free and 100% private.",
-    howToName: "How to extract images from a PDF in your browser",
+    tagline: "Pull out all embedded photos, diagrams, and illustrations from your PDF documents in their original crisp resolution.",
+    howToName: "How to extract images from a PDF",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
-      {
-        name: "Upload PDF",
-        text: "Drop your PDF document containing images or photos.",
-      },
-      {
-        name: "Extract",
-        text: "We extract all embedded raster images at their original resolution.",
-      },
-      {
-        name: "Download ZIP",
-        text: "Download all extracted images bundled in a convenient ZIP archive.",
-      },
+      { name: "Upload PDF", text: "Select the PDF document containing the photos you want to extract." },
+      { name: "Extract", text: "Our tool analyzes the document objects and extracts every embedded image file." },
+      { name: "Download Images", text: "Download all extracted pictures individually or packed neatly in a single ZIP file." }
     ],
-    crossLink: {
-      href: "/pdf-to-png",
-      label: "Want to render full PDF pages as images? Try PDF to PNG.",
-    },
+    faq: [
+      { q: "What is the difference between this and PDF to JPG?", a: "'PDF to JPG' converts entire pages into pictures. 'Extract Images' pulls only the actual photos/illustrations out of the document without page text or margins." },
+      { q: "Are images recompressed?", a: "No. Images are extracted in their exact original format and quality (JPEG, PNG) as embedded in the PDF." }
+    ],
+    crossLink: { href: "/pdf-to-jpg", label: "Want to convert whole pages into pictures instead? Try PDF to JPG." }
   },
   tr: {
-    title: "PDF Resim Çıkar — gömülü fotoğrafları orijinal kalitede indir",
-    description:
-      "PDF belgelerindeki tüm gömülü resimleri ve fotoğrafları orijinal kalitede ayıklayın. %100 gizli, dosyanız cihazınızdan çıkmaz.",
-    keywords:
-      "pdf resim çıkar, pdf fotoğrafları al, pdf ten resim ayıkla, pdf to jpg, extract images from pdf",
-    h1: "PDF Resim Çıkar",
-    tagline:
-      "PDF'teki gömülü JPG ve PNG resimlerini ayıklayın — ücretsiz ve %100 gizli.",
-    howToName: "PDF içindeki resimler tarayıcıda nasıl çıkarılır",
-    howItWorks: "Nasıl çalışır",
+    title: "PDF'ten Görselleri Çıkar",
+    description: "PDF dosyalarındaki tüm gömülü fotoğrafları, logoları ve grafikleri orijinal kalitesinde ayıklayıp bilgisayarınıza indirin.",
+    keywords: "pdf görselleri çıkar, pdf ten fotoğraf alma, pdf içindeki resimleri kaydetme, pdf resim ayıklama, pdf fotoğraflarını indir",
+    h1: "PDF'ten Görselleri Çıkar",
+    tagline: "Belgenizin içindeki fotoğrafları, grafik ve şekilleri orijinal çözünürlüklerini hiç bozmadan tek tıkla dışa aktarın.",
+    howToName: "PDF içindeki fotoğraflar ve resimler nasıl kaydedilir?",
+    howItWorks: "Nasıl çalışır?",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
-      {
-        name: "PDF Yükle",
-        text: "Resim veya fotoğraf içeren PDF belgenizi sürükleyip bırakın.",
-      },
-      {
-        name: "Resimleri Çıkar",
-        text: "Belgedeki tüm gömülü resimler orijinal çözünürlüklerinde ayıklanır.",
-      },
-      {
-        name: "ZIP İndir",
-        text: "Çıkarılan tüm görselleri tek bir ZIP dosyası olarak anında indirin.",
-      },
+      { name: "Belgenizi Yükleyin", text: "İçindeki fotoğrafları almak istediğiniz PDF dosyasını seçin." },
+      { name: "Ayıklama", text: "Aracımız belgedeki tüm gömülü fotoğraf nesnelerini otomatik olarak bulur." },
+      { name: "Resimleri İndirin", text: "Tüm fotoğrafları tek tıkla toplu olarak ZIP arşivi içinde bilgisayarınıza kaydedin." }
     ],
-    crossLink: {
-      href: "/tr/pdf-to-png",
-      label:
-        "Tüm sayfayı görüntü olarak kaydetmek mi istiyorsunuz? PDF - PNG dönüştürücü.",
-    },
+    faq: [
+      { q: "PDF to JPG ile bu aracın farkı nedir?", a: "'PDF to JPG' tüm sayfayı bir resme dönüştürür. 'Görselleri Çıkar' ise sadece belgenin içine gömülmüş fotoğrafları (yazısız ve sayfa kenarlıksız) saf haliyle çıkarır." },
+      { q: "Fotoğrafların kalitesi düşer mi?", a: "Hayır. Dosyaya gömülü fotoğraflar hiçbir sıkıştırmaya uğramadan %100 orijinal kalitelerinde indirilir." }
+    ],
+    crossLink: { href: "/tr/pdf-to-jpg", label: "Tüm sayfayı olduğu gibi resim yapmak istiyorsanız PDF to JPG aracını kullanabilirsiniz." }
   },
 };
 export const compressCopy: Record<"en" | "tr", ToolCopy> = {
