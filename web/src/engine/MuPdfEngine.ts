@@ -22,6 +22,7 @@ export class MuPdfEngine implements PdfEngine {
   }
 
   async open(data: ArrayBuffer): Promise<PdfDoc> {
+    if (!this.mupdf) await this.init();
     const m = this.require();
     const doc = m.Document.openDocument(data, 'application/pdf');
     if (doc.needsPassword()) {

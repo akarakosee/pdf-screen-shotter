@@ -2133,6 +2133,7 @@ async function extractJavascriptRun(_file: ArrayBuffer, meta: FileMeta): Promise
 async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;
   try {
+    await engine.init();
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
     const wb = XLSX.utils.book_new();
@@ -2291,6 +2292,7 @@ async function pdfToHtmlRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
 async function pdfToJsonRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;
   try {
+    await engine.init();
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
     const resultJson: any = {
