@@ -100,28 +100,7 @@ function chunk<T>(items: T[], size: number): T[][] {
     <slot />
   </div>
 
-  <div class="mx-auto flex max-w-[720px] flex-col px-4 pb-0">
-    <section class="reveal relative pb-0" data-reveal>
-      <h2 class="font-heading text-lg font-semibold">{p.howItWorks}</h2>
-      <div class="filmstrip mt-3">
-        {
-          p.steps.map((s, i) => (
-            <div class="filmstrip-frame">
-              <div class="filmstrip-sprockets" aria-hidden="true" />
-              <div class="font-heading text-lg font-semibold text-accent dark:text-amber-dark">
-                {String(i + 1).padStart(2, '0')}
-              </div>
-              <h3 class="mt-3 text-sm font-semibold">{s.name}</h3>
-              <p class="mt-1.5 text-xs text-ink-muted dark:text-ink-muted-dark">{s.text}</p>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-  </div>
-
-  
-    <!-- Viral Share & Recommendation Bar -->
+  <!-- Viral Share & Recommendation Bar -->
   <div class="mx-auto flex max-w-[720px] w-full px-4 mt-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 w-full rounded-xl border border-border/80 dark:border-border-dark/80 bg-surface/40 dark:bg-surface-dark/40 backdrop-blur-sm">
       <div class="flex items-center gap-3">
@@ -172,6 +151,29 @@ function chunk<T>(items: T[], size: number): T[][] {
       });
     }
   </script>
+
+  <div class="mx-auto flex max-w-[720px] flex-col px-4 pb-0">
+    <section class="reveal relative pb-0" data-reveal>
+      <h2 class="font-heading text-lg font-semibold">{p.howItWorks}</h2>
+      <div class="filmstrip mt-3">
+        {
+          p.steps.map((s, i) => (
+            <div class="filmstrip-frame">
+              <div class="filmstrip-sprockets" aria-hidden="true" />
+              <div class="font-heading text-lg font-semibold text-accent dark:text-amber-dark">
+                {String(i + 1).padStart(2, '0')}
+              </div>
+              <h3 class="mt-3 text-sm font-semibold">{s.name}</h3>
+              <p class="mt-1.5 text-xs text-ink-muted dark:text-ink-muted-dark">{s.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  
+  
 
 
   <div class="mx-auto flex max-w-[720px] flex-col px-4 mt-12 pb-0">
