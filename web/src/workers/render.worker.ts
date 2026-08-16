@@ -100,6 +100,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'split-bookmarks-start') await splitBookmarksRun(msg.file, msg.meta);
       else if (msg.type === 'pdf-to-html-start') await pdfToHtmlRun(msg.file, msg.meta);
       else if (msg.type === 'pdf-to-json-start') await pdfToJsonRun(msg.file, msg.meta);
+      else if (msg.type === 'audio-reader-start') await audioReaderRun(msg.file, msg.meta);
       else if (msg.type === 'scan-to-pdf-start') await scanToPdfRun(msg.files, msg.meta);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type.endsWith('-start')) {
@@ -2350,4 +2351,39 @@ async function viewerPrefsRun(file: ArrayBuffer, meta: FileMeta, prefs: any): Pr
   if (prefs.fullScreen) doc.catalog.set(PDFName.of('PageMode'), PDFName.of('FullScreen'));
   const bytes = await doc.save();
   post({ type: 'viewer-prefs-done', result: { totalPages: doc.getPageCount(), succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-prefs.pdf', cancelled: false } });
+}
+
+async function audioReaderRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  let doc;
+  try {
+    await engine.init();
+    doc = await engine.open(file);
+    const count = engine.pageCount(doc);
+    const texts = await (engine as any).extractText(doc);
+    const fullText = (texts || []).join('\n\n').trim();
+
+    const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-audio-text.txt';
+
+    post({
+      type: 'audio-reader-done',
+      result: {
+        totalPages: count,
+        succeeded: count,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('audioReaderRun error:', err);
+    post({
+      type: 'audio-reader-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (doc) engine.close(doc);
+  }
 }
