@@ -1,3 +1,4 @@
+import * as XLSX from 'xlsx';
 // Single render worker — SISTEM_TASARIMI §3.3 message protocol.
 // The PDF engine lives only here; the main thread never imports it.
 // Cancel is cooperative (flag checked per page); pages already written to the
@@ -2134,12 +2135,12 @@ async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void
   try {
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
-    let csvOutput = '';
-    let tableRowCount = 0;
+    const wb = XLSX.utils.book_new();
+    let tableCounter = 1;
+    let totalExtractedRows = 0;
 
     for (let pageNum = 0; pageNum < count; pageNum++) {
       const pageIndex = pageNum;
-      // Load page structured text JSON
       const json = await (engine as any).extractTextJSON(doc, pageIndex);
       const allLines: Array<{ text: string; x: number; y: number }> = [];
 
@@ -2158,16 +2159,11 @@ async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void
         }
       }
 
-      // Sort lines by Y (top to bottom), then X (left to right)
-      allLines.sort((a, b) => {
-        if (Math.abs(a.y - b.y) <= 4) {
-          return a.x - b.x;
-        }
-        return a.y - b.y;
-      });
+      // Sort by Y (vertical), then X (horizontal)
+      allLines.sort((a, b) => (Math.abs(a.y - b.y) <= 4 ? a.x - b.x : a.y - b.y));
 
-      // Group into horizontal rows based on Y proximity
-      const rows: Array<Array<{ text: string; x: number }>> = [];
+      // Group into horizontal rows
+      const rows: Array<{ y: number; cells: Array<{ text: string; x: number }> }> = [];
       let currentRow: Array<{ text: string; x: number }> = [];
       let currentY = -9999;
 
@@ -2176,60 +2172,66 @@ async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void
           currentRow.push(line);
           currentY = line.y;
         } else {
-          if (currentRow.length > 0) {
-            rows.push(currentRow);
-          }
+          if (currentRow.length > 0) rows.push({ y: currentY, cells: currentRow });
           currentRow = [line];
           currentY = line.y;
         }
       }
-      if (currentRow.length > 0) {
-        rows.push(currentRow);
-      }
+      if (currentRow.length > 0) rows.push({ y: currentY, cells: currentRow });
 
-      // Format table rows as CSV
-      for (const row of rows) {
-        row.sort((a, b) => a.x - b.x);
-        const csvRow = row.map(cell => {
-          let val = cell.text;
-          if (val.includes(',') || val.includes('"') || val.includes('\n')) {
-            val = '"' + val.replace(/"/g, '""') + '"';
+      // Separate and group distinct tables
+      let currentTableRows: string[][] = [];
+      let currentTableTitle = '';
+
+      for (let r = 0; r < rows.length; r++) {
+        const row = rows[r];
+        row.cells.sort((a, b) => a.x - b.x);
+        const texts = row.cells.map(c => c.text);
+
+        if (texts.length >= 2) {
+          currentTableRows.push(texts);
+          totalExtractedRows++;
+        } else if (texts.length === 1) {
+          const lineText = texts[0];
+          const isTableTitle = lineText.toLowerCase().includes('table') || lineText.toLowerCase().includes('tablo') || lineText.length < 50;
+
+          if (currentTableRows.length > 0) {
+            const sheetName = currentTableTitle || `Table ${tableCounter}`;
+            addSheetToWorkbook(wb, sheetName, currentTableRows);
+            tableCounter++;
+            currentTableRows = [];
+            currentTableTitle = '';
           }
-          return val;
-        }).join(',');
 
-        csvOutput += csvRow + '\n';
-        tableRowCount++;
+          if (isTableTitle) {
+            currentTableTitle = lineText.replace(/[:\/\\?*[\]]/g, '').trim().slice(0, 28);
+          }
+        }
       }
 
-      if (pageNum < count - 1) {
-        csvOutput += '\n';
+      if (currentTableRows.length > 0) {
+        const sheetName = currentTableTitle || `Table ${tableCounter}`;
+        addSheetToWorkbook(wb, sheetName, currentTableRows);
+        tableCounter++;
+        currentTableRows = [];
+        currentTableTitle = '';
       }
     }
 
-    if (!csvOutput.trim()) {
-      post({
-        type: 'extract-tables-done',
-        result: { totalPages: count, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
-      });
-      return;
+    if (wb.SheetNames.length === 0) {
+      const ws = XLSX.utils.aoa_to_sheet([["No structured tables detected in this PDF."]]);
+      XLSX.utils.book_append_sheet(wb, ws, "Extracted Data");
     }
 
-    // Add UTF-8 BOM so Excel opens Turkish / International characters correctly
-    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-    const textBytes = new TextEncoder().encode(csvOutput);
-    const combined = new Uint8Array(bom.length + textBytes.length);
-    combined.set(bom, 0);
-    combined.set(textBytes, bom.length);
-
-    const blob = new Blob([combined], { type: 'text/csv;charset=utf-8' });
-    const outputName = meta.name.replace(/\.pdf$/i, '') + '-tables.csv';
+    const outBuffer = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+    const blob = new Blob([outBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-tables.xlsx';
 
     post({
       type: 'extract-tables-done',
       result: {
         totalPages: count,
-        succeeded: tableRowCount,
+        succeeded: totalExtractedRows,
         failed: [],
         durationMs: 0,
         output: blob,
@@ -2246,6 +2248,20 @@ async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void
   } finally {
     if (doc) engine.close(doc);
   }
+}
+
+function addSheetToWorkbook(wb: XLSX.WorkBook, title: string, data: string[][]) {
+  let cleanName = (title || 'Table').replace(/[:\/\\?*[\]]/g, '').trim().slice(0, 28);
+  if (!cleanName) cleanName = `Table ${wb.SheetNames.length + 1}`;
+
+  let finalName = cleanName;
+  let counter = 1;
+  while (wb.SheetNames.includes(finalName)) {
+    finalName = `${cleanName.slice(0, 24)} (${counter++})`;
+  }
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, finalName);
 }
 
 async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
