@@ -33,6 +33,8 @@ export interface PdfEngine {
   /** Extracts the specified 1-based pages from a doc into one new PDF. */
   split(doc: PdfDoc, pages: number[]): Promise<Uint8Array>;
   extractText?(doc: PdfDoc): Promise<string[]>;
+  extractTextJSON?(doc: PdfDoc, pageIndex: number): Promise<any>;
+  extractHTML?(doc: PdfDoc, pageIndex: number): Promise<string>;
   renderSvgPage?(doc: PdfDoc, page: number): Promise<Uint8Array>;
   renderPage(
     doc: PdfDoc,

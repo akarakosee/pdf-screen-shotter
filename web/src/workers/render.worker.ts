@@ -2129,8 +2129,123 @@ async function extractHiddenTextRun(_file: ArrayBuffer, meta: FileMeta): Promise
 async function extractJavascriptRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'extract-javascript-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
 }
-async function extractTablesRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-tables-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  let doc;
+  try {
+    doc = await engine.open(file);
+    const count = engine.pageCount(doc);
+    let csvOutput = '';
+    let tableRowCount = 0;
+
+    for (let pageNum = 0; pageNum < count; pageNum++) {
+      const pageIndex = pageNum;
+      // Load page structured text JSON
+      const json = await (engine as any).extractTextJSON(doc, pageIndex);
+      const allLines: Array<{ text: string; x: number; y: number }> = [];
+
+      for (const b of (json.blocks || [])) {
+        if (b.type === 'text') {
+          for (const l of (b.lines || [])) {
+            const text = (l.text || '').trim();
+            if (text) {
+              allLines.push({
+                text,
+                x: l.x || (l.bbox ? l.bbox.x : 0),
+                y: l.y || (l.bbox ? l.bbox.y : 0),
+              });
+            }
+          }
+        }
+      }
+
+      // Sort lines by Y (top to bottom), then X (left to right)
+      allLines.sort((a, b) => {
+        if (Math.abs(a.y - b.y) <= 4) {
+          return a.x - b.x;
+        }
+        return a.y - b.y;
+      });
+
+      // Group into horizontal rows based on Y proximity
+      const rows: Array<Array<{ text: string; x: number }>> = [];
+      let currentRow: Array<{ text: string; x: number }> = [];
+      let currentY = -9999;
+
+      for (const line of allLines) {
+        if (currentY === -9999 || Math.abs(line.y - currentY) <= 4) {
+          currentRow.push(line);
+          currentY = line.y;
+        } else {
+          if (currentRow.length > 0) {
+            rows.push(currentRow);
+          }
+          currentRow = [line];
+          currentY = line.y;
+        }
+      }
+      if (currentRow.length > 0) {
+        rows.push(currentRow);
+      }
+
+      // Format table rows as CSV
+      for (const row of rows) {
+        row.sort((a, b) => a.x - b.x);
+        const csvRow = row.map(cell => {
+          let val = cell.text;
+          if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+            val = '"' + val.replace(/"/g, '""') + '"';
+          }
+          return val;
+        }).join(',');
+
+        csvOutput += csvRow + '\n';
+        tableRowCount++;
+      }
+
+      if (pageNum < count - 1) {
+        csvOutput += '\n';
+      }
+    }
+
+    if (!csvOutput.trim()) {
+      post({
+        type: 'extract-tables-done',
+        result: { totalPages: count, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+      });
+      return;
+    }
+
+    // Add UTF-8 BOM so Excel opens Turkish / International characters correctly
+    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const textBytes = new TextEncoder().encode(csvOutput);
+    const combined = new Uint8Array(bom.length + textBytes.length);
+    combined.set(bom, 0);
+    combined.set(textBytes, bom.length);
+
+    const blob = new Blob([combined], { type: 'text/csv;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-tables.csv';
+
+    post({
+      type: 'extract-tables-done',
+      result: {
+        totalPages: count,
+        succeeded: tableRowCount,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('extractTablesRun error:', err);
+    post({
+      type: 'extract-tables-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (doc) engine.close(doc);
+  }
 }
 
 async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
