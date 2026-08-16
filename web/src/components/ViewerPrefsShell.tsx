@@ -20,11 +20,15 @@ export function ViewerPrefsShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
-  const [fullScreen, setFullScreen] = useState(true);
+  
+  // Options
+  const [pageMode, setPageMode] = useState<string>('FullScreen');
+  const [pageLayout, setPageLayout] = useState<string>('SinglePage');
   const [hideToolbar, setHideToolbar] = useState(true);
   const [hideMenubar, setHideMenubar] = useState(true);
   const [fitWindow, setFitWindow] = useState(true);
   const [centerWindow, setCenterWindow] = useState(true);
+  const [displayDocTitle, setDisplayDocTitle] = useState(true);
 
   const controller = useRef<JobController | null>(null);
 
@@ -64,13 +68,15 @@ export function ViewerPrefsShell({ t = en }: Props) {
     if (!file) return;
     setPhase('processing');
     controller.current?.runViewerPrefs(file, {
-      fullScreen,
+      pageMode,
+      pageLayout,
       hideToolbar,
       hideMenubar,
       fitWindow,
       centerWindow,
+      displayDocTitle,
     });
-  }, [file, fullScreen, hideToolbar, hideMenubar, fitWindow, centerWindow]);
+  }, [file, pageMode, pageLayout, hideToolbar, hideMenubar, fitWindow, centerWindow, displayDocTitle]);
 
   const reset = useCallback(() => {
     setFile(null);
@@ -120,34 +126,55 @@ export function ViewerPrefsShell({ t = en }: Props) {
           </div>
           
           {/* Preferences Options */}
-          <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-5 shadow-sm space-y-4">
+          <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-5 shadow-sm space-y-5">
             <div>
               <h3 className="font-semibold text-sm text-ink dark:text-ink-dark">
-                {isTr ? 'Görüntüleyici & Sunum Tercihleri' : 'Viewer & Presentation Preferences'}
+                {isTr ? 'Görüntüleyici Açılış & Sunum Tercihleri' : 'Viewer & Presentation Preferences'}
               </h3>
               <p className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
-                {isTr ? 'PDF bir bilgisayarda veya Adobe Acrobat\'ta açıldığında otomatik uygulanacak görünüm ayarları:' : 'Display settings automatically applied when opened in Adobe Acrobat or PDF viewers:'}
+                {isTr 
+                  ? 'Belge Adobe Acrobat, Foxit veya PDF okuyucularda açıldığında otomatik uygulanacak açılış kuralları:' 
+                  : 'Display rules automatically applied when opened in Adobe Acrobat or PDF desktop readers:'}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-1">
-              <label className="flex items-start gap-2.5 p-3 rounded-xl border border-border/70 dark:border-border-dark/70 hover:border-amber/50 dark:hover:border-amber-dark/50 bg-bg/40 dark:bg-bg-dark/40 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={fullScreen}
-                  onChange={e => setFullScreen(e.target.checked)}
-                  className="mt-0.5 rounded border-ink-muted/30 text-amber focus:ring-amber cursor-pointer"
-                />
-                <div>
-                  <span className="font-medium text-ink dark:text-ink-dark block">
-                    {isTr ? 'Tam Ekran Modunda Aç' : 'Open in Full Screen Mode'}
-                  </span>
-                  <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark block mt-0.5">
-                    {isTr ? 'Sunum ve kiosk gösterileri için idealdir.' : 'Ideal for slide presentations and kiosk displays.'}
-                  </span>
-                </div>
-              </label>
+            {/* Dropdowns Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-ink dark:text-ink-dark">
+                  {isTr ? 'Açılış Modu (Initial Page Mode)' : 'Initial View Mode'}
+                </label>
+                <select
+                  value={pageMode}
+                  onChange={e => setPageMode(e.target.value)}
+                  className="w-full text-xs bg-bg dark:bg-bg-dark border border-border dark:border-border-dark rounded-xl px-3 py-2.5 text-ink dark:text-ink-dark focus:outline-none focus:border-amber cursor-pointer"
+                >
+                  <option value="FullScreen">{isTr ? '🖥️ Tam Ekran Sunum Modu (FullScreen)' : '🖥️ Full Screen Presentation (FullScreen)'}</option>
+                  <option value="UseNone">{isTr ? '📄 Normal Açılış (UseNone)' : '📄 Standard Window (UseNone)'}</option>
+                  <option value="UseOutlines">{isTr ? '📑 İçindekiler / Yer İmleri Açık (UseOutlines)' : '📑 Bookmarks Panel Open (UseOutlines)'}</option>
+                  <option value="UseThumbs">{isTr ? '🖼️ Sayfa Küçük Resimleri Açık (UseThumbs)' : '🖼️ Thumbnails Panel Open (UseThumbs)'}</option>
+                </select>
+              </div>
 
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-ink dark:text-ink-dark">
+                  {isTr ? 'Sayfa Düzeni (Page Layout)' : 'Page Layout'}
+                </label>
+                <select
+                  value={pageLayout}
+                  onChange={e => setPageLayout(e.target.value)}
+                  className="w-full text-xs bg-bg dark:bg-bg-dark border border-border dark:border-border-dark rounded-xl px-3 py-2.5 text-ink dark:text-ink-dark focus:outline-none focus:border-amber cursor-pointer"
+                >
+                  <option value="SinglePage">{isTr ? '📄 Tek Sayfa Görünümü' : '📄 Single Page'}</option>
+                  <option value="OneColumn">{isTr ? '📜 Sürekli Dikey Kaydırma' : '📜 Continuous Vertical Scroll'}</option>
+                  <option value="TwoPageLeft">{isTr ? '📖 İki Sayfalı Kitap Görünümü (Karşılıklı)' : '📖 Two-Page Facing Book Spread'}</option>
+                  <option value="TwoColumnLeft">{isTr ? '📚 İki Sayfalı Sürekli Kaydırma' : '📚 Two-Column Continuous'}</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Checkboxes Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-2">
               <label className="flex items-start gap-2.5 p-3 rounded-xl border border-border/70 dark:border-border-dark/70 hover:border-amber/50 dark:hover:border-amber-dark/50 bg-bg/40 dark:bg-bg-dark/40 cursor-pointer transition-colors">
                 <input
                   type="checkbox"
@@ -160,7 +187,7 @@ export function ViewerPrefsShell({ t = en }: Props) {
                     {isTr ? 'Araç Çubuğunu Gizle' : 'Hide Toolbars'}
                   </span>
                   <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark block mt-0.5">
-                    {isTr ? 'Üst kısımdaki buton ve araçları gizler.' : 'Hides top toolbars in Adobe/Foxit.'}
+                    {isTr ? 'Acrobat üst butonlarını kapatır.' : 'Hides top toolbars in Adobe/Foxit.'}
                   </span>
                 </div>
               </label>
@@ -194,12 +221,12 @@ export function ViewerPrefsShell({ t = en }: Props) {
                     {isTr ? 'Pencereyi Sayfaya Sığdır' : 'Fit Window to Page'}
                   </span>
                   <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark block mt-0.5">
-                    {isTr ? 'Pencere boyutunu belgenin tam boyutuna uyarlar.' : 'Resizes window to exact document size.'}
+                    {isTr ? 'Pencereyi belgenin tam boyutuna eşitler.' : 'Resizes window to exact document size.'}
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-3 rounded-xl border border-border/70 dark:border-border-dark/70 hover:border-amber/50 dark:hover:border-amber-dark/50 bg-bg/40 dark:bg-bg-dark/40 cursor-pointer transition-colors sm:col-span-2">
+              <label className="flex items-start gap-2.5 p-3 rounded-xl border border-border/70 dark:border-border-dark/70 hover:border-amber/50 dark:hover:border-amber-dark/50 bg-bg/40 dark:bg-bg-dark/40 cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   checked={centerWindow}
@@ -211,15 +238,44 @@ export function ViewerPrefsShell({ t = en }: Props) {
                     {isTr ? 'Pencereyi Ekranda Ortala' : 'Center Window on Screen'}
                   </span>
                   <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark block mt-0.5">
-                    {isTr ? 'Belge açıldığında pencereyi ekranın tam merkezine yerleştirir.' : 'Positions the viewer window right at screen center.'}
+                    {isTr ? 'Belgeyi ekranın tam ortasında başlatır.' : 'Positions window right at screen center.'}
+                  </span>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-2.5 p-3 rounded-xl border border-border/70 dark:border-border-dark/70 hover:border-amber/50 dark:hover:border-amber-dark/50 bg-bg/40 dark:bg-bg-dark/40 cursor-pointer transition-colors sm:col-span-2">
+                <input
+                  type="checkbox"
+                  checked={displayDocTitle}
+                  onChange={e => setDisplayDocTitle(e.target.checked)}
+                  className="mt-0.5 rounded border-ink-muted/30 text-amber focus:ring-amber cursor-pointer"
+                />
+                <div>
+                  <span className="font-medium text-ink dark:text-ink-dark block">
+                    {isTr ? 'Pencere Başlığında Belge Başlığını Göster' : 'Display Document Title in Window'}
+                  </span>
+                  <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark block mt-0.5">
+                    {isTr ? 'Dosya adı yerine PDF içindeki resmi başlığı pencere başlığında gösterir.' : 'Displays official PDF title instead of file name in window bar.'}
                   </span>
                 </div>
               </label>
             </div>
 
+            {/* Pro Tip Alert */}
+            <div className="rounded-xl bg-amber/5 dark:bg-amber-dark/5 border border-amber/20 dark:border-amber-dark/20 p-3 text-xs text-ink-muted dark:text-ink-muted-dark">
+              <p className="flex items-center gap-1.5 font-medium text-ink dark:text-ink-dark mb-1">
+                <span className="text-amber dark:text-amber-dark">💡</span> {isTr ? 'Önemli Bilgi (Uyumluluk Notu):' : 'Compatibility Notice:'}
+              </p>
+              <p>
+                {isTr 
+                  ? 'ViewerPreferences ve FullScreen modları Adobe Acrobat Reader, Foxit ve profesyonel PDF görüntüleyicilerinde dosya açıldığında otomatik olarak devreye girer. Tarayıcılar (Chrome/Safari) güvenlik nedeniyle menü gizleme yetkilerini kısıtlayabilir.'
+                  : 'ViewerPreferences and FullScreen triggers execute automatically in Adobe Acrobat Reader, Foxit, and standard desktop viewers. Web browsers may restrict window control permissions for security.'}
+              </p>
+            </div>
+
             <button
               onClick={startJob}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-amber hover:bg-amber-dark font-semibold text-black px-4 py-3 text-sm shadow-md transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-amber hover:bg-amber-dark font-semibold text-black px-4 py-3 text-sm shadow-md transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
             >
               <span>{isTr ? 'Tercihleri PDF\'e Uygula & Kaydet' : 'Apply Preferences & Save PDF'}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

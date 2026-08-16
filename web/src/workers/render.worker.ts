@@ -2346,11 +2346,44 @@ async function scanToPdfRun(_files: ArrayBuffer[], meta: FileMeta): Promise<void
 }
 async function viewerPrefsRun(file: ArrayBuffer, meta: FileMeta, prefs: any): Promise<void> {
   const doc = await PDFDocument.load(file, { ignoreEncryption: true });
-  const vp = doc.context.obj({ HideToolbar: prefs.hideToolbar, HideMenubar: prefs.hideMenubar, FitWindow: prefs.fitWindow, CenterWindow: prefs.centerWindow });
+  
+  const vpObj: Record<string, boolean> = {
+    HideToolbar: !!prefs.hideToolbar,
+    HideMenubar: !!prefs.hideMenubar,
+    HideWindowUI: !!prefs.hideWindowUI,
+    FitWindow: !!prefs.fitWindow,
+    CenterWindow: !!prefs.centerWindow,
+    DisplayDocTitle: !!prefs.displayDocTitle,
+  };
+  
+  const vp = doc.context.obj(vpObj);
   doc.catalog.set(PDFName.of('ViewerPreferences'), vp);
-  if (prefs.fullScreen) doc.catalog.set(PDFName.of('PageMode'), PDFName.of('FullScreen'));
+  
+  // Page Mode (Initial View)
+  if (prefs.pageMode) {
+    doc.catalog.set(PDFName.of('PageMode'), PDFName.of(prefs.pageMode));
+  } else if (prefs.fullScreen) {
+    doc.catalog.set(PDFName.of('PageMode'), PDFName.of('FullScreen'));
+  }
+
+  // Page Layout (Single, Continuous, Two-Page Book)
+  if (prefs.pageLayout) {
+    doc.catalog.set(PDFName.of('PageLayout'), PDFName.of(prefs.pageLayout));
+  }
+
   const bytes = await doc.save();
-  post({ type: 'viewer-prefs-done', result: { totalPages: doc.getPageCount(), succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-prefs.pdf', cancelled: false } });
+  post({
+    type: 'viewer-prefs-done',
+    result: {
+      totalPages: doc.getPageCount(),
+      succeeded: 1,
+      failed: [],
+      durationMs: 0,
+      output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }),
+      outputName: meta.name.replace(/\.pdf$/i, '') + '-prefs.pdf',
+      cancelled: false
+    }
+  });
 }
 
 async function audioReaderRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
