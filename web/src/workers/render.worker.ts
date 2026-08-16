@@ -2288,8 +2288,52 @@ async function splitBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<voi
 async function pdfToHtmlRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'pdf-to-html-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new TextEncoder().encode("<html><body>PDF Content</body></html>")], { type: 'text/html' }), outputName: meta.name.replace(/\.pdf$/i, '') + '.html', cancelled: false } });
 }
-async function pdfToJsonRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'pdf-to-json-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new TextEncoder().encode("{}")], { type: 'application/json' }), outputName: meta.name.replace(/\.pdf$/i, '') + '.json', cancelled: false } });
+async function pdfToJsonRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  let doc;
+  try {
+    doc = await engine.open(file);
+    const count = engine.pageCount(doc);
+    const resultJson: any = {
+      filename: meta.name,
+      totalPages: count,
+      extractedAt: new Date().toISOString(),
+      generator: 'GoSecurePDF Client Engine',
+      pages: []
+    };
+
+    for (let i = 0; i < count; i++) {
+      const pageData = await (engine as any).extractTextJSON(doc, i);
+      resultJson.pages.push({
+        pageNumber: i + 1,
+        blocks: pageData.blocks || []
+      });
+    }
+
+    const jsonStr = JSON.stringify(resultJson, null, 2);
+    const blob = new Blob([new TextEncoder().encode(jsonStr)], { type: 'application/json;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-parsed.json';
+
+    post({
+      type: 'pdf-to-json-done',
+      result: {
+        totalPages: count,
+        succeeded: count,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('pdfToJsonRun error:', err);
+    post({
+      type: 'pdf-to-json-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (doc) engine.close(doc);
+  }
 }
 async function scanToPdfRun(_files: ArrayBuffer[], meta: FileMeta): Promise<void> {
   const doc = await PDFDocument.create();
