@@ -2125,8 +2125,65 @@ async function extractColorsRun(_file: ArrayBuffer, meta: FileMeta): Promise<voi
 async function extractFontsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'extract-fonts-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
 }
-async function extractHiddenTextRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-hidden-text-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+async function extractHiddenTextRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  let doc;
+  try {
+    await engine.init();
+    doc = await engine.open(file);
+    const count = engine.pageCount(doc);
+    const textByPage = await (engine as any).extractText(doc);
+
+    let report = `=====================================================\n`;
+    report += `GOSECUREPDF - FORENSIC TEXT & HIDDEN LAYER REPORT\n`;
+    report += `Document: ${meta.name}\n`;
+    report += `Scan Timestamp: ${new Date().toISOString()}\n`;
+    report += `Total Pages Analyzed: ${count}\n`;
+    report += `=====================================================\n\n`;
+
+    let totalCharacters = 0;
+
+    for (let i = 0; i < count; i++) {
+      const pageText = (textByPage && textByPage[i]) ? textByPage[i].trim() : '';
+      totalCharacters += pageText.length;
+      report += `[PAGE ${i + 1} - All Layer Streams & Extracted Text]\n`;
+      report += `-----------------------------------------------------\n`;
+      if (pageText) {
+        report += pageText + `\n\n`;
+      } else {
+        report += `(No text streams detected on this page)\n\n`;
+      }
+    }
+
+    report += `=====================================================\n`;
+    report += `SUMMARY: Total ${totalCharacters} characters uncovered.\n`;
+    report += `Includes text hidden beneath blackout shapes, transparent OCR\n`;
+    report += `layers, and white-on-white content streams.\n`;
+    report += `=====================================================\n`;
+
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-hidden-text-report.txt';
+
+    post({
+      type: 'extract-hidden-text-done',
+      result: {
+        totalPages: count,
+        succeeded: count,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('extractHiddenTextRun error:', err);
+    post({
+      type: 'extract-hidden-text-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (doc) engine.close(doc);
+  }
 }
 async function extractJavascriptRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'extract-javascript-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
@@ -2347,7 +2404,7 @@ async function scanToPdfRun(_files: ArrayBuffer[], meta: FileMeta): Promise<void
 async function viewerPrefsRun(file: ArrayBuffer, meta: FileMeta, prefs: any): Promise<void> {
   const doc = await PDFDocument.load(file, { ignoreEncryption: true });
   
-  const vpObj: Record<string, boolean> = {
+  const vpObj: Record<string, any> = {
     HideToolbar: !!prefs.hideToolbar,
     HideMenubar: !!prefs.hideMenubar,
     HideWindowUI: !!prefs.hideWindowUI,
@@ -2355,18 +2412,20 @@ async function viewerPrefsRun(file: ArrayBuffer, meta: FileMeta, prefs: any): Pr
     CenterWindow: !!prefs.centerWindow,
     DisplayDocTitle: !!prefs.displayDocTitle,
   };
+
+  if (prefs.pageMode && prefs.pageMode !== 'FullScreen') {
+    vpObj.NonFullScreenPageMode = PDFName.of(prefs.pageMode);
+  }
   
   const vp = doc.context.obj(vpObj);
   doc.catalog.set(PDFName.of('ViewerPreferences'), vp);
   
-  // Page Mode (Initial View)
+  // Page Mode (Initial View: FullScreen, UseThumbs, UseOutlines, UseNone)
   if (prefs.pageMode) {
     doc.catalog.set(PDFName.of('PageMode'), PDFName.of(prefs.pageMode));
-  } else if (prefs.fullScreen) {
-    doc.catalog.set(PDFName.of('PageMode'), PDFName.of('FullScreen'));
   }
 
-  // Page Layout (Single, Continuous, Two-Page Book)
+  // Page Layout (SinglePage, OneColumn, TwoColumnLeft, TwoPageLeft)
   if (prefs.pageLayout) {
     doc.catalog.set(PDFName.of('PageLayout'), PDFName.of(prefs.pageLayout));
   }
