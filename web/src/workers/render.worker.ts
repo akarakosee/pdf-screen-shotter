@@ -2185,8 +2185,127 @@ async function extractHiddenTextRun(file: ArrayBuffer, meta: FileMeta): Promise<
     if (doc) engine.close(doc);
   }
 }
-async function extractJavascriptRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-javascript-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+async function extractJavascriptRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const scripts: Array<{ source: string; code: string }> = [];
+
+    // 1. Check Catalog OpenAction
+    const openAction = doc.catalog.get(PDFName.of('OpenAction'));
+    if (openAction) {
+      const oaDict = doc.context.lookup(openAction) as any;
+      if (oaDict && oaDict.get) {
+        const js = oaDict.get(PDFName.of('JS'));
+        if (js) {
+          scripts.push({
+            source: 'Document Catalog / OpenAction (Otomatik Açılış Scripti)',
+            code: js.asString ? js.asString() : js.toString()
+          });
+        }
+      }
+    }
+
+    // 2. Check Catalog Names -> JavaScript
+    const names = doc.catalog.get(PDFName.of('Names'));
+    if (names) {
+      const namesDict = doc.context.lookup(names) as any;
+      if (namesDict && namesDict.get) {
+        const jsTreeRef = namesDict.get(PDFName.of('JavaScript'));
+        if (jsTreeRef) {
+          const jsTree = doc.context.lookup(jsTreeRef) as any;
+          if (jsTree && jsTree.get) {
+            const namesArrayRef = jsTree.get(PDFName.of('Names'));
+            if (namesArrayRef) {
+              const arr = doc.context.lookup(namesArrayRef) as any;
+              if (arr && arr.size) {
+                for (let i = 0; i < arr.size(); i += 2) {
+                  const name = arr.get(i);
+                  const actionRef = arr.get(i + 1);
+                  const action = doc.context.lookup(actionRef) as any;
+                  if (action && action.get) {
+                    const js = action.get(PDFName.of('JS'));
+                    if (js) {
+                      scripts.push({
+                        source: `Names Tree: ${name && name.asString ? name.asString() : 'Named Script'}`,
+                        code: js.asString ? js.asString() : js.toString()
+                      });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 3. Scan all indirect objects in the document context for /JS
+    for (const [ref, obj] of doc.context.enumerateIndirectObjects()) {
+      if (obj && (obj as any).get && (obj as any).get(PDFName.of('S'))?.toString() === '/JavaScript') {
+        const js = (obj as any).get(PDFName.of('JS'));
+        if (js) {
+          const raw = js.asString ? js.asString() : js.toString();
+          if (!scripts.some(s => s.code === raw)) {
+            scripts.push({
+              source: `Object [${ref.tag}] (Content Stream JS Action)`,
+              code: raw
+            });
+          }
+        }
+      }
+    }
+
+    if (scripts.length === 0) {
+      post({
+        type: 'extract-javascript-done',
+        result: {
+          totalPages: doc.getPageCount(),
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
+      return;
+    }
+
+    let report = `/**\n * GOSECUREPDF - EMBEDDED JAVASCRIPT & EXPLOIT ANALYSIS REPORT\n`;
+    report += ` * Document: ${meta.name}\n`;
+    report += ` * Scan Timestamp: ${new Date().toISOString()}\n`;
+    report += ` * Total Scripts Found: ${scripts.length}\n`;
+    report += ` */\n\n`;
+
+    scripts.forEach((s, idx) => {
+      report += `// =========================================================\n`;
+      report += `// SCRIPT ${idx + 1}: ${s.source}\n`;
+      report += `// =========================================================\n`;
+      report += `${s.code.trim()}\n\n`;
+    });
+
+    const blob = new Blob([report], { type: 'application/javascript;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-extracted-scripts.js';
+
+    post({
+      type: 'extract-javascript-done',
+      result: {
+        totalPages: doc.getPageCount(),
+        succeeded: scripts.length,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('extractJavascriptRun error:', err);
+    post({
+      type: 'extract-javascript-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function extractTablesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;

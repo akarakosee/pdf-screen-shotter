@@ -34,7 +34,12 @@ export function ExtractJavascriptShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setPhase('upload');
-          setToast({ kind: 'error', message: 'No JavaScript found in this document.' });
+          setToast({
+            kind: 'info',
+            message: t.lang === 'tr' 
+              ? 'Bu PDF dosyasında gömülü herhangi bir JavaScript kodu bulunamadı (Temiz Belge).' 
+              : 'No embedded JavaScript found in this document (Clean Document).'
+          });
         }
       }
     });
@@ -78,7 +83,7 @@ export function ExtractJavascriptShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Gömülü JavaScript kodları ve tehditler taranıyor...' : 'Scanning for embedded JavaScript & threat payloads...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
