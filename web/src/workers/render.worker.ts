@@ -2089,30 +2089,135 @@ async function contrastEnhancerRun(file: ArrayBuffer, meta: FileMeta, brightness
 
 
 async function extractUrlsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  let doc;
   try {
-    doc = await engine.open(file);
-    const texts = await engine.extractText(doc);
-    const allText = texts.join(' ');
-    
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const matches = allText.match(urlRegex) || [];
-    const uniqueUrls = [...new Set(matches)];
-    
-    if (uniqueUrls.length === 0) {
-      post({ type: 'extract-urls-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+    const urls: Array<{ page: number; type: string; url: string }> = [];
+    const seenUrls = new Set<string>();
+
+    // 1. Extract Clickable Hyperlink Annotations via pdf-lib
+    try {
+      const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+      const pageCount = doc.getPageCount();
+
+      for (let i = 0; i < pageCount; i++) {
+        const page = doc.getPage(i);
+        const annots = page.node.get(PDFName.of('Annots'));
+        if (annots) {
+          const annotsArr = doc.context.lookup(annots) as any;
+          if (annotsArr && annotsArr.size) {
+            for (let j = 0; j < annotsArr.size(); j++) {
+              const annotRef = annotsArr.get(j);
+              const annot = doc.context.lookup(annotRef) as any;
+              if (annot && annot.get) {
+                const action = annot.get(PDFName.of('A'));
+                if (action) {
+                  const actionDict = doc.context.lookup(action) as any;
+                  if (actionDict && actionDict.get) {
+                    const uri = actionDict.get(PDFName.of('URI'));
+                    if (uri) {
+                      const rawUrl = (uri.asString ? uri.asString() : uri.toString()).replace(/^\(|\)$/g, '').trim();
+                      if (rawUrl && !seenUrls.has(rawUrl)) {
+                        seenUrls.add(rawUrl);
+                        urls.push({
+                          page: i + 1,
+                          type: 'Clickable Hyperlink (Tıklanabilir Bağlantı)',
+                          url: rawUrl
+                        });
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Annotation extraction error:', e);
+    }
+
+    // 2. Extract Plain-Text URLs from Content Streams via MuPDF
+    try {
+      await engine.init();
+      const muDoc = await engine.open(file);
+      const texts = await (engine as any).extractText(muDoc);
+      const count = engine.pageCount(muDoc);
+
+      const urlRegex = /(https?:\/\/[^\s<>"'{}|\\^`\]\[]+|mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+
+      for (let i = 0; i < count; i++) {
+        const pageText = texts[i] || '';
+        const matches = pageText.match(urlRegex) || [];
+        for (const m of matches) {
+          const clean = m.replace(/[.,;:!?)]+$/, '').trim();
+          if (clean && !seenUrls.has(clean)) {
+            seenUrls.add(clean);
+            urls.push({
+              page: i + 1,
+              type: 'Plain Text URL (Düz Metin Bağlantısı)',
+              url: clean
+            });
+          }
+        }
+      }
+      engine.close(muDoc);
+    } catch (e) {
+      console.warn('MuPDF text URL extraction error:', e);
+    }
+
+    if (urls.length === 0) {
+      post({
+        type: 'extract-urls-done',
+        result: {
+          totalPages: 1,
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
       return;
     }
-    
-    const outputText = uniqueUrls.join('\n');
-    const blob = new Blob([outputText], { type: 'text/plain;charset=utf-8' });
-    
+
+    let report = `=====================================================\n`;
+    report += `GOSECUREPDF - PDF URL & HYPERLINK AUDIT REPORT\n`;
+    report += `Document: ${meta.name}\n`;
+    report += `Scan Timestamp: ${new Date().toISOString()}\n`;
+    report += `Total Unique Links Discovered: ${urls.length}\n`;
+    report += `=====================================================\n\n`;
+
+    report += `[BULUNAN TUM BAGLANTILAR LISTESI / ALL LINKS]\n`;
+    report += `-----------------------------------------------------\n`;
+    urls.forEach((item, idx) => {
+      report += `${idx + 1}. [Sayfa ${item.page}] [${item.type}]\n   ${item.url}\n\n`;
+    });
+
+    report += `=====================================================\n`;
+    report += `OZET: Toplam ${urls.length} adet baglanti tespit edildi.\n`;
+    report += `=====================================================\n`;
+
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-extracted-urls.txt';
+
     post({
       type: 'extract-urls-done',
-      result: { totalPages: 1, succeeded: uniqueUrls.length, failed: [], durationMs: 0, output: blob, outputName: meta.name.replace(/\.pdf$/i, '') + '-urls.txt', cancelled: false }
+      result: {
+        totalPages: 1,
+        succeeded: urls.length,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
     });
-  } finally {
-    if (doc) engine.close(doc);
+  } catch (err) {
+    console.error('extractUrlsRun error:', err);
+    post({
+      type: 'extract-urls-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
   }
 }
 

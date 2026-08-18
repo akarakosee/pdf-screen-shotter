@@ -34,7 +34,12 @@ export function ExtractUrlsShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setPhase('upload');
-          setToast({ kind: 'error', message: 'No URLs or clickable links found.' });
+          setToast({
+            kind: 'info',
+            message: t.lang === 'tr' 
+              ? 'Bu PDF belgesinde herhangi bir web bağlantısı veya tıklanabilir link bulunamadı.' 
+              : 'No web links or clickable hyperlinks found in this document.'
+          });
         }
       }
     });
@@ -78,7 +83,7 @@ export function ExtractUrlsShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Belgedeki tüm bağlantılar ve URL\'ler taranıyor...' : 'Scanning all links, hyperlinks & URLs...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
