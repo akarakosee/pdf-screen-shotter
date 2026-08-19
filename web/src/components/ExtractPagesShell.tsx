@@ -66,6 +66,7 @@ export function ExtractPagesShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<ExtractPageData[]>([]);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [progress, setProgress] = useState({ text: '', percentage: 0 });
   const [resultSize, setResultSize] = useState<number | null>(null);
 
@@ -111,7 +112,8 @@ export function ExtractPagesShell({ t = en }: Props) {
     } catch (e: any) {
       console.error(e);
       setToast({ kind: 'error', message: 'Failed to load PDF. It might be encrypted or corrupted.' });
-      setPhase('upload');
+      setErrorMsg(null);
+    setPhase('upload');
     }
   };
 
@@ -162,6 +164,7 @@ export function ExtractPagesShell({ t = en }: Props) {
   };
 
   const handleReset = () => {
+    setErrorMsg(null);
     setPhase('upload');
     setFile(null);
     setPages([]);
@@ -223,7 +226,8 @@ export function ExtractPagesShell({ t = en }: Props) {
       )}
 
       {phase === 'done' && (
-        <ResultPanel 
+        <ResultPanel
+            errorMsg={errorMsg} 
           filename={file?.name.replace(/\.[^/.]+$/, "") + '_extracted.pdf' || 'extracted.pdf'}
           sizeBytes={resultSize || 0}
           onReset={handleReset}

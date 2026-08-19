@@ -27,6 +27,7 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const [progress, setProgress] = useState<{ message: string; percentage?: number } | null>(null);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [maxSizeMB, setMaxSizeMB] = useState<number>(5); // Default to 5MB parts
@@ -46,7 +47,8 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
         onFatal: (message) => {
           setCancelling(false);
           setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onUnavailable: () => {
           setUnavailable(true);
@@ -59,12 +61,14 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const cancel = useCallback(() => {
     setCancelling(true);
     controller().cancel();
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
   const reset = useCallback(() => {
     setResult(null);
     setProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
     setFile(null);
   }, [controller]);
@@ -184,8 +188,9 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
         />
       )}
 
-      {phase === 'done' && result && (
+      {phase === 'done' && (result || errorMsg) && (
         <ResultPanel
+            errorMsg={errorMsg}
           t={t}
           result={result}
           skipped={[]}

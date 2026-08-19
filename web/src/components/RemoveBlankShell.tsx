@@ -25,6 +25,7 @@ export function RemoveBlankShell({ t = en, desktopAppUrl }: Props) {
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const controllerRef = useRef<JobController | null>(null);
   const controller = useCallback((): JobController => {
@@ -42,7 +43,8 @@ export function RemoveBlankShell({ t = en, desktopAppUrl }: Props) {
         onFatal: (message) => {
           setCancelling(false);
           setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
       });
     }
@@ -52,6 +54,7 @@ export function RemoveBlankShell({ t = en, desktopAppUrl }: Props) {
   const cancel = useCallback(() => {
     setCancelling(true);
     controller().cancel();
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
@@ -59,6 +62,7 @@ export function RemoveBlankShell({ t = en, desktopAppUrl }: Props) {
     controller().clear();
     setResult(null);
     setProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
@@ -130,8 +134,9 @@ export function RemoveBlankShell({ t = en, desktopAppUrl }: Props) {
         />
       )}
 
-      {phase === 'done' && result && (
+      {phase === 'done' && (result || errorMsg) && (
         <ResultPanel
+            errorMsg={errorMsg}
           t={t}
           result={result}
           onDownload={() => triggerDownload(result.output, result.outputName)}

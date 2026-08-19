@@ -252,7 +252,8 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
         }
         return true;
       });
-      if (next.length === 0) setPhase('upload');
+      if (next.length === 0) setErrorMsg(null);
+    setPhase('upload');
       return next;
     });
   };
@@ -297,6 +298,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
     items.forEach((item) => URL.revokeObjectURL(item.previewUrl));
     setItems([]);
     setResultBlob(null);
+    setErrorMsg(null);
     setPhase('upload');
     setFrozen(false);
   };
@@ -442,6 +444,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

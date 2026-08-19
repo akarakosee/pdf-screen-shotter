@@ -18,6 +18,7 @@ export function AudioReaderShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [extractedText, setExtractedText] = useState<string>('');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -64,7 +65,8 @@ export function AudioReaderShell({ t = en }: Props) {
     controller.current = new JobController({
       onFileError: (_, msg) => {
         setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
-        setPhase('upload');
+        setErrorMsg(null);
+    setPhase('upload');
       },
       onAudioReaderDone: async (result) => {
         if (result.output) {
@@ -75,15 +77,20 @@ export function AudioReaderShell({ t = en }: Props) {
               setPhase('player');
             } else {
               setToast({ kind: 'error', message: 'No readable text found in this PDF.' });
-              setPhase('upload');
+              setErrorMsg(null);
+    setPhase('upload');
             }
           } catch (e) {
             setToast({ kind: 'error', message: 'Failed to read extracted text.' });
-            setPhase('upload');
+            setErrorMsg(null);
+    setPhase('upload');
           }
         } else {
-          setPhase('upload');
-          setToast({ kind: 'error', message: 'Failed to extract audio text.' });
+          setErrorMsg(null);
+    const errMsg = 'Failed to extract audio text.';
+          setErrorMsg(errMsg);
+          setToast({ kind: 'error', message: errMsg });
+          setPhase('done');
         }
       }
     });
@@ -200,6 +207,7 @@ export function AudioReaderShell({ t = en }: Props) {
     setIsPlaying(false);
     setIsPaused(false);
     setCharIndex(0);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 

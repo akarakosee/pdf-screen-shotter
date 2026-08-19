@@ -19,6 +19,7 @@ export function SplitBookmarksShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
   const controller = useRef<JobController | null>(null);
 
@@ -26,20 +27,21 @@ export function SplitBookmarksShell({ t = en }: Props) {
     controller.current = new JobController({
       onFileError: (_, msg) => {
         setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
-        setPhase('upload');
+        setErrorMsg(null);
+    setPhase('upload');
       },
       onSplitBookmarksDone: (result) => {
         if (result.output && result.succeeded > 0) {
           setOutput({ blob: result.output, name: result.outputName! });
           setPhase('done');
         } else {
-          setPhase('upload');
-          setToast({
-            kind: 'info',
-            message: t.lang === 'tr' 
+          setErrorMsg(null);
+    const errMsg = t.lang === 'tr' 
               ? 'Bu PDF belgesinde bölümlere ayırmak için herhangi bir Yer İmi (Bookmarks / İçindekiler) bulunamadı.' 
-              : 'Could not find any Table of Contents (Bookmarks) to split by.'
-          });
+              : 'Could not find any Table of Contents (Bookmarks) to split by.';
+          setErrorMsg(errMsg);
+          setToast({ kind: 'error', message: errMsg });
+          setPhase('done');
         }
       }
     });
@@ -64,6 +66,7 @@ export function SplitBookmarksShell({ t = en }: Props) {
   const reset = useCallback(() => {
     setFile(null);
     setOutput(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -91,14 +94,15 @@ export function SplitBookmarksShell({ t = en }: Props) {
         </div>
       )}
 
-      {phase === 'done' && output && (
+      {phase === 'done' && (output || errorMsg) && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
-            result={{ totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false }}
+            result={output ? { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false } : null}
             skipped={[]}
             crossLink={null}
-            onDownload={() => triggerDownload(output.blob, output.name)}
+            onDownload={() => output && triggerDownload(output.blob, output.name)}
             onConvertMore={reset}
           />
         </div>

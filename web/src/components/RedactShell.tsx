@@ -29,6 +29,7 @@ export function RedactShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,7 +83,8 @@ export function RedactShell({ t = en }: Props) {
       loadImages(1, f);
     } catch (e) {
       setToast({ kind: 'error', message: 'Failed to inspect document' });
-      setPhase('upload');
+      setErrorMsg(null);
+    setPhase('upload');
     }
   };
 
@@ -236,6 +238,7 @@ export function RedactShell({ t = en }: Props) {
     setFile(null);
     setOutput(null);
     setRedactions({});
+    setErrorMsg(null);
     setPhase('upload');
     setCurrentPage(1);
     if (blobUrl) URL.revokeObjectURL(blobUrl);
@@ -373,6 +376,7 @@ export function RedactShell({ t = en }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

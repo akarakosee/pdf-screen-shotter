@@ -25,6 +25,7 @@ export function CompressShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [level, setLevel] = useState<CompressLevel>('extreme');
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<CompressResult | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
@@ -41,7 +42,8 @@ export function CompressShell({ t = en }: Props) {
             kind: 'error',
             message: message === 'encrypted' ? t.passwordProtected : t.corruptFile,
           });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onCompressDone: (res) => {
           setResult(res);
@@ -51,7 +53,8 @@ export function CompressShell({ t = en }: Props) {
         onFatal: () => {
           setCancelling(false);
           setToast({ kind: 'error', message: t.corruptFile });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onUnavailable: () => setUnavailable(true),
       });
@@ -109,6 +112,7 @@ export function CompressShell({ t = en }: Props) {
   const handleReset = () => {
     setFile(null);
     setResult(null);
+    setErrorMsg(null);
     setPhase('upload');
   };
 
@@ -204,6 +208,7 @@ export function CompressShell({ t = en }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

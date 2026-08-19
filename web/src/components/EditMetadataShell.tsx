@@ -20,6 +20,7 @@ export function EditMetadataShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
 
   const [metadata, setMetadata] = useState({
@@ -93,6 +94,7 @@ export function EditMetadataShell({ t = en }: Props) {
   };
 
   const reset = () => {
+    setErrorMsg(null);
     setPhase('upload');
     setFile(null);
     setOutput(null);
@@ -157,7 +159,7 @@ export function EditMetadataShell({ t = en }: Props) {
         </div>
       )}
 
-      {phase === 'done' && output && (
+      {phase === 'done' && (output || errorMsg) && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mb-6">
             <Tags className="w-8 h-8 text-success" />

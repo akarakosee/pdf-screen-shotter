@@ -22,6 +22,7 @@ export function OcrShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [extractedText, setExtractedText] = useState<string>('');
   const [progressMsg, setProgressMsg] = useState<string>('');
@@ -114,7 +115,8 @@ export function OcrShell({ t = en }: Props) {
     } catch (err: any) {
       console.error(err);
       setToast({ kind: 'error', message: err?.message || 'Failed to extract text. Check console for details.' });
-      setPhase('upload');
+      setErrorMsg(null);
+    setPhase('upload');
     }
   };
 
@@ -135,6 +137,7 @@ export function OcrShell({ t = en }: Props) {
   const reset = () => {
     setFile(null);
     setExtractedText('');
+    setErrorMsg(null);
     setPhase('upload');
   };
 
@@ -199,6 +202,7 @@ export function OcrShell({ t = en }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col gap-6 duration-500">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

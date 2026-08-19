@@ -23,6 +23,7 @@ export function UnlockShell({ t = en }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
 
   const addFile = useCallback((incoming: File[]) => {
@@ -73,6 +74,7 @@ export function UnlockShell({ t = en }: Props) {
     setPassword('');
     setShowPassword(false);
     setOutput(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -157,6 +159,7 @@ export function UnlockShell({ t = en }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

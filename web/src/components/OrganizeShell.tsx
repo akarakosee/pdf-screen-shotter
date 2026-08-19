@@ -148,6 +148,7 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
   const [organizeProgress, setOrganizeProgress] = useState<{ processedPages: number; totalPages: number } | null>(null);
   const [organizeResult, setOrganizeResult] = useState<OrganizeResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Selection & Drag overlay state
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -175,7 +176,8 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
         },
         onFileError: (fileId, message) => {
           setToast({ kind: 'error', message: t.corruptFile });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onOrganizeProgress: (processedPages, totalPages) => setOrganizeProgress({ processedPages, totalPages }),
         onOrganizeDone: (result) => {
@@ -249,6 +251,7 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
     setHasPerformedAction(false);
     setOrganizeResult(null);
     setOrganizeProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -545,6 +548,7 @@ export function OrganizeShell({ t = en, desktopAppUrl, mode = 'organize' }: Prop
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

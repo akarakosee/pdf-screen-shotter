@@ -38,6 +38,7 @@ export function MarkdownShell({ t = en }: Props) {
   const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   const previewRef = useRef<HTMLDivElement>(null);
 

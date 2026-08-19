@@ -21,6 +21,7 @@ export function FlattenShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string; hadForm: boolean } | null>(null);
   const [removeAnnotations, setRemoveAnnotations] = useState(true);
 
@@ -68,6 +69,7 @@ export function FlattenShell({ t = en }: Props) {
   const reset = useCallback(() => {
     setFile(null);
     setOutput(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -144,6 +146,7 @@ export function FlattenShell({ t = en }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

@@ -17,6 +17,7 @@ interface Props {
 export function Base64Shell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('choose');
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   // State for PDF to Base64
   const [base64Output, setBase64Output] = useState('');

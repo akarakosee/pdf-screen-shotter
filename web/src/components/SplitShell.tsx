@@ -33,6 +33,7 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
   const [splitProgress, setSplitProgress] = useState<{ extractedPages: number; totalSelected: number } | null>(null);
   const [splitResult, setSplitResult] = useState<SplitResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const controllerRef = useRef<JobController | null>(null);
   const controller = useCallback((): JobController => {
@@ -46,7 +47,8 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
         },
         onFileError: (fileId, message) => {
           setToast({ kind: 'error', message: t.corruptFile });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onSplitProgress: (extractedPages, totalSelected) => setSplitProgress({ extractedPages, totalSelected }),
         onSplitDone: (result) => {
@@ -134,6 +136,7 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
     setSelectedPages(new Set());
     setSplitResult(null);
     setSplitProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -266,6 +269,7 @@ export function SplitShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

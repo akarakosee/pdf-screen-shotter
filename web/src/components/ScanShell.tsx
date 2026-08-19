@@ -19,6 +19,7 @@ export function ScanShell({ t = en, desktopAppUrl }: Props) {
   const [phase, setPhase] = useState<Phase>('capture');
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -216,6 +217,7 @@ export function ScanShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'done' && resultBlob && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: images.length,

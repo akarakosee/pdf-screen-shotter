@@ -13,6 +13,7 @@ type Phase = 'camera' | 'processing' | 'done';
 export function ScanToPdfShell({ t = en }: { t?: Strings }) {
   const [phase, setPhase] = useState<Phase>('camera');
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
   const [images, setImages] = useState<File[]>([]);
   
@@ -139,9 +140,10 @@ export function ScanToPdfShell({ t = en }: { t?: Strings }) {
         </div>
       )}
 
-      {phase === 'done' && output && (
+      {phase === 'done' && (output || errorMsg) && (
         <div className="animate-in fade-in flex flex-col items-center justify-center py-8">
-          <ResultPanel t={t} result={{ totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false }} skipped={[]} crossLink={null} onDownload={() => triggerDownload(output.blob, output.name)} onConvertMore={reset} />
+          <ResultPanel
+            errorMsg={errorMsg} t={t} result={output ? { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: output.blob, outputName: output.name, cancelled: false } : null} skipped={[]} crossLink={null} onDownload={() => output && triggerDownload(output.blob, output.name)} onConvertMore={reset} />
         </div>
       )}
     </div>

@@ -22,6 +22,7 @@ export function FormsShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [toast, setToast] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   const [fields, setFields] = useState<FormField[]>([]);
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
@@ -58,7 +59,8 @@ export function FormsShell({ t = en }: Props) {
       
       if (extractedFields.length === 0) {
         setToast({ kind: 'error', message: 'No text fields found in this PDF form.' });
-        setPhase('upload');
+        setErrorMsg(null);
+    setPhase('upload');
         return;
       }
       
@@ -68,7 +70,8 @@ export function FormsShell({ t = en }: Props) {
     } catch (e) {
       console.error(e);
       setToast({ kind: 'error', message: 'Failed to load PDF or extract forms.' });
-      setPhase('upload');
+      setErrorMsg(null);
+    setPhase('upload');
     }
   };
 
@@ -110,6 +113,7 @@ export function FormsShell({ t = en }: Props) {
   };
 
   const reset = () => {
+    setErrorMsg(null);
     setPhase('upload');
     setFile(null);
     setPdfBytes(null);

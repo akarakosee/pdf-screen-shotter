@@ -22,6 +22,7 @@ export function InvertShell({ t = en }: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
 
   const invertColors = async (incoming: File[]) => {
@@ -94,13 +95,15 @@ export function InvertShell({ t = en }: Props) {
     } catch (err: any) {
       console.error(err);
       setToast({ kind: 'error', message: err.message || t.errorGeneric });
-      setPhase('upload');
+      setErrorMsg(null);
+    setPhase('upload');
     } finally {
       setIsProcessing(false);
     }
   };
 
   const reset = () => {
+    setErrorMsg(null);
     setPhase('upload');
     setOutput(null);
     setProgress(0);
@@ -123,7 +126,7 @@ export function InvertShell({ t = en }: Props) {
         </div>
       )}
 
-      {phase === 'done' && output && (
+      {phase === 'done' && (output || errorMsg) && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-md mx-auto text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mb-6">
             <Moon className="w-8 h-8 text-accent dark:text-teal-dark" />

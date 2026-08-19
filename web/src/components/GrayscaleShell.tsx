@@ -25,6 +25,7 @@ export function GrayscaleShell({ t = en, desktopAppUrl }: Props) {
   const [progress, setProgress] = useState<ProgressData | null>(null);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const controllerRef = useRef<JobController | null>(null);
   const controller = useCallback((): JobController => {
@@ -40,7 +41,8 @@ export function GrayscaleShell({ t = en, desktopAppUrl }: Props) {
         onFatal: () => {
           setCancelling(false);
           setToast({ kind: 'error', message: t.corruptFile || 'Could not process file.' });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
       });
     }
@@ -50,6 +52,7 @@ export function GrayscaleShell({ t = en, desktopAppUrl }: Props) {
   const cancel = useCallback(() => {
     setCancelling(true);
     controller().cancel();
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
@@ -57,6 +60,7 @@ export function GrayscaleShell({ t = en, desktopAppUrl }: Props) {
     controller().clear();
     setResult(null);
     setProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
@@ -130,9 +134,10 @@ export function GrayscaleShell({ t = en, desktopAppUrl }: Props) {
         />
       )}
 
-      {phase === 'done' && result && (
+      {phase === 'done' && (result || errorMsg) && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={result}
             skipped={[]}

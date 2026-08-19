@@ -21,6 +21,7 @@ export function CompareShell({ t = en }: Props) {
   const [fileA, setFileA] = useState<File | null>(null);
   const [fileB, setFileB] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Viewer state
   const [totalPages, setTotalPages] = useState(1);
@@ -168,6 +169,7 @@ export function CompareShell({ t = en }: Props) {
     if (blobB) URL.revokeObjectURL(blobB);
     setBlobA(null);
     setBlobB(null);
+    setErrorMsg(null);
     setPhase('upload');
   };
 

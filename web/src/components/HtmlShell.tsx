@@ -28,6 +28,7 @@ export function HtmlShell({ t = en }: Props) {
   const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
   const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   const previewRef = useRef<HTMLDivElement>(null);
 

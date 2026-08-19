@@ -16,6 +16,7 @@ export function EditShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [toast, setToast] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   const [pageNumber, setPageNumber] = useState(1);
   const [xPos, setXPos] = useState(50);
@@ -81,6 +82,7 @@ export function EditShell({ t = en }: Props) {
   };
 
   const reset = () => {
+    setErrorMsg(null);
     setPhase('upload');
     setFile(null);
     setPdfBytes(null);

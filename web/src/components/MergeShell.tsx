@@ -43,6 +43,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
   );
   const [mergeResult, setMergeResult] = useState<MergeResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const addFileInputRef = useRef<HTMLInputElement>(null);
 
   const controllerRef = useRef<JobController | null>(null);
@@ -114,7 +115,8 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
     filesRef.current.delete(id);
     setChips((cs) => {
       const next = cs.filter((c) => c.id !== id);
-      if (!next.some((c) => c.status === 'valid')) setPhase('upload');
+      if (!next.some((c) => c.status === 'valid')) setErrorMsg(null);
+    setPhase('upload');
       return next;
     });
   }, []);
@@ -383,6 +385,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
     setChips([]);
     setMergeResult(null);
     setMergeProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -534,6 +537,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'done' && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
+            errorMsg={errorMsg}
             t={t}
             result={{
               totalPages: 1,

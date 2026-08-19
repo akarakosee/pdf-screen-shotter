@@ -63,6 +63,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
   const [cancelling, setCancelling] = useState(false);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   // §4.1: scroll must never jump between states. The options state is usually
   // the tallest; when it unmounts for processing/done we pin the region to the
   // height it had at Convert time.
@@ -187,7 +188,8 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
       const removed = cs.find((c) => c.id === id);
       if (removed?.thumbnailUrl) URL.revokeObjectURL(removed.thumbnailUrl);
       const next = cs.filter((c) => c.id !== id);
-      if (!next.some((c) => c.status === 'valid')) setPhase('upload');
+      if (!next.some((c) => c.status === 'valid')) setErrorMsg(null);
+    setPhase('upload');
       return next;
     });
     setFileOptions((opts) => {
@@ -330,6 +332,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
     setResult(null);
     setProgress(null);
     setRegionMinHeight(null);
+    setErrorMsg(null);
     setPhase('upload');
   }, []);
 
@@ -560,8 +563,9 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
         </div>
       )}
 
-      {phase === 'done' && result && (
+      {phase === 'done' && (result || errorMsg) && (
         <ResultPanel
+            errorMsg={errorMsg}
           t={t}
           result={result}
           skipped={skippedRows}

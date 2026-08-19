@@ -31,6 +31,7 @@ export function MixShell({ t = en, desktopAppUrl }: Props) {
   const [progress, setProgress] = useState<{ message: string; percentage?: number } | null>(null);
   const [result, setResult] = useState<ExportResult | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [files, setFiles] = useState<{ id: string; file: File }[]>([]);
 
@@ -49,7 +50,8 @@ export function MixShell({ t = en, desktopAppUrl }: Props) {
         onFatal: (message) => {
           setCancelling(false);
           setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
-          setPhase('upload');
+          setErrorMsg(null);
+    setPhase('upload');
         },
         onUnavailable: () => {
           setUnavailable(true);
@@ -62,12 +64,14 @@ export function MixShell({ t = en, desktopAppUrl }: Props) {
   const cancel = useCallback(() => {
     setCancelling(true);
     controller().cancel();
+    setErrorMsg(null);
     setPhase('upload');
   }, [controller]);
 
   const reset = useCallback(() => {
     setResult(null);
     setProgress(null);
+    setErrorMsg(null);
     setPhase('upload');
     setFiles([]);
   }, [controller]);
@@ -96,7 +100,8 @@ export function MixShell({ t = en, desktopAppUrl }: Props) {
   const removeFile = (id: string) => {
     setFiles(prev => {
       const next = prev.filter(f => f.id !== id);
-      if (next.length < 2) setPhase('upload');
+      if (next.length < 2) setErrorMsg(null);
+    setPhase('upload');
       return next;
     });
   };
@@ -232,8 +237,9 @@ export function MixShell({ t = en, desktopAppUrl }: Props) {
         />
       )}
 
-      {phase === 'done' && result && (
+      {phase === 'done' && (result || errorMsg) && (
         <ResultPanel
+            errorMsg={errorMsg}
           t={t}
           result={result}
           skipped={[]}
