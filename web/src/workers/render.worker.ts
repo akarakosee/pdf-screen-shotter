@@ -2557,10 +2557,32 @@ async function removeTextRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'remove-text-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-no-text.pdf', cancelled: false } });
 }
 async function wipeBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  const doc = await PDFDocument.load(file, { ignoreEncryption: true });
-  doc.catalog.delete(PDFName.of('Outlines'));
-  const bytes = await doc.save();
-  post({ type: 'wipe-bookmarks-done', result: { totalPages: doc.getPageCount(), succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-no-bookmarks.pdf', cancelled: false } });
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    doc.catalog.delete(PDFName.of('Outlines'));
+    if (doc.catalog.get(PDFName.of('PageMode'))?.toString() === '/UseOutlines') {
+      doc.catalog.set(PDFName.of('PageMode'), PDFName.of('UseNone'));
+    }
+    const bytes = await doc.save();
+    post({
+      type: 'wipe-bookmarks-done',
+      result: {
+        totalPages: doc.getPageCount(),
+        succeeded: doc.getPageCount(),
+        failed: [],
+        durationMs: 0,
+        output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }),
+        outputName: meta.name.replace(/\.pdf$/i, '') + '-no-bookmarks.pdf',
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('wipeBookmarksRun error:', err);
+    post({
+      type: 'wipe-bookmarks-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function splitBlankRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'split-blank-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-split.pdf', cancelled: false } });
