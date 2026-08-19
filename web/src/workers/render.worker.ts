@@ -1,3 +1,4 @@
+import { inflate } from 'pako';
 import * as XLSX from 'xlsx';
 // Single render worker — SISTEM_TASARIMI §3.3 message protocol.
 // The PDF engine lives only here; the main thread never imports it.
@@ -2224,8 +2225,124 @@ async function extractUrlsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> 
 async function extractAttachmentsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'extract-attachments-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
 }
-async function extractColorsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-colors-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+function rgbToHexStr(r: number, g: number, b: number): string {
+  const toHex = (n: number) => Math.round(Math.max(0, Math.min(255, n))).toString(16).padStart(2, '0').toUpperCase();
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+async function extractColorsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const hexMap = new Map<string, { count: number; r: number; g: number; b: number }>();
+
+    for (const [ref, obj] of doc.context.enumerateIndirectObjects()) {
+      if (obj && (obj as any).contents) {
+        let text = '';
+        try {
+          const decompressed = inflate((obj as any).contents);
+          text = new TextDecoder('latin1').decode(decompressed);
+        } catch (e) {
+          text = new TextDecoder('latin1').decode((obj as any).contents);
+        }
+
+        // Match RGB fill: `r g b rg`
+        const rgbFillRegex = /([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+rg/gi;
+        let match;
+        while ((match = rgbFillRegex.exec(text)) !== null) {
+          const r = Math.round(parseFloat(match[1]) * 255);
+          const g = Math.round(parseFloat(match[2]) * 255);
+          const b = Math.round(parseFloat(match[3]) * 255);
+          const hex = rgbToHexStr(r, g, b);
+          const existing = hexMap.get(hex) || { count: 0, r, g, b };
+          existing.count++;
+          hexMap.set(hex, existing);
+        }
+
+        // Match RGB stroke: `r g b RG`
+        const rgbStrokeRegex = /([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+RG/gi;
+        while ((match = rgbStrokeRegex.exec(text)) !== null) {
+          const r = Math.round(parseFloat(match[1]) * 255);
+          const g = Math.round(parseFloat(match[2]) * 255);
+          const b = Math.round(parseFloat(match[3]) * 255);
+          const hex = rgbToHexStr(r, g, b);
+          const existing = hexMap.get(hex) || { count: 0, r, g, b };
+          existing.count++;
+          hexMap.set(hex, existing);
+        }
+      }
+    }
+
+    const swatches = [...hexMap.entries()]
+      .sort((a, b) => b[1].count - a[1].count)
+      .map(([hex, data]) => ({
+        hex,
+        rgb: `rgb(${data.r}, ${data.g}, ${data.b})`,
+        usageCount: data.count
+      }));
+
+    if (swatches.length === 0) {
+      post({
+        type: 'extract-colors-done',
+        result: {
+          totalPages: doc.getPageCount(),
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
+      return;
+    }
+
+    let report = `=====================================================\n`;
+    report += `GOSECUREPDF - BRAND COLOR PALETTE & DESIGN TOKENS\n`;
+    report += `Document: ${meta.name}\n`;
+    report += `Scan Timestamp: ${new Date().toISOString()}\n`;
+    report += `Total Unique Colors Found: ${swatches.length}\n`;
+    report += `=====================================================\n\n`;
+
+    report += `[CSS DESIGN TOKENS / CSS DEGISKENLERI]\n`;
+    report += `:root {\n`;
+    swatches.forEach((s, idx) => {
+      report += `  --pdf-color-${idx + 1}: ${s.hex}; /* ${s.rgb} */\n`;
+    });
+    report += `}\n\n`;
+
+    report += `[RENK PALETI LISTESI / COLOR SWATCHES]\n`;
+    report += `-----------------------------------------------------\n`;
+    swatches.forEach((s, idx) => {
+      report += `${idx + 1}. HEX: ${s.hex} | ${s.rgb} | Kullanim: ${s.usageCount} kez\n`;
+    });
+
+    report += `\n=====================================================\n`;
+    report += `JSON VERISI / JSON SCHEMA:\n`;
+    report += JSON.stringify({ filename: meta.name, totalColors: swatches.length, palette: swatches }, null, 2);
+    report += `\n=====================================================\n`;
+
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-color-palette.txt';
+
+    post({
+      type: 'extract-colors-done',
+      result: {
+        totalPages: doc.getPageCount(),
+        succeeded: swatches.length,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('extractColorsRun error:', err);
+    post({
+      type: 'extract-colors-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function extractFontsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'extract-fonts-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });

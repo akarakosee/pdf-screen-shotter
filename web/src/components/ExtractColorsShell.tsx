@@ -34,7 +34,12 @@ export function ExtractColorsShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setPhase('upload');
-          setToast({ kind: 'error', message: 'Could not extract color palette.' });
+          setToast({
+            kind: 'info',
+            message: t.lang === 'tr' 
+              ? 'Bu PDF dosyasından renk paleti çıkarılamadı veya standart renk içermiyor.' 
+              : 'Could not extract color palette from this PDF.'
+          });
         }
       }
     });
@@ -78,7 +83,7 @@ export function ExtractColorsShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Tasarım ve marka renk paleti taranıyor...' : 'Extracting brand color palette & HEX tokens...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
