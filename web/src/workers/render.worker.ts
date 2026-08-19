@@ -2702,7 +2702,108 @@ async function wipeBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void
   }
 }
 async function splitBlankRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'split-blank-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-split.pdf', cancelled: false } });
+  let muDoc;
+  try {
+    const srcDoc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = srcDoc.getPageCount();
+
+    // Check text with MuPdfEngine
+    let texts: string[] = [];
+    try {
+      await engine.init();
+      muDoc = await engine.open(file);
+      texts = await (engine as any).extractText(muDoc);
+    } catch (e) {
+      console.warn('MuPDF text check in splitBlank:', e);
+    }
+
+    const isBlank = (pageIdx: number): boolean => {
+      const page = srcDoc.getPage(pageIdx);
+      const contents = page.node.get(PDFName.of('Contents'));
+      const text = texts[pageIdx] ? texts[pageIdx].trim() : '';
+      if (!contents) return true;
+      if (text.length === 0) {
+        // If contents is empty array or empty stream
+        const cLookup = srcDoc.context.lookup(contents) as any;
+        if (!cLookup || (cLookup.size && cLookup.size() === 0) || (cLookup.contents && cLookup.contents.length < 10)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const groups: number[][] = [];
+    let currentGroup: number[] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      if (isBlank(i)) {
+        if (currentGroup.length > 0) {
+          groups.push([...currentGroup]);
+          currentGroup = [];
+        }
+      } else {
+        currentGroup.push(i);
+      }
+    }
+
+    if (currentGroup.length > 0) {
+      groups.push([...currentGroup]);
+    }
+
+    if (groups.length <= 1 && groups[0]?.length === totalPages) {
+      // No blank separator pages found
+      post({
+        type: 'split-blank-done',
+        result: {
+          totalPages,
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
+      return;
+    }
+
+    const JSZip = (await import('jszip')).default;
+    const zip = new JSZip();
+
+    for (let i = 0; i < groups.length; i++) {
+      const subDoc = await PDFDocument.create();
+      const copiedPages = await subDoc.copyPages(srcDoc, groups[i]);
+      copiedPages.forEach(p => subDoc.addPage(p));
+      const subBytes = await subDoc.save();
+
+      const filename = `Document_${String(i + 1).padStart(2, '0')}.pdf`;
+      zip.file(filename, subBytes);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-split-documents.zip';
+
+    post({
+      type: 'split-blank-done',
+      result: {
+        totalPages,
+        succeeded: groups.length,
+        failed: [],
+        durationMs: 0,
+        output: zipBlob,
+        outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('splitBlankRun error:', err);
+    post({
+      type: 'split-blank-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (muDoc) engine.close(muDoc);
+  }
 }
 async function splitBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   try {

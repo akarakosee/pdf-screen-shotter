@@ -29,12 +29,17 @@ export function SplitBlankShell({ t = en }: Props) {
         setPhase('upload');
       },
       onSplitBlankDone: (result) => {
-        if (result.succeeded > 0 && result.output) {
+        if (result.output && result.succeeded > 0) {
           setOutput({ blob: result.output, name: result.outputName! });
           setPhase('done');
         } else {
           setPhase('upload');
-          setToast({ kind: 'error', message: 'Could not find any blank pages to split by.' });
+          setToast({
+            kind: 'info',
+            message: t.lang === 'tr' 
+              ? 'Bu PDF belgesinde ayraç olarak kullanılmış herhangi bir boş sayfa tespit edilemedi.' 
+              : 'Could not find any blank separator pages in this PDF.'
+          });
         }
       }
     });
@@ -78,7 +83,7 @@ export function SplitBlankShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Boş sayfalar tespit ediliyor ve belgeler bölünüyor...' : 'Detecting blank separator pages and splitting documents...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
