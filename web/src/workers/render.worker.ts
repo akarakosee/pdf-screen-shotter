@@ -2222,8 +2222,128 @@ async function extractUrlsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> 
   }
 }
 
-async function extractAttachmentsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-attachments-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+async function extractAttachmentsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const extractedFiles: Array<{ filename: string; data: Uint8Array }> = [];
+
+    const processFileSpec = (fileSpec: any) => {
+      if (!fileSpec || !fileSpec.get) return;
+      const filenameObj = fileSpec.get(PDFName.of('UF')) || fileSpec.get(PDFName.of('F'));
+      const filename = filenameObj ? (filenameObj.asString ? filenameObj.asString() : filenameObj.toString()) : 'attached_file.bin';
+
+      const ef = fileSpec.get(PDFName.of('EF'));
+      if (ef) {
+        const efDict = doc.context.lookup(ef) as any;
+        if (efDict && efDict.get) {
+          const streamRef = efDict.get(PDFName.of('F')) || efDict.get(PDFName.of('UF'));
+          if (streamRef) {
+            const stream = doc.context.lookup(streamRef) as any;
+            if (stream && stream.contents) {
+              let data = stream.contents;
+              try {
+                data = inflate(data);
+              } catch (e) {}
+              extractedFiles.push({ filename, data: new Uint8Array(data) });
+            }
+          }
+        }
+      }
+    };
+
+    // 1. Scan Names -> EmbeddedFiles
+    const names = doc.catalog.get(PDFName.of('Names'));
+    if (names) {
+      const namesDict = doc.context.lookup(names) as any;
+      if (namesDict && namesDict.get) {
+        const efTree = namesDict.get(PDFName.of('EmbeddedFiles'));
+        if (efTree) {
+          const efTreeDict = doc.context.lookup(efTree) as any;
+          if (efTreeDict && efTreeDict.get) {
+            const namesArr = efTreeDict.get(PDFName.of('Names'));
+            if (namesArr) {
+              const arr = doc.context.lookup(namesArr) as any;
+              if (arr && arr.size) {
+                for (let i = 0; i < arr.size(); i += 2) {
+                  const fsRef = arr.get(i + 1);
+                  const fileSpec = doc.context.lookup(fsRef);
+                  processFileSpec(fileSpec);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Scan all objects in context for Filespec
+    for (const [ref, obj] of doc.context.enumerateIndirectObjects()) {
+      if (obj && (obj as any).get && (obj as any).get(PDFName.of('Type'))?.toString() === '/Filespec') {
+        processFileSpec(obj);
+      }
+    }
+
+    // Deduplicate by filename
+    const unique: Array<{ filename: string; data: Uint8Array }> = [];
+    const seen = new Set<string>();
+    for (const f of extractedFiles) {
+      if (!seen.has(f.filename)) {
+        seen.add(f.filename);
+        unique.push(f);
+      }
+    }
+
+    if (unique.length === 0) {
+      post({
+        type: 'extract-attachments-done',
+        result: {
+          totalPages: doc.getPageCount(),
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
+      return;
+    }
+
+    let outputBlob: Blob;
+    let outputName: string;
+
+    if (unique.length === 1) {
+      outputBlob = new Blob([unique[0].data]);
+      outputName = unique[0].filename;
+    } else {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      for (const item of unique) {
+        zip.file(item.filename, item.data);
+      }
+      outputBlob = await zip.generateAsync({ type: 'blob' });
+      outputName = meta.name.replace(/\.pdf$/i, '') + '-extracted-attachments.zip';
+    }
+
+    post({
+      type: 'extract-attachments-done',
+      result: {
+        totalPages: doc.getPageCount(),
+        succeeded: unique.length,
+        failed: [],
+        durationMs: 0,
+        output: outputBlob,
+        outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('extractAttachmentsRun error:', err);
+    post({
+      type: 'extract-attachments-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 function rgbToHexStr(r: number, g: number, b: number): string {
   const toHex = (n: number) => Math.round(Math.max(0, Math.min(255, n))).toString(16).padStart(2, '0').toUpperCase();

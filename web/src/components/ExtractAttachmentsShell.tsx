@@ -29,12 +29,17 @@ export function ExtractAttachmentsShell({ t = en }: Props) {
         setPhase('upload');
       },
       onExtractAttachmentsDone: (result) => {
-        if (result.succeeded > 0 && result.output) {
+        if (result.output && result.succeeded > 0) {
           setOutput({ blob: result.output, name: result.outputName! });
           setPhase('done');
         } else {
           setPhase('upload');
-          setToast({ kind: 'error', message: 'No embedded attachments found.' });
+          setToast({
+            kind: 'info',
+            message: t.lang === 'tr' 
+              ? 'Bu belgenin içinde gizli veya gömülü bir ek dosya (attachment) bulunamadı.' 
+              : 'Could not find any embedded attachments in this PDF.'
+          });
         }
       }
     });
@@ -78,7 +83,7 @@ export function ExtractAttachmentsShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Gömülü veri ve ek dosyalar çıkarılıyor...' : 'Extracting embedded file attachments...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
