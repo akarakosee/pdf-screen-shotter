@@ -2705,7 +2705,100 @@ async function splitBlankRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'split-blank-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-split.pdf', cancelled: false } });
 }
 async function splitBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'split-bookmarks-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-split.pdf', cancelled: false } });
+  try {
+    const srcDoc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = srcDoc.getPageCount();
+
+    const pageRefToIdx = new Map<string, number>();
+    for (let i = 0; i < totalPages; i++) {
+      const page = srcDoc.getPage(i);
+      pageRefToIdx.set(page.ref.toString(), i);
+    }
+
+    const outlinesRef = srcDoc.catalog.get(PDFName.of('Outlines'));
+    if (!outlinesRef) {
+      throw new Error('NO_BOOKMARKS');
+    }
+
+    const outlines = srcDoc.context.lookup(outlinesRef) as any;
+    let currentItemRef = outlines?.get(PDFName.of('First'));
+    const bookmarkList: Array<{ title: string; startPageIndex: number }> = [];
+
+    while (currentItemRef) {
+      const item = srcDoc.context.lookup(currentItemRef) as any;
+      if (!item) break;
+
+      const titleObj = item.get(PDFName.of('Title'));
+      const title = titleObj ? (titleObj.asString ? titleObj.asString() : titleObj.toString()) : 'Chapter';
+
+      const dest = item.get(PDFName.of('Dest'));
+      let startPageIndex = 0;
+      if (dest) {
+        const destArr = srcDoc.context.lookup(dest) as any;
+        if (destArr && destArr.get) {
+          const targetPageRef = destArr.get(0);
+          if (targetPageRef && pageRefToIdx.has(targetPageRef.toString())) {
+            startPageIndex = pageRefToIdx.get(targetPageRef.toString())!;
+          }
+        }
+      }
+
+      bookmarkList.push({ title, startPageIndex });
+      currentItemRef = item.get(PDFName.of('Next'));
+    }
+
+    if (bookmarkList.length === 0) {
+      throw new Error('NO_BOOKMARKS');
+    }
+
+    // Sort bookmarks by startPageIndex
+    bookmarkList.sort((a, b) => a.startPageIndex - b.startPageIndex);
+
+    const JSZip = (await import('jszip')).default;
+    const zip = new JSZip();
+
+    for (let i = 0; i < bookmarkList.length; i++) {
+      const startIdx = bookmarkList[i].startPageIndex;
+      const endIdx = (i < bookmarkList.length - 1) ? bookmarkList[i + 1].startPageIndex : totalPages;
+      const pageIndices: number[] = [];
+      for (let p = startIdx; p < endIdx; p++) {
+        pageIndices.push(p);
+      }
+
+      if (pageIndices.length === 0) continue;
+
+      const subDoc = await PDFDocument.create();
+      const copiedPages = await subDoc.copyPages(srcDoc, pageIndices);
+      copiedPages.forEach(p => subDoc.addPage(p));
+      const subBytes = await subDoc.save();
+
+      const cleanTitle = bookmarkList[i].title.replace(/[^a-zA-Z0-9_\-]/g, '_').substring(0, 50);
+      const filename = `${String(i + 1).padStart(2, '0')}-${cleanTitle}.pdf`;
+      zip.file(filename, subBytes);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-split-chapters.zip';
+
+    post({
+      type: 'split-bookmarks-done',
+      result: {
+        totalPages: totalPages,
+        succeeded: bookmarkList.length,
+        failed: [],
+        durationMs: 0,
+        output: zipBlob,
+        outputName: outputName,
+        cancelled: false
+      }
+    });
+  } catch (err: any) {
+    console.error('splitBookmarksRun error:', err);
+    post({
+      type: 'split-bookmarks-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function pdfToHtmlRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({ type: 'pdf-to-html-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new TextEncoder().encode("<html><body>PDF Content</body></html>")], { type: 'text/html' }), outputName: meta.name.replace(/\.pdf$/i, '') + '.html', cancelled: false } });
