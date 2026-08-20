@@ -8,7 +8,8 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
 import { JobController } from '../app/JobController';
-import { FileUp, FileText, Sun } from 'lucide-react';
+import { FileUp, FileText, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -27,12 +28,18 @@ export function ContrastEnhancerShell({ t = en }: Props) {
   const [brightness, setBrightness] = useState<number>(100);
   const [contrast, setContrast] = useState<number>(200);
 
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const cacheRef = useRef<Map<number, string>>(new Map());
+
   useEffect(() => {
     controller.current = new JobController({
       onFileError: (_, msg) => {
         setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
         setErrorMsg(null);
-    setPhase('upload');
+        setPhase('upload');
       },
       onContrastEnhancerDone: (result) => {
         if (result.output) {
@@ -40,7 +47,7 @@ export function ContrastEnhancerShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = t.corruptFile;
+          const errMsg = t.corruptFile;
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -60,52 +67,90 @@ export function ContrastEnhancerShell({ t = en }: Props) {
       setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
       return;
     }
+    try {
+      const buf = await f.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      setTotalPages(Math.max(1, pdfDoc.getPageCount()));
+    } catch {
+      setTotalPages(1);
+    }
     setFile(f);
+    setPreviewPageNum(1);
+    // Clear preview cache on new file
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setPhase('options');
   }, [t]);
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewPageNum, setPreviewPageNum] = useState(1);
-  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
-
+  // Fetch or serve from cache with smooth pre-fetching
   useEffect(() => {
     if (!file || phase !== 'options') return;
     let active = true;
-    setIsPreviewLoading(true);
-    
-    // We fetch a 150 DPI preview for crisp display
-    controller.current?.previewPage(file, previewPageNum, 150)
-      .then((blob) => {
-        if (!active) return;
-        setPreviewUrl(URL.createObjectURL(blob));
-      })
-      .catch((err) => {
-        console.error('Preview error:', err);
-        // If out of bounds, maybe go back to 1
-        if (previewPageNum > 1 && active) setPreviewPageNum(previewPageNum - 1);
-      })
-      .finally(() => {
-        if (active) setIsPreviewLoading(false);
-      });
+
+    const cached = cacheRef.current.get(previewPageNum);
+    if (cached) {
+      setPreviewUrl(cached);
+      setIsPreviewLoading(false);
+    } else {
+      setIsPreviewLoading(true);
+      controller.current?.previewPage(file, previewPageNum, 150)
+        .then((blob) => {
+          if (!active) return;
+          const u = URL.createObjectURL(blob);
+          cacheRef.current.set(previewPageNum, u);
+          setPreviewUrl(u);
+        })
+        .catch((err) => {
+          console.error('Preview error:', err);
+          if (previewPageNum > 1 && active) setPreviewPageNum(p => Math.max(1, p - 1));
+        })
+        .finally(() => {
+          if (active) setIsPreviewLoading(false);
+        });
+    }
+
+    // Background prefetch neighbours for zero-delay instant transition
+    for (const neighbour of [previewPageNum - 1, previewPageNum + 1]) {
+      if (neighbour < 1 || neighbour > totalPages || cacheRef.current.has(neighbour)) continue;
+      controller.current?.previewPage(file, neighbour, 150)
+        .then((blob) => {
+          if (!cacheRef.current.has(neighbour)) {
+            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          }
+        })
+        .catch(() => {});
+    }
 
     return () => {
       active = false;
-      // Clean up previous URL to avoid memory leaks
-      setPreviewUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
-        return null;
-      });
     };
-  }, [file, previewPageNum, phase]);
+  }, [file, previewPageNum, totalPages, phase]);
+
+  // Keyboard left/right arrow navigation
+  useEffect(() => {
+    if (phase !== 'options') return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        setPreviewPageNum(p => Math.max(1, p - 1));
+      } else if (e.key === 'ArrowRight') {
+        setPreviewPageNum(p => Math.min(totalPages, p + 1));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, totalPages]);
 
   const reset = useCallback(() => {
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setFile(null);
     setOutput(null);
     setErrorMsg(null);
     setPhase('upload');
     setBrightness(100);
-    setContrast(100);
+    setContrast(200);
     setPreviewPageNum(1);
+    setTotalPages(1);
   }, []);
 
   return (
@@ -141,36 +186,47 @@ export function ContrastEnhancerShell({ t = en }: Props) {
               <div className="text-xs text-center text-ink-muted dark:text-ink-muted-dark">{contrast}%</div>
             </div>
 
-            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[300px]">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[340px] select-none">
               {isPreviewLoading && !previewUrl && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
                 </div>
               )}
-              {previewUrl && (
-                <img 
-                  src={previewUrl} 
-                  alt="PDF Preview" 
-                  className="max-h-[350px] w-auto object-contain shadow-sm border dark:border-ink-faint-dark transition-all duration-75"
-                  style={{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }}
-                />
-              )}
-              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm border">
+              
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-2">
+                {previewUrl && (
+                  <img 
+                    key={previewPageNum}
+                    src={previewUrl} 
+                    alt="PDF Preview" 
+                    className="max-h-[350px] w-auto object-contain shadow-md rounded border dark:border-ink-faint-dark transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
+                    style={{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }}
+                  />
+                )}
+              </div>
+
+              {/* Smooth Left/Right Arrow Navigation Bar */}
+              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3.5 py-1.5 rounded-full shadow-md backdrop-blur-md border border-ink-faint dark:border-ink-faint-dark z-10 transition-all duration-200">
                 <button 
+                  type="button"
                   onClick={() => setPreviewPageNum(p => Math.max(1, p - 1))}
                   disabled={previewPageNum <= 1}
-                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-bg dark:hover:bg-bg-dark disabled:opacity-30 disabled:hover:bg-transparent text-lg leading-none"
+                  aria-label={t.lang === 'tr' ? 'Önceki Sayfa' : 'Previous Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
                 >
-                  -
+                  <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="text-xs font-mono min-w-[3rem] text-center">
-                  {t.lang === 'tr' ? 'Sayfa' : 'Page'} {previewPageNum}
+                <span className="text-xs font-mono min-w-[4rem] text-center font-medium select-none text-ink dark:text-ink-dark">
+                  {t.lang === 'tr' ? `Sayfa ${previewPageNum} / ${totalPages}` : `Page ${previewPageNum} of ${totalPages}`}
                 </span>
                 <button 
-                  onClick={() => setPreviewPageNum(p => p + 1)}
-                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-bg dark:hover:bg-bg-dark text-lg leading-none"
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.min(totalPages, p + 1))}
+                  disabled={previewPageNum >= totalPages}
+                  aria-label={t.lang === 'tr' ? 'Sonraki Sayfa' : 'Next Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
                 >
-                  +
+                  <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
