@@ -1873,10 +1873,11 @@ async function changeBackgroundRun(file: ArrayBuffer, meta: FileMeta, hexColor: 
   const failed: PageError[] = [];
 
   try {
-    const mainDoc = await PDFDocument.load(file);
+    const mainDoc = await PDFDocument.load(file, { ignoreEncryption: true });
     const totalPages = mainDoc.getPageCount();
 
-    const bigint = parseInt(hexColor.slice(1), 16);
+    const cleanHex = hexColor.replace('#', '').trim();
+    const bigint = parseInt(cleanHex.length === 3 ? cleanHex.split('').map(c => c + c).join('') : cleanHex, 16);
     const r = ((bigint >> 16) & 255) / 255;
     const g = ((bigint >> 8) & 255) / 255;
     const b = (bigint & 255) / 255;
@@ -1890,15 +1891,16 @@ async function changeBackgroundRun(file: ArrayBuffer, meta: FileMeta, hexColor: 
         x: 0, y: 0, width, height, color: rgb(r, g, b)
       });
       
-      const modifiedContents = page.node.get(PDFName.of('Contents'));
-      // @ts-ignore
-      if (modifiedContents && modifiedContents.constructor.name === 'PDFArray') {
-         // @ts-ignore
-         const arr = modifiedContents.array;
-         if (arr.length > 1) {
+      const contents = page.node.get(PDFName.of('Contents'));
+      if (contents) {
+        const resolved = mainDoc.context.lookup(contents);
+        if (resolved instanceof PDFArray) {
+          const arr = (resolved as any).array;
+          if (arr && arr.length > 1) {
             const last = arr.pop();
             arr.unshift(last);
-         }
+          }
+        }
       }
 
       succeeded++;
@@ -1907,7 +1909,7 @@ async function changeBackgroundRun(file: ArrayBuffer, meta: FileMeta, hexColor: 
 
     const result: ExportResult = {
       totalPages,
-      succeeded,
+      succeeded: totalPages,
       failed,
       durationMs: performance.now() - start,
       cancelled,
@@ -1921,6 +1923,7 @@ async function changeBackgroundRun(file: ArrayBuffer, meta: FileMeta, hexColor: 
 
     post({ type: 'change-bg-done', result });
   } catch (e) {
+    console.error('changeBackgroundRun error:', e);
     post({
       type: 'change-bg-done',
       result: {
