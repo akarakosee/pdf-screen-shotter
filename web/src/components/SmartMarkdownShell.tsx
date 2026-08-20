@@ -39,7 +39,7 @@ export function SmartMarkdownShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'No text found.';
+          const errMsg = t.lang === 'tr' ? 'Belgede dönüştürülecek herhangi bir metin bulunamadı.' : 'No text found to convert.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -89,7 +89,7 @@ export function SmartMarkdownShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'PDF yapay zeka ile akıllı Markdown (.md) biçimine dönüştürülüyor...' : 'Converting PDF to Smart Markdown...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />

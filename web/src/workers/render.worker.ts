@@ -2015,77 +2015,119 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
 
 async function smartMarkdownRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   const start = performance.now();
-  let succeeded = 0;
-  const failed: PageError[] = [];
+  let muDoc;
 
   try {
-    const muDoc = await engine.open(file);
+    await engine.init();
+    muDoc = await engine.open(file);
     const totalPages = engine.pageCount(muDoc);
     
-    let md = '';
+    let fullMarkdown = '';
 
-    for (let i = 0; i < totalPages; i++) {
+    for (let p = 0; p < totalPages; p++) {
       if (cancelled) break;
       
-      const textJson = await engine.extractTextJSON(muDoc, i);
-      
+      const textJson = await engine.extractTextJSON(muDoc, p);
+      let pageMd = '';
+      let inCodeBlock = false;
+
       if (textJson.blocks) {
         for (const block of textJson.blocks) {
-           if (block.type !== 0) continue;
-           
-           for (const line of block.lines) {
-              let lineText = '';
-              let maxFontSize = 0;
-              let isBold = false;
-              
-              for (const span of line.spans) {
-                 lineText += span.text;
-                 if (span.size > maxFontSize) maxFontSize = span.size;
-                 if (span.font.toLowerCase().includes('bold')) isBold = true;
+          if (block.type !== 'text' || !block.lines) continue;
+
+          for (const line of block.lines) {
+            const text = (line.text || '').trim();
+            if (!text) continue;
+
+            const font = line.font || {};
+            const fontSize = font.size || 10;
+            const isBold = (font.weight === 'bold') || (font.name || '').toLowerCase().includes('bold');
+            const isItalic = (font.style === 'italic') || (font.name || '').toLowerCase().includes('italic') || (font.name || '').toLowerCase().includes('oblique');
+            const isMono = (font.name || '').toLowerCase().includes('courier') || (font.family || '').toLowerCase().includes('monospace') || (font.name || '').toLowerCase().includes('code') || (font.name || '').toLowerCase().includes('mono');
+
+            if (isMono) {
+              if (!inCodeBlock) {
+                pageMd += '```\n';
+                inCodeBlock = true;
               }
-              
-              if (maxFontSize > 24) {
-                 md += '# ' + lineText + '\\n\\n';
-              } else if (maxFontSize > 18) {
-                 md += '## ' + lineText + '\\n\\n';
-              } else if (maxFontSize > 14) {
-                 md += '### ' + lineText + '\\n\\n';
-              } else if (isBold) {
-                 md += '**' + lineText + '**\\n\\n';
-              } else {
-                 md += lineText + '\\n';
-              }
-           }
-           md += '\\n';
+              pageMd += line.text + '\n';
+              continue;
+            } else if (inCodeBlock) {
+              pageMd += '```\n\n';
+              inCodeBlock = false;
+            }
+
+            // Headings hierarchy
+            if (fontSize >= 15) {
+              pageMd += `# ${text}\n\n`;
+            } else if (fontSize >= 13 || (fontSize >= 12 && isBold)) {
+              pageMd += `## ${text}\n\n`;
+            } else if ((fontSize >= 11 && isBold) || /^\d+\.\s+[A-Z]/.test(text)) {
+              pageMd += `### ${text}\n\n`;
+            } else if (/^[•\-\*–—]\s+/.test(text)) {
+              const cleanBullet = text.replace(/^[•\-\*–—]\s+/, '');
+              pageMd += `- ${isBold ? `**${cleanBullet}**` : cleanBullet}\n`;
+            } else if (/^\d+[\.\)]\s+/.test(text)) {
+              pageMd += `${text}\n`;
+            } else if (/^(Note|Uyarı|Dikkat|Warning|Tip|Önemli|Madde\s+\d+):/i.test(text)) {
+              pageMd += `> ${isBold ? `**${text}**` : text}\n\n`;
+            } else if (isBold && text.length < 80) {
+              pageMd += `**${text}**\n\n`;
+            } else if (isItalic) {
+              pageMd += `*${text}*\n\n`;
+            } else {
+              pageMd += `${text}\n\n`;
+            }
+          }
         }
       }
-      md += '\\n---\\n\\n';
-      
-      post({ type: 'smart-markdown-progress', processedPages: i + 1, totalPages });
-    }
-    
-    engine.close(muDoc);
-    succeeded = 1;
 
-    const result: ExportResult = {
-      totalPages,
-      succeeded,
-      failed,
-      durationMs: performance.now() - start,
-      cancelled,
-    };
+      if (inCodeBlock) {
+        pageMd += '```\n\n';
+        inCodeBlock = false;
+      }
 
-    if (succeeded > 0) {
-      result.output = new Blob([md], { type: 'text/markdown' });
-      result.outputName = sanitizeBaseName(meta.name) + '-smart.md';
+      fullMarkdown += pageMd.trim() + '\n\n';
+      if (p < totalPages - 1) {
+        fullMarkdown += '---\n\n';
+      }
+
+      post({ type: 'smart-markdown-progress', processedPages: p + 1, totalPages });
     }
 
-    post({ type: 'smart-markdown-done', result });
+    if (!fullMarkdown.trim()) {
+      post({
+        type: 'smart-markdown-done',
+        result: { totalPages, succeeded: 0, failed: [], durationMs: performance.now() - start, output: new Blob([]), outputName: '', cancelled: false }
+      });
+      return;
+    }
+
+    const outputBlob = new Blob([fullMarkdown], { type: 'text/markdown;charset=utf-8' });
+    const outputName = sanitizeBaseName(meta.name) + '.md';
+
+    post({
+      type: 'smart-markdown-done',
+      result: {
+        totalPages,
+        succeeded: totalPages,
+        failed: [],
+        durationMs: performance.now() - start,
+        output: outputBlob,
+        outputName,
+        cancelled: false
+      }
+    });
   } catch (e) {
+    console.error('smartMarkdownRun error:', e);
     post({
       type: 'smart-markdown-done',
       result: { totalPages: 1, succeeded: 0, failed: [{ fileId: meta.fileId, page: 0, message: String(e) }], durationMs: performance.now() - start, cancelled: false }
     });
+  } finally {
+    if (muDoc) {
+      try { engine.close(muDoc); } catch {}
+    }
   }
 }
 
