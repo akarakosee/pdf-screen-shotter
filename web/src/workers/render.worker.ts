@@ -2464,8 +2464,231 @@ async function extractColorsRun(file: ArrayBuffer, meta: FileMeta): Promise<void
     });
   }
 }
-async function extractFontsRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'extract-fonts-done', result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false } });
+async function extractFontsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = doc.getPageCount();
+
+    const fontsMap = new Map<string, any>();
+    const embeddedFontFiles: { name: string; fontName: string; format: string; data: Uint8Array }[] = [];
+
+    // 1. Scan pages and resources for fonts
+    for (let i = 0; i < totalPages; i++) {
+      const page = doc.getPage(i);
+      const resRef = page.node.get(PDFName.of('Resources'));
+      if (!resRef) continue;
+
+      const res = doc.context.lookup(resRef);
+      if (!res || !(res instanceof PDFDict)) continue;
+
+      const fontDictRef = res.get(PDFName.of('Font'));
+      if (!fontDictRef) continue;
+
+      const fontDict = doc.context.lookup(fontDictRef);
+      if (!fontDict || !(fontDict instanceof PDFDict)) continue;
+
+      const fontKeys = fontDict.keys();
+      for (const k of fontKeys) {
+        const fontObjRef = fontDict.get(k);
+        const fontObj = doc.context.lookup(fontObjRef);
+        if (!fontObj || !(fontObj instanceof PDFDict)) continue;
+
+        const baseFont = fontObj.get(PDFName.of('BaseFont'))?.toString().replace(/^\//, '') || 'UnknownFont';
+        const subtype = fontObj.get(PDFName.of('Subtype'))?.toString().replace(/^\//, '') || 'UnknownSubtype';
+        const encoding = fontObj.get(PDFName.of('Encoding'))?.toString().replace(/^\//, '') || 'Standard';
+
+        const cleanName = baseFont.replace(/^[A-Z]{6}\+/, '');
+
+        if (!fontsMap.has(baseFont)) {
+          fontsMap.set(baseFont, {
+            name: baseFont,
+            cleanName,
+            subtype,
+            encoding,
+            pages: [i + 1],
+            isEmbedded: false,
+            fontFormat: null,
+            fontFileName: null,
+            fileSize: null
+          });
+        } else {
+          const entry = fontsMap.get(baseFont);
+          if (!entry.pages.includes(i + 1)) entry.pages.push(i + 1);
+        }
+      }
+    }
+
+    // 2. Scan indirect objects for FontDescriptors and embedded font streams
+    const indirectObjects = doc.context.enumerateIndirectObjects();
+    for (const [_, obj] of indirectObjects) {
+      if (obj instanceof PDFDict && obj.get(PDFName.of('Type'))?.toString() === '/FontDescriptor') {
+        const fontName = obj.get(PDFName.of('FontName'))?.toString().replace(/^\//, '') || 'EmbeddedFont';
+        const ff2Ref = obj.get(PDFName.of('FontFile2')); // TrueType (.ttf)
+        const ff3Ref = obj.get(PDFName.of('FontFile3')); // OpenType / CFF (.otf)
+        const ffRef = obj.get(PDFName.of('FontFile'));   // Type 1 (.pfa/.pfb)
+
+        const targetStreamRef = ff2Ref || ff3Ref || ffRef;
+        if (targetStreamRef) {
+          const streamObj = doc.context.lookup(targetStreamRef) as any;
+          if (streamObj && streamObj.contents) {
+            let fontBytes: Uint8Array = streamObj.contents;
+            const filter = streamObj.dict?.get(PDFName.of('Filter'))?.toString();
+            if (filter === '/FlateDecode' || (!filter && fontBytes[0] === 0x78)) {
+              try {
+                fontBytes = inflate(fontBytes);
+              } catch (e) {
+                console.warn('Could not inflate font stream:', e);
+              }
+            }
+
+            let ext = 'ttf';
+            if (ff3Ref) ext = 'otf';
+            else if (ffRef) ext = 'pfa';
+
+            const cleanName = fontName.replace(/^[A-Z]{6}\+/, '');
+            const fileName = `${cleanName}.${ext}`;
+
+            embeddedFontFiles.push({
+              name: fileName,
+              fontName,
+              format: ext.toUpperCase(),
+              data: fontBytes
+            });
+
+            if (fontsMap.has(fontName)) {
+              const entry = fontsMap.get(fontName);
+              entry.isEmbedded = true;
+              entry.fontFormat = ext.toUpperCase();
+              entry.fontFileName = fileName;
+              entry.fileSize = fontBytes.length;
+            } else {
+              fontsMap.set(fontName, {
+                name: fontName,
+                cleanName,
+                subtype: ext.toUpperCase(),
+                encoding: 'Embedded',
+                pages: [],
+                isEmbedded: true,
+                fontFormat: ext.toUpperCase(),
+                fontFileName: fileName,
+                fileSize: fontBytes.length
+              });
+            }
+          }
+        }
+      }
+    }
+
+    if (fontsMap.size === 0) {
+      post({
+        type: 'extract-fonts-done',
+        result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+      });
+      return;
+    }
+
+    // 3. Generate Forensic Typography Report (.txt)
+    let report = `=====================================================\n`;
+    report += `GOSECUREPDF - TYPOGRAPHY & FONT SPECIFICATION REPORT\n`;
+    report += `Belge: ${meta.name}\n`;
+    report += `Tarama Tarihi: ${new Date().toISOString()}\n`;
+    report += `Toplam Sayfa: ${totalPages}\n`;
+    report += `Tespit Edilen Yazi Tipi Sayisi: ${fontsMap.size}\n`;
+    report += `Gomulu Font Dosyasi Sayisi: ${embeddedFontFiles.length}\n`;
+    report += `=====================================================\n\n`;
+
+    report += `[YAZI TIPLERI LISTESI / FONT LIST]\n`;
+    report += `-----------------------------------------------------\n`;
+    let fontIndex = 1;
+    for (const font of fontsMap.values()) {
+      report += `${fontIndex}. ${font.cleanName}\n`;
+      report += `   • PDF Font Ismi: ${font.name}\n`;
+      report += `   • Format / Alt Tur: ${font.subtype}\n`;
+      report += `   • Kodlama (Encoding): ${font.encoding}\n`;
+      report += `   • Gomulu Font (Embedded): ${font.isEmbedded ? `EVET (${font.fontFileName} - ${Math.round((font.fileSize || 0) / 1024)} KB)` : 'HAYIR (Sistem / Standart Font)'}\n`;
+      if (font.pages.length > 0) {
+        report += `   • Kullanildigi Sayfalar: ${font.pages.join(', ')}\n`;
+      }
+      report += `\n`;
+      fontIndex++;
+    }
+
+    report += `\n[CSS @FONT-FACE DEKLARASYONLARI]\n`;
+    report += `-----------------------------------------------------\n`;
+    for (const font of fontsMap.values()) {
+      const familyName = font.cleanName.split('-')[0];
+      const weight = font.cleanName.toLowerCase().includes('bold') ? 'bold' : 'normal';
+      const style = font.cleanName.toLowerCase().includes('italic') || font.cleanName.toLowerCase().includes('oblique') ? 'italic' : 'normal';
+      report += `@font-face {\n`;
+      report += `  font-family: '${familyName}';\n`;
+      if (font.fontFileName) {
+        report += `  src: url('${font.fontFileName}') format('${font.fontFormat?.toLowerCase() === 'otf' ? 'opentype' : 'truetype'}');\n`;
+      } else {
+        report += `  /* Standart veya Webfont karsiligi */\n`;
+        report += `  src: local('${font.cleanName}'), local('${familyName}');\n`;
+      }
+      report += `  font-weight: ${weight};\n`;
+      report += `  font-style: ${style};\n`;
+      report += `}\n\n`;
+    }
+
+    report += `\n[JSON SEMASI]\n`;
+    report += JSON.stringify(Array.from(fontsMap.values()), null, 2);
+
+    // 4. Packaging
+    if (embeddedFontFiles.length > 0) {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+
+      // Add font files (.ttf/.otf)
+      for (const fontFile of embeddedFontFiles) {
+        zip.file(fontFile.name, fontFile.data);
+      }
+
+      // Add reports
+      zip.file('tipografi_raporu.txt', report);
+      zip.file('fonts_metadata.json', JSON.stringify(Array.from(fontsMap.values()), null, 2));
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const outputName = meta.name.replace(/\.pdf$/i, '') + '-extracted-fonts.zip';
+
+      post({
+        type: 'extract-fonts-done',
+        result: {
+          totalPages,
+          succeeded: fontsMap.size,
+          failed: [],
+          durationMs: 0,
+          output: zipBlob,
+          outputName,
+          cancelled: false
+        }
+      });
+    } else {
+      // If only system fonts exist without embedded binaries, output .txt report
+      const textBlob = new Blob([new TextEncoder().encode(report)], { type: 'text/plain;charset=utf-8' });
+      const outputName = meta.name.replace(/\.pdf$/i, '') + '-typography-report.txt';
+
+      post({
+        type: 'extract-fonts-done',
+        result: {
+          totalPages,
+          succeeded: fontsMap.size,
+          failed: [],
+          durationMs: 0,
+          output: textBlob,
+          outputName,
+          cancelled: false
+        }
+      });
+    }
+  } catch (err) {
+    console.error('extractFontsRun error:', err);
+    post({
+      type: 'extract-fonts-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function extractHiddenTextRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;
