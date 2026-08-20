@@ -36,7 +36,9 @@ export function RemoveTextShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'Error removing text.';
+          const errMsg = t.lang === 'tr'
+            ? 'Belgeden metinler silinirken bir hata oluştu veya silinecek metin katmanı bulunamadı.'
+            : 'Could not remove text or no selectable text layer found in this PDF.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -84,7 +86,7 @@ export function RemoveTextShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Tüm metin katmanları siliniyor, grafik tasarım korunuyor...' : 'Removing all text layers while preserving layout...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />

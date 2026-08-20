@@ -1,11 +1,11 @@
-import { inflate } from 'pako';
+import { inflate, deflate } from 'pako';
 import * as XLSX from 'xlsx';
 // Single render worker — SISTEM_TASARIMI §3.3 message protocol.
 // The PDF engine lives only here; the main thread never imports it.
 // Cancel is cooperative (flag checked per page); pages already written to the
 // ZIP stream are preserved so a partial ZIP stays downloadable.
 
-import { PDFDocument, degrees, PageSizes, PDFName, PDFDict, rgb } from 'pdf-lib';
+import { PDFDocument, degrees, PageSizes, PDFName, PDFDict, PDFArray, rgb } from 'pdf-lib';
 import type {
   ExportResult,
   FileMeta,
@@ -2791,7 +2791,103 @@ async function removeImagesRun(file: ArrayBuffer, meta: FileMeta): Promise<void>
   post({ type: 'remove-images-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-no-images.pdf', cancelled: false } });
 }
 async function removeTextRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'remove-text-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-no-text.pdf', cancelled: false } });
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = doc.getPageCount();
+
+    for (let i = 0; i < totalPages; i++) {
+      const page = doc.getPage(i);
+      const contentsRef = page.node.get(PDFName.of('Contents'));
+      if (!contentsRef) continue;
+
+      const streamRefs: any[] = [];
+      const contentsObj = doc.context.lookup(contentsRef);
+      if (contentsObj instanceof PDFArray) {
+        for (let j = 0; j < contentsObj.size(); j++) {
+          streamRefs.push(contentsObj.get(j));
+        }
+      } else {
+        streamRefs.push(contentsRef);
+      }
+
+      for (const ref of streamRefs) {
+        const streamObj = doc.context.lookup(ref) as any;
+        if (!streamObj || !streamObj.contents) continue;
+
+        const rawBytes = streamObj.contents;
+        const filter = streamObj.dict?.get(PDFName.of('Filter'))?.toString();
+        let decodedStr = '';
+        let isFlate = false;
+
+        if (filter === '/FlateDecode' || (!filter && rawBytes[0] === 0x78)) {
+          try {
+            const decompressed = inflate(rawBytes);
+            decodedStr = new TextDecoder('latin1').decode(decompressed);
+            isFlate = true;
+          } catch (e) {
+            decodedStr = new TextDecoder('latin1').decode(rawBytes);
+          }
+        } else {
+          decodedStr = new TextDecoder('latin1').decode(rawBytes);
+        }
+
+        // Strip BT ... ET blocks
+        const noTextStr = decodedStr.replace(/\bBT\b[\s\S]*?\bET\b/g, '');
+
+        // Re-encode
+        const newBytes = new TextEncoder().encode(noTextStr);
+        const finalBytes = isFlate ? deflate(newBytes) : newBytes;
+
+        streamObj.contents = finalBytes;
+        if (streamObj.dict) {
+          streamObj.dict.set(PDFName.of('Length'), doc.context.obj(finalBytes.length));
+        }
+      }
+
+      // Also remove FreeText annotations if any
+      const annotsRef = page.node.get(PDFName.of('Annots'));
+      if (annotsRef) {
+        const annots = doc.context.lookup(annotsRef);
+        if (annots instanceof PDFArray) {
+          const remainingAnnots: any[] = [];
+          for (let k = 0; k < annots.size(); k++) {
+            const annotRef = annots.get(k);
+            const annotObj = doc.context.lookup(annotRef) as any;
+            const subtype = annotObj?.dict?.get(PDFName.of('Subtype'))?.toString();
+            if (subtype !== '/FreeText') {
+              remainingAnnots.push(annotRef);
+            }
+          }
+          if (remainingAnnots.length === 0) {
+            page.node.delete(PDFName.of('Annots'));
+          } else if (remainingAnnots.length < annots.size()) {
+            const newAnnotsArray = doc.context.obj(remainingAnnots);
+            page.node.set(PDFName.of('Annots'), newAnnotsArray);
+          }
+        }
+      }
+    }
+
+    const outputBytes = await doc.save();
+    post({
+      type: 'remove-text-done',
+      result: {
+        totalPages,
+        succeeded: totalPages,
+        failed: [],
+        durationMs: 0,
+        output: new Blob([new Uint8Array(outputBytes)], { type: 'application/pdf' }),
+        outputName: meta.name.replace(/\.pdf$/i, '') + '-no-text.pdf',
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('removeTextRun error:', err);
+    post({
+      type: 'remove-text-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function wipeBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   try {
