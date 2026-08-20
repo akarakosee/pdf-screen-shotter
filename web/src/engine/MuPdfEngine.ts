@@ -191,6 +191,26 @@ export class MuPdfEngine implements PdfEngine {
     }
   }
 
+  searchPage(doc: PdfDoc, pageIndex: number, needle: string): Array<[number, number, number, number]> {
+    const p = (doc as MuPdfDoc).handle.loadPage(pageIndex);
+    try {
+      const quadsList = p.search(needle);
+      const rects: Array<[number, number, number, number]> = [];
+      for (const quadWrapper of quadsList) {
+        for (const q of quadWrapper) {
+          const minX = Math.min(q[0], q[2], q[4], q[6]);
+          const minY = Math.min(q[1], q[3], q[5], q[7]);
+          const maxX = Math.max(q[0], q[2], q[4], q[6]);
+          const maxY = Math.max(q[1], q[3], q[5], q[7]);
+          rects.push([minX, minY, maxX, maxY]);
+        }
+      }
+      return rects;
+    } finally {
+      p.destroy();
+    }
+  }
+
   async extractImages(
     doc: PdfDoc,
     onProgress?: (page: number, total: number, extracted: number) => void

@@ -1882,14 +1882,26 @@ async function changeBackgroundRun(file: ArrayBuffer, meta: FileMeta, hexColor: 
 
 async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   const start = performance.now();
-  let succeeded = 0;
-  const failed: PageError[] = [];
+  let muDoc;
 
   try {
-    const mainDoc = await PDFDocument.load(file);
+    const mainDoc = await PDFDocument.load(file, { ignoreEncryption: true });
     const totalPages = mainDoc.getPageCount();
     
-    const muDoc = await engine.open(file);
+    await engine.init();
+    muDoc = await engine.open(file);
+
+    let totalRedactedItems = 0;
+
+    const PII_PATTERNS = [
+      /\b[1-9]\d{10}\b/g,                                                       // TC Kimlik (11 hane)
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,                       // E-posta
+      /\b(?:\d{4}[ -]?){3}\d{4}\b/g,                                            // Kredi Karti (16 hane)
+      /(?:\+?90[-.\s]?)?\(?0?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}\b/g,  // Telefon (TR)
+      /\bTR\d{2}[ -]?(?:\d{4}[ -]?){5}\d{2}\b/gi,                              // IBAN (TR)
+      /\b\d{3}-\d{2}-\d{4}\b/g,                                                 // US SSN
+      /\b(?:sk_live_[0-9a-zA-Z]{24,}|ghp_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z-_]{35})\b/g, // API Keys
+    ];
 
     for (let i = 0; i < totalPages; i++) {
       if (cancelled) break;
@@ -1898,55 +1910,85 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       const { height } = page.getSize();
       const textJson = await engine.extractTextJSON(muDoc, i);
       
-      let pageRedacted = false;
-      const PII_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\b(?:\d{3}-\d{2}-\d{4}|\d{4}-\d{4}-\d{4}-\d{4})\b/g;
-      
+      // Collect full page text
+      let pageText = '';
       if (textJson.blocks) {
         for (const block of textJson.blocks) {
-           if (block.type !== 0) continue;
-           for (const line of block.lines) {
+          if (block.type === 0 && block.lines) {
+            for (const line of block.lines) {
               for (const span of line.spans) {
-                 if (span.text.match(PII_REGEX)) {
-                    page.drawRectangle({
-                       x: span.bbox[0],
-                       y: height - span.bbox[3], // flip y
-                       width: span.bbox[2] - span.bbox[0],
-                       height: span.bbox[3] - span.bbox[1],
-                       color: rgb(0, 0, 0)
-                    });
-                    pageRedacted = true;
-                 }
+                pageText += span.text + ' ';
               }
-           }
+            }
+          }
         }
       }
 
-      if (pageRedacted) succeeded++;
+      // Find all matching PII substrings
+      const matches = new Set<string>();
+      for (const pat of PII_PATTERNS) {
+        let m;
+        while ((m = pat.exec(pageText)) !== null) {
+          const matchStr = m[0]?.trim();
+          if (matchStr && matchStr.length >= 5) {
+            matches.add(matchStr);
+          }
+        }
+      }
+
+      // Search exact coordinates and draw black redaction bars
+      for (const term of matches) {
+        const rects = (engine as any).searchPage ? (engine as any).searchPage(muDoc, i, term) : [];
+        for (const [minX, minY, maxX, maxY] of rects) {
+          page.drawRectangle({
+            x: minX - 2,
+            y: height - maxY - 2,
+            width: (maxX - minX) + 4,
+            height: (maxY - minY) + 4,
+            color: rgb(0, 0, 0),
+          });
+          totalRedactedItems++;
+        }
+      }
+
       post({ type: 'auto-redact-progress', processedPages: i + 1, totalPages });
     }
-    
-    engine.close(muDoc);
 
-    const result: ExportResult = {
-      totalPages,
-      succeeded,
-      failed,
-      durationMs: performance.now() - start,
-      cancelled,
-    };
+    if (totalRedactedItems === 0) {
+      // 0 PII found
+      post({
+        type: 'auto-redact-done',
+        result: { totalPages, succeeded: 0, failed: [], durationMs: performance.now() - start, output: new Blob([]), outputName: '', cancelled: false }
+      });
+      return;
+    }
 
     const pdfBytes = await mainDoc.save();
-    result.output = new Blob([pdfBytes], { type: 'application/pdf' });
-    result.outputName = sanitizeBaseName(meta.name) + '-redacted.pdf';
-    // Count all pages as succeeded even if no PII was found (the tool still ran)
-    result.succeeded = totalPages;
+    const outputBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const outputName = sanitizeBaseName(meta.name) + '-redacted.pdf';
 
-    post({ type: 'auto-redact-done', result });
+    post({
+      type: 'auto-redact-done',
+      result: {
+        totalPages,
+        succeeded: totalPages,
+        failed: [],
+        durationMs: performance.now() - start,
+        output: outputBlob,
+        outputName,
+        cancelled: false
+      }
+    });
   } catch (e) {
+    console.error('autoRedactRun error:', e);
     post({
       type: 'auto-redact-done',
       result: { totalPages: 1, succeeded: 0, failed: [{ fileId: meta.fileId, page: 0, message: String(e) }], durationMs: performance.now() - start, cancelled: false }
     });
+  } finally {
+    if (muDoc) {
+      try { engine.close(muDoc); } catch {}
+    }
   }
 }
 

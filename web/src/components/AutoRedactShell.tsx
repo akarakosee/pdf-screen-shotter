@@ -39,7 +39,9 @@ export function AutoRedactShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'No PII found or error occurred.';
+          const errMsg = t.lang === 'tr'
+            ? 'Bu belgede gizlenmesi gereken herhangi bir hassas veri (TC Kimlik, Kredi Kartı, Telefon, E-posta, IBAN vb.) bulunamadı.'
+            : 'No sensitive PII data (SSN, National ID, Credit Card, Phone, Email, IBAN) found in this document.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -89,7 +91,7 @@ export function AutoRedactShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Hassas kişisel veriler (TCKN, Kredi Kartı, E-posta, Telefon, IBAN) taranıyor ve sansürleniyor...' : 'Scanning & auto-redacting sensitive PII data...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
