@@ -1894,13 +1894,44 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     let totalRedactedItems = 0;
 
     const PII_PATTERNS = [
-      /\b[1-9]\d{10}\b/g,                                                       // TC Kimlik (11 hane)
-      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,                       // E-posta
-      /\b(?:\d{4}[ -]?){3}\d{4}\b/g,                                            // Kredi Karti (16 hane)
-      /(?:\+?90[-.\s]?)?\(?0?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}\b/g,  // Telefon (TR)
-      /\bTR\d{2}[ -]?(?:\d{4}[ -]?){5}\d{2}\b/gi,                              // IBAN (TR)
-      /\b\d{3}-\d{2}-\d{4}\b/g,                                                 // US SSN
-      /\b(?:sk_live_[0-9a-zA-Z]{24,}|ghp_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z-_]{35})\b/g, // API Keys
+      // 1. Emails (Global RFC 5322)
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
+
+      // 2. Credit Cards / Debit Cards (Visa, MasterCard, Amex, Discover, JCB, UnionPay - 13 to 19 digits)
+      /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}|62[0-9]{14,17}|(?:\d{4}[ -]){3}\d{4})\b/g,
+
+      // 3. IBAN (International Bank Account Number - 80+ countries: TR, DE, GB, FR, ES, IT, etc.)
+      /\b[A-Z]{2}\d{2}[ -]?(?:[A-Z0-9]{4}[ -]?){3,7}[A-Z0-9]{1,4}\b/gi,
+
+      // 4. US / Canada (SSN, EIN, SIN)
+      /\b\d{3}-\d{2}-\d{4}\b/g,
+      /\b\d{2}-\d{7}\b/g,
+      /\b\d{3}[ -]\d{3}[ -]\d{3}\b/g,
+
+      // 5. India (Aadhaar 12-digits, PAN 10-chars)
+      /\b[2-9]\d{3}[ -]\d{4}[ -]\d{4}\b/g,
+      /\b[A-Z]{5}[0-9]{4}[A-Z]{1}\b/g,
+
+      // 6. China & East Asia (Resident ID 18-digits)
+      /\b[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[\dXx]\b/g,
+
+      // 7. Europe & UK (UK NINO, German Tax ID, Spanish DNI/NIE, Italian Codice Fiscale)
+      /\b[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}\b/g,
+      /\b\d{2}[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}\b/g,
+      /\b(?:[XYZ][0-9]{7}[A-Z]|[0-9]{8}[A-Z])\b/g,
+      /\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b/g,
+
+      // 8. Turkey (TCKN 11-digits)
+      /\b[1-9]\d{10}\b/g,
+
+      // 9. Phone Numbers (International with country codes, US NANP, TR, EU, IN, CN)
+      /\b(?:\+\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{2,4}\b/g,
+
+      // 10. Cloud & API Keys, Secrets, JWTs (AWS, GitHub, Stripe, OpenAI, Google Cloud)
+      /\b(?:AKIA[0-9A-Z]{16}|sk_live_[0-9a-zA-Z]{24,}|ghp_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z-_]{35}|sk-[a-zA-Z0-9]{32,}|eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})\b/g,
+
+      // 11. Crypto Wallet Addresses (Bitcoin, Ethereum)
+      /\b(?:0x[a-fA-F0-9]{40}|(?:1|3|bc1)[a-zA-HJ-NP-Z0-9]{25,39})\b/g,
     ];
 
     for (let i = 0; i < totalPages; i++) {
