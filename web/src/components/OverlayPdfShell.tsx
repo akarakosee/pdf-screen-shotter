@@ -237,7 +237,7 @@ export function OverlayPdfShell({ t = en }: Props) {
                     }`}
                   >
                     <span className="text-sm font-medium text-ink dark:text-ink-dark">
-                      {isTr ? '📄 Arka Plan (Antet)' : '📄 Background (Stationery)'}
+                      {isTr ? 'Arka Plan (Antet)' : 'Background (Stationery)'}
                     </span>
                     <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
                       {isTr ? 'Metinlerin arkasında yer alır' : 'Placed behind text (Recommended)'}
@@ -254,7 +254,7 @@ export function OverlayPdfShell({ t = en }: Props) {
                     }`}
                   >
                     <span className="text-sm font-medium text-ink dark:text-ink-dark">
-                      {isTr ? '🏷️ Ön Plan (Damga)' : '🏷️ Foreground (Stamp)'}
+                      {isTr ? 'Ön Plan (Damga)' : 'Foreground (Stamp)'}
                     </span>
                     <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
                       {isTr ? 'Metinlerin üstüne basılır' : 'Superimposed on top of text'}
@@ -309,12 +309,12 @@ export function OverlayPdfShell({ t = en }: Props) {
 
               {/* Helpful Guide note */}
               <div className="mt-auto pt-3 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border">
-                💡 <strong>{isTr ? 'İpucu:' : 'Tip:'}</strong> {isTr ? 'Teklif ve fatura gibi belgelerde antet arka plana giydirilir, metinleriniz orijinal vektörel keskinliğini korur.' : 'Letterhead templates are seamlessly layered behind text without rasterizing or degrading original vector font quality.'}
+                <strong>{isTr ? 'İpucu:' : 'Tip:'}</strong> {isTr ? 'Teklif ve fatura gibi belgelerde antet arka plana giydirilir, metinleriniz orijinal vektörel keskinliğini korur.' : 'Letterhead templates are seamlessly layered behind text without rasterizing or degrading original vector font quality.'}
               </div>
             </div>
 
             {/* Live Document Preview Column */}
-            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[320px] select-none">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[480px] select-none">
               {isPreviewLoading && !previewUrl && (
                 <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
                   <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
@@ -327,7 +327,7 @@ export function OverlayPdfShell({ t = en }: Props) {
                     key={previewPageNum}
                     src={previewUrl}
                     alt="PDF Page Preview"
-                    className="max-h-[320px] w-auto object-contain shadow-md rounded border dark:border-ink-faint-dark transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
+                    className="max-h-[450px] w-auto object-contain shadow-md rounded border dark:border-ink-faint-dark transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
                   />
                 )}
               </div>

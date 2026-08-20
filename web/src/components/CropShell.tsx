@@ -340,8 +340,8 @@ export function CropShell({ t = en }: Props) {
             </div>
             <span className="text-[11px] text-center text-ink-muted dark:text-ink-muted-dark">
               {t.lang === 'tr'
-                ? '💡 İpucu: Kırpma kutusunu köşelerinden tutarak yeniden boyutlandırabilir veya sürükleyerek taşıyabilirsiniz.'
-                : '💡 Tip: Drag the corners to resize the crop area, or click inside to move it.'}
+                ? 'İpucu: Kırpma kutusunu köşelerinden tutarak yeniden boyutlandırabilir veya sürükleyerek taşıyabilirsiniz.'
+                : 'Tip: Drag the corners to resize the crop area, or click inside to move it.'}
             </span>
           </div>
 

@@ -30,8 +30,8 @@ interface ColorPreset {
 const PRESETS: ColorPreset[] = [
   {
     id: 'sepia',
-    nameTr: '📖 Sıcak Sepya',
-    nameEn: '📖 Warm Sepia',
+    nameTr: 'Sıcak Sepya',
+    nameEn: 'Warm Sepia',
     hex: '#F4ECD8',
     textColor: '#2E2211',
     descTr: 'Gözü yormayan klasik kitap kağıdı tonu',
@@ -39,8 +39,8 @@ const PRESETS: ColorPreset[] = [
   },
   {
     id: 'mint',
-    nameTr: '🌿 Göz Koruma Yeşili',
-    nameEn: '🌿 Eye-Care Mint',
+    nameTr: 'Göz Koruma Yeşili',
+    nameEn: 'Eye-Care Mint',
     hex: '#E8F5E9',
     textColor: '#15361B',
     descTr: 'Uzun okumalar için dinlendirici nane tonu',
@@ -48,8 +48,8 @@ const PRESETS: ColorPreset[] = [
   },
   {
     id: 'blue',
-    nameTr: '🌊 Pastel Mavi',
-    nameEn: '🌊 Soft Blue',
+    nameTr: 'Pastel Mavi',
+    nameEn: 'Soft Blue',
     hex: '#E3F2FD',
     textColor: '#0D274D',
     descTr: 'Odaklanmayı artıran ferah gök mavisi',
@@ -57,8 +57,8 @@ const PRESETS: ColorPreset[] = [
   },
   {
     id: 'cream',
-    nameTr: '☕ Krem & Fildişi',
-    nameEn: '☕ Cream & Ivory',
+    nameTr: 'Krem & Fildişi',
+    nameEn: 'Cream & Ivory',
     hex: '#FFF9E6',
     textColor: '#332914',
     descTr: 'Yumuşak gün ışığı kağıt dokusu',
@@ -66,8 +66,8 @@ const PRESETS: ColorPreset[] = [
   },
   {
     id: 'rose',
-    nameTr: '🌸 Gül Kurusu',
-    nameEn: '🌸 Soft Rose',
+    nameTr: 'Gül Kurusu',
+    nameEn: 'Soft Rose',
     hex: '#FCE4EC',
     textColor: '#3E1825',
     descTr: 'Yumuşak ve sakinleştirici pastel pembe',
@@ -75,8 +75,8 @@ const PRESETS: ColorPreset[] = [
   },
   {
     id: 'dark',
-    nameTr: '🌙 Gece Modu',
-    nameEn: '🌙 Dark Mode',
+    nameTr: 'Gece Modu',
+    nameEn: 'Dark Mode',
     hex: '#1E1E1E',
     textColor: '#FFFFFF',
     descTr: 'Karanlık ortamlar için koyu arka plan',
@@ -326,12 +326,12 @@ export function ChangeBackgroundShell({ t = en }: Props) {
               </div>
 
               <div className="mt-auto pt-2 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border">
-                💡 <strong>{isTr ? 'İpucu:' : 'Tip:'}</strong> {isTr ? 'Sepya ve Krem tonları göz yorgunluğunu %60 oranında azaltarak uzun okumalarda konfor sağlar.' : 'Sepia and warm ivory tints significantly reduce blue-light glare and eye strain during long reading.'}
+                <strong>{isTr ? 'İpucu:' : 'Tip:'}</strong> {isTr ? 'Sepya ve Krem tonları göz yorgunluğunu %60 oranında azaltarak uzun okumalarda konfor sağlar.' : 'Sepia and warm ivory tints significantly reduce blue-light glare and eye strain during long reading.'}
               </div>
             </div>
 
             {/* Right Column: Interactive Live Document Preview with Color Tint */}
-            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[340px] select-none">
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[480px] select-none">
               {isPreviewLoading && !previewUrl && (
                 <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
                   <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
@@ -341,14 +341,14 @@ export function ChangeBackgroundShell({ t = en }: Props) {
               <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-2">
                 {previewUrl && (
                   <div
-                    className="relative max-h-[320px] w-auto rounded border shadow-lg overflow-hidden transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
+                    className="relative max-h-[450px] w-auto rounded border shadow-lg overflow-hidden transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
                     style={{ backgroundColor: hexColor }}
                   >
                     <img
                       key={previewPageNum}
                       src={previewUrl}
                       alt="PDF Page Tint Preview"
-                      className="max-h-[320px] w-auto object-contain transition-all duration-200"
+                      className="max-h-[450px] w-auto object-contain transition-all duration-200"
                       style={{
                         mixBlendMode: hexColor.toLowerCase() === '#1e1e1e' || hexColor.toLowerCase() === '#121212' ? 'luminosity' : 'multiply',
                       }}

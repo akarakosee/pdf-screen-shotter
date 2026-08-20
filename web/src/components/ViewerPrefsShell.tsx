@@ -270,7 +270,7 @@ export function ViewerPrefsShell({ t = en }: Props) {
             {/* Pro Tip Alert */}
             <div className="rounded-xl bg-amber/5 dark:bg-amber-dark/5 border border-amber/20 dark:border-amber-dark/20 p-3 text-xs text-ink-muted dark:text-ink-muted-dark">
               <p className="flex items-center gap-1.5 font-medium text-ink dark:text-ink-dark mb-1">
-                <span className="text-amber dark:text-amber-dark">💡</span> {isTr ? 'Önemli Bilgi (Uyumluluk Notu):' : 'Compatibility Notice:'}
+                {isTr ? 'Önemli Bilgi (Uyumluluk Notu):' : 'Compatibility Notice:'}
               </p>
               <p>
                 {isTr 

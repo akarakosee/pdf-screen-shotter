@@ -675,8 +675,8 @@ export function SignShell({ t = en }: Props) {
             </div>
             <span className="text-[11px] text-center text-ink-muted dark:text-ink-muted-dark">
               {t.lang === 'tr'
-                ? '💡 İpucu: İmza kutucuğunu sürükleyip taşıyabilir, sağ alt köşesinden boyutunu değiştirebilir veya sayfada herhangi bir yere tıklayabilirsiniz.'
-                : '💡 Tip: Drag to move the signature box, resize it from the bottom-right corner, or click anywhere on the page preview.'}
+                ? 'İpucu: İmza kutucuğunu sürükleyip taşıyabilir, sağ alt köşesinden boyutunu değiştirebilir veya sayfada herhangi bir yere tıklayabilirsiniz.'
+                : 'Tip: Drag to move the signature box, resize it from the bottom-right corner, or click anywhere on the page preview.'}
             </span>
           </div>
 
