@@ -9,7 +9,7 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
 import { JobController } from '../app/JobController';
-import { Image, ChevronLeft, ChevronRight, Sparkles, Check, ShieldCheck, Download, Layers } from 'lucide-react';
+import { Image, ChevronLeft, ChevronRight, Sparkles, Check, ShieldCheck, FileType, Filter, CheckCircle2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -18,6 +18,8 @@ interface Props {
   t?: Strings;
 }
 
+type FormatOption = 'original' | 'png' | 'jpg';
+
 export function ExtractImagesShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
@@ -25,6 +27,11 @@ export function ExtractImagesShell({ t = en }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<ExtractImagesResult | null>(null);
   const controller = useRef<JobController | null>(null);
+
+  // Interactive Options State
+  const [selectedFormat, setSelectedFormat] = useState<FormatOption>('original');
+  const [filterTinyIcons, setFilterTinyIcons] = useState(false);
+  const [pageRange, setPageRange] = useState<'all' | 'first'>('all');
 
   // Live Preview State
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -128,7 +135,11 @@ export function ExtractImagesShell({ t = en }: Props) {
   const handleRun = () => {
     if (!file) return;
     setPhase('processing');
-    controller.current?.runExtractImages(file);
+    controller.current?.runExtractImages(file, {
+      format: selectedFormat,
+      minSize: filterTinyIcons ? 50 : 0,
+      pageRange: pageRange,
+    });
   };
 
   const reset = useCallback(() => {
@@ -140,7 +151,40 @@ export function ExtractImagesShell({ t = en }: Props) {
     setPhase('upload');
     setPreviewPageNum(1);
     setTotalPages(1);
+    setSelectedFormat('original');
+    setFilterTinyIcons(false);
+    setPageRange('all');
   }, []);
+
+  const formatCards = [
+    {
+      id: 'original' as FormatOption,
+      titleTr: 'Orijinal Format (Önerilen)',
+      titleEn: 'Original Format (Recommended)',
+      descTr: 'Her görselin belgedeki doğal formatını (PNG, JPG vb.) ve piksel kalitesini korur.',
+      descEn: 'Preserves each embedded image in its native format and pixel quality.',
+      badgeTr: 'Kayıpsız & En Hızlı',
+      badgeEn: 'Lossless & Fastest',
+    },
+    {
+      id: 'png' as FormatOption,
+      titleTr: 'Tümünü PNG Yap',
+      titleEn: 'Convert All to PNG',
+      descTr: 'Tüm görselleri şeffaflık ve yüksek netlik destekli kayıpsız PNG formatına çevirir.',
+      descEn: 'Converts all images to lossless PNG with transparency support.',
+      badgeTr: 'Şeffaf / Net',
+      badgeEn: 'Transparent / Crisp',
+    },
+    {
+      id: 'jpg' as FormatOption,
+      titleTr: 'Tümünü JPG Yap',
+      titleEn: 'Convert All to JPG',
+      descTr: 'Tüm görselleri hafif, yüksek uyumluluk sunan standart JPG formatına çevirir.',
+      descEn: 'Converts all images to standard, lightweight JPEG photos.',
+      badgeTr: 'Hafif Dosya',
+      badgeEn: 'Compact Size',
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-5">
@@ -177,48 +221,93 @@ export function ExtractImagesShell({ t = en }: Props) {
 
           {/* Settings and Live Preview Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Left Column: Extraction Details & Information */}
+            {/* Left Column: Interactive Options */}
             <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-              <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
-                {isTr ? 'Görsel Ayıklama Ayarları' : 'Image Extraction Settings'}
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? '1. Çıktı Formatını Seçin' : '1. Select Output Format'}
+                </label>
+              </div>
 
-              <div className="flex flex-col gap-3">
-                <div className="flex items-start gap-3 p-3.5 rounded-2xl border border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber/15 text-amber dark:bg-amber-dark/25 dark:text-amber-dark">
-                    <Layers className="h-5 w-5" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
-                      {isTr ? 'Kayıpsız Orijinal Çözünürlük' : 'Lossless Original Resolution'}
-                    </span>
-                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5 leading-relaxed">
-                      {isTr
-                        ? 'Belge içindeki tüm PNG, JPEG ve WebP fotoğraflar yeniden sıkıştırılmadan ham piksel kalitesinde ayıklanır.'
-                        : 'Extracts all embedded PNG, JPEG, and WebP raster images without recompression at native pixel quality.'}
-                    </span>
-                  </div>
-                </div>
+              {/* Format Cards */}
+              <div className="flex flex-col gap-2.5">
+                {formatCards.map((c) => {
+                  const isSelected = selectedFormat === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setSelectedFormat(c.id)}
+                      className={`btn-motion flex flex-col p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                        isSelected
+                          ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
+                          : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                            {isTr ? c.titleTr : c.titleEn}
+                          </span>
+                          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                            isSelected
+                              ? 'bg-amber text-[#1D1108] dark:bg-amber-dark dark:text-white font-semibold'
+                              : 'bg-ink-faint/40 text-ink-muted dark:text-ink-muted-dark'
+                          }`}>
+                            {isTr ? c.badgeTr : c.badgeEn}
+                          </span>
+                        </div>
+                        {isSelected ? (
+                          <CheckCircle2 className="w-5 h-5 text-amber dark:text-amber-dark shrink-0" />
+                        ) : (
+                          <div className="w-4 h-4 rounded-full border border-ink-faint dark:border-ink-faint-dark shrink-0" />
+                        )}
+                      </div>
+                      <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-1 leading-relaxed">
+                        {isTr ? c.descTr : c.descEn}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
 
-                <div className="flex items-start gap-3 p-3.5 rounded-2xl border border-ink-faint bg-surface dark:bg-surface-dark dark:border-ink-faint-dark">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink-faint/30 text-ink dark:bg-ink-faint-dark/30 dark:text-ink-dark">
-                    <Download className="h-5 w-5" />
+              {/* Extra Filters */}
+              <div className="pt-2 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? '2. Filtre ve Kapsam' : '2. Scope & Filter'}
+                </label>
+
+                {/* Tiny icons filter toggle */}
+                <button
+                  type="button"
+                  onClick={() => setFilterTinyIcons(!filterTinyIcons)}
+                  className={`btn-motion flex items-center justify-between p-3 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                    filterTinyIcons
+                      ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark'
+                      : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Filter className="w-4 h-4 text-amber dark:text-amber-dark shrink-0" />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-ink dark:text-ink-dark">
+                        {isTr ? 'Küçük Simgeleri Filtrele (>50px)' : 'Ignore Tiny Icons (>50px)'}
+                      </span>
+                      <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark">
+                        {isTr ? 'Nokta ve madde işaretlerini atlar, sadece gerçek resimleri alır.' : 'Skips small bullet dots and decorative markers.'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
-                      {isTr ? 'Tek Bir ZIP Dosyası' : 'Single Organized ZIP Archive'}
-                    </span>
-                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5 leading-relaxed">
-                      {isTr
-                        ? 'Tüm resimler sayfa numaralarına göre isimlendirilerek düzenli bir ZIP arşivi halinde sunulur.'
-                        : 'All images are indexed and named by page and sequence order inside a convenient ZIP file.'}
-                    </span>
+                  <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${
+                    filterTinyIcons ? 'bg-amber border-amber text-[#1D1108] dark:bg-amber-dark dark:border-amber-dark dark:text-white' : 'border-ink-faint dark:border-ink-faint-dark'
+                  }`}>
+                    {filterTinyIcons && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                   </div>
-                </div>
+                </button>
               </div>
 
               {/* Guide Note */}
-              <div className="mt-auto pt-3 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border flex items-start gap-2">
+              <div className="mt-auto pt-2 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border flex items-start gap-2">
                 <ShieldCheck className="w-4 h-4 text-amber dark:text-amber-dark shrink-0 mt-0.5" />
                 <span>
                   {isTr
@@ -328,4 +417,5 @@ export function ExtractImagesShell({ t = en }: Props) {
     </div>
   );
 }
+
 

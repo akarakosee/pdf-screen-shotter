@@ -64,7 +64,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'merge-start') await mergeRun(msg.files, msg.meta);
       else if (msg.type === 'split-start') await splitRun(msg.file, msg.meta, msg.selectedPages, msg.mode);
       else if (msg.type === 'organize-start') await organizeRun(msg.file, msg.meta, msg.pages);
-      else if (msg.type === 'extract-images-start') await extractImagesRun(msg.file, msg.meta);
+      else if (msg.type === 'extract-images-start') await extractImagesRun(msg.file, msg.meta, msg);
       else if (msg.type === 'compress-start') await compressRun(msg.file, msg.meta, msg.level);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type === 'grayscale-start') await grayscaleRun(msg.file, msg.meta);
@@ -544,7 +544,8 @@ function range(n: number): number[] {
 
 async function extractImagesRun(
   file: ArrayBuffer,
-  meta: FileMeta
+  meta: FileMeta,
+  options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' }
 ): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
@@ -557,7 +558,7 @@ async function extractImagesRun(
     doc = await engine.open(file);
     totalPages = engine.pageCount(doc);
 
-    const images = await engine.extractImages(doc, (page, total, extracted) => {
+    const rawImages = await engine.extractImages(doc, (page, total, extracted) => {
       post({
         type: 'extract-images-progress',
         extractedImages: extracted,
@@ -566,14 +567,68 @@ async function extractImagesRun(
       });
     });
 
-    extractedImages = images.length;
-    if (extractedImages > 0 && !cancelled) {
+    let images = rawImages;
+    if (options?.pageRange === 'first') {
+      images = images.filter(img => img.name.startsWith('page_01_') || img.name.startsWith('page_1_'));
+    }
+
+    if (images.length > 0 && !cancelled) {
       const zip = new ZipStream();
+      let validCount = 0;
+
       for (const img of images) {
-        zip.add(img.name, img.data);
+        if (cancelled) break;
+        try {
+          const reqFormat = options?.format || 'original';
+          const minSize = options?.minSize || 0;
+
+          if (reqFormat === 'original' && minSize === 0) {
+            zip.add(img.name, img.data);
+            validCount++;
+          } else {
+            const blob = new Blob([img.data as BlobPart]);
+            const bmp = await createImageBitmap(blob);
+            
+            if (minSize > 0 && (bmp.width < minSize || bmp.height < minSize)) {
+              bmp.close();
+              continue;
+            }
+
+            if (reqFormat === 'original') {
+              bmp.close();
+              zip.add(img.name, img.data);
+              validCount++;
+            } else {
+              const canvas = new OffscreenCanvas(bmp.width, bmp.height);
+              const ctx = canvas.getContext('2d')!;
+              if (reqFormat === 'jpg') {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+              }
+              ctx.drawImage(bmp, 0, 0);
+              bmp.close();
+
+              const mime = reqFormat === 'jpg' ? 'image/jpeg' : 'image/png';
+              const ext = reqFormat === 'jpg' ? '.jpg' : '.png';
+              const convertedBlob = await canvas.convertToBlob({ type: mime, quality: 0.92 });
+              const buf = await convertedBlob.arrayBuffer();
+              const newName = img.name.replace(/\.[^.]+$/, ext);
+              zip.add(newName, new Uint8Array(buf));
+              validCount++;
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to process individual image:', img.name, err);
+          zip.add(img.name, img.data);
+          validCount++;
+        }
       }
-      output = await zip.toBlob();
-      outputName = `${sanitizeBaseName(meta.name)}-images.zip`;
+
+      extractedImages = validCount;
+      if (extractedImages > 0 && !cancelled) {
+        output = await zip.toBlob();
+        outputName = `${sanitizeBaseName(meta.name)}-images.zip`;
+      }
     }
   } catch (e) {
     console.error('[worker] extractImagesRun failed:', e);

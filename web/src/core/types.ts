@@ -128,7 +128,14 @@ export type UiToWorkerMessage =
   | { type: 'merge-start'; files: ArrayBuffer[]; meta: FileMeta[] } // ADR-008: combine N PDFs into one
   | { type: 'split-start'; file: ArrayBuffer; meta: FileMeta; selectedPages: number[]; mode: 'extract' | 'burst' }
   | { type: 'organize-start'; file: ArrayBuffer; meta: FileMeta; pages: { pageIndex: number; rotation: number }[] }
-  | { type: 'extract-images-start'; file: ArrayBuffer; meta: FileMeta }
+  | {
+      type: 'extract-images-start';
+      file: ArrayBuffer;
+      meta: FileMeta;
+      format?: 'original' | 'png' | 'jpg';
+      minSize?: number;
+      pageRange?: 'all' | 'first';
+    }
   | { type: 'compress-start'; file: ArrayBuffer; meta: FileMeta; level: 'recommended' | 'extreme' | 'fast' }
   | { type: 'remove-blank-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'reverse-start'; file: ArrayBuffer; meta: FileMeta }
