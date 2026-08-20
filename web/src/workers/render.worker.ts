@@ -1924,8 +1924,10 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       // 8. Turkey (TCKN 11-digits)
       /\b[1-9]\d{10}\b/g,
 
-      // 9. Phone Numbers (International with country codes, US NANP, TR, EU, IN, CN)
-      /\b(?:\+\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{2,4}\b/g,
+      // 9. Strict Phone Numbers (Turkey, US/NANP, International with + prefix)
+      /(?:\+90[-.\s]?\(?0?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}|\b05\d{2}[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}|\b0[234]\d{2}[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}|\(?0[2345]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2})\b/g,
+      /(?:\+?1[-.\s]?)?\(?[2-9]\d{2}\)?[-.\s]?[2-9]\d{2}[-.\s]?\d{4}\b/g,
+      /\+\d{1,3}[-.\s]?\(?\d{2,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,
 
       // 10. Cloud & API Keys, Secrets, JWTs (AWS, GitHub, Stripe, OpenAI, Google Cloud)
       /\b(?:AKIA[0-9A-Z]{16}|sk_live_[0-9a-zA-Z]{24,}|ghp_[0-9a-zA-Z]{36}|AIza[0-9A-Za-z-_]{35}|sk-[a-zA-Z0-9]{32,}|eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,})\b/g,
