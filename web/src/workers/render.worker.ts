@@ -2135,34 +2135,57 @@ async function contrastEnhancerRun(file: ArrayBuffer, meta: FileMeta, brightness
   const start = performance.now();
   let succeeded = 0;
   const failed: PageError[] = [];
+  let muDoc;
 
   try {
-    const mainDoc = await PDFDocument.create();
-    const muDoc = await engine.open(file);
+    await engine.init();
+    const mupdf = (engine as any).require();
+    muDoc = await engine.open(file);
     const totalPages = engine.pageCount(muDoc);
+    const mainDoc = await PDFDocument.create();
+
+    const B = brightness / 100;
+    const C = contrast / 100;
+    const dpi = 150;
+    const scale = dpi / 72;
 
     for (let i = 0; i < totalPages; i++) {
       if (cancelled) break;
       
-      const { data: pngData, width: pWidth, height: pHeight } = await engine.renderPage(muDoc, i, 2, 'png', undefined, 'transparent');
-      
-      const bitmap = await createImageBitmap(new Blob([pngData as BlobPart], { type: 'image/png' }));
-      const canvas = new OffscreenCanvas(pWidth, pHeight);
-      const ctx = canvas.getContext('2d')!;
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, pWidth, pHeight);
-      
-      ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
-      ctx.drawImage(bitmap, 0, 0);
-      bitmap.close();
-      
-      const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-      const jpgBytes = new Uint8Array(await blob.arrayBuffer());
-      
+      const page = muDoc.handle.loadPage(i);
+      const bounds = page.getBounds();
+      const origWidth = bounds[2] - bounds[0];
+      const origHeight = bounds[3] - bounds[1];
+
+      const pixmap = page.toPixmap(mupdf.Matrix.scale(scale, scale), mupdf.ColorSpace.DeviceRGB, false, true);
+
+      // Manipulate RGB pixels directly in memory
+      const pixels = pixmap.getPixels();
+      for (let p = 0; p < pixels.length; p += 3) {
+        let r = pixels[p];
+        let g = pixels[p + 1];
+        let b = pixels[p + 2];
+
+        // Apply contrast
+        r = (r - 128) * C + 128;
+        g = (g - 128) * C + 128;
+        b = (b - 128) * C + 128;
+
+        // Apply brightness
+        r = r * B;
+        g = g * B;
+        b = b * B;
+
+        // Clamp 0-255
+        pixels[p] = Math.max(0, Math.min(255, Math.round(r)));
+        pixels[p + 1] = Math.max(0, Math.min(255, Math.round(g)));
+        pixels[p + 2] = Math.max(0, Math.min(255, Math.round(b)));
+      }
+
+      const jpgBytes = pixmap.asJPEG(85, false);
       const image = await mainDoc.embedJpg(jpgBytes);
-      const page = mainDoc.addPage([pWidth / 2, pHeight / 2]);
-      page.drawImage(image, { x: 0, y: 0, width: pWidth / 2, height: pHeight / 2 });
+      const newPage = mainDoc.addPage([origWidth, origHeight]);
+      newPage.drawImage(image, { x: 0, y: 0, width: origWidth, height: origHeight });
 
       succeeded++;
       post({ type: 'contrast-enhancer-progress', processedPages: i + 1, totalPages });
@@ -2186,10 +2209,15 @@ async function contrastEnhancerRun(file: ArrayBuffer, meta: FileMeta, brightness
 
     post({ type: 'contrast-enhancer-done', result });
   } catch (e) {
+    console.error('contrastEnhancerRun error:', e);
     post({
       type: 'contrast-enhancer-done',
       result: { totalPages: 1, succeeded: 0, failed: [{ fileId: meta.fileId, page: 0, message: String(e) }], durationMs: performance.now() - start, cancelled: false }
     });
+  } finally {
+    if (muDoc) {
+      try { engine.close(muDoc); } catch {}
+    }
   }
 }
 
