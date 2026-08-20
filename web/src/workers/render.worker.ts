@@ -3015,80 +3015,29 @@ async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<v
 
     await engine.init();
     muDoc = await engine.open(file);
-    const texts = await (engine as any).extractText(muDoc);
 
-    const seenSignatures = new Set<string>();
+    const seenVisualSignatures = new Set<string>();
     const keepPageIndices: number[] = [];
     const duplicatePageIndices: number[] = [];
 
     for (let i = 0; i < totalPages; i++) {
-      const pageText = (texts[i] || '').trim();
+      // 1. Render page to low-res pixmap (36 DPI, fast and 100% visually deterministic)
+      const render = await engine.renderPage(muDoc, i + 1, 36, 'png');
+      const sample = render.data;
 
-      // Read & decompress content stream from pdf-lib
-      const pdfLibPage = srcDoc.getPage(i);
-      const contentsRef = pdfLibPage.node.get(PDFName.of('Contents'));
-      let decompressedContent = '';
-
-      if (contentsRef) {
-        const contentsObj = srcDoc.context.lookup(contentsRef);
-        const streamList = (contentsObj instanceof PDFArray) ? (contentsObj as any).asArray() : [contentsObj];
-        for (const stmRef of streamList) {
-          const stm = srcDoc.context.lookup(stmRef) as any;
-          if (stm && stm.contents) {
-            let bytes = stm.contents;
-            try {
-              bytes = inflate(bytes);
-            } catch (e) {}
-            decompressedContent += new TextDecoder('latin1').decode(bytes);
-          }
-        }
+      // 2. Generate deterministic visual signature
+      const len = sample.length;
+      const step = Math.max(1, Math.floor(len / 128));
+      const samples: number[] = [];
+      for (let s = 0; s < len; s += step) {
+        samples.push(sample[s]);
       }
+      const visualSig = `${len}_${render.width}x${render.height}_${samples.join(',')}`;
 
-      // Normalize page Resources (Fonts & Images) to avoid randomized internal identifier mismatches
-      const resRef = pdfLibPage.node.get(PDFName.of('Resources'));
-      if (resRef) {
-        const res = srcDoc.context.lookup(resRef) as any;
-        if (res && res.get) {
-          // 1. Normalize Fonts (Map local /F1 or /Helvetica-1234 to BaseFont)
-          const fontRef = res.get(PDFName.of('Font'));
-          if (fontRef) {
-            const fontDict = srcDoc.context.lookup(fontRef) as any;
-            if (fontDict && fontDict.entries) {
-              for (const [k, ref] of fontDict.entries()) {
-                const fontObj = srcDoc.context.lookup(ref) as any;
-                const baseFont = fontObj?.get?.(PDFName.of('BaseFont'))?.toString() || 'Font';
-                const keyName = k.toString().replace(/^\//, '');
-                decompressedContent = decompressedContent.replace(new RegExp(`/${keyName}\\b`, 'g'), baseFont);
-              }
-            }
-          }
-
-          // 2. Normalize Images (Map local /Im1 or /Image-1234 to Image Binary Hash)
-          const xobjRef = res.get(PDFName.of('XObject'));
-          if (xobjRef) {
-            const xobjDict = srcDoc.context.lookup(xobjRef) as any;
-            if (xobjDict && xobjDict.entries) {
-              for (const [k, ref] of xobjDict.entries()) {
-                const streamObj = srcDoc.context.lookup(ref) as any;
-                if (streamObj && streamObj.contents) {
-                  const pLen = streamObj.contents.length;
-                  const pSample = `${pLen}_${streamObj.contents[0]}_${streamObj.contents[Math.floor(pLen / 2)]}_${streamObj.contents[pLen - 1]}`;
-                  const keyName = k.toString().replace(/^\//, '');
-                  decompressedContent = decompressedContent.replace(new RegExp(`/${keyName}\\b`, 'g'), `/IMG_${pSample}`);
-                }
-              }
-            }
-          }
-        }
-      }
-
-      // Generate robust signature
-      const sig = `${pageText}___${decompressedContent}`;
-
-      if (seenSignatures.has(sig)) {
+      if (seenVisualSignatures.has(visualSig)) {
         duplicatePageIndices.push(i + 1);
       } else {
-        seenSignatures.add(sig);
+        seenVisualSignatures.add(visualSig);
         keepPageIndices.push(i);
       }
     }
