@@ -3117,8 +3117,203 @@ async function splitBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<voi
     });
   }
 }
-async function pdfToHtmlRun(_file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'pdf-to-html-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new TextEncoder().encode("<html><body>PDF Content</body></html>")], { type: 'text/html' }), outputName: meta.name.replace(/\.pdf$/i, '') + '.html', cancelled: false } });
+async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  let doc;
+  try {
+    await engine.init();
+    doc = await engine.open(file);
+    const count = engine.pageCount(doc);
+
+    let pagesHtml = '';
+
+    for (let i = 0; i < count; i++) {
+      let rawPageHtml = '';
+      let width = 595;
+      let height = 842;
+
+      try {
+        const p = ((doc as any).handle).loadPage(i);
+        const bounds = p.getBounds();
+        width = Math.round(bounds[2] - bounds[0]);
+        height = Math.round(bounds[3] - bounds[1]);
+
+        const stext = p.toStructuredText('preserve-whitespace');
+        try {
+          rawPageHtml = stext.asHTML();
+        } finally {
+          stext.destroy();
+          p.destroy();
+        }
+      } catch (pageErr) {
+        console.warn(`Error extracting HTML for page ${i + 1}:`, pageErr);
+        rawPageHtml = `<div style="padding: 20px; color: #666;">Page ${i + 1} content could not be rendered.</div>`;
+      }
+
+      pagesHtml += `
+    <div class="pdf-page-container" style="--page-width: ${width}pt; --page-height: ${height}pt;">
+      <div class="page-header-badge">Sayfa ${i + 1} / ${count}</div>
+      <div class="pdf-page" style="width: ${width}pt; height: ${height}pt; position: relative;">
+        ${rawPageHtml}
+      </div>
+    </div>
+      `;
+    }
+
+    const fullHtml = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${meta.name} — HTML Görünümü</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --accent: #f59e0b;
+      --border-color: #334155;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      min-height: 100vh;
+    }
+    .toolbar {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+      max-width: 860px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      color: #f8fafc;
+    }
+    .toolbar-title {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toolbar-badge {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pdf-pages-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+      max-width: 900px;
+      align-items: center;
+    }
+    .pdf-page-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .page-header-badge {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 8px;
+      font-weight: 500;
+      align-self: flex-start;
+      margin-left: max(0px, calc(50% - (var(--page-width) / 2)));
+    }
+    .pdf-page {
+      background: var(--card-bg);
+      border-radius: 4px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+    .pdf-page div {
+      position: absolute !important;
+    }
+    .pdf-page p {
+      position: absolute !important;
+      margin: 0 !important;
+      white-space: pre !important;
+      transform-origin: left top !important;
+    }
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .toolbar, .page-header-badge {
+        display: none !important;
+      }
+      .pdf-pages-wrapper {
+        gap: 0;
+        max-width: none;
+      }
+      .pdf-page {
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-title">${meta.name}</div>
+    <div class="toolbar-badge">Toplam ${count} Sayfa • GoSecurePDF</div>
+  </header>
+  <main class="pdf-pages-wrapper">
+    ${pagesHtml}
+  </main>
+</body>
+</html>`;
+
+    const blob = new Blob([new TextEncoder().encode(fullHtml)], { type: 'text/html;charset=utf-8' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '.html';
+
+    post({
+      type: 'pdf-to-html-done',
+      result: {
+        totalPages: count,
+        succeeded: count,
+        failed: [],
+        durationMs: 0,
+        output: blob,
+        outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('pdfToHtmlRun error:', err);
+    post({
+      type: 'pdf-to-html-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function pdfToJsonRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;
