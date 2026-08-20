@@ -1,148 +1,331 @@
-import { useCallback, useRef, useState } from 'react';
-import { JobController } from '../app/JobController';
-import { triggerDownload } from '../app/download';
-import type { ExtractImagesResult, ProgressData } from '../core/types';
-import type { Strings } from '../i18n/en';
-import { en } from '../i18n/en';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { validatePdfFile } from '../app/validators';
 import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
-import { ProgressPanel } from './ProgressPanel';
+import { triggerDownload } from '../app/download';
+import type { ExtractImagesResult } from '../core/types';
+import type { Strings } from '../i18n/en';
+import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
+import { JobController } from '../app/JobController';
+import { Image, ChevronLeft, ChevronRight, Sparkles, Check, ShieldCheck, Download, Layers } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 
-type Phase = 'upload' | 'processing' | 'done';
+type Phase = 'upload' | 'options' | 'processing' | 'done';
 
 interface Props {
   t?: Strings;
-  desktopAppUrl?: string;
 }
 
-export function ExtractImagesShell({ t = en, desktopAppUrl }: Props) {
-  const [wasmOk, setWasmOk] = useState(true);
-  const [unavailable, setUnavailable] = useState(false);
+export function ExtractImagesShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
-  const [cancelling, setCancelling] = useState(false);
-  const [progress, setProgress] = useState<{ message: string; percentage?: number } | null>(null);
-  const [result, setResult] = useState<ExtractImagesResult | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [result, setResult] = useState<ExtractImagesResult | null>(null);
+  const controller = useRef<JobController | null>(null);
 
-  const controllerRef = useRef<JobController | null>(null);
-  const controller = useCallback((): JobController => {
-    if (!controllerRef.current) {
-      controllerRef.current = new JobController({
-        onExtractImagesProgress: (processed, total) => {
-           setProgress({ message: `Converting page ${processed} of ${total} to SVG...`, percentage: (processed / total) * 100 });
-        },
-        onExtractImagesDone: (res) => {
+  // Live Preview State
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const cacheRef = useRef<Map<number, string>>(new Map());
+
+  const isTr = t.lang === 'tr';
+
+  useEffect(() => {
+    controller.current = new JobController({
+      onFileError: (_, msg) => {
+        setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
+        setErrorMsg(null);
+        setPhase('upload');
+      },
+      onExtractImagesDone: (res) => {
+        if (res.succeeded > 0 && res.output) {
           setResult(res);
-          setCancelling(false);
           setPhase('done');
-        },
-        onFatal: (message) => {
-          setCancelling(false);
-          setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
+        } else {
           setErrorMsg(null);
-    setPhase('upload');
-        },
-        onUnavailable: () => {
-          setUnavailable(true);
+          const errMsg = isTr ? 'Bu belgede gömülü resim bulunamadı.' : 'No embedded raster images found in this PDF.';
+          setErrorMsg(errMsg);
+          setToast({ kind: 'info', message: errMsg });
+          setPhase('done');
         }
-      });
+      }
+    });
+    return () => {
+      controller.current?.dispose();
+    };
+  }, [t, isTr]);
+
+  const addFile = useCallback(async (incoming: File[]) => {
+    if (incoming.length === 0) return;
+    const f = incoming[0];
+    const rejection = await validatePdfFile(f);
+    if (rejection) {
+      setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
+      return;
     }
-    return controllerRef.current;
+    try {
+      const buf = await f.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      setTotalPages(Math.max(1, pdfDoc.getPageCount()));
+    } catch {
+      setTotalPages(1);
+    }
+    setFile(f);
+    setPreviewPageNum(1);
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
+    setPhase('options');
   }, [t]);
 
-  const cancel = useCallback(() => {
-    setCancelling(true);
-    controller().cancel();
-    setErrorMsg(null);
-    setPhase('upload');
-  }, [controller]);
+  // Page preview with prefetching
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+
+    const cached = cacheRef.current.get(previewPageNum);
+    if (cached) {
+      setPreviewUrl(cached);
+      setIsPreviewLoading(false);
+    } else {
+      setIsPreviewLoading(true);
+      controller.current?.previewPage(file, previewPageNum, 140)
+        .then((blob) => {
+          if (!active) return;
+          const u = URL.createObjectURL(blob);
+          cacheRef.current.set(previewPageNum, u);
+          setPreviewUrl(u);
+        })
+        .catch((err) => {
+          console.error('Preview error:', err);
+          if (previewPageNum > 1 && active) setPreviewPageNum(p => Math.max(1, p - 1));
+        })
+        .finally(() => {
+          if (active) setIsPreviewLoading(false);
+        });
+    }
+
+    for (const neighbour of [previewPageNum - 1, previewPageNum + 1]) {
+      if (neighbour < 1 || neighbour > totalPages || cacheRef.current.has(neighbour)) continue;
+      controller.current?.previewPage(file, neighbour, 140)
+        .then((blob) => {
+          if (!cacheRef.current.has(neighbour)) {
+            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [file, previewPageNum, totalPages, phase]);
+
+  const handleRun = () => {
+    if (!file) return;
+    setPhase('processing');
+    controller.current?.runExtractImages(file);
+  };
 
   const reset = useCallback(() => {
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
+    setFile(null);
     setResult(null);
-    setProgress(null);
     setErrorMsg(null);
     setPhase('upload');
-  }, [controller]);
-
-  const addFiles = useCallback(
-    (files: File[]) => {
-      if (files.length === 0) return;
-      const file = files[0];
-      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-        setToast({ kind: 'error', message: t.notPdf || 'Not a PDF file' });
-        return;
-      }
-      setPhase('processing');
-      controller().runExtractImages(file);
-    },
-    [controller]
-  );
-
-  const preload = useCallback(() => controller().preload(), [controller]);
-
-  if (!wasmOk) {
-    return (
-      <div className="w-full rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
-        <p className="text-sm">{t.noWasm || 'WASM not supported'}</p>
-      </div>
-    );
-  }
-
-  if (unavailable) {
-    return (
-      <div role="alert" className="w-full rounded-2xl border bg-surface p-6 dark:bg-surface-dark">
-        <p className="text-sm">{t.toolUnavailable || 'Tool unavailable'}</p>
-        <div className="mt-3">
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm font-medium hover:bg-bg dark:bg-surface-dark dark:hover:bg-bg-dark"
-          >
-            {t.reload || 'Reload page'}
-          </button>
-        </div>
-      </div>
-    );
-  }
+    setPreviewPageNum(1);
+    setTotalPages(1);
+  }, []);
 
   return (
-    <div className="w-full flex flex-col gap-5">
-      {phase === 'upload' && (
+    <div className="flex flex-col gap-5">
+      {toast && (
+        <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />
+      )}
+
+      {phase === 'upload' && !file && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
-          <DropZone t={t} hasFiles={false} onFiles={addFiles} onPreload={preload} />
+          <DropZone t={t} hasFiles={false} onFiles={addFile} multiple={false} />
           <PrivacyLine t={t} />
         </div>
       )}
 
+      {phase === 'options' && file && (
+        <div className="phase-enter flex flex-col gap-5">
+          {/* File Header Bar */}
+          <div className="flex items-center gap-3.5 rounded-2xl border bg-surface p-4 dark:bg-surface-dark min-w-0">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
+              <Image className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                {isTr ? 'Seçilen PDF Belgesi' : 'Target PDF Document'}
+              </span>
+              <div className="truncate text-sm font-medium pr-2 text-ink dark:text-ink-dark" title={file.name}>
+                {file.name}
+              </div>
+              <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                {isTr ? `${totalPages} Sayfa` : `${totalPages} Pages`}
+              </span>
+            </div>
+          </div>
+
+          {/* Settings and Live Preview Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Left Column: Extraction Details & Information */}
+            <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
+              <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                {isTr ? 'Görsel Ayıklama Ayarları' : 'Image Extraction Settings'}
+              </label>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start gap-3 p-3.5 rounded-2xl border border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber/15 text-amber dark:bg-amber-dark/25 dark:text-amber-dark">
+                    <Layers className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                      {isTr ? 'Kayıpsız Orijinal Çözünürlük' : 'Lossless Original Resolution'}
+                    </span>
+                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5 leading-relaxed">
+                      {isTr
+                        ? 'Belge içindeki tüm PNG, JPEG ve WebP fotoğraflar yeniden sıkıştırılmadan ham piksel kalitesinde ayıklanır.'
+                        : 'Extracts all embedded PNG, JPEG, and WebP raster images without recompression at native pixel quality.'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-2xl border border-ink-faint bg-surface dark:bg-surface-dark dark:border-ink-faint-dark">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink-faint/30 text-ink dark:bg-ink-faint-dark/30 dark:text-ink-dark">
+                    <Download className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                      {isTr ? 'Tek Bir ZIP Dosyası' : 'Single Organized ZIP Archive'}
+                    </span>
+                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5 leading-relaxed">
+                      {isTr
+                        ? 'Tüm resimler sayfa numaralarına göre isimlendirilerek düzenli bir ZIP arşivi halinde sunulur.'
+                        : 'All images are indexed and named by page and sequence order inside a convenient ZIP file.'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Guide Note */}
+              <div className="mt-auto pt-3 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-amber dark:text-amber-dark shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'İşlem tamamen cihazınızda (tarayıcınızda) gerçekleşir. Belgeleriniz sunucuya yüklenmez, %100 gizli kalır.'
+                    : 'Extraction processes 100% locally on your device via WebAssembly. Your files are never uploaded to any server.'}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Live Document Preview */}
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[480px] select-none">
+              {isPreviewLoading && !previewUrl && (
+                <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
+                </div>
+              )}
+
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-2">
+                {previewUrl && (
+                  <div className="relative max-h-[450px] w-auto rounded border shadow-lg overflow-hidden transition-all duration-300 ease-out animate-in fade-in zoom-in-95 bg-white">
+                    <img
+                      key={previewPageNum}
+                      src={previewUrl}
+                      alt="PDF Page Preview"
+                      className="max-h-[450px] w-auto object-contain"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Navigation Chevrons */}
+              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3.5 py-1.5 rounded-full shadow-md backdrop-blur-md border border-ink-faint dark:border-ink-faint-dark z-10 transition-all duration-200">
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.max(1, p - 1))}
+                  disabled={previewPageNum <= 1}
+                  aria-label={isTr ? 'Önceki Sayfa' : 'Previous Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-mono min-w-[4rem] text-center font-medium select-none text-ink dark:text-ink-dark">
+                  {isTr ? `Sayfa ${previewPageNum} / ${totalPages}` : `Page ${previewPageNum} of ${totalPages}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.min(totalPages, p + 1))}
+                  disabled={previewPageNum >= totalPages}
+                  aria-label={isTr ? 'Sonraki Sayfa' : 'Next Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onClick={reset}
+              className="btn-motion rounded-lg border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark"
+            >
+              {t.cancel || (isTr ? 'Vazgeç' : 'Cancel')}
+            </button>
+            <button
+              type="button"
+              onClick={handleRun}
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778]"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>
+                {isTr ? 'Resimleri Ayıkla ve İndir (ZIP)' : 'Extract Images (ZIP)'}
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {phase === 'processing' && (
-        <ProgressPanel
-          cancelling={cancelling}
-          label={progress?.message || (t.lang === 'tr' ? 'İşleniyor...' : 'Processing...')}
-          progressPercent={progress?.percentage || 0}
-          cancelLabel={t.cancel || 'Cancel'}
-          cancellingLabel={t.lang === 'tr' ? 'İptal ediliyor...' : 'Cancelling...'}
-          onCancel={cancel}
-        />
+        <div className="phase-enter flex flex-col gap-3">
+          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
+            <span>{t.converting || (isTr ? 'Gömülü resimler ayıklanıyor...' : 'Extracting embedded images...')}</span>
+          </div>
+          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
+            <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
+          </div>
+        </div>
       )}
 
       {phase === 'done' && (result || errorMsg) && (
-        <ResultPanel
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
             errorMsg={errorMsg}
-          t={t}
-          result={result}
-          skipped={[]}
-          crossLink={null}
-                    onDownload={() => {
-            if (result.output) triggerDownload(result.output, result.outputName || 'svgs.zip');
-          }}
-          onConvertMore={reset}
-        />
+            t={t}
+            result={result}
+            skipped={[]}
+            crossLink={null}
+            onDownload={() => {
+              if (result?.output) triggerDownload(result.output, result.outputName || 'images.zip');
+            }}
+            onConvertMore={reset}
+          />
+        </div>
       )}
-
-      {toast && <Toast toast={toast} onClear={() => setToast(null)} />}
     </div>
   );
 }
+
