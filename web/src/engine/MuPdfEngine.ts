@@ -372,6 +372,68 @@ export class MuPdfEngine implements PdfEngine {
     return await pdf.save();
   }
 
+  async rasterizeContrastEnhance(
+    doc: PdfDoc,
+    brightness: number,
+    contrast: number,
+    onProgress?: (page: number, total: number) => void
+  ): Promise<Uint8Array> {
+    const m = this.require();
+    const count = this.pageCount(doc);
+    const pdf = await PDFDocument.create();
+
+    const B = brightness / 100;
+    const C = contrast / 100;
+    const scale = 2.0; // ~144 DPI
+    
+    for (let i = 0; i < count; i++) {
+      const p = (doc as MuPdfDoc).handle.loadPage(i);
+      try {
+        const bounds = p.getBounds();
+        const width = bounds[2] - bounds[0];
+        const height = bounds[3] - bounds[1];
+        
+        const pixmap = p.toPixmap(m.Matrix.scale(scale, scale), m.ColorSpace.DeviceRGB, false, true);
+        let jpgBytes: Uint8Array;
+        try {
+          const pixels = pixmap.getPixels();
+          for (let j = 0; j < pixels.length; j += 3) {
+            let r = pixels[j];
+            let g = pixels[j + 1];
+            let b = pixels[j + 2];
+
+            // Apply contrast
+            r = (r - 128) * C + 128;
+            g = (g - 128) * C + 128;
+            b = (b - 128) * C + 128;
+
+            // Apply brightness
+            r = r * B;
+            g = g * B;
+            b = b * B;
+
+            pixels[j] = Math.max(0, Math.min(255, Math.round(r)));
+            pixels[j + 1] = Math.max(0, Math.min(255, Math.round(g)));
+            pixels[j + 2] = Math.max(0, Math.min(255, Math.round(b)));
+          }
+
+          jpgBytes = pixmap.asJPEG(85, false).slice();
+        } finally {
+          pixmap.destroy();
+        }
+        
+        const image = await pdf.embedJpg(jpgBytes);
+        const page = pdf.addPage([width, height]);
+        page.drawImage(image, { x: 0, y: 0, width, height });
+      } finally {
+        p.destroy();
+      }
+      if (onProgress) onProgress(i + 1, count);
+    }
+    
+    return await pdf.save();
+  }
+
   private require(): Mupdf {
     if (!this.mupdf) throw new Error('PdfEngine.init() must be called first');
     return this.mupdf;

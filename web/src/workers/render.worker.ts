@@ -2133,79 +2133,32 @@ async function smartMarkdownRun(file: ArrayBuffer, meta: FileMeta): Promise<void
 
 async function contrastEnhancerRun(file: ArrayBuffer, meta: FileMeta, brightness: number, contrast: number): Promise<void> {
   const start = performance.now();
-  let succeeded = 0;
-  const failed: PageError[] = [];
   let muDoc;
 
   try {
-    await engine.init();
-    const mupdf = (engine as any).require();
     muDoc = await engine.open(file);
     const totalPages = engine.pageCount(muDoc);
-    const mainDoc = await PDFDocument.create();
 
-    const B = brightness / 100;
-    const C = contrast / 100;
-    const dpi = 150;
-    const scale = dpi / 72;
-
-    for (let i = 0; i < totalPages; i++) {
-      if (cancelled) break;
-      
-      const page = muDoc.handle.loadPage(i);
-      const bounds = page.getBounds();
-      const origWidth = bounds[2] - bounds[0];
-      const origHeight = bounds[3] - bounds[1];
-
-      const pixmap = page.toPixmap(mupdf.Matrix.scale(scale, scale), mupdf.ColorSpace.DeviceRGB, false, true);
-
-      // Manipulate RGB pixels directly in memory
-      const pixels = pixmap.getPixels();
-      for (let p = 0; p < pixels.length; p += 3) {
-        let r = pixels[p];
-        let g = pixels[p + 1];
-        let b = pixels[p + 2];
-
-        // Apply contrast
-        r = (r - 128) * C + 128;
-        g = (g - 128) * C + 128;
-        b = (b - 128) * C + 128;
-
-        // Apply brightness
-        r = r * B;
-        g = g * B;
-        b = b * B;
-
-        // Clamp 0-255
-        pixels[p] = Math.max(0, Math.min(255, Math.round(r)));
-        pixels[p + 1] = Math.max(0, Math.min(255, Math.round(g)));
-        pixels[p + 2] = Math.max(0, Math.min(255, Math.round(b)));
+    const pdfBytes = await engine.rasterizeContrastEnhance(
+      muDoc,
+      brightness,
+      contrast,
+      (page, total) => {
+        post({ type: 'contrast-enhancer-progress', processedPages: page, totalPages: total });
       }
+    );
 
-      const jpgBytes = pixmap.asJPEG(85, false);
-      const image = await mainDoc.embedJpg(jpgBytes);
-      const newPage = mainDoc.addPage([origWidth, origHeight]);
-      newPage.drawImage(image, { x: 0, y: 0, width: origWidth, height: origHeight });
-
-      succeeded++;
-      post({ type: 'contrast-enhancer-progress', processedPages: i + 1, totalPages });
-    }
-    
     engine.close(muDoc);
 
     const result: ExportResult = {
       totalPages,
-      succeeded,
-      failed,
+      succeeded: totalPages,
+      failed: [],
       durationMs: performance.now() - start,
-      cancelled,
+      output: new Blob([pdfBytes], { type: 'application/pdf' }),
+      outputName: sanitizeBaseName(meta.name) + '-enhanced.pdf',
+      cancelled: false,
     };
-
-    if (succeeded > 0) {
-      const pdfBytes = await mainDoc.save();
-      result.output = new Blob([pdfBytes], { type: 'application/pdf' });
-      result.outputName = sanitizeBaseName(meta.name) + '-enhanced.pdf';
-    }
 
     post({ type: 'contrast-enhancer-done', result });
   } catch (e) {
