@@ -36,7 +36,9 @@ export function RemoveImagesShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'Error removing images.';
+          const errMsg = t.lang === 'tr'
+            ? 'Belgeden resimler silinirken bir hata oluştu veya silinecek resim bulunamadı.'
+            : 'Could not remove images or no image objects found in this PDF.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -84,7 +86,7 @@ export function RemoveImagesShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Tüm resim ve fotoğraflar siliniyor, metinler korunuyor...' : 'Removing all images while preserving text and layout...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />

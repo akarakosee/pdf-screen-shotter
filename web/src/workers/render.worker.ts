@@ -3011,7 +3011,127 @@ async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<v
   post({ type: 'remove-duplicates-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-deduped.pdf', cancelled: false } });
 }
 async function removeImagesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'remove-images-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-no-images.pdf', cancelled: false } });
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = doc.getPageCount();
+    let totalImagesRemoved = 0;
+
+    for (let i = 0; i < totalPages; i++) {
+      const page = doc.getPage(i);
+      const resRef = page.node.get(PDFName.of('Resources'));
+      if (!resRef) continue;
+
+      const res = doc.context.lookup(resRef);
+      if (!res || !(res instanceof PDFDict)) continue;
+
+      const xObjectRef = res.get(PDFName.of('XObject'));
+      if (!xObjectRef) continue;
+
+      const xObjectDict = doc.context.lookup(xObjectRef);
+      if (!xObjectDict || !(xObjectDict instanceof PDFDict)) continue;
+
+      const imageKeys: PDFName[] = [];
+      const entries = xObjectDict.entries();
+      for (const [k, ref] of entries) {
+        const obj = doc.context.lookup(ref) as any;
+        const subtype = obj?.dict ? obj.dict.get(PDFName.of('Subtype'))?.toString() : obj?.get?.(PDFName.of('Subtype'))?.toString();
+        if (subtype === '/Image') {
+          imageKeys.push(k);
+        }
+      }
+
+      if (imageKeys.length > 0) {
+        totalImagesRemoved += imageKeys.length;
+
+        // Delete image keys from XObject dictionary
+        for (const k of imageKeys) {
+          xObjectDict.delete(k);
+        }
+
+        // If XObject dictionary is now empty, delete XObject from Resources
+        if (xObjectDict.keys().length === 0) {
+          res.delete(PDFName.of('XObject'));
+        }
+
+        // Clean page content streams
+        const contentsRef = page.node.get(PDFName.of('Contents'));
+        if (contentsRef) {
+          const streamRefs: any[] = [];
+          const contentsObj = doc.context.lookup(contentsRef);
+          if (contentsObj instanceof PDFArray) {
+            for (let j = 0; j < contentsObj.size(); j++) {
+              streamRefs.push(contentsObj.get(j));
+            }
+          } else {
+            streamRefs.push(contentsRef);
+          }
+
+          for (const ref of streamRefs) {
+            const streamObj = doc.context.lookup(ref) as any;
+            if (!streamObj || !streamObj.contents) continue;
+
+            let rawBytes = streamObj.contents;
+            const filter = streamObj.dict?.get(PDFName.of('Filter'))?.toString();
+            let decodedStr = '';
+            let isFlate = false;
+
+            if (filter === '/FlateDecode' || (!filter && rawBytes[0] === 0x78)) {
+              try {
+                const decompressed = inflate(rawBytes);
+                decodedStr = new TextDecoder('latin1').decode(decompressed);
+                isFlate = true;
+              } catch (e) {
+                decodedStr = new TextDecoder('latin1').decode(rawBytes);
+              }
+            } else {
+              decodedStr = new TextDecoder('latin1').decode(rawBytes);
+            }
+
+            // Strip `/<ImageName>\s+Do` commands
+            let modifiedStr = decodedStr;
+            for (const k of imageKeys) {
+              const keyName = k.toString().replace(/^\//, '');
+              const escaped = keyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const doRegex = new RegExp(`/${escaped}\\s+Do`, 'g');
+              modifiedStr = modifiedStr.replace(doRegex, '');
+            }
+
+            // Also strip inline images `BI ... ID ... EI`
+            modifiedStr = modifiedStr.replace(/\bBI\b[\s\S]*?\bID\b[\s\S]*?\bEI\b/g, '');
+
+            // Re-encode
+            const newBytes = new TextEncoder().encode(modifiedStr);
+            const finalBytes = isFlate ? deflate(newBytes) : newBytes;
+
+            streamObj.contents = finalBytes;
+            if (streamObj.dict) {
+              streamObj.dict.set(PDFName.of('Length'), doc.context.obj(finalBytes.length));
+            }
+          }
+        }
+      }
+    }
+
+    const savedBytes = await doc.save();
+    post({
+      type: 'remove-images-done',
+      result: {
+        totalPages,
+        succeeded: totalPages,
+        failed: [],
+        durationMs: 0,
+        output: new Blob([new Uint8Array(savedBytes)], { type: 'application/pdf' }),
+        outputName: meta.name.replace(/\.pdf$/i, '') + '-no-images.pdf',
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('removeImagesRun error:', err);
+    post({
+      type: 'remove-images-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
 }
 async function removeTextRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   try {
