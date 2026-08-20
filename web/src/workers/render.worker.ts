@@ -1934,26 +1934,14 @@ async function autoRedactRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       /\b(?:0x[a-fA-F0-9]{40}|(?:1|3|bc1)[a-zA-HJ-NP-Z0-9]{25,39})\b/g,
     ];
 
+    const texts = await engine.extractText(muDoc);
+
     for (let i = 0; i < totalPages; i++) {
       if (cancelled) break;
       
       const page = mainDoc.getPage(i);
       const { height } = page.getSize();
-      const textJson = await engine.extractTextJSON(muDoc, i);
-      
-      // Collect full page text
-      let pageText = '';
-      if (textJson.blocks) {
-        for (const block of textJson.blocks) {
-          if (block.type === 0 && block.lines) {
-            for (const line of block.lines) {
-              for (const span of line.spans) {
-                pageText += span.text + ' ';
-              }
-            }
-          }
-        }
-      }
+      const pageText = texts[i] || '';
 
       // Find all matching PII substrings
       const matches = new Set<string>();
