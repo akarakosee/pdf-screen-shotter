@@ -309,12 +309,24 @@ export class JobController {
     this.post({ type: 'extract-toc-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runOverlayPdf(file: File, templateFile: File): Promise<void> {
+  async runOverlayPdf(
+    file: File,
+    templateFile: File,
+    mode: 'background' | 'foreground' = 'background',
+    pageRange: 'all' | 'first' | 'except-first' = 'all'
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
     const templateBuf = await templateFile.arrayBuffer();
-    this.post({ type: 'overlay-pdf-start', file: buf, meta: { fileId: file.name, name: file.name }, templateFile: templateBuf }, [buf, templateBuf]);
+    this.post({
+      type: 'overlay-pdf-start',
+      file: buf,
+      meta: { fileId: file.name, name: file.name },
+      templateFile: templateBuf,
+      mode,
+      pageRange,
+    }, [buf, templateBuf]);
   }
 
   async runChangeBackground(file: File, hexColor: string): Promise<void> {

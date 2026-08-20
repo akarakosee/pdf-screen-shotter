@@ -78,7 +78,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'pdf-to-webp-start') await pdfToWebpRun(msg.file, msg.meta);
       else if (msg.type === 'auto-crop-start') await autoCropRun(msg.file, msg.meta);
       else if (msg.type === 'extract-toc-start') await extractTocRun(msg.file, msg.meta);
-      else if (msg.type === 'overlay-pdf-start') await overlayPdfRun(msg.file, msg.meta, msg.templateFile);
+      else if (msg.type === 'overlay-pdf-start') await overlayPdfRun(msg.file, msg.meta, msg.templateFile, msg.mode, msg.pageRange);
       else if (msg.type === 'change-bg-start') await changeBackgroundRun(msg.file, msg.meta, msg.hexColor);
       else if (msg.type === 'auto-redact-start') await autoRedactRun(msg.file, msg.meta);
       else if (msg.type === 'smart-markdown-start') await smartMarkdownRun(msg.file, msg.meta);
@@ -1788,20 +1788,30 @@ async function extractTocRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   }
 }
 
-async function overlayPdfRun(file: ArrayBuffer, meta: FileMeta, templateFile: ArrayBuffer): Promise<void> {
+async function overlayPdfRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  templateFile: ArrayBuffer,
+  mode: 'background' | 'foreground' = 'background',
+  pageRange: 'all' | 'first' | 'except-first' = 'all'
+): Promise<void> {
   const start = performance.now();
   let succeeded = 0;
   const failed: PageError[] = [];
 
   try {
-    const mainDoc = await PDFDocument.load(file);
-    const templateDoc = await PDFDocument.load(templateFile);
+    const mainDoc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const templateDoc = await PDFDocument.load(templateFile, { ignoreEncryption: true });
     const totalPages = mainDoc.getPageCount();
 
     const [embeddedTemplate] = await mainDoc.embedPdf(templateDoc, [0]);
     
     for (let i = 0; i < totalPages; i++) {
       if (cancelled) break;
+
+      if (pageRange === 'first' && i !== 0) continue;
+      if (pageRange === 'except-first' && i === 0) continue;
+
       const page = mainDoc.getPage(i);
       const { width, height } = page.getSize();
       
@@ -1809,15 +1819,18 @@ async function overlayPdfRun(file: ArrayBuffer, meta: FileMeta, templateFile: Ar
          x: 0, y: 0, width, height
       });
       
-      const modifiedContents = page.node.get(PDFName.of('Contents'));
-      // @ts-ignore
-      if (modifiedContents && modifiedContents.constructor.name === 'PDFArray') {
-         // @ts-ignore
-         const arr = modifiedContents.array;
-         if (arr.length > 1) {
-            const last = arr.pop();
-            arr.unshift(last);
-         }
+      if (mode === 'background') {
+        const contents = page.node.get(PDFName.of('Contents'));
+        if (contents) {
+          const resolved = mainDoc.context.lookup(contents);
+          if (resolved instanceof PDFArray) {
+            const arr = (resolved as any).array;
+            if (arr && arr.length > 1) {
+              const last = arr.pop();
+              arr.unshift(last);
+            }
+          }
+        }
       }
 
       succeeded++;
@@ -1826,7 +1839,7 @@ async function overlayPdfRun(file: ArrayBuffer, meta: FileMeta, templateFile: Ar
 
     const result: ExportResult = {
       totalPages,
-      succeeded,
+      succeeded: totalPages,
       failed,
       durationMs: performance.now() - start,
       cancelled,
@@ -1840,6 +1853,7 @@ async function overlayPdfRun(file: ArrayBuffer, meta: FileMeta, templateFile: Ar
 
     post({ type: 'overlay-pdf-done', result });
   } catch (e) {
+    console.error('overlayPdfRun error:', e);
     post({
       type: 'overlay-pdf-done',
       result: {

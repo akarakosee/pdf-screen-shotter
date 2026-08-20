@@ -148,7 +148,7 @@ export type UiToWorkerMessage =
   | { type: 'pdf-to-webp-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'auto-crop-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'extract-toc-start'; file: ArrayBuffer; meta: FileMeta }
-  | { type: 'overlay-pdf-start'; file: ArrayBuffer; meta: FileMeta; templateFile: ArrayBuffer }
+  | { type: 'overlay-pdf-start'; file: ArrayBuffer; meta: FileMeta; templateFile: ArrayBuffer; mode?: 'background' | 'foreground'; pageRange?: 'all' | 'first' | 'except-first' }
   | { type: 'change-bg-start'; file: ArrayBuffer; meta: FileMeta; hexColor: string }
   | { type: 'auto-redact-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'smart-markdown-start'; file: ArrayBuffer; meta: FileMeta }

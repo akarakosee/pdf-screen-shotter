@@ -8,8 +8,8 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
 import { JobController } from '../app/JobController';
-import { FileUp, Palette, FileText } from 'lucide-react';
-
+import { FileUp, FileText, Layers, ChevronLeft, ChevronRight, CheckCircle2, Upload, Sparkles } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -20,20 +20,29 @@ interface Props {
 export function OverlayPdfShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
+  const [templateFile, setTemplateFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
   const controller = useRef<JobController | null>(null);
 
-  const [templateFile, setTemplateFile] = useState<File | null>(null);
-  
+  const [mode, setMode] = useState<'background' | 'foreground'>('background');
+  const [pageRange, setPageRange] = useState<'all' | 'first' | 'except-first'>('all');
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const cacheRef = useRef<Map<number, string>>(new Map());
+
+  const isTr = t.lang === 'tr';
 
   useEffect(() => {
     controller.current = new JobController({
       onFileError: (_, msg) => {
         setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
         setErrorMsg(null);
-    setPhase('upload');
+        setPhase('upload');
       },
       onOverlayPdfDone: (result) => {
         if (result.succeeded > 0 && result.output) {
@@ -41,7 +50,7 @@ export function OverlayPdfShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = t.corruptFile;
+          const errMsg = isTr ? 'Antetli kağıt şablonu uygulanamadı. Dosyaları kontrol ediniz.' : 'Failed to apply letterhead overlay.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -51,7 +60,7 @@ export function OverlayPdfShell({ t = en }: Props) {
     return () => {
       controller.current?.dispose();
     };
-  }, [t]);
+  }, [t, isTr]);
 
   const addFile = useCallback(async (incoming: File[]) => {
     if (incoming.length === 0) return;
@@ -61,15 +70,86 @@ export function OverlayPdfShell({ t = en }: Props) {
       setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
       return;
     }
+    try {
+      const buf = await f.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      setTotalPages(Math.max(1, pdfDoc.getPageCount()));
+    } catch {
+      setTotalPages(1);
+    }
     setFile(f);
+    setPreviewPageNum(1);
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setPhase('options');
   }, [t]);
 
+  const handleTemplateUpload = useCallback(async (incoming: FileList | null) => {
+    if (!incoming || incoming.length === 0) return;
+    const f = incoming[0];
+    const rejection = await validatePdfFile(f);
+    if (rejection) {
+      setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
+      return;
+    }
+    setTemplateFile(f);
+  }, [t]);
+
+  // Page preview with prefetching
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+
+    const cached = cacheRef.current.get(previewPageNum);
+    if (cached) {
+      setPreviewUrl(cached);
+      setIsPreviewLoading(false);
+    } else {
+      setIsPreviewLoading(true);
+      controller.current?.previewPage(file, previewPageNum, 140)
+        .then((blob) => {
+          if (!active) return;
+          const u = URL.createObjectURL(blob);
+          cacheRef.current.set(previewPageNum, u);
+          setPreviewUrl(u);
+        })
+        .catch((err) => {
+          console.error('Preview error:', err);
+          if (previewPageNum > 1 && active) setPreviewPageNum(p => Math.max(1, p - 1));
+        })
+        .finally(() => {
+          if (active) setIsPreviewLoading(false);
+        });
+    }
+
+    for (const neighbour of [previewPageNum - 1, previewPageNum + 1]) {
+      if (neighbour < 1 || neighbour > totalPages || cacheRef.current.has(neighbour)) continue;
+      controller.current?.previewPage(file, neighbour, 140)
+        .then((blob) => {
+          if (!cacheRef.current.has(neighbour)) {
+            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [file, previewPageNum, totalPages, phase]);
+
   const reset = useCallback(() => {
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setFile(null);
+    setTemplateFile(null);
     setOutput(null);
     setErrorMsg(null);
     setPhase('upload');
+    setMode('background');
+    setPageRange('all');
+    setPreviewPageNum(1);
+    setTotalPages(1);
   }, []);
 
   return (
@@ -78,7 +158,7 @@ export function OverlayPdfShell({ t = en }: Props) {
         <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />
       )}
 
-      {phase === 'upload' && (
+      {phase === 'upload' && !file && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFile} multiple={false} />
           <PrivacyLine t={t} />
@@ -86,22 +166,220 @@ export function OverlayPdfShell({ t = en }: Props) {
       )}
 
       {phase === 'options' && file && (
-        <div className="phase-enter flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark min-w-0 flex-1">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
-              <FileText className="h-5 w-5" />
+        <div className="phase-enter flex flex-col gap-5">
+          {/* Main Document & Template Selection Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* 1. Main Document Card */}
+            <div className="flex items-center gap-3.5 rounded-2xl border bg-surface p-4 dark:bg-surface-dark min-w-0">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
+                <FileText className="h-6 w-6" />
+              </div>
+              <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? '1. Ana Metin Belgesi (Fatura / Rapor)' : '1. Main Content PDF'}
+                </span>
+                <div className="truncate text-sm font-medium pr-2 text-ink dark:text-ink-dark" title={file.name}>
+                  {file.name}
+                </div>
+                <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? `${totalPages} Sayfa` : `${totalPages} Pages`}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col overflow-hidden min-w-0 flex-1">
-              <div className="overflow-x-auto whitespace-nowrap scrollbar-thin text-sm font-medium pr-2" title={file.name}>{file.name} (Target)</div>
+
+            {/* 2. Letterhead Template Card */}
+            <div className={`flex items-center gap-3.5 rounded-2xl border p-4 transition-all duration-200 min-w-0 ${templateFile ? 'bg-surface dark:bg-surface-dark border-emerald-500/40' : 'bg-surface/50 dark:bg-surface-dark/50 border-dashed border-ink-faint dark:border-ink-faint-dark'}`}>
+              <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${templateFile ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-indigo/10 text-indigo dark:bg-indigo-dark/20 dark:text-indigo-dark'}`}>
+                {templateFile ? <CheckCircle2 className="h-6 w-6" /> : <FileUp className="h-6 w-6" />}
+              </div>
+              <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? '2. Şirket Anteti / Şablon PDF' : '2. Letterhead / Stationery PDF'}
+                </span>
+                {templateFile ? (
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-medium text-emerald-600 dark:text-emerald-400" title={templateFile.name}>
+                      {templateFile.name}
+                    </span>
+                    <label className="text-xs text-indigo hover:underline cursor-pointer dark:text-indigo-dark shrink-0">
+                      {isTr ? 'Değiştir' : 'Change'}
+                      <input type="file" accept="application/pdf" className="hidden" onChange={(e) => handleTemplateUpload(e.target.files)} />
+                    </label>
+                  </div>
+                ) : (
+                  <label className="text-sm font-medium text-indigo hover:underline cursor-pointer dark:text-indigo-dark flex items-center gap-1.5 pt-0.5">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{isTr ? 'Antetli PDF Dosyası Seçin...' : 'Select Letterhead Template PDF...'}</span>
+                    <input type="file" accept="application/pdf" className="hidden" onChange={(e) => handleTemplateUpload(e.target.files)} />
+                  </label>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-            <label className="text-sm font-medium">{t.lang === 'tr' ? 'Şablon / Antet Dosyası' : 'Template / Letterhead File'}</label>
-            <input type="file" accept="application/pdf" onChange={(e) => setTemplateFile(e.target.files?.[0] || null)} className="text-sm" />
+
+          {/* Configuration and Live Preview Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Options Column */}
+            <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
+              {/* Placement Mode */}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? 'Katman Konumu (Yerleşim)' : 'Layer Placement'}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setMode('background')}
+                    className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all ${
+                      mode === 'background'
+                        ? 'border-indigo bg-indigo/5 dark:bg-indigo-dark/10 ring-1 ring-indigo dark:ring-indigo-dark'
+                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                    }`}
+                  >
+                    <span className="text-sm font-medium text-ink dark:text-ink-dark">
+                      {isTr ? '📄 Arka Plan (Antet)' : '📄 Background (Stationery)'}
+                    </span>
+                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
+                      {isTr ? 'Metinlerin arkasında yer alır' : 'Placed behind text (Recommended)'}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setMode('foreground')}
+                    className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all ${
+                      mode === 'foreground'
+                        ? 'border-indigo bg-indigo/5 dark:bg-indigo-dark/10 ring-1 ring-indigo dark:ring-indigo-dark'
+                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                    }`}
+                  >
+                    <span className="text-sm font-medium text-ink dark:text-ink-dark">
+                      {isTr ? '🏷️ Ön Plan (Damga)' : '🏷️ Foreground (Stamp)'}
+                    </span>
+                    <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
+                      {isTr ? 'Metinlerin üstüne basılır' : 'Superimposed on top of text'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Page Range Selection */}
+              <div className="flex flex-col gap-2 pt-2 border-t dark:border-ink-faint-dark/20">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? 'Uygulanacak Sayfa Aralığı' : 'Apply to Pages'}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPageRange('all')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                      pageRange === 'all'
+                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
+                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                    }`}
+                  >
+                    {isTr ? 'Tüm Sayfalar' : 'All Pages'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPageRange('first')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                      pageRange === 'first'
+                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
+                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                    }`}
+                  >
+                    {isTr ? 'Yalnızca 1. Sayfa' : 'First Page Only'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPageRange('except-first')}
+                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                      pageRange === 'except-first'
+                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
+                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                    }`}
+                  >
+                    {isTr ? '1. Sayfa Hariç' : 'Except First'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Helpful Guide note */}
+              <div className="mt-auto pt-3 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border">
+                💡 <strong>{isTr ? 'İpucu:' : 'Tip:'}</strong> {isTr ? 'Teklif ve fatura gibi belgelerde antet arka plana giydirilir, metinleriniz orijinal vektörel keskinliğini korur.' : 'Letterhead templates are seamlessly layered behind text without rasterizing or degrading original vector font quality.'}
+              </div>
+            </div>
+
+            {/* Live Document Preview Column */}
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[320px] select-none">
+              {isPreviewLoading && !previewUrl && (
+                <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo border-t-transparent dark:border-indigo-dark dark:border-t-transparent" />
+                </div>
+              )}
+
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-2">
+                {previewUrl && (
+                  <img
+                    key={previewPageNum}
+                    src={previewUrl}
+                    alt="PDF Page Preview"
+                    className="max-h-[320px] w-auto object-contain shadow-md rounded border dark:border-ink-faint-dark transition-all duration-300 ease-out animate-in fade-in zoom-in-95"
+                  />
+                )}
+              </div>
+
+              {/* Navigation Chevrons */}
+              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3.5 py-1.5 rounded-full shadow-md backdrop-blur-md border border-ink-faint dark:border-ink-faint-dark z-10 transition-all duration-200">
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.max(1, p - 1))}
+                  disabled={previewPageNum <= 1}
+                  aria-label={isTr ? 'Önceki Sayfa' : 'Previous Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-mono min-w-[4rem] text-center font-medium select-none text-ink dark:text-ink-dark">
+                  {isTr ? `Sayfa ${previewPageNum} / ${totalPages}` : `Page ${previewPageNum} of ${totalPages}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.min(totalPages, p + 1))}
+                  disabled={previewPageNum >= totalPages}
+                  aria-label={isTr ? 'Sonraki Sayfa' : 'Next Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-end mt-2">
-            <button className="rounded-lg bg-indigo px-4 py-2 text-sm font-medium text-white hover:bg-indigo/90 dark:bg-indigo-dark dark:hover:bg-indigo-dark/90 disabled:opacity-50" onClick={() => { setPhase('processing'); controller.current?.runOverlayPdf(file, templateFile!); }} disabled={!templateFile}>
-              {t.lang === 'tr' ? 'Şablonu Ekle' : 'Apply Overlay'}
+
+          {/* Action Buttons */}
+          <div className="flex justify-between items-center mt-2 border-t dark:border-ink-faint-dark/20 pt-4">
+            <button
+              onClick={reset}
+              className="px-4 py-2 text-sm font-medium text-ink-muted dark:text-ink-muted-dark hover:text-ink dark:hover:text-ink-dark transition-colors"
+            >
+              {isTr ? 'İptal' : 'Cancel'}
+            </button>
+            <button
+              onClick={() => {
+                if (!templateFile) return;
+                setPhase('processing');
+                controller.current?.runOverlayPdf(file, templateFile, mode, pageRange);
+              }}
+              disabled={!templateFile}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 bg-indigo text-white shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] dark:bg-indigo-dark dark:shadow-[0_0_15px_rgba(99,102,241,0.3)] dark:hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm">
+                {isTr ? 'Antetli Kağıdı Uygula' : 'Apply Letterhead Template'}
+              </span>
             </button>
           </div>
         </div>
@@ -110,7 +388,7 @@ export function OverlayPdfShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{isTr ? 'Antetli kağıt şablonu belgenize giydiriliyor...' : 'Applying letterhead template to your document...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
@@ -134,3 +412,4 @@ export function OverlayPdfShell({ t = en }: Props) {
     </div>
   );
 }
+

@@ -2568,12 +2568,12 @@ export const extractTocCopy = {
 
 export const overlayPdfCopy = {
   en: {
-    title: "Overlay PDF (Letterhead & Stamp)",
-    description: "Overlay or superimpose two PDF documents together online for free. Add letterhead templates and background stamps easily.",
-    keywords: "overlay pdf, superimpose pdf, add letterhead to pdf, pdf background stamp, merge pdf layers",
-    h1: "Overlay PDF",
-    tagline: "Superimpose a transparent letterhead, company stationery, or background stamp over your multi-page documents.",
-    howToName: "How to overlay a letterhead onto a PDF",
+    title: "Add Letterhead to PDF (Overlay & Stamp)",
+    description: "Add company letterhead stationery, corporate templates, or background stamps to your PDF documents online for free.",
+    keywords: "add letterhead to pdf, pdf overlay, pdf stationery template, pdf background stamp, merge pdf layers",
+    h1: "Add Letterhead to PDF",
+    tagline: "Superimpose your company letterhead, stationery template, or background stamp over your multi-page documents.",
+    howToName: "How to add a letterhead or overlay onto a PDF",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
     steps: [
@@ -2583,27 +2583,27 @@ export const overlayPdfCopy = {
     ],
     faq: [
       { q: "Can I place the overlay in the background or foreground?", a: "Yes, you can choose whether the overlay appears under your text (as stationery) or over it (as a stamp)." },
-      { q: "Is it applied to every page?", a: "Yes, the template repeats across all document pages automatically." }
+      { q: "Is it applied to every page?", a: "Yes, you can choose to apply it to all pages, first page only, or all pages except the first." }
     ],
     crossLink: { href: "/watermark-pdf", label: "Need a text watermark instead? Try Watermark PDF." }
   },
   tr: {
-    title: "PDF Üst Üste Bindir (Antetli Kağıt)",
-    description: "PDF fatura ve yazılarınıza antetli kağıt şablonu, kurumsal çerçeve veya arka plan damgası ekleyin. Ücretsiz ve pratik.",
-    keywords: "pdf antetli kağıt ekleme, pdf üst üste bindirme, kurumsal antet pdf yapma, pdf arka plan şablonu",
-    h1: "PDF Üst Üste Bindir",
-    tagline: "Şirket antetli kağıdınızı fatura veya yazılarınızın altına şablon olarak yerleştirin. Matbaa baskısı kalitesinde evraklar üretin.",
+    title: "PDF'e Antetli Kağıt Ekle (Şablon & Damga)",
+    description: "PDF fatura ve yazılarınıza şirket antetli kağıt şablonu, kurumsal çerçeve veya arka plan damgası ekleyin. Ücretsiz ve pratik.",
+    keywords: "pdf antetli kağıt ekleme, pdf antet giydirme, kurumsal antet pdf yapma, pdf arka plan şablonu, pdf overlay",
+    h1: "PDF'e Antetli Kağıt Ekle",
+    tagline: "Şirket antetli kağıdınızı, kurumsal şablonunuzu veya arka plan logonuzu fatura ve raporlarınızın altına şablon olarak yerleştirin.",
     howToName: "PDF belgesine antetli kağıt şablonu nasıl eklenir?",
     howItWorks: "Nasıl çalışır?",
     faqTitle: "Sık Sorulan Sorular",
     steps: [
-      { name: "Metin Belgenizi Yükleyin", text: "Fatura veya yazı içeren ana PDF dosyanızı seçin." },
-      { name: "Antetli Şablonu Ekleyin", text: "Şirket logonuzu içeren antetli kağıt PDF'ini seçin." },
-      { name: "Birleştirilmiş PDF'i İndirin", text: "Antetli kağıt üzerine basılmış gibi görünen yeni belgenizi indirin." }
+      { name: "Metin Belgenizi Yükleyin", text: "Fatura, teklif veya yazı içeren ana PDF dosyanızı seçin." },
+      { name: "Antetli Şablonu Ekleyin", text: "Şirket logonuzu ve antetinizi içeren şablon PDF'ini seçin." },
+      { name: "Birleştirilmiş PDF'i İndirin", text: "Antetli kağıt üzerine basılmış gibi profesyonelce hazırlanan belgenizi indirin." }
     ],
     faq: [
-      { q: "Antet yazının arkasında mı kalır?", a: "Evet! Şablon arka plan olarak yerleştirilir, böylece metinlerinizin okunurluğu asla bozulmaz." },
-      { q: "Tüm sayfalara otomatik uygulanır mı?", a: "Evet, antetli şablon belgenin tüm sayfalarına otomatik olarak giydirilir." }
+      { q: "Antet yazının arkasında mı kalır?", a: "Evet! Varsayılan olarak şablon arka plan olarak yerleştirilir, böylece metinlerinizin okunurluğu asla bozulmaz." },
+      { q: "Hangi sayfalara uygulanır?", a: "Tüm sayfalara, yalnızca ilk sayfaya (kapak/ön yazı) veya ilk sayfa hariç tüm sayfalara uygulama seçeneğiniz vardır." }
     ],
     crossLink: { href: "/tr/watermark-pdf", label: "Metin damgası basmak için PDF Filigran Ekle aracını kullanın." }
   },
