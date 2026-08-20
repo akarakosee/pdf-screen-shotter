@@ -3008,7 +3008,93 @@ function addSheetToWorkbook(wb: XLSX.WorkBook, title: string, data: string[][]) 
 }
 
 async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
-  post({ type: 'remove-duplicates-done', result: { totalPages: 1, succeeded: 1, failed: [], durationMs: 0, output: new Blob([new Uint8Array(file)], { type: 'application/pdf' }), outputName: meta.name.replace(/\.pdf$/i, '') + '-deduped.pdf', cancelled: false } });
+  let muDoc;
+  try {
+    const srcDoc = await PDFDocument.load(file, { ignoreEncryption: true });
+    const totalPages = srcDoc.getPageCount();
+
+    await engine.init();
+    muDoc = await engine.open(file);
+    const texts = await (engine as any).extractText(muDoc);
+
+    const seenSignatures = new Set<string>();
+    const keepPageIndices: number[] = [];
+    const duplicatePageIndices: number[] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      const pageText = (texts[i] || '').trim();
+
+      // Read content stream from pdf-lib
+      const pdfLibPage = srcDoc.getPage(i);
+      const contentsRef = pdfLibPage.node.get(PDFName.of('Contents'));
+      let streamBytes = '';
+      if (contentsRef) {
+        const contentsObj = srcDoc.context.lookup(contentsRef);
+        if (contentsObj && (contentsObj as any).contents) {
+          streamBytes = Array.from((contentsObj as any).contents.slice(0, 100)).join(',');
+        }
+      }
+
+      // Generate signature
+      const sig = `${pageText}___${streamBytes}`;
+
+      if (seenSignatures.has(sig)) {
+        duplicatePageIndices.push(i + 1);
+      } else {
+        seenSignatures.add(sig);
+        keepPageIndices.push(i);
+      }
+    }
+
+    if (duplicatePageIndices.length === 0) {
+      // 0 duplicates found
+      post({
+        type: 'remove-duplicates-done',
+        result: {
+          totalPages,
+          succeeded: 0,
+          failed: [],
+          durationMs: 0,
+          output: new Blob([]),
+          outputName: '',
+          cancelled: false
+        }
+      });
+      return;
+    }
+
+    // Build new deduplicated PDF
+    const outDoc = await PDFDocument.create();
+    const copiedPages = await outDoc.copyPages(srcDoc, keepPageIndices);
+    copiedPages.forEach(p => outDoc.addPage(p));
+
+    const dedupedBytes = await outDoc.save();
+    const outputBlob = new Blob([new Uint8Array(dedupedBytes)], { type: 'application/pdf' });
+    const outputName = meta.name.replace(/\.pdf$/i, '') + '-deduped.pdf';
+
+    post({
+      type: 'remove-duplicates-done',
+      result: {
+        totalPages,
+        succeeded: keepPageIndices.length,
+        failed: duplicatePageIndices,
+        durationMs: 0,
+        output: outputBlob,
+        outputName,
+        cancelled: false
+      }
+    });
+  } catch (err) {
+    console.error('removeDuplicatesRun error:', err);
+    post({
+      type: 'remove-duplicates-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  } finally {
+    if (muDoc) {
+      try { engine.close(muDoc); } catch {}
+    }
+  }
 }
 async function removeImagesRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   try {

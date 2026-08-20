@@ -36,7 +36,9 @@ export function RemoveDuplicatesShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'No duplicates found or error occurred.';
+          const errMsg = t.lang === 'tr'
+            ? 'Bu PDF belgesinde herhangi bir mükerrer (yinelenen) sayfa bulunamadı. Tüm sayfalar zaten benzersiz.'
+            : 'No duplicate pages found in this PDF document. All pages are already unique.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -84,7 +86,7 @@ export function RemoveDuplicatesShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'Mükerrer ve yinelenen sayfalar taranıyor ve ayıklanıyor...' : 'Scanning and removing duplicate pages...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
