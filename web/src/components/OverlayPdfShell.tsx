@@ -188,8 +188,8 @@ export function OverlayPdfShell({ t = en }: Props) {
             </div>
 
             {/* 2. Letterhead Template Card */}
-            <div className={`flex items-center gap-3.5 rounded-2xl border p-4 transition-all duration-200 min-w-0 ${templateFile ? 'bg-surface dark:bg-surface-dark border-emerald-500/40' : 'bg-surface/50 dark:bg-surface-dark/50 border-dashed border-ink-faint dark:border-ink-faint-dark'}`}>
-              <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${templateFile ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-indigo/10 text-indigo dark:bg-indigo-dark/20 dark:text-indigo-dark'}`}>
+            <div className={`flex items-center gap-3.5 rounded-2xl border p-4 transition-all duration-200 min-w-0 ${templateFile ? 'bg-surface dark:bg-surface-dark border-amber/50 dark:border-amber-dark/50' : 'bg-surface/50 dark:bg-surface-dark/50 border-dashed border-amber/60 dark:border-amber-dark/60'}`}>
+              <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${templateFile ? 'bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark' : 'bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark'}`}>
                 {templateFile ? <CheckCircle2 className="h-6 w-6" /> : <FileUp className="h-6 w-6" />}
               </div>
               <div className="flex flex-col overflow-hidden min-w-0 flex-1">
@@ -198,16 +198,16 @@ export function OverlayPdfShell({ t = en }: Props) {
                 </span>
                 {templateFile ? (
                   <div className="flex items-center justify-between gap-2">
-                    <span className="truncate text-sm font-medium text-emerald-600 dark:text-emerald-400" title={templateFile.name}>
+                    <span className="truncate text-sm font-medium text-amber dark:text-amber-dark" title={templateFile.name}>
                       {templateFile.name}
                     </span>
-                    <label className="text-xs text-indigo hover:underline cursor-pointer dark:text-indigo-dark shrink-0">
+                    <label className="text-xs text-amber hover:underline cursor-pointer dark:text-amber-dark shrink-0 font-medium">
                       {isTr ? 'Değiştir' : 'Change'}
                       <input type="file" accept="application/pdf" className="hidden" onChange={(e) => handleTemplateUpload(e.target.files)} />
                     </label>
                   </div>
                 ) : (
-                  <label className="text-sm font-medium text-indigo hover:underline cursor-pointer dark:text-indigo-dark flex items-center gap-1.5 pt-0.5">
+                  <label className="text-sm font-medium text-amber hover:underline cursor-pointer dark:text-amber-dark flex items-center gap-1.5 pt-0.5">
                     <Upload className="w-3.5 h-3.5" />
                     <span>{isTr ? 'Antetli PDF Dosyası Seçin...' : 'Select Letterhead Template PDF...'}</span>
                     <input type="file" accept="application/pdf" className="hidden" onChange={(e) => handleTemplateUpload(e.target.files)} />
@@ -232,7 +232,7 @@ export function OverlayPdfShell({ t = en }: Props) {
                     onClick={() => setMode('background')}
                     className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all ${
                       mode === 'background'
-                        ? 'border-indigo bg-indigo/5 dark:bg-indigo-dark/10 ring-1 ring-indigo dark:ring-indigo-dark'
+                        ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark'
                         : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                     }`}
                   >
@@ -249,7 +249,7 @@ export function OverlayPdfShell({ t = en }: Props) {
                     onClick={() => setMode('foreground')}
                     className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all ${
                       mode === 'foreground'
-                        ? 'border-indigo bg-indigo/5 dark:bg-indigo-dark/10 ring-1 ring-indigo dark:ring-indigo-dark'
+                        ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark'
                         : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                     }`}
                   >
@@ -272,10 +272,10 @@ export function OverlayPdfShell({ t = en }: Props) {
                   <button
                     type="button"
                     onClick={() => setPageRange('all')}
-                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                    className={`btn-motion py-2.5 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
                       pageRange === 'all'
-                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
-                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                        ? 'border-amber bg-amber/10 text-amber dark:text-amber-dark dark:border-amber-dark font-semibold'
+                        : 'border-ink-faint bg-surface text-ink-muted hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark dark:text-ink-muted-dark'
                     }`}
                   >
                     {isTr ? 'Tüm Sayfalar' : 'All Pages'}
@@ -284,10 +284,10 @@ export function OverlayPdfShell({ t = en }: Props) {
                   <button
                     type="button"
                     onClick={() => setPageRange('first')}
-                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                    className={`btn-motion py-2.5 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
                       pageRange === 'first'
-                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
-                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                        ? 'border-amber bg-amber/10 text-amber dark:text-amber-dark dark:border-amber-dark font-semibold'
+                        : 'border-ink-faint bg-surface text-ink-muted hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark dark:text-ink-muted-dark'
                     }`}
                   >
                     {isTr ? 'Yalnızca 1. Sayfa' : 'First Page Only'}
@@ -296,10 +296,10 @@ export function OverlayPdfShell({ t = en }: Props) {
                   <button
                     type="button"
                     onClick={() => setPageRange('except-first')}
-                    className={`py-2 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
+                    className={`btn-motion py-2.5 px-3 rounded-xl border text-xs font-medium text-center transition-all ${
                       pageRange === 'except-first'
-                        ? 'border-indigo bg-indigo/10 text-indigo dark:text-indigo-dark dark:border-indigo-dark'
-                        : 'border-ink-faint hover:bg-bg dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                        ? 'border-amber bg-amber/10 text-amber dark:text-amber-dark dark:border-amber-dark font-semibold'
+                        : 'border-ink-faint bg-surface text-ink-muted hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark dark:text-ink-muted-dark'
                     }`}
                   >
                     {isTr ? '1. Sayfa Hariç' : 'Except First'}
@@ -317,7 +317,7 @@ export function OverlayPdfShell({ t = en }: Props) {
             <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[320px] select-none">
               {isPreviewLoading && !previewUrl && (
                 <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
-                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-indigo border-t-transparent dark:border-indigo-dark dark:border-t-transparent" />
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
                 </div>
               )}
 
@@ -363,7 +363,7 @@ export function OverlayPdfShell({ t = en }: Props) {
           <div className="flex justify-between items-center mt-2 border-t dark:border-ink-faint-dark/20 pt-4">
             <button
               onClick={reset}
-              className="px-4 py-2 text-sm font-medium text-ink-muted dark:text-ink-muted-dark hover:text-ink dark:hover:text-ink-dark transition-colors"
+              className="btn-motion rounded-lg border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark"
             >
               {isTr ? 'İptal' : 'Cancel'}
             </button>
@@ -374,10 +374,10 @@ export function OverlayPdfShell({ t = en }: Props) {
                 controller.current?.runOverlayPdf(file, templateFile, mode, pageRange);
               }}
               disabled={!templateFile}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 bg-indigo text-white shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] dark:bg-indigo-dark dark:shadow-[0_0_15px_rgba(99,102,241,0.3)] dark:hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-95 disabled:opacity-40 disabled:pointer-events-none"
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
             >
               <Sparkles className="w-4 h-4" />
-              <span className="text-sm">
+              <span>
                 {isTr ? 'Antetli Kağıdı Uygula' : 'Apply Letterhead Template'}
               </span>
             </button>
