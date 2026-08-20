@@ -23,8 +23,6 @@ interface ColorPreset {
   nameEn: string;
   hex: string;
   textColor: string;
-  descTr: string;
-  descEn: string;
 }
 
 const PRESETS: ColorPreset[] = [
@@ -34,8 +32,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Warm Sepia',
     hex: '#F4ECD8',
     textColor: '#2E2211',
-    descTr: 'Gözü yormayan klasik kitap kağıdı tonu',
-    descEn: 'Classic warm book paper reading tint',
   },
   {
     id: 'mint',
@@ -43,8 +39,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Eye-Care Mint',
     hex: '#E8F5E9',
     textColor: '#15361B',
-    descTr: 'Uzun okumalar için dinlendirici nane tonu',
-    descEn: 'Relaxing soothing mint for long reading sessions',
   },
   {
     id: 'blue',
@@ -52,8 +46,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Soft Blue',
     hex: '#E3F2FD',
     textColor: '#0D274D',
-    descTr: 'Odaklanmayı artıran ferah gök mavisi',
-    descEn: 'Refreshing soft sky blue for clarity',
   },
   {
     id: 'cream',
@@ -61,8 +53,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Cream & Ivory',
     hex: '#FFF9E6',
     textColor: '#332914',
-    descTr: 'Yumuşak gün ışığı kağıt dokusu',
-    descEn: 'Soft daylight vintage paper tone',
   },
   {
     id: 'rose',
@@ -70,8 +60,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Soft Rose',
     hex: '#FCE4EC',
     textColor: '#3E1825',
-    descTr: 'Yumuşak ve sakinleştirici pastel pembe',
-    descEn: 'Calming gentle pastel rose hue',
   },
   {
     id: 'dark',
@@ -79,8 +67,6 @@ const PRESETS: ColorPreset[] = [
     nameEn: 'Dark Mode',
     hex: '#1E1E1E',
     textColor: '#FFFFFF',
-    descTr: 'Karanlık ortamlar için koyu arka plan',
-    descEn: 'Dark background for night reading',
   },
 ];
 
@@ -93,6 +79,7 @@ export function ChangeBackgroundShell({ t = en }: Props) {
   const controller = useRef<JobController | null>(null);
 
   const [hexColor, setHexColor] = useState<string>('#F4ECD8');
+  const [customInput, setCustomInput] = useState<string>('#F4ECD8');
   const [activePreset, setActivePreset] = useState<string>('sepia');
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -196,12 +183,31 @@ export function ChangeBackgroundShell({ t = en }: Props) {
   const handleSelectPreset = (preset: ColorPreset) => {
     setActivePreset(preset.id);
     setHexColor(preset.hex);
+    setCustomInput(preset.hex);
   };
 
-  const handleCustomColorChange = (newHex: string) => {
-    setHexColor(newHex);
-    const found = PRESETS.find(p => p.hex.toLowerCase() === newHex.toLowerCase());
+  const handlePickerChange = (val: string) => {
+    const upper = val.toUpperCase();
+    setHexColor(upper);
+    setCustomInput(upper);
+    const found = PRESETS.find(p => p.hex.toLowerCase() === upper.toLowerCase());
     setActivePreset(found ? found.id : 'custom');
+  };
+
+  const handleTextInputChange = (raw: string) => {
+    setCustomInput(raw);
+    let clean = raw.trim();
+    if (!clean.startsWith('#')) clean = '#' + clean;
+    if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(clean)) {
+      let fullHex = clean;
+      if (clean.length === 4) {
+        fullHex = '#' + clean[1] + clean[1] + clean[2] + clean[2] + clean[3] + clean[3];
+      }
+      const upper = fullHex.toUpperCase();
+      setHexColor(upper);
+      const found = PRESETS.find(p => p.hex.toLowerCase() === upper.toLowerCase());
+      setActivePreset(found ? found.id : 'custom');
+    }
   };
 
   const reset = useCallback(() => {
@@ -214,6 +220,7 @@ export function ChangeBackgroundShell({ t = en }: Props) {
     setPreviewPageNum(1);
     setTotalPages(1);
     setHexColor('#F4ECD8');
+    setCustomInput('#F4ECD8');
     setActivePreset('sepia');
   }, []);
 
@@ -263,8 +270,8 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                 </span>
               </div>
 
-              {/* Preset Cards Grid */}
-              <div className="grid grid-cols-2 gap-2.5">
+              {/* Preset Cards Grid (Enlarged and Streamlined) */}
+              <div className="grid grid-cols-2 gap-3">
                 {PRESETS.map((preset) => {
                   const isSelected = activePreset === preset.id;
                   return (
@@ -272,25 +279,22 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                       key={preset.id}
                       type="button"
                       onClick={() => handleSelectPreset(preset)}
-                      className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all duration-200 ${
+                      className={`btn-motion flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-200 ${
                         isSelected
                           ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
                           : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                       }`}
                     >
-                      <div className="flex items-center justify-between w-full mb-1.5">
+                      <div className="flex items-center gap-3">
                         <div
-                          className="w-5 h-5 rounded-full border border-black/15 shadow-inner shrink-0"
+                          className="w-7 h-7 rounded-full border-2 border-black/10 shadow-sm shrink-0 dark:border-white/10"
                           style={{ backgroundColor: preset.hex }}
                         />
-                        {isSelected && <Check className="w-4 h-4 text-amber dark:text-amber-dark" />}
+                        <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                          {isTr ? preset.nameTr : preset.nameEn}
+                        </span>
                       </div>
-                      <span className="text-xs font-semibold text-ink dark:text-ink-dark">
-                        {isTr ? preset.nameTr : preset.nameEn}
-                      </span>
-                      <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark mt-0.5 line-clamp-1 leading-snug">
-                        {isTr ? preset.descTr : preset.descEn}
-                      </span>
+                      {isSelected && <Check className="w-5 h-5 text-amber dark:text-amber-dark shrink-0 ml-2" />}
                     </button>
                   );
                 })}
@@ -302,24 +306,24 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                   {isTr ? 'Özel Renk Seç (Custom HEX)' : 'Custom Color (HEX)'}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className="relative flex items-center justify-center">
+                  <div className="relative flex items-center justify-center shrink-0">
                     <input
                       type="color"
-                      value={hexColor}
-                      onChange={(e) => handleCustomColorChange(e.target.value)}
-                      className="h-10 w-12 rounded-xl cursor-pointer border border-ink-faint dark:border-ink-faint-dark p-0.5 bg-surface dark:bg-surface-dark"
+                      value={hexColor.startsWith('#') && hexColor.length === 7 ? hexColor : '#F4ECD8'}
+                      onChange={(e) => handlePickerChange(e.target.value)}
+                      className="h-11 w-12 rounded-xl cursor-pointer border border-ink-faint dark:border-ink-faint-dark p-0.5 bg-surface dark:bg-surface-dark"
                     />
                   </div>
                   <input
                     type="text"
-                    value={hexColor}
-                    onChange={(e) => handleCustomColorChange(e.target.value)}
+                    value={customInput}
+                    onChange={(e) => handleTextInputChange(e.target.value)}
                     maxLength={7}
                     placeholder="#F4ECD8"
-                    className="h-10 w-28 rounded-xl border bg-bg px-3 font-mono text-sm font-medium uppercase text-ink focus:border-amber focus:outline-none dark:bg-bg-dark dark:text-ink-dark dark:focus:border-amber-dark"
+                    className="h-11 w-32 rounded-xl border bg-bg px-3.5 font-mono text-sm font-semibold uppercase text-ink focus:border-amber focus:outline-none dark:bg-bg-dark dark:text-ink-dark dark:focus:border-amber-dark"
                   />
                   <div
-                    className="h-10 flex-1 rounded-xl border border-ink-faint dark:border-ink-faint-dark shadow-inner transition-colors duration-200"
+                    className="h-11 flex-1 rounded-xl border border-ink-faint dark:border-ink-faint-dark shadow-inner transition-colors duration-200"
                     style={{ backgroundColor: hexColor }}
                   />
                 </div>
