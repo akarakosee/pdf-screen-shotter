@@ -3117,17 +3117,29 @@ async function splitBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<voi
     });
   }
 }
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk as any);
+  }
+  return btoa(binary);
+}
+
 async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let doc;
   try {
     await engine.init();
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
+    const m = (engine as any).require();
 
     let pagesHtml = '';
 
     for (let i = 0; i < count; i++) {
       let rawPageHtml = '';
+      let base64Bg = '';
       let width = 595;
       let height = 842;
 
@@ -3137,6 +3149,17 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
         width = Math.round(bounds[2] - bounds[0]);
         height = Math.round(bounds[3] - bounds[1]);
 
+        // 1. High-fidelity visual raster background (150 DPI) for background graphics, banners, colors & tables
+        const scale = 150 / 72;
+        const pixmap = p.toPixmap(m.Matrix.scale(scale, scale), m.ColorSpace.DeviceRGB, false, true);
+        try {
+          const pngBytes = pixmap.asPNG();
+          base64Bg = bytesToBase64(pngBytes);
+        } finally {
+          pixmap.destroy();
+        }
+
+        // 2. Selectable structured text layer
         const stext = p.toStructuredText('preserve-whitespace');
         try {
           rawPageHtml = stext.asHTML();
@@ -3153,7 +3176,10 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     <div class="pdf-page-container" style="--page-width: ${width}pt; --page-height: ${height}pt;">
       <div class="page-header-badge">Sayfa ${i + 1} / ${count}</div>
       <div class="pdf-page" style="width: ${width}pt; height: ${height}pt; position: relative;">
-        ${rawPageHtml}
+        ${base64Bg ? `<img class="page-render-bg" src="data:image/png;base64,${base64Bg}" alt="Page ${i + 1}" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; pointer-events: none;" />` : ''}
+        <div class="text-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;">
+          ${rawPageHtml}
+        </div>
       </div>
     </div>
       `;
@@ -3164,14 +3190,13 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${meta.name} — HTML Görünümü</title>
+  <title>${meta.name} — Web Görünümü</title>
   <style>
     :root {
-      --bg-color: #0f172a;
+      --bg-color: #0b1120;
       --card-bg: #ffffff;
-      --text-main: #1e293b;
       --accent: #f59e0b;
-      --border-color: #334155;
+      --border-color: #1e293b;
     }
     * {
       box-sizing: border-box;
@@ -3180,21 +3205,21 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     }
     body {
       background-color: var(--bg-color);
-      color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 24px 16px;
       min-height: 100vh;
+      color: #f8fafc;
     }
     .toolbar {
       position: sticky;
       top: 16px;
       z-index: 100;
-      background: rgba(30, 41, 59, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 12px 24px;
       display: flex;
@@ -3204,8 +3229,7 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       width: 100%;
       max-width: 860px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      color: #f8fafc;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
     }
     .toolbar-title {
       font-size: 14px;
@@ -3218,15 +3242,18 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
       background: rgba(245, 158, 11, 0.15);
       color: #f59e0b;
       border: 1px solid rgba(245, 158, 11, 0.3);
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .pdf-pages-wrapper {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 36px;
       width: 100%;
       max-width: 900px;
       align-items: center;
@@ -3248,35 +3275,46 @@ async function pdfToHtmlRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     .pdf-page {
       background: var(--card-bg);
       border-radius: 4px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
       overflow: hidden;
       position: relative;
     }
-    .pdf-page div {
+    /* Transparent text overlay for precision selection & copy/paste */
+    .text-layer div {
       position: absolute !important;
     }
-    .pdf-page p {
+    .text-layer p {
       position: absolute !important;
       margin: 0 !important;
       white-space: pre !important;
       transform-origin: left top !important;
+      color: transparent !important;
+      user-select: text !important;
+      cursor: text !important;
+    }
+    .text-layer p * {
+      color: transparent !important;
+    }
+    .text-layer ::selection {
+      background: rgba(59, 130, 246, 0.35) !important;
+      color: transparent !important;
     }
     @media print {
       body {
-        background: transparent;
-        padding: 0;
+        background: transparent !important;
+        padding: 0 !important;
       }
       .toolbar, .page-header-badge {
         display: none !important;
       }
       .pdf-pages-wrapper {
-        gap: 0;
-        max-width: none;
+        gap: 0 !important;
+        max-width: none !important;
       }
       .pdf-page {
-        box-shadow: none;
-        border-radius: 0;
-        page-break-after: always;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
       }
     }
   </style>
