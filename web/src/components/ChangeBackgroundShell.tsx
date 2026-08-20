@@ -270,7 +270,7 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                 </span>
               </div>
 
-              {/* Preset Cards Grid (Enlarged and Streamlined) */}
+              {/* Preset Cards Grid (Fixed height, no layout shift) */}
               <div className="grid grid-cols-2 gap-3">
                 {PRESETS.map((preset) => {
                   const isSelected = activePreset === preset.id;
@@ -279,22 +279,22 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                       key={preset.id}
                       type="button"
                       onClick={() => handleSelectPreset(preset)}
-                      className={`btn-motion flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-200 ${
+                      className={`btn-motion flex h-14 items-center justify-between px-3.5 rounded-2xl border text-left transition-all duration-200 select-none overflow-hidden ${
                         isSelected
                           ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
                           : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <div
-                          className="w-7 h-7 rounded-full border-2 border-black/10 shadow-sm shrink-0 dark:border-white/10"
+                          className="w-6 h-6 rounded-full border-2 border-black/10 shadow-sm shrink-0 dark:border-white/10"
                           style={{ backgroundColor: preset.hex }}
                         />
-                        <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                        <span className="text-xs font-semibold text-ink dark:text-ink-dark truncate">
                           {isTr ? preset.nameTr : preset.nameEn}
                         </span>
                       </div>
-                      {isSelected && <Check className="w-5 h-5 text-amber dark:text-amber-dark shrink-0 ml-2" />}
+                      {isSelected && <Check className="w-4 h-4 text-amber dark:text-amber-dark shrink-0 ml-1" />}
                     </button>
                   );
                 })}
@@ -353,9 +353,11 @@ export function ChangeBackgroundShell({ t = en }: Props) {
                       src={previewUrl}
                       alt="PDF Page Tint Preview"
                       className="max-h-[450px] w-auto object-contain transition-all duration-200"
-                      style={{
-                        mixBlendMode: hexColor.toLowerCase() === '#1e1e1e' || hexColor.toLowerCase() === '#121212' ? 'luminosity' : 'multiply',
-                      }}
+                      style={
+                        hexColor.toLowerCase() === '#1e1e1e' || hexColor.toLowerCase() === '#121212' || hexColor.toLowerCase() === '#000000'
+                          ? { filter: 'invert(0.92) hue-rotate(180deg)' }
+                          : { mixBlendMode: 'multiply' }
+                      }
                     />
                   </div>
                 )}
