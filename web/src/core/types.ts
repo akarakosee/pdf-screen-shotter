@@ -144,7 +144,15 @@ export type UiToWorkerMessage =
   | { type: 'split-by-size-start'; file: ArrayBuffer; meta: FileMeta; maxSizeMB: number }
   | { type: 'extract-by-keyword-start'; file: ArrayBuffer; meta: FileMeta; keyword: string; caseSensitive: boolean }
   | { type: 'mix-pdf-start'; files: ArrayBuffer[]; meta: FileMeta[] }
-  | { type: 'remove-annotations-start'; file: ArrayBuffer; meta: FileMeta }
+  | {
+      type: 'remove-annotations-start';
+      file: ArrayBuffer;
+      meta: FileMeta;
+      removeHighlights?: boolean;
+      removeComments?: boolean;
+      removeDrawings?: boolean;
+      preserveLinks?: boolean;
+    }
   | { type: 'pdf-to-webp-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'auto-crop-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'extract-toc-start'; file: ArrayBuffer; meta: FileMeta }

@@ -74,7 +74,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'bates-start') await batesRun(msg.file, msg.meta, msg.prefix, msg.suffix, msg.startNumber, msg.padding);
       else if (msg.type === 'n-up-start') await nUpRun(msg.file, msg.meta, msg.grid);
       else if (msg.type === 'pdf-a-start') await pdfARun(msg.file, msg.meta);
-      else if (msg.type === 'remove-annotations-start') await removeAnnotationsRun(msg.file, msg.meta);
+      else if (msg.type === 'remove-annotations-start') await removeAnnotationsRun(msg.file, msg.meta, msg);
       else if (msg.type === 'pdf-to-webp-start') await pdfToWebpRun(msg.file, msg.meta);
       else if (msg.type === 'auto-crop-start') await autoCropRun(msg.file, msg.meta);
       else if (msg.type === 'extract-toc-start') await extractTocRun(msg.file, msg.meta);
@@ -1515,20 +1515,78 @@ async function mixPdfRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> 
 }
 
 
-async function removeAnnotationsRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+async function removeAnnotationsRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  options?: {
+    removeHighlights?: boolean;
+    removeComments?: boolean;
+    removeDrawings?: boolean;
+    preserveLinks?: boolean;
+  }
+): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
   let outputName: string | undefined;
+  const opts = {
+    removeHighlights: options?.removeHighlights ?? true,
+    removeComments: options?.removeComments ?? true,
+    removeDrawings: options?.removeDrawings ?? true,
+    preserveLinks: options?.preserveLinks ?? true,
+  };
+
   try {
     const pdfLib = await import('pdf-lib');
     const doc = await pdfLib.PDFDocument.load(file, { ignoreEncryption: true });
     const pages = doc.getPages();
+
     for (let i = 0; i < pages.length; i++) {
       if (cancelled) break;
-      pages[i].node.delete(pdfLib.PDFName.of('Annots'));
+      const page = pages[i];
+      const annotsRef = page.node.get(pdfLib.PDFName.of('Annots'));
+      if (annotsRef) {
+        const annots = doc.context.lookup(annotsRef);
+        if (annots instanceof pdfLib.PDFArray) {
+          const remainingAnnots = [];
+          for (let j = 0; j < annots.size(); j++) {
+            const annotRef = annots.get(j);
+            const annot = doc.context.lookup(annotRef);
+            if (annot instanceof pdfLib.PDFDict) {
+              const subtype = annot.get(pdfLib.PDFName.of('Subtype'))?.toString();
+
+              let shouldRemove = false;
+              if (subtype === '/Highlight' || subtype === '/Underline' || subtype === '/StrikeOut' || subtype === '/Squiggly') {
+                if (opts.removeHighlights) shouldRemove = true;
+              } else if (subtype === '/Text' || subtype === '/FreeText' || subtype === '/Popup') {
+                if (opts.removeComments) shouldRemove = true;
+              } else if (subtype === '/Ink' || subtype === '/Line' || subtype === '/Square' || subtype === '/Circle' || subtype === '/Polygon' || subtype === '/PolyLine') {
+                if (opts.removeDrawings) shouldRemove = true;
+              } else if (subtype === '/Link') {
+                if (!opts.preserveLinks) shouldRemove = true;
+              } else if (subtype === '/Widget') {
+                shouldRemove = false; // Always preserve interactive form fields
+              } else {
+                shouldRemove = true;
+              }
+
+              if (!shouldRemove) {
+                remainingAnnots.push(annotRef);
+              }
+            }
+          }
+
+          if (remainingAnnots.length === 0) {
+            page.node.delete(pdfLib.PDFName.of('Annots'));
+          } else {
+            page.node.set(pdfLib.PDFName.of('Annots'), doc.context.obj(remainingAnnots));
+          }
+        }
+      }
+
       post({ type: 'remove-annotations-progress', processedPages: i + 1, totalPages: pages.length });
       await new Promise(r => setTimeout(r, 0));
     }
+
     if (!cancelled) {
       const bytes = await doc.save();
       output = new Blob([bytes], { type: 'application/pdf' });
@@ -1538,6 +1596,7 @@ async function removeAnnotationsRun(file: ArrayBuffer, meta: FileMeta): Promise<
     console.error('[worker] removeAnnotationsRun failed:', e);
     post({ type: 'file-error', fileId: meta.fileId, message: e instanceof EncryptedError ? 'encrypted' : 'corrupt' });
   }
+
   post({
     type: 'remove-annotations-done',
     result: { totalPages: 0, succeeded: output ? 1 : 0, failed: [], durationMs: Date.now() - started, cancelled, output, outputName }

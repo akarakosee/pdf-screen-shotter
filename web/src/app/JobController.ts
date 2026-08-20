@@ -281,11 +281,24 @@ export class JobController {
     this.post({ type: 'reverse-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runRemoveAnnotations(file: File): Promise<void> {
+  async runRemoveAnnotations(
+    file: File,
+    options: {
+      removeHighlights?: boolean;
+      removeComments?: boolean;
+      removeDrawings?: boolean;
+      preserveLinks?: boolean;
+    } = { removeHighlights: true, removeComments: true, removeDrawings: true, preserveLinks: true }
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'remove-annotations-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+    this.post({
+      type: 'remove-annotations-start',
+      file: buf,
+      meta: { fileId: file.name, name: file.name },
+      ...options,
+    }, [buf]);
   }
 
   async runPdfToWebp(file: File): Promise<void> {
