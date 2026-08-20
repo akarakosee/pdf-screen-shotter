@@ -3024,27 +3024,66 @@ async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<v
     for (let i = 0; i < totalPages; i++) {
       const pageText = (texts[i] || '').trim();
 
-      // Read content stream from pdf-lib
+      // Read & decompress content stream from pdf-lib
       const pdfLibPage = srcDoc.getPage(i);
       const contentsRef = pdfLibPage.node.get(PDFName.of('Contents'));
-      let streamBytes = '';
+      let decompressedContent = '';
+
       if (contentsRef) {
         const contentsObj = srcDoc.context.lookup(contentsRef);
-        if (contentsObj instanceof PDFArray) {
-          for (let j = 0; j < contentsObj.size(); j++) {
-            const stream = srcDoc.context.lookup(contentsObj.get(j)) as any;
-            if (stream && stream.contents) {
-              streamBytes += stream.contents.length + '_' + stream.contents[0] + '_' + stream.contents[stream.contents.length - 1] + '_' + stream.contents.slice(0, 200).join(',');
-            }
+        const streamList = (contentsObj instanceof PDFArray) ? (contentsObj as any).asArray() : [contentsObj];
+        for (const stmRef of streamList) {
+          const stm = srcDoc.context.lookup(stmRef) as any;
+          if (stm && stm.contents) {
+            let bytes = stm.contents;
+            try {
+              bytes = inflate(bytes);
+            } catch (e) {}
+            decompressedContent += new TextDecoder('latin1').decode(bytes);
           }
-        } else if (contentsObj && (contentsObj as any).contents) {
-          const raw = (contentsObj as any).contents;
-          streamBytes = raw.length + '_' + raw[0] + '_' + raw[raw.length - 1] + '_' + raw.slice(0, 300).join(',');
         }
       }
 
-      // Generate full cryptographic signature (Text + Layout + Fonts + Graphics)
-      const sig = `${pageText}___${streamBytes}`;
+      // Normalize page Resources (Fonts & Images) to avoid randomized internal identifier mismatches
+      const resRef = pdfLibPage.node.get(PDFName.of('Resources'));
+      if (resRef) {
+        const res = srcDoc.context.lookup(resRef) as any;
+        if (res && res.get) {
+          // 1. Normalize Fonts (Map local /F1 or /Helvetica-1234 to BaseFont)
+          const fontRef = res.get(PDFName.of('Font'));
+          if (fontRef) {
+            const fontDict = srcDoc.context.lookup(fontRef) as any;
+            if (fontDict && fontDict.entries) {
+              for (const [k, ref] of fontDict.entries()) {
+                const fontObj = srcDoc.context.lookup(ref) as any;
+                const baseFont = fontObj?.get?.(PDFName.of('BaseFont'))?.toString() || 'Font';
+                const keyName = k.toString().replace(/^\//, '');
+                decompressedContent = decompressedContent.replace(new RegExp(`/${keyName}\\b`, 'g'), baseFont);
+              }
+            }
+          }
+
+          // 2. Normalize Images (Map local /Im1 or /Image-1234 to Image Binary Hash)
+          const xobjRef = res.get(PDFName.of('XObject'));
+          if (xobjRef) {
+            const xobjDict = srcDoc.context.lookup(xobjRef) as any;
+            if (xobjDict && xobjDict.entries) {
+              for (const [k, ref] of xobjDict.entries()) {
+                const streamObj = srcDoc.context.lookup(ref) as any;
+                if (streamObj && streamObj.contents) {
+                  const pLen = streamObj.contents.length;
+                  const pSample = `${pLen}_${streamObj.contents[0]}_${streamObj.contents[Math.floor(pLen / 2)]}_${streamObj.contents[pLen - 1]}`;
+                  const keyName = k.toString().replace(/^\//, '');
+                  decompressedContent = decompressedContent.replace(new RegExp(`/${keyName}\\b`, 'g'), `/IMG_${pSample}`);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Generate robust signature
+      const sig = `${pageText}___${decompressedContent}`;
 
       if (seenSignatures.has(sig)) {
         duplicatePageIndices.push(i + 1);
