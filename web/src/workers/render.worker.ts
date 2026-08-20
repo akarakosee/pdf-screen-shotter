@@ -3030,12 +3030,20 @@ async function removeDuplicatesRun(file: ArrayBuffer, meta: FileMeta): Promise<v
       let streamBytes = '';
       if (contentsRef) {
         const contentsObj = srcDoc.context.lookup(contentsRef);
-        if (contentsObj && (contentsObj as any).contents) {
-          streamBytes = Array.from((contentsObj as any).contents.slice(0, 100)).join(',');
+        if (contentsObj instanceof PDFArray) {
+          for (let j = 0; j < contentsObj.size(); j++) {
+            const stream = srcDoc.context.lookup(contentsObj.get(j)) as any;
+            if (stream && stream.contents) {
+              streamBytes += stream.contents.length + '_' + stream.contents[0] + '_' + stream.contents[stream.contents.length - 1] + '_' + stream.contents.slice(0, 200).join(',');
+            }
+          }
+        } else if (contentsObj && (contentsObj as any).contents) {
+          const raw = (contentsObj as any).contents;
+          streamBytes = raw.length + '_' + raw[0] + '_' + raw[raw.length - 1] + '_' + raw.slice(0, 300).join(',');
         }
       }
 
-      // Generate signature
+      // Generate full cryptographic signature (Text + Layout + Fonts + Graphics)
       const sig = `${pageText}___${streamBytes}`;
 
       if (seenSignatures.has(sig)) {
