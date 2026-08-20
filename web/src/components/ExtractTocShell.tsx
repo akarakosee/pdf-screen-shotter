@@ -41,7 +41,7 @@ export function ExtractTocShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = 'No Table of Contents found in this PDF.';
+          const errMsg = t.lang === 'tr' ? 'Bu PDF belgesinde herhangi bir İçindekiler / Yer İmi (Bookmarks) yapısı bulunamadı.' : 'No Table of Contents (Bookmarks) found in this PDF.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -91,7 +91,7 @@ export function ExtractTocShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.lang === 'tr' ? 'PDF içindekiler ve yer imleri yapısı taranıyor...' : 'Scanning PDF Table of Contents and Bookmarks...'}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />

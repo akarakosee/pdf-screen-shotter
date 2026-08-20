@@ -1673,68 +1673,104 @@ async function autoCropRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
 
 async function extractTocRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   const start = performance.now();
-  let succeeded = 0;
-  const failed: PageError[] = [];
-  let tocText = '';
+  let muDoc;
 
   try {
     post({ type: 'extract-toc-progress', processedPages: 0, totalPages: 1 });
-    const pdfDoc = await PDFDocument.load(file);
+    await engine.init();
+    muDoc = await engine.open(file);
+    const totalPages = engine.pageCount(muDoc);
     
-    const catalog = pdfDoc.catalog;
-    const outlines = catalog.get(PDFName.of('Outlines'));
-    if (!outlines || !(outlines instanceof PDFDict)) {
-       throw new Error('No Table of Contents (Bookmarks) found in this PDF.');
+    let outline: any[] = [];
+    try {
+      outline = (muDoc as any).handle.loadOutline() || [];
+    } catch {
+      outline = [];
     }
 
-    function parseNode(node: PDFDict, level: number) {
-      if (!node || !(node instanceof PDFDict)) return;
-      const title = node.get(PDFName.of('Title'));
-      if (title) {
-        // @ts-ignore
-        tocText += '  '.repeat(level) + '- ' + (title.decodeText ? title.decodeText() : title.value) + '\n';
+    if (!outline || outline.length === 0) {
+      // Intelligent fallback: Scan document pages for chapter/section headings
+      const detectedHeadings: Array<{ title: string; page: number; level: number }> = [];
+      for (let p = 0; p < totalPages; p++) {
+        const textJson = await engine.extractTextJSON(muDoc, p);
+        if (textJson.blocks) {
+          for (const block of textJson.blocks) {
+            if (block.type !== 'text' || !block.lines) continue;
+            for (const line of block.lines) {
+              const text = (line.text || '').trim();
+              if (!text || text.length > 120) continue;
+              const font = line.font || {};
+              const fontSize = font.size || 10;
+              const isBold = font.weight === 'bold' || (font.name || '').toLowerCase().includes('bold');
+              if (fontSize >= 15 || (fontSize >= 12 && isBold) || /^(BÖLÜM|CHAPTER|KISIM|MADDE|\d+\.)\s+[A-ZĞÜŞİÖÇ]/i.test(text)) {
+                detectedHeadings.push({
+                  title: text,
+                  page: p,
+                  level: fontSize >= 16 ? 1 : (fontSize >= 13 ? 2 : 3)
+                });
+              }
+            }
+          }
+        }
       }
-      const first = node.get(PDFName.of('First'));
-      if (first) {
-        let curr = pdfDoc.context.lookup(first);
-        while (curr && curr instanceof PDFDict) {
-          parseNode(curr, level + 1);
-          const next = curr.get(PDFName.of('Next'));
-          curr = next ? pdfDoc.context.lookup(next) : null;
+
+      if (detectedHeadings.length === 0) {
+        post({
+          type: 'extract-toc-done',
+          result: { totalPages, succeeded: 0, failed: [], durationMs: performance.now() - start, output: new Blob([]), outputName: '', cancelled: false }
+        });
+        return;
+      }
+
+      let mdContent = `# Table of Contents (İçindekiler)\n\n`;
+      for (const h of detectedHeadings) {
+        const indent = '  '.repeat(Math.max(0, h.level - 1));
+        mdContent += `${indent}- **${h.title}** *(Sayfa ${h.page + 1})*\n`;
+      }
+
+      const outputBlob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+      const outputName = sanitizeBaseName(meta.name) + '-toc.md';
+
+      post({
+        type: 'extract-toc-done',
+        result: { totalPages, succeeded: 1, failed: [], durationMs: performance.now() - start, output: outputBlob, outputName, cancelled: false }
+      });
+      return;
+    }
+
+    // Format MuPDF Outline Tree
+    let mdContent = `# Table of Contents (İçindekiler)\n\n`;
+    function traverse(items: any[], depth: number) {
+      for (const item of items) {
+        const title = item.title || 'Untitled';
+        const pageNum = typeof item.page === 'number' && item.page >= 0 ? ` *(Sayfa ${item.page + 1})*` : '';
+        const indent = '  '.repeat(depth);
+        mdContent += `${indent}- **${title}**${pageNum}\n`;
+        if (item.down && Array.isArray(item.down) && item.down.length > 0) {
+          traverse(item.down, depth + 1);
         }
       }
     }
 
-    const first = outlines.get(PDFName.of('First'));
-    if (first) {
-      let curr = pdfDoc.context.lookup(first);
-      while (curr && curr instanceof PDFDict) {
-        parseNode(curr, 0);
-        const next = curr.get(PDFName.of('Next'));
-        curr = next ? pdfDoc.context.lookup(next) : null;
-      }
-    }
+    traverse(outline, 0);
 
-    if (!tocText.trim()) throw new Error('No Table of Contents (Bookmarks) found in this PDF.');
-    
-    succeeded = 1;
-    post({ type: 'extract-toc-progress', processedPages: 1, totalPages: 1 });
+    const outputBlob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+    const outputName = sanitizeBaseName(meta.name) + '-toc.md';
 
-    const blob = new Blob([tocText], { type: 'text/markdown' });
     post({
       type: 'extract-toc-done',
       result: {
-        totalPages: 1,
-        succeeded,
-        failed,
+        totalPages,
+        succeeded: 1,
+        failed: [],
         durationMs: performance.now() - start,
         cancelled: false,
-        output: blob,
-        outputName: sanitizeBaseName(meta.name) + '-toc.md',
+        output: outputBlob,
+        outputName,
       }
     });
-
   } catch (e) {
+    console.error('extractTocRun error:', e);
     post({
       type: 'extract-toc-done',
       result: {
@@ -1745,6 +1781,10 @@ async function extractTocRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
         cancelled: false,
       }
     });
+  } finally {
+    if (muDoc) {
+      try { engine.close(muDoc); } catch {}
+    }
   }
 }
 
