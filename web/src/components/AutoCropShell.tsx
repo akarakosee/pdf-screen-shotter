@@ -8,12 +8,50 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
 import { JobController } from '../app/JobController';
+import { Crop, ChevronLeft, ChevronRight, Sparkles, Check, Scissors, ShieldCheck } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 
-type Phase = 'upload' | 'processing' | 'done';
+type Phase = 'upload' | 'options' | 'processing' | 'done';
 
 interface Props {
   t?: Strings;
 }
+
+interface PaddingPreset {
+  id: string;
+  nameTr: string;
+  nameEn: string;
+  value: number;
+  descTr: string;
+  descEn: string;
+}
+
+const PADDING_PRESETS: PaddingPreset[] = [
+  {
+    id: 'tight',
+    nameTr: 'Sıkı (4pt)',
+    nameEn: 'Tight (4pt)',
+    value: 4,
+    descTr: 'Kenarlara sıfır kırpma, maksimum alan tasarrufu',
+    descEn: 'Minimal edge padding for maximum content space',
+  },
+  {
+    id: 'balanced',
+    nameTr: 'Dengeli (12pt)',
+    nameEn: 'Balanced (12pt)',
+    value: 12,
+    descTr: 'Okunaklı ve dengeli kenar boşluğu (Önerilen)',
+    descEn: 'Clean standard margin padding (Recommended)',
+  },
+  {
+    id: 'comfort',
+    nameTr: 'Ferah (24pt)',
+    nameEn: 'Comfort (24pt)',
+    value: 24,
+    descTr: 'Daha geniş ve ferah nefes alma payı',
+    descEn: 'Generous breathing room around cropped content',
+  },
+];
 
 export function AutoCropShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
@@ -23,12 +61,24 @@ export function AutoCropShell({ t = en }: Props) {
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
   const controller = useRef<JobController | null>(null);
 
+  // Options State
+  const [selectedPadding, setSelectedPadding] = useState<number>(12);
+
+  // Live Preview State
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const cacheRef = useRef<Map<number, string>>(new Map());
+
+  const isTr = t.lang === 'tr';
+
   useEffect(() => {
     controller.current = new JobController({
       onFileError: (_, msg) => {
         setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
         setErrorMsg(null);
-    setPhase('upload');
+        setPhase('upload');
       },
       onAutoCropDone: (result) => {
         if (result.succeeded > 0 && result.output) {
@@ -36,7 +86,7 @@ export function AutoCropShell({ t = en }: Props) {
           setPhase('done');
         } else {
           setErrorMsg(null);
-    const errMsg = t.corruptFile;
+          const errMsg = isTr ? 'Otomatik kırpma gerçekleştirilemedi. Lütfen dosyayı kontrol ediniz.' : 'Failed to auto-crop PDF.';
           setErrorMsg(errMsg);
           setToast({ kind: 'error', message: errMsg });
           setPhase('done');
@@ -46,7 +96,7 @@ export function AutoCropShell({ t = en }: Props) {
     return () => {
       controller.current?.dispose();
     };
-  }, [t]);
+  }, [t, isTr]);
 
   const addFile = useCallback(async (incoming: File[]) => {
     if (incoming.length === 0) return;
@@ -56,16 +106,79 @@ export function AutoCropShell({ t = en }: Props) {
       setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
       return;
     }
+    try {
+      const buf = await f.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      setTotalPages(Math.max(1, pdfDoc.getPageCount()));
+    } catch {
+      setTotalPages(1);
+    }
     setFile(f);
-    setPhase('processing');
-    controller.current?.runAutoCrop(f);
+    setPreviewPageNum(1);
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
+    setPhase('options');
   }, [t]);
 
+  // Page preview with prefetching
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+
+    const cached = cacheRef.current.get(previewPageNum);
+    if (cached) {
+      setPreviewUrl(cached);
+      setIsPreviewLoading(false);
+    } else {
+      setIsPreviewLoading(true);
+      controller.current?.previewPage(file, previewPageNum, 140)
+        .then((blob) => {
+          if (!active) return;
+          const u = URL.createObjectURL(blob);
+          cacheRef.current.set(previewPageNum, u);
+          setPreviewUrl(u);
+        })
+        .catch((err) => {
+          console.error('Preview error:', err);
+          if (previewPageNum > 1 && active) setPreviewPageNum(p => Math.max(1, p - 1));
+        })
+        .finally(() => {
+          if (active) setIsPreviewLoading(false);
+        });
+    }
+
+    for (const neighbour of [previewPageNum - 1, previewPageNum + 1]) {
+      if (neighbour < 1 || neighbour > totalPages || cacheRef.current.has(neighbour)) continue;
+      controller.current?.previewPage(file, neighbour, 140)
+        .then((blob) => {
+          if (!cacheRef.current.has(neighbour)) {
+            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [file, previewPageNum, totalPages, phase]);
+
+  const handleRun = () => {
+    if (!file) return;
+    setPhase('processing');
+    controller.current?.runAutoCrop(file, { padding: selectedPadding });
+  };
+
   const reset = useCallback(() => {
+    cacheRef.current.forEach(u => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setFile(null);
     setOutput(null);
     setErrorMsg(null);
     setPhase('upload');
+    setPreviewPageNum(1);
+    setTotalPages(1);
+    setSelectedPadding(12);
   }, []);
 
   return (
@@ -74,17 +187,158 @@ export function AutoCropShell({ t = en }: Props) {
         <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />
       )}
 
-      {phase === 'upload' && (
+      {phase === 'upload' && !file && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFile} multiple={false} />
           <PrivacyLine t={t} />
         </div>
       )}
 
+      {phase === 'options' && file && (
+        <div className="phase-enter flex flex-col gap-5">
+          {/* File Header Bar */}
+          <div className="flex items-center gap-3.5 rounded-2xl border bg-surface p-4 dark:bg-surface-dark min-w-0">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
+              <Scissors className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                {isTr ? 'Seçilen PDF Belgesi' : 'Target PDF Document'}
+              </span>
+              <div className="truncate text-sm font-medium pr-2 text-ink dark:text-ink-dark" title={file.name}>
+                {file.name}
+              </div>
+              <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                {isTr ? `${totalPages} Sayfa` : `${totalPages} Pages`}
+              </span>
+            </div>
+          </div>
+
+          {/* Settings and Live Preview Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Left Column: Padding Options & Info */}
+            <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? 'Kenar Boşluğu Hassasiyeti (Padding)' : 'Margin Padding Preference'}
+                </label>
+              </div>
+
+              {/* Presets List */}
+              <div className="flex flex-col gap-3">
+                {PADDING_PRESETS.map((preset) => {
+                  const isSelected = selectedPadding === preset.value;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setSelectedPadding(preset.value)}
+                      className={`btn-motion flex items-center justify-between p-4 rounded-2xl border text-left transition-all duration-200 ${
+                        isSelected
+                          ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
+                          : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                      }`}
+                    >
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                          {isTr ? preset.nameTr : preset.nameEn}
+                        </span>
+                        <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-0.5">
+                          {isTr ? preset.descTr : preset.descEn}
+                        </span>
+                      </div>
+                      {isSelected && <Check className="w-5 h-5 text-amber dark:text-amber-dark shrink-0 ml-2" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* How it works Guide Note */}
+              <div className="mt-auto pt-3 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-amber dark:text-amber-dark shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'Yapay zeka piksel tarayıcısı belgedeki gereksiz boş beyaz kenarlıkları otomatik algılar ve içeriği tam merkezleyerek kırpar.'
+                    : 'Intelligent pixel boundary scanner automatically detects excessive white margins on each page and crops tightly around valid content.'}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Live Document Preview */}
+            <div className="flex flex-col gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark items-center justify-center bg-bg dark:bg-bg-dark relative overflow-hidden min-h-[480px] select-none">
+              {isPreviewLoading && !previewUrl && (
+                <div className="absolute inset-0 flex items-center justify-center bg-bg/50 dark:bg-bg-dark/50 z-20 backdrop-blur-[1px]">
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-amber border-t-transparent dark:border-amber-dark dark:border-t-transparent" />
+                </div>
+              )}
+
+              <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-2">
+                {previewUrl && (
+                  <div className="relative max-h-[450px] w-auto rounded border shadow-lg overflow-hidden transition-all duration-300 ease-out animate-in fade-in zoom-in-95 bg-white">
+                    <img
+                      key={previewPageNum}
+                      src={previewUrl}
+                      alt="PDF Page Preview"
+                      className="max-h-[450px] w-auto object-contain"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Navigation Chevrons */}
+              <div className="absolute bottom-3 flex items-center gap-2 bg-surface/90 dark:bg-surface-dark/90 px-3.5 py-1.5 rounded-full shadow-md backdrop-blur-md border border-ink-faint dark:border-ink-faint-dark z-10 transition-all duration-200">
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.max(1, p - 1))}
+                  disabled={previewPageNum <= 1}
+                  aria-label={isTr ? 'Önceki Sayfa' : 'Previous Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-mono min-w-[4rem] text-center font-medium select-none text-ink dark:text-ink-dark">
+                  {isTr ? `Sayfa ${previewPageNum} / ${totalPages}` : `Page ${previewPageNum} of ${totalPages}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum(p => Math.min(totalPages, p + 1))}
+                  disabled={previewPageNum >= totalPages}
+                  aria-label={isTr ? 'Sonraki Sayfa' : 'Next Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onClick={reset}
+              className="btn-motion rounded-lg border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-bg dark:bg-surface-dark dark:text-ink-dark dark:hover:bg-bg-dark"
+            >
+              {t.cancel || (isTr ? 'Vazgeç' : 'Cancel')}
+            </button>
+            <button
+              type="button"
+              onClick={handleRun}
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778]"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>
+                {isTr ? 'Otomatik Kırp ve İndir' : 'Auto-Crop and Download'}
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.converting || 'Processing...'}</span>
+            <span>{t.converting || (isTr ? 'Beyaz kenarlıklar kırpılıyor...' : 'Cropping white margins...')}</span>
           </div>
           <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
             <div className="h-full w-full origin-left animate-fake-progress progress-fill" />

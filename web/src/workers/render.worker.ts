@@ -76,7 +76,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'pdf-a-start') await pdfARun(msg.file, msg.meta);
       else if (msg.type === 'remove-annotations-start') await removeAnnotationsRun(msg.file, msg.meta, msg);
       else if (msg.type === 'pdf-to-webp-start') await pdfToWebpRun(msg.file, msg.meta);
-      else if (msg.type === 'auto-crop-start') await autoCropRun(msg.file, msg.meta);
+      else if (msg.type === 'auto-crop-start') await autoCropRun(msg.file, msg.meta, msg.padding);
       else if (msg.type === 'extract-toc-start') await extractTocRun(msg.file, msg.meta);
       else if (msg.type === 'overlay-pdf-start') await overlayPdfRun(msg.file, msg.meta, msg.templateFile, msg.mode, msg.pageRange);
       else if (msg.type === 'change-bg-start') await changeBackgroundRun(msg.file, msg.meta, msg.hexColor);
@@ -1657,11 +1657,12 @@ async function pdfToWebpRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   });
 }
 
-async function autoCropRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+async function autoCropRun(file: ArrayBuffer, meta: FileMeta, paddingOpt?: number): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
   let outputName: string | undefined;
   let doc;
+  const padding = typeof paddingOpt === 'number' ? paddingOpt : 12;
   try {
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
@@ -1699,13 +1700,12 @@ async function autoCropRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
           // Found content
           const page = pages[i - 1];
           const height = page.getHeight();
-          const padding = 10;
-          minX = Math.max(0, minX - padding);
-          maxX = Math.min(canvas.width, maxX + padding);
-          minY = Math.max(0, minY - padding);
-          maxY = Math.min(canvas.height, maxY + padding);
+          const pLeft = Math.max(0, minX - padding);
+          const pRight = Math.min(canvas.width, maxX + padding);
+          const pTop = Math.max(0, minY - padding);
+          const pBottom = Math.min(canvas.height, maxY + padding);
           
-          page.setCropBox(minX, height - maxY, maxX - minX, maxY - minY);
+          page.setCropBox(pLeft, height - pBottom, pRight - pLeft, pBottom - pTop);
         }
       } catch(e) {
         console.warn('Failed to auto-crop page', i, e);

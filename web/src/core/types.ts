@@ -154,7 +154,7 @@ export type UiToWorkerMessage =
       preserveLinks?: boolean;
     }
   | { type: 'pdf-to-webp-start'; file: ArrayBuffer; meta: FileMeta }
-  | { type: 'auto-crop-start'; file: ArrayBuffer; meta: FileMeta }
+  | { type: 'auto-crop-start'; file: ArrayBuffer; meta: FileMeta; padding?: number }
   | { type: 'extract-toc-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'overlay-pdf-start'; file: ArrayBuffer; meta: FileMeta; templateFile: ArrayBuffer; mode?: 'background' | 'foreground'; pageRange?: 'all' | 'first' | 'except-first' }
   | { type: 'change-bg-start'; file: ArrayBuffer; meta: FileMeta; hexColor: string }

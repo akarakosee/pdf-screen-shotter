@@ -308,11 +308,11 @@ export class JobController {
     this.post({ type: 'pdf-to-webp-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runAutoCrop(file: File): Promise<void> {
+  async runAutoCrop(file: File, options: { padding?: number } = { padding: 12 }): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'auto-crop-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+    this.post({ type: 'auto-crop-start', file: buf, meta: { fileId: file.name, name: file.name }, ...options }, [buf]);
   }
 
   async runExtractToc(file: File): Promise<void> {
