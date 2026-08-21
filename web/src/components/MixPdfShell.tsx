@@ -231,11 +231,6 @@ export function MixPdfShell({ t = en }: Props) {
               onFiles={handleFilesAdded}
               multiple={true}
             />
-            <p className="px-2 text-xs text-ink-muted dark:text-ink-muted-dark">
-              {isTr
-                ? 'İki ayrı PDF dosyasını buraya sürükleyin veya seçin (Örn: Tek Sayfalar PDF ve Çift Sayfalar PDF).'
-                : 'Upload 2 separate PDF files to interleave their pages (e.g. Odd Pages PDF & Even Pages PDF).'}
-            </p>
             <PrivacyLine t={t} />
           </div>
 
