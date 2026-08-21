@@ -134,7 +134,7 @@ export type UiToWorkerMessage =
       meta: FileMeta;
       format?: 'original' | 'png' | 'jpg';
       minSize?: number;
-      pageRange?: 'all' | 'first';
+      pageRange?: 'all' | 'first' | number;
     }
   | { type: 'compress-start'; file: ArrayBuffer; meta: FileMeta; level: 'recommended' | 'extreme' | 'fast' }
   | { type: 'remove-blank-start'; file: ArrayBuffer; meta: FileMeta }

@@ -545,7 +545,7 @@ function range(n: number): number[] {
 async function extractImagesRun(
   file: ArrayBuffer,
   meta: FileMeta,
-  options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' }
+  options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' | number }
 ): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
@@ -568,7 +568,11 @@ async function extractImagesRun(
     });
 
     let images = rawImages;
-    if (options?.pageRange === 'first') {
+    if (typeof options?.pageRange === 'number') {
+      const pageStr1 = `page_${String(options.pageRange).padStart(2, '0')}_`;
+      const pageStr2 = `page_${options.pageRange}_`;
+      images = images.filter(img => img.name.startsWith(pageStr1) || img.name.startsWith(pageStr2));
+    } else if (options?.pageRange === 'first') {
       images = images.filter(img => img.name.startsWith('page_01_') || img.name.startsWith('page_1_'));
     }
 

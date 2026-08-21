@@ -31,7 +31,7 @@ export function ExtractImagesShell({ t = en }: Props) {
   // Interactive Options State
   const [selectedFormat, setSelectedFormat] = useState<FormatOption>('original');
   const [filterTinyIcons, setFilterTinyIcons] = useState(false);
-  const [pageRange, setPageRange] = useState<'all' | 'first'>('all');
+  const [pageScope, setPageScope] = useState<'all' | 'current'>('all');
 
   // Live Preview State
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -138,7 +138,7 @@ export function ExtractImagesShell({ t = en }: Props) {
     controller.current?.runExtractImages(file, {
       format: selectedFormat,
       minSize: filterTinyIcons ? 50 : 0,
-      pageRange: pageRange,
+      pageRange: pageScope === 'current' ? previewPageNum : 'all',
     });
   };
 
@@ -153,7 +153,7 @@ export function ExtractImagesShell({ t = en }: Props) {
     setTotalPages(1);
     setSelectedFormat('original');
     setFilterTinyIcons(false);
-    setPageRange('all');
+    setPageScope('all');
   }, []);
 
   const formatCards = [
@@ -211,51 +211,80 @@ export function ExtractImagesShell({ t = en }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column: Interactive Options */}
             <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-              <div className="flex items-center justify-between">
+              {/* 1. Format */}
+              <div className="flex flex-col gap-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
                   {isTr ? 'Çıktı Formatı' : 'Output Format'}
                 </label>
+                <div className="flex flex-col gap-2">
+                  {formatCards.map((c) => {
+                    const isSelected = selectedFormat === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setSelectedFormat(c.id)}
+                        className={`btn-motion flex items-center justify-between h-11 px-3.5 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
+                            : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
+                        }`}
+                      >
+                        <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                          {isTr ? c.titleTr : c.titleEn}
+                        </span>
+                        {isSelected ? (
+                          <CheckCircle2 className="w-4.5 h-4.5 text-amber dark:text-amber-dark shrink-0 ml-2" />
+                        ) : (
+                          <div className="w-3.5 h-3.5 rounded-full border border-ink-faint dark:border-ink-faint-dark shrink-0 ml-2" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Format Buttons (Clean, compact, no description) */}
-              <div className="flex flex-col gap-2.5">
-                {formatCards.map((c) => {
-                  const isSelected = selectedFormat === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => setSelectedFormat(c.id)}
-                      className={`btn-motion flex items-center justify-between h-12 px-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
-                        isSelected
-                          ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
-                          : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
-                      }`}
-                    >
-                      <span className="text-sm font-semibold text-ink dark:text-ink-dark">
-                        {isTr ? c.titleTr : c.titleEn}
-                      </span>
-                      {isSelected ? (
-                        <CheckCircle2 className="w-5 h-5 text-amber dark:text-amber-dark shrink-0 ml-2" />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full border border-ink-faint dark:border-ink-faint-dark shrink-0 ml-2" />
-                      )}
-                    </button>
-                  );
-                })}
+              {/* 2. Page Scope */}
+              <div className="pt-3 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+                  {isTr ? 'Sayfa Kapsamı' : 'Page Scope'}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPageScope('all')}
+                    className={`btn-motion flex items-center justify-center h-10 px-3 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                      pageScope === 'all'
+                        ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark text-ink dark:text-ink-dark'
+                        : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark text-ink-muted dark:text-ink-muted-dark'
+                    }`}
+                  >
+                    {isTr ? `Tüm Sayfalar (${totalPages})` : `All Pages (${totalPages})`}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPageScope('current')}
+                    className={`btn-motion flex items-center justify-center h-10 px-3 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                      pageScope === 'current'
+                        ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark text-ink dark:text-ink-dark'
+                        : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark text-ink-muted dark:text-ink-muted-dark'
+                    }`}
+                  >
+                    {isTr ? `Sayfa ${previewPageNum}` : `Page ${previewPageNum} Only`}
+                  </button>
+                </div>
               </div>
 
-              {/* Extra Filters */}
-              <div className="pt-3 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2.5">
+              {/* 3. Filter */}
+              <div className="pt-3 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
                   {isTr ? 'Filtre' : 'Filter'}
                 </label>
 
-                {/* Tiny icons filter toggle */}
                 <button
                   type="button"
                   onClick={() => setFilterTinyIcons(!filterTinyIcons)}
-                  className={`btn-motion flex items-center justify-between h-12 px-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                  className={`btn-motion flex items-center justify-between h-11 px-3.5 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                     filterTinyIcons
                       ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark'
                       : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
@@ -267,12 +296,32 @@ export function ExtractImagesShell({ t = en }: Props) {
                       {isTr ? 'Küçük Simgeleri Filtrele (>50px)' : 'Ignore Tiny Icons (>50px)'}
                     </span>
                   </div>
-                  <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors shrink-0 ml-2 ${
+                  <div className={`w-4.5 h-4.5 rounded flex items-center justify-center border transition-colors shrink-0 ml-2 ${
                     filterTinyIcons ? 'bg-amber border-amber text-[#1D1108] dark:bg-amber-dark dark:border-amber-dark dark:text-white' : 'border-ink-faint dark:border-ink-faint-dark'
                   }`}>
-                    {filterTinyIcons && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    {filterTinyIcons && <Check className="w-3 h-3 stroke-[3]" />}
                   </div>
                 </button>
+              </div>
+
+              {/* 4. Quick Specs Bar (Fills remaining height symmetrically) */}
+              <div className="mt-auto pt-3 border-t border-ink-faint dark:border-ink-faint-dark grid grid-cols-2 gap-2 text-xs">
+                <div className="rounded-xl border border-ink-faint/60 bg-bg p-2.5 dark:border-ink-faint-dark/60 dark:bg-bg-dark flex flex-col gap-0.5">
+                  <span className="text-[10px] uppercase font-semibold text-ink-muted dark:text-ink-muted-dark">
+                    {isTr ? 'Çıktı Biçimi' : 'Package Type'}
+                  </span>
+                  <span className="font-semibold text-ink dark:text-ink-dark truncate">
+                    ZIP Arşivi
+                  </span>
+                </div>
+                <div className="rounded-xl border border-ink-faint/60 bg-bg p-2.5 dark:border-ink-faint-dark/60 dark:bg-bg-dark flex flex-col gap-0.5">
+                  <span className="text-[10px] uppercase font-semibold text-ink-muted dark:text-ink-muted-dark">
+                    {isTr ? 'Çözünürlük' : 'Resolution'}
+                  </span>
+                  <span className="font-semibold text-ink dark:text-ink-dark truncate">
+                    {isTr ? 'Orijinal Piksel' : 'Native Pixels'}
+                  </span>
+                </div>
               </div>
             </div>
 

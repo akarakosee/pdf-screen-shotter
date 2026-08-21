@@ -560,7 +560,7 @@ export class JobController {
     this.post({ type: 'split-half-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runExtractImages(file: File, options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' }): Promise<void> {
+  async runExtractImages(file: File, options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' | number }): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
