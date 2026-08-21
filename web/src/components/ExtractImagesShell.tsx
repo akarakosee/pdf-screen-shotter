@@ -51,7 +51,7 @@ export function ExtractImagesShell({ t = en }: Props) {
         setPhase('upload');
       },
       onExtractImagesDone: (res) => {
-        if (res.succeeded > 0 && res.output) {
+        if (res.extractedImages > 0 && res.output) {
           setResult(res);
           setPhase('done');
         } else {
