@@ -44,6 +44,7 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
   const [sensitivity, setSensitivity] = useState<Sensitivity>('normal');
   const [pages, setPages] = useState<PageInfo[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isReanalyzing, setIsReanalyzing] = useState(false);
   const [progressMsg, setProgressMsg] = useState('');
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -142,6 +143,7 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
   const handleSensitivityChange = async (newSensitivity: Sensitivity) => {
     setSensitivity(newSensitivity);
     if (!file || !controller.current) return;
+    setIsReanalyzing(true);
     try {
       const blankIndices = await controller.current.detectBlankPages(file, newSensitivity);
       const blankSet = new Set(blankIndices);
@@ -154,6 +156,8 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
       );
     } catch (err) {
       console.error('Sensitivity change re-detection error:', err);
+    } finally {
+      setIsReanalyzing(false);
     }
   };
 
@@ -309,7 +313,13 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
+              {isReanalyzing && (
+                <div className="flex items-center gap-1.5 text-xs text-amber font-medium animate-pulse">
+                  <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-amber border-t-transparent" />
+                  <span>{isTr ? 'Taranıyor...' : 'Scanning...'}</span>
+                </div>
+              )}
               <span className="text-xs font-semibold text-ink-muted dark:text-ink-muted-dark uppercase tracking-wider">
                 {isTr ? 'Hassasiyet:' : 'Sensitivity:'}
               </span>
@@ -318,12 +328,13 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
                   <button
                     key={s}
                     type="button"
+                    disabled={isReanalyzing}
                     onClick={() => handleSensitivityChange(s)}
                     className={`px-2 py-1 rounded font-medium transition-all ${
                       sensitivity === s
                         ? 'bg-amber text-[#1D1108] font-bold shadow-xs dark:bg-amber-dark dark:text-white'
                         : 'text-ink-muted dark:text-ink-muted-dark hover:text-ink'
-                    }`}
+                    } disabled:opacity-50`}
                   >
                     {s === 'strict' ? (isTr ? 'Hassas' : 'Strict') : s === 'normal' ? (isTr ? 'Standart' : 'Normal') : (isTr ? 'Geniş' : 'Lenient')}
                   </button>

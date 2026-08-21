@@ -330,20 +330,27 @@ export class MuPdfEngine implements PdfEngine {
     for (let i = 0; i < count; i++) {
       const p = (doc as MuPdfDoc).handle.loadPage(i);
       try {
-        // 1. Text check: if there is any readable or hidden text string, page is NOT blank
+        // 1. Text check:
+        // - In STRICT & NORMAL mode: ANY readable or non-whitespace text marks the page as non-blank.
+        // - In LENIENT mode: Only substantial text (> 25 characters) immediately marks non-blank;
+        //   minor single faint watermark strings are sent to visual contrast analysis.
         let hasText = false;
         try {
           const stext = p.toStructuredText('preserve-whitespace');
           try {
             const rawText = stext.asText().trim();
-            if (rawText.length > 0) {
+            if (sensitivity === 'strict' && rawText.length > 0) {
+              hasText = true;
+            } else if (sensitivity === 'normal' && rawText.length > 0) {
+              hasText = true;
+            } else if (sensitivity === 'lenient' && rawText.length > 25) {
               hasText = true;
             }
           } finally {
             stext.destroy();
           }
         } catch {
-          // If text extraction fails, continue to pixmap check
+          // If text extraction fails, proceed to pixmap check
         }
 
         if (hasText) {
@@ -351,11 +358,10 @@ export class MuPdfEngine implements PdfEngine {
           continue;
         }
 
-        // 2. Visual rendering check (covers images, vector paths, table lines, charts, annotations)
-        // Render at 1.0 scale (~72 DPI) for sharp raster inspection
+        // 2. Visual pixmap rendering check (covers images, vector paths, table lines, charts, annotations)
         const pixmap = p.toPixmap(m.Matrix.scale(1.0, 1.0), m.ColorSpace.DeviceGray, false, true);
         try {
-          const pixels = pixmap.getPixels(); // Uint8ClampedArray (Grayscale, 1 byte per pixel)
+          const pixels = pixmap.getPixels();
           const totalPixels = pixels.length;
           
           if (totalPixels === 0) {
@@ -363,7 +369,7 @@ export class MuPdfEngine implements PdfEngine {
             continue;
           }
 
-          // Sample page background tone from corners & borders
+          // Sample page background tone from corners
           const w = pixmap.getWidth();
           const h = pixmap.getHeight();
           let bgSum = 0;
@@ -389,29 +395,32 @@ export class MuPdfEngine implements PdfEngine {
           }
           const avgBg = bgSamples > 0 ? bgSum / bgSamples : 255;
 
-          // Count non-background pixels (contrast difference > 16 in grayscale)
+          // Multi-tier thresholds:
+          // Strict: contrast diff > 8, max allowed = 8 pixels (very sensitive, preserves even tiny dots)
+          // Normal: contrast diff > 16, max allowed = 40 pixels (optimal for digital & clean scans)
+          // Lenient: contrast diff > 24, max allowed = 350 pixels (tolerates scanner dust, punch holes, faint watermarks)
+          let contrastThreshold = 16;
+          let maxAllowedCount = 40;
+          let maxAllowedRatio = 0.0005;
+
+          if (sensitivity === 'strict') {
+            contrastThreshold = 8;
+            maxAllowedCount = 8;
+            maxAllowedRatio = 0.00005;
+          } else if (sensitivity === 'lenient') {
+            contrastThreshold = 24;
+            maxAllowedCount = 350;
+            maxAllowedRatio = 0.003;
+          }
+
           let nonBgPixels = 0;
           for (let j = 0; j < totalPixels; j++) {
-            if (Math.abs(pixels[j] - avgBg) > 16) {
+            if (Math.abs(pixels[j] - avgBg) > contrastThreshold) {
               nonBgPixels++;
             }
           }
 
           const nonBgRatio = nonBgPixels / totalPixels;
-
-          // Sensitivity thresholds:
-          // strict: < 0.01% non-bg pixels or < 15 pixels (extremely conservative)
-          // normal: < 0.05% non-bg pixels or < 40 pixels (recommended for clean digital PDFs)
-          // lenient: < 0.2% non-bg pixels or < 120 pixels (tolerates scan noise/speckles)
-          let maxAllowedRatio = 0.0005;
-          let maxAllowedCount = 40;
-          if (sensitivity === 'strict') {
-            maxAllowedRatio = 0.0001;
-            maxAllowedCount = 15;
-          } else if (sensitivity === 'lenient') {
-            maxAllowedRatio = 0.002;
-            maxAllowedCount = 120;
-          }
 
           if (nonBgRatio < maxAllowedRatio || nonBgPixels < maxAllowedCount) {
             blankIndices.push(i);
