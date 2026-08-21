@@ -320,28 +320,100 @@ export class MuPdfEngine implements PdfEngine {
 
   async detectBlankPages(
     doc: PdfDoc,
-    onProgress?: (page: number, total: number) => void
+    onProgress?: (page: number, total: number) => void,
+    sensitivity: 'strict' | 'normal' | 'lenient' = 'normal'
   ): Promise<number[]> {
     const m = this.require();
     const count = this.pageCount(doc);
     const blankIndices: number[] = [];
     
-    // Scale 0.5 (~36 DPI) is enough to check for visible ink
     for (let i = 0; i < count; i++) {
       const p = (doc as MuPdfDoc).handle.loadPage(i);
       try {
-        const pixmap = p.toPixmap(m.Matrix.scale(0.5, 0.5), m.ColorSpace.DeviceGray, false, true);
+        // 1. Text check: if there is any readable or hidden text string, page is NOT blank
+        let hasText = false;
+        try {
+          const stext = p.toStructuredText('preserve-whitespace');
+          try {
+            const rawText = stext.asText().trim();
+            if (rawText.length > 0) {
+              hasText = true;
+            }
+          } finally {
+            stext.destroy();
+          }
+        } catch {
+          // If text extraction fails, continue to pixmap check
+        }
+
+        if (hasText) {
+          if (onProgress) onProgress(i + 1, count);
+          continue;
+        }
+
+        // 2. Visual rendering check (covers images, vector paths, table lines, charts, annotations)
+        // Render at 1.0 scale (~72 DPI) for sharp raster inspection
+        const pixmap = p.toPixmap(m.Matrix.scale(1.0, 1.0), m.ColorSpace.DeviceGray, false, true);
         try {
           const pixels = pixmap.getPixels(); // Uint8ClampedArray (Grayscale, 1 byte per pixel)
-          let whitePixels = 0;
-          for (let j = 0; j < pixels.length; j++) {
-            if (pixels[j] > 250) {
-              whitePixels++;
+          const totalPixels = pixels.length;
+          
+          if (totalPixels === 0) {
+            blankIndices.push(i);
+            continue;
+          }
+
+          // Sample page background tone from corners & borders
+          const w = pixmap.getWidth();
+          const h = pixmap.getHeight();
+          let bgSum = 0;
+          let bgSamples = 0;
+          const cornerSize = Math.min(10, Math.floor(w / 4), Math.floor(h / 4));
+          const sampleBoxes = [
+            [0, 0],
+            [w - cornerSize, 0],
+            [0, h - cornerSize],
+            [w - cornerSize, h - cornerSize],
+          ];
+
+          for (const [sx, sy] of sampleBoxes) {
+            for (let dy = 0; dy < cornerSize && sy + dy < h; dy++) {
+              for (let dx = 0; dx < cornerSize && sx + dx < w; dx++) {
+                const idx = (sy + dy) * w + (sx + dx);
+                if (idx < totalPixels) {
+                  bgSum += pixels[idx];
+                  bgSamples++;
+                }
+              }
             }
           }
-          const whiteRatio = whitePixels / pixels.length;
-          // If 99.5% of pixels are near white, we consider it a blank page
-          if (whiteRatio > 0.995) {
+          const avgBg = bgSamples > 0 ? bgSum / bgSamples : 255;
+
+          // Count non-background pixels (contrast difference > 16 in grayscale)
+          let nonBgPixels = 0;
+          for (let j = 0; j < totalPixels; j++) {
+            if (Math.abs(pixels[j] - avgBg) > 16) {
+              nonBgPixels++;
+            }
+          }
+
+          const nonBgRatio = nonBgPixels / totalPixels;
+
+          // Sensitivity thresholds:
+          // strict: < 0.01% non-bg pixels or < 15 pixels (extremely conservative)
+          // normal: < 0.05% non-bg pixels or < 40 pixels (recommended for clean digital PDFs)
+          // lenient: < 0.2% non-bg pixels or < 120 pixels (tolerates scan noise/speckles)
+          let maxAllowedRatio = 0.0005;
+          let maxAllowedCount = 40;
+          if (sensitivity === 'strict') {
+            maxAllowedRatio = 0.0001;
+            maxAllowedCount = 15;
+          } else if (sensitivity === 'lenient') {
+            maxAllowedRatio = 0.002;
+            maxAllowedCount = 120;
+          }
+
+          if (nonBgRatio < maxAllowedRatio || nonBgPixels < maxAllowedCount) {
             blankIndices.push(i);
           }
         } finally {

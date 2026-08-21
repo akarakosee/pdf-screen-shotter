@@ -1,10 +1,10 @@
 ---
 import ToolPage from '../../layouts/ToolPage.astro';
-import { RemoveBlankShell } from '../../components/RemoveBlankShell';
-import { removeCopy } from '../../i18n/toolCopy';
+import { RemoveBlankPagesShell } from '../../components/RemoveBlankPagesShell';
+import { removeblankpagesCopy } from '../../i18n/toolCopy';
 import { tr } from '../../i18n/tr';
 
-const copy = removeCopy.tr;
+const copy = removeblankpagesCopy.tr;
 ---
 
 <ToolPage
@@ -16,8 +16,6 @@ const copy = removeCopy.tr;
   howToName={copy.howToName}
   howItWorks={copy.howItWorks}
   steps={copy.steps}
-  faqTitle={copy.faqTitle}
-  faq={copy.faq}
 >
-  <RemoveBlankShell client:load t={tr} />
+  <RemoveBlankPagesShell client:load t={tr} />
 </ToolPage>

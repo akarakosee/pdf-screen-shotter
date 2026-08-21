@@ -69,7 +69,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type === 'grayscale-start') await grayscaleRun(msg.file, msg.meta);
       else if (msg.type === 'resize-start') await resizeRun(msg.file, msg.meta, msg.pageSize, msg.margin);
-      else if (msg.type === 'remove-blank-start') await removeBlankRun(msg.file, msg.meta);
+      else if (msg.type === 'remove-blank-start') await removeBlankRun(msg.file, msg.meta, msg.sensitivity, msg.indicesToRemove);
       else if (msg.type === 'reverse-start') await reverseRun(msg.file, msg.meta);
       else if (msg.type === 'bates-start') await batesRun(msg.file, msg.meta, msg.prefix, msg.suffix, msg.startNumber, msg.padding);
       else if (msg.type === 'n-up-start') await nUpRun(msg.file, msg.meta, msg.grid);
@@ -864,7 +864,12 @@ async function resizeRun(
   }
 }
 
-async function removeBlankRun(file: ArrayBuffer, meta: FileMeta) {
+async function removeBlankRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  sensitivity?: 'strict' | 'normal' | 'lenient',
+  indicesToRemove?: number[]
+) {
   try {
     const started = Date.now();
     let doc;
@@ -876,24 +881,33 @@ async function removeBlankRun(file: ArrayBuffer, meta: FileMeta) {
     }
     
     const count = engine.pageCount(doc);
-    const blankIndices = await engine.detectBlankPages(doc, (processed, total) => {
-      post({ type: 'remove-blank-progress', processedPages: processed, totalPages: total });
-      if (cancelled) throw new Error('Cancelled');
-    });
+    let blankIndices: number[] = [];
+
+    if (indicesToRemove && Array.isArray(indicesToRemove) && indicesToRemove.length > 0) {
+      blankIndices = indicesToRemove;
+    } else {
+      blankIndices = await engine.detectBlankPages(doc, (processed, total) => {
+        post({ type: 'remove-blank-progress', processedPages: processed, totalPages: total });
+        if (cancelled) throw new Error('Cancelled');
+      }, sensitivity || 'normal');
+    }
     engine.close(doc);
     
     // If cancelled, early exit
     if (cancelled) return;
 
     // Load into pdf-lib to actually remove the pages
-    const pdfDoc = await PDFDocument.load(file);
+    const pdfDoc = await PDFDocument.load(file, { ignoreEncryption: true });
     
     // Remove pages from highest index to lowest so indices don't shift
-    for (let i = blankIndices.length - 1; i >= 0; i--) {
-      pdfDoc.removePage(blankIndices[i]);
+    const sortedIndices = [...blankIndices].sort((a, b) => b - a);
+    for (const idx of sortedIndices) {
+      if (idx >= 0 && idx < pdfDoc.getPageCount()) {
+        pdfDoc.removePage(idx);
+      }
     }
     
-    // If all pages were removed, it's an error, but we'll return a 1-page blank doc to avoid corruption
+    // If all pages were removed, return a 1-page blank doc to avoid corruption
     if (pdfDoc.getPageCount() === 0) {
        pdfDoc.addPage([595.28, 841.89]); // A4
     }
@@ -904,7 +918,7 @@ async function removeBlankRun(file: ArrayBuffer, meta: FileMeta) {
       type: 'done',
       result: {
         totalPages: count,
-        succeeded: 1,
+        succeeded: blankIndices.length,
         failed: [],
         durationMs: Date.now() - started,
         output: new Blob([bytes as unknown as Uint8Array], { type: 'application/pdf' }),

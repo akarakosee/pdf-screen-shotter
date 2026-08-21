@@ -267,11 +267,11 @@ export class JobController {
     this.post({ type: 'resize-start', file: buf, meta: { fileId: file.name, name: file.name }, pageSize, margin }, [buf]);
   }
 
-  async runRemoveBlank(file: File): Promise<void> {
+  async runRemoveBlank(file: File, options?: { sensitivity?: 'strict' | 'normal' | 'lenient'; indicesToRemove?: number[] }): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'remove-blank-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+    this.post({ type: 'remove-blank-start', file: buf, meta: { fileId: file.name, name: file.name }, ...options }, [buf]);
   }
 
   async runReverse(file: File): Promise<void> {
@@ -567,11 +567,11 @@ export class JobController {
     this.post({ type: 'extract-images-start', file: buf, meta: { fileId: file.name, name: file.name }, ...options }, [buf]);
   }
 
-  async runRemoveBlankPages(file: File): Promise<void> {
+  async runRemoveBlankPages(file: File, options?: { sensitivity?: 'strict' | 'normal' | 'lenient'; indicesToRemove?: number[] }): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'remove-blank-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+    this.post({ type: 'remove-blank-start', file: buf, meta: { fileId: file.name, name: file.name }, ...options }, [buf]);
   }
 
   async runBatesNumbering(file: File, prefix: string, suffix: string, startNumber: number, padding: number): Promise<void> {
