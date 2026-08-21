@@ -412,18 +412,22 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
             <button
               type="button"
               onClick={executeRemoval}
-              disabled={removedCount === 0}
+              disabled={removedCount === 0 || removedCount === pages.length}
               className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             >
               <Trash2 className="h-4 w-4" />
               <span>
-                {removedCount > 0
+                {removedCount === 0
                   ? isTr
-                    ? `Seçilen ${removedCount} Boş Sayfayı Sil ve İndir`
-                    : `Remove ${removedCount} Blank Pages & Download`
+                    ? 'Silinecek Boş Sayfa Yok'
+                    : 'No Blank Pages to Remove'
+                  : removedCount === pages.length
+                  ? isTr
+                    ? 'Tüm Sayfalar Silinemez (En Az 1 Sayfa Kalmalı)'
+                    : 'Cannot Remove All Pages (Keep at Least 1)'
                   : isTr
-                  ? 'Silinecek Boş Sayfa Yok'
-                  : 'No Blank Pages to Remove'}
+                  ? `Seçilen ${removedCount} Boş Sayfayı Sil ve İndir`
+                  : `Remove ${removedCount} Blank Pages & Download`}
               </span>
             </button>
           </div>
