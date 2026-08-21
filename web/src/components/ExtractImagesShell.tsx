@@ -159,30 +159,18 @@ export function ExtractImagesShell({ t = en }: Props) {
   const formatCards = [
     {
       id: 'original' as FormatOption,
-      titleTr: 'Orijinal Format (Önerilen)',
-      titleEn: 'Original Format (Recommended)',
-      descTr: 'Her görselin belgedeki doğal formatını (PNG, JPG vb.) ve piksel kalitesini korur.',
-      descEn: 'Preserves each embedded image in its native format and pixel quality.',
-      badgeTr: 'Kayıpsız & En Hızlı',
-      badgeEn: 'Lossless & Fastest',
+      titleTr: 'Orijinal Format',
+      titleEn: 'Original Format',
     },
     {
       id: 'png' as FormatOption,
       titleTr: 'Tümünü PNG Yap',
       titleEn: 'Convert All to PNG',
-      descTr: 'Tüm görselleri şeffaflık ve yüksek netlik destekli kayıpsız PNG formatına çevirir.',
-      descEn: 'Converts all images to lossless PNG with transparency support.',
-      badgeTr: 'Şeffaf / Net',
-      badgeEn: 'Transparent / Crisp',
     },
     {
       id: 'jpg' as FormatOption,
       titleTr: 'Tümünü JPG Yap',
       titleEn: 'Convert All to JPG',
-      descTr: 'Tüm görselleri hafif, yüksek uyumluluk sunan standart JPG formatına çevirir.',
-      descEn: 'Converts all images to standard, lightweight JPEG photos.',
-      badgeTr: 'Hafif Dosya',
-      badgeEn: 'Compact Size',
     },
   ];
 
@@ -225,11 +213,11 @@ export function ExtractImagesShell({ t = en }: Props) {
             <div className="flex flex-col gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
-                  {isTr ? '1. Çıktı Formatını Seçin' : '1. Select Output Format'}
+                  {isTr ? 'Çıktı Formatı' : 'Output Format'}
                 </label>
               </div>
 
-              {/* Format Cards */}
+              {/* Format Buttons (Clean, compact, no description) */}
               <div className="flex flex-col gap-2.5">
                 {formatCards.map((c) => {
                   const isSelected = selectedFormat === c.id;
@@ -238,82 +226,53 @@ export function ExtractImagesShell({ t = en }: Props) {
                       key={c.id}
                       type="button"
                       onClick={() => setSelectedFormat(c.id)}
-                      className={`btn-motion flex flex-col p-3.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
+                      className={`btn-motion flex items-center justify-between h-12 px-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                         isSelected
                           ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark shadow-sm'
                           : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                       }`}
                     >
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-ink dark:text-ink-dark">
-                            {isTr ? c.titleTr : c.titleEn}
-                          </span>
-                          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
-                            isSelected
-                              ? 'bg-amber text-[#1D1108] dark:bg-amber-dark dark:text-white font-semibold'
-                              : 'bg-ink-faint/40 text-ink-muted dark:text-ink-muted-dark'
-                          }`}>
-                            {isTr ? c.badgeTr : c.badgeEn}
-                          </span>
-                        </div>
-                        {isSelected ? (
-                          <CheckCircle2 className="w-5 h-5 text-amber dark:text-amber-dark shrink-0" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border border-ink-faint dark:border-ink-faint-dark shrink-0" />
-                        )}
-                      </div>
-                      <span className="text-xs text-ink-muted dark:text-ink-muted-dark mt-1 leading-relaxed">
-                        {isTr ? c.descTr : c.descEn}
+                      <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                        {isTr ? c.titleTr : c.titleEn}
                       </span>
+                      {isSelected ? (
+                        <CheckCircle2 className="w-5 h-5 text-amber dark:text-amber-dark shrink-0 ml-2" />
+                      ) : (
+                        <div className="w-4 h-4 rounded-full border border-ink-faint dark:border-ink-faint-dark shrink-0 ml-2" />
+                      )}
                     </button>
                   );
                 })}
               </div>
 
               {/* Extra Filters */}
-              <div className="pt-2 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2.5">
+              <div className="pt-3 border-t border-ink-faint dark:border-ink-faint-dark flex flex-col gap-2.5">
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
-                  {isTr ? '2. Filtre ve Kapsam' : '2. Scope & Filter'}
+                  {isTr ? 'Filtre' : 'Filter'}
                 </label>
 
                 {/* Tiny icons filter toggle */}
                 <button
                   type="button"
                   onClick={() => setFilterTinyIcons(!filterTinyIcons)}
-                  className={`btn-motion flex items-center justify-between p-3 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                  className={`btn-motion flex items-center justify-between h-12 px-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
                     filterTinyIcons
                       ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-1 ring-amber dark:ring-amber-dark'
                       : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <Filter className="w-4 h-4 text-amber dark:text-amber-dark shrink-0" />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-ink dark:text-ink-dark">
-                        {isTr ? 'Küçük Simgeleri Filtrele (>50px)' : 'Ignore Tiny Icons (>50px)'}
-                      </span>
-                      <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark">
-                        {isTr ? 'Nokta ve madde işaretlerini atlar, sadece gerçek resimleri alır.' : 'Skips small bullet dots and decorative markers.'}
-                      </span>
-                    </div>
+                    <span className="text-xs font-semibold text-ink dark:text-ink-dark truncate">
+                      {isTr ? 'Küçük Simgeleri Filtrele (>50px)' : 'Ignore Tiny Icons (>50px)'}
+                    </span>
                   </div>
-                  <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${
+                  <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors shrink-0 ml-2 ${
                     filterTinyIcons ? 'bg-amber border-amber text-[#1D1108] dark:bg-amber-dark dark:border-amber-dark dark:text-white' : 'border-ink-faint dark:border-ink-faint-dark'
                   }`}>
                     {filterTinyIcons && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                   </div>
                 </button>
-              </div>
-
-              {/* Guide Note */}
-              <div className="mt-auto pt-2 text-xs text-ink-muted dark:text-ink-muted-dark bg-bg dark:bg-bg-dark p-3 rounded-xl border flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber dark:text-amber-dark shrink-0 mt-0.5" />
-                <span>
-                  {isTr
-                    ? 'İşlem tamamen cihazınızda (tarayıcınızda) gerçekleşir. Belgeleriniz sunucuya yüklenmez, %100 gizli kalır.'
-                    : 'Extraction processes 100% locally on your device via WebAssembly. Your files are never uploaded to any server.'}
-                </span>
               </div>
             </div>
 
