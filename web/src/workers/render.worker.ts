@@ -558,30 +558,29 @@ async function extractImagesRun(
     doc = await engine.open(file);
     totalPages = engine.pageCount(doc);
 
-    const rawImages = await engine.extractImages(doc, (page, total, extracted) => {
-      post({
-        type: 'extract-images-progress',
-        extractedImages: extracted,
-        totalPages: total,
-        currentPage: page,
-      });
-    });
+    let targetPages: number[] | undefined;
+    if (Array.isArray(options?.pageRange)) {
+      targetPages = options.pageRange;
+    } else if (typeof options?.pageRange === 'number') {
+      targetPages = [options.pageRange];
+    } else if (options?.pageRange === 'first') {
+      targetPages = [1];
+    }
+
+    const rawImages = await engine.extractImages(
+      doc,
+      (page, total, extracted) => {
+        post({
+          type: 'extract-images-progress',
+          extractedImages: extracted,
+          totalPages: total,
+          currentPage: page,
+        });
+      },
+      targetPages
+    );
 
     let images = rawImages;
-    if (Array.isArray(options?.pageRange)) {
-      const targetPrefixes = options.pageRange.map(p => `page_${String(p).padStart(2, '0')}_`);
-      const targetPrefixesAlt = options.pageRange.map(p => `page_${p}_`);
-      images = images.filter(img =>
-        targetPrefixes.some(pref => img.name.startsWith(pref)) ||
-        targetPrefixesAlt.some(pref => img.name.startsWith(pref))
-      );
-    } else if (typeof options?.pageRange === 'number') {
-      const pageStr1 = `page_${String(options.pageRange).padStart(2, '0')}_`;
-      const pageStr2 = `page_${options.pageRange}_`;
-      images = images.filter(img => img.name.startsWith(pageStr1) || img.name.startsWith(pageStr2));
-    } else if (options?.pageRange === 'first') {
-      images = images.filter(img => img.name.startsWith('page_01_') || img.name.startsWith('page_1_'));
-    }
 
     if (images.length > 0 && !cancelled) {
       const zip = new ZipStream();

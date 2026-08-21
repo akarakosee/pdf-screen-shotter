@@ -213,55 +213,76 @@ export class MuPdfEngine implements PdfEngine {
 
   async extractImages(
     doc: PdfDoc,
-    onProgress?: (page: number, total: number, extracted: number) => void
+    onProgress?: (page: number, total: number, extracted: number) => void,
+    targetPages?: number[]
   ): Promise<{ name: string; data: Uint8Array }[]> {
     const count = this.pageCount(doc);
     const images: { name: string; data: Uint8Array }[] = [];
-    const visited = new Set<string>();
-    for (let i = 0; i < count; i++) {
+    const pagesToScan = targetPages && targetPages.length > 0
+      ? targetPages.filter(p => p >= 1 && p <= count).map(p => p - 1)
+      : Array.from({ length: count }, (_, i) => i);
+
+    let progressStep = 0;
+    for (const i of pagesToScan) {
+      progressStep++;
       const p = (doc as MuPdfDoc).handle.loadPage(i);
+      const pageNum = i + 1;
+      const pageVisited = new Set<string>();
+      let imgIndex = 0;
+
+      const processXObject = (xobj: any) => {
+        if (!xobj || !xobj.isDictionary()) return;
+        xobj.forEach((obj: any, _key: string) => {
+          const subtype = obj.get('Subtype')?.asName();
+          if (subtype === 'Image') {
+            const refId = obj.asIndirect() ? String(obj.asIndirect()) : obj.toString();
+            if (pageVisited.has(refId)) return;
+            pageVisited.add(refId);
+            imgIndex++;
+            const filter = obj.get('Filter')?.asName();
+            const isJpeg = filter === 'DCTDecode';
+            if (isJpeg) {
+              const raw = obj.readRawStream();
+              if (raw) {
+                const data = raw.asUint8Array().slice();
+                images.push({
+                  name: `page_${String(pageNum).padStart(2, '0')}_img_${String(imgIndex).padStart(2, '0')}.jpg`,
+                  data,
+                });
+              }
+            } else {
+              try {
+                const image = (doc as MuPdfDoc).handle.loadImage(obj);
+                const pix = image.toPixmap();
+                const data = pix.asPNG().slice();
+                images.push({
+                  name: `page_${String(pageNum).padStart(2, '0')}_img_${String(imgIndex).padStart(2, '0')}.png`,
+                  data,
+                });
+              } catch (e) {
+                console.warn('[MuPdfEngine] loadImage error:', e);
+              }
+            }
+          } else if (subtype === 'Form') {
+            try {
+              const formRes = obj.get('Resources');
+              const formXobj = formRes?.get('XObject');
+              if (formXobj) processXObject(formXobj);
+            } catch (e) {
+              console.warn('[MuPdfEngine] form xobject parse error:', e);
+            }
+          }
+        });
+      };
+
       try {
         const res = p.getObject().getInheritable('Resources');
         const xobj = res?.get('XObject');
-        let imgIndex = 0;
-        if (xobj && xobj.isDictionary()) {
-          xobj.forEach((obj, _key) => {
-            if (obj.get('Subtype')?.asName() === 'Image') {
-              const refId = obj.asIndirect() ? String(obj.asIndirect()) : obj.toString();
-              if (visited.has(refId)) return;
-              visited.add(refId);
-              imgIndex++;
-              const filter = obj.get('Filter')?.asName();
-              const isJpeg = filter === 'DCTDecode';
-              if (isJpeg) {
-                const raw = obj.readRawStream();
-                if (raw) {
-                  const data = raw.asUint8Array().slice();
-                  images.push({
-                    name: `page_${String(i + 1).padStart(2, '0')}_img_${String(imgIndex).padStart(2, '0')}.jpg`,
-                    data,
-                  });
-                }
-              } else {
-                try {
-                  const image = (doc as MuPdfDoc).handle.loadImage(obj);
-                  const pix = image.toPixmap();
-                  const data = pix.asPNG().slice();
-                  images.push({
-                    name: `page_${String(i + 1).padStart(2, '0')}_img_${String(imgIndex).padStart(2, '0')}.png`,
-                    data,
-                  });
-                } catch (e) {
-                  console.warn('[MuPdfEngine] loadImage error:', e);
-                }
-              }
-            }
-          });
-        }
+        processXObject(xobj);
       } finally {
         p.destroy();
       }
-      if (onProgress) onProgress(i + 1, count, images.length);
+      if (onProgress) onProgress(pageNum, pagesToScan.length, images.length);
     }
     return images;
   }
