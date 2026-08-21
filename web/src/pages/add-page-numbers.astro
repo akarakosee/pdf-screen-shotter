@@ -1,10 +1,10 @@
 ---
-import { AddPageNumbersShell } from '../components/AddPageNumbersShell';
+import { NumberShell } from '../components/NumberShell';
 import ToolPage from '../layouts/ToolPage.astro';
 import { addpagenumbersCopy } from '../i18n/toolCopy';
 import { en } from '../i18n/en';
 ---
 
 <ToolPage lang="en" badgeLabel="UTILITY · ORGANIZE" {...addpagenumbersCopy.en}>
-  <AddPageNumbersShell client:load t={en} />
+  <NumberShell client:load t={en} />
 </ToolPage>
