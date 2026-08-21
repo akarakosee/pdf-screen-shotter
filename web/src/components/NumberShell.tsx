@@ -27,7 +27,7 @@ type Position =
   | 'top-left'
   | 'top-right';
 
-type NumberStyle = 'simple' | 'prefix' | 'slash' | 'full' | 'roman';
+type NumberStyle = 'simple' | 'prefix' | 'slash' | 'full' | 'roman' | 'dash';
 
 function toRoman(num: number): string {
   if (num <= 0 || isNaN(num)) return num.toString();
@@ -71,6 +71,8 @@ function getPageNumberText(
       return isTr ? `Sayfa ${current} / ${total}` : `Page ${current} of ${total}`;
     case 'roman':
       return toRoman(current);
+    case 'dash':
+      return `- ${current} -`;
     case 'simple':
     default:
       return current.toString();
@@ -294,6 +296,7 @@ export function NumberShell({ t = en }: Props) {
     { id: 'simple', labelTr: 'Sadece Sayı', labelEn: 'Number Only', sample: '1, 2, 3...' },
     { id: 'prefix', labelTr: '"Sayfa" Yazısıyla', labelEn: 'With "Page"', sample: isTr ? 'Sayfa 1' : 'Page 1' },
     { id: 'roman', labelTr: 'Romen Rakamı', labelEn: 'Roman Numerals', sample: 'I, II, III...' },
+    { id: 'dash', labelTr: 'Tireli Format', labelEn: 'Hyphen Style', sample: '- 1 -, - 2 -' },
   ];
 
   const positions: { id: Position; labelTr: string; labelEn: string; row: number; col: number }[] = [
@@ -504,7 +507,13 @@ export function NumberShell({ t = en }: Props) {
 
                     {/* Live Virtual Stamp Overlay Marker on Preview */}
                     <div
-                      className={`absolute pointer-events-none transition-all duration-200 z-10 px-2 py-0.5 rounded shadow-sm text-xs font-mono font-bold backdrop-blur-sm ${
+                      className={`absolute pointer-events-none transition-all duration-200 z-10 rounded shadow-sm font-mono font-bold backdrop-blur-sm ${
+                        fontSizePt === 10
+                          ? 'px-1.5 py-0.5'
+                          : fontSizePt === 14
+                          ? 'px-3 py-1'
+                          : 'px-2 py-0.5'
+                      } ${
                         skipFirstPage && previewPageNum === 1
                           ? 'opacity-40 line-through bg-gray-200/90 text-gray-600'
                           : 'bg-amber text-[#1D1108] ring-1 ring-amber-dark/30 animate-pulse'
@@ -521,6 +530,10 @@ export function NumberShell({ t = en }: Props) {
                           ? 'bottom-4 right-4'
                           : 'bottom-4 left-1/2 -translate-x-1/2'
                       }`}
+                      style={{
+                        fontSize: fontSizePt === 10 ? '11px' : fontSizePt === 14 ? '16px' : '13px',
+                        lineHeight: 1.2,
+                      }}
                     >
                       {currentPreviewSampleText}
                     </div>
