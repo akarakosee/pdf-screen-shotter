@@ -17,6 +17,9 @@ import {
   ArrowRight,
   SlidersHorizontal,
   CheckCircle2,
+  Plus,
+  X,
+  Upload,
 } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
 import { JobController } from '../app/JobController';
@@ -48,6 +51,12 @@ export function MixPdfShell({ t = en }: Props) {
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string; totalPages: number } | null>(null);
+
+  // File input refs for empty slots
+  const fileInputRef1 = useRef<HTMLInputElement | null>(null);
+  const fileInputRef2 = useRef<HTMLInputElement | null>(null);
+  const [isDraggingSlot1, setIsDraggingSlot1] = useState(false);
+  const [isDraggingSlot2, setIsDraggingSlot2] = useState(false);
 
   const controller = useRef<JobController | null>(null);
   const isTr = t.lang === 'tr';
@@ -129,6 +138,7 @@ export function MixPdfShell({ t = en }: Props) {
         } else {
           const d1 = await loadDocInfo(validFiles[0]);
           setDoc1(d1);
+          setPhase('options'); // Single PDF directly transitions to options!
         }
       } else if (doc1 && !doc2) {
         const d2 = await loadDocInfo(validFiles[0]);
@@ -142,6 +152,42 @@ export function MixPdfShell({ t = en }: Props) {
     },
     [doc1, doc2, t]
   );
+
+  const handleSlot1Add = async (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    const rej = await validatePdfFile(file);
+    if (rej) {
+      setToast({ kind: 'error', message: t.notPdf || 'Invalid PDF file' });
+      return;
+    }
+    const d1 = await loadDocInfo(file);
+    setDoc1(d1);
+  };
+
+  const handleSlot2Add = async (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    const rej = await validatePdfFile(file);
+    if (rej) {
+      setToast({ kind: 'error', message: t.notPdf || 'Invalid PDF file' });
+      return;
+    }
+    const d2 = await loadDocInfo(file);
+    setDoc2(d2);
+  };
+
+  const removeDoc1 = () => {
+    if (doc1?.thumbnailUrl) URL.revokeObjectURL(doc1.thumbnailUrl);
+    setDoc1(null);
+    if (!doc2) setPhase('upload');
+  };
+
+  const removeDoc2 = () => {
+    if (doc2?.thumbnailUrl) URL.revokeObjectURL(doc2.thumbnailUrl);
+    setDoc2(null);
+    if (!doc1) setPhase('upload');
+  };
 
   const swapDocs = () => {
     const temp = doc1;
@@ -187,9 +233,9 @@ export function MixPdfShell({ t = en }: Props) {
 
   // Generate a live sample sequence preview
   const generatePreviewSequence = () => {
-    if (!doc1 || !doc2) return [];
-    const count1 = Math.min(doc1.pageCount, 6);
-    const count2 = Math.min(doc2.pageCount, 6);
+    if (!doc1 && !doc2) return [];
+    const count1 = doc1 ? Math.min(doc1.pageCount, 6) : 3;
+    const count2 = doc2 ? Math.min(doc2.pageCount, 6) : 3;
     const p1 = Array.from({ length: count1 }, (_, i) => `${i + 1}A`);
     if (reverseDoc1) p1.reverse();
     const p2 = Array.from({ length: count2 }, (_, i) => `${i + 1}B`);
@@ -203,10 +249,10 @@ export function MixPdfShell({ t = en }: Props) {
 
     while ((i1 < p1.length || i2 < p2.length) && result.length < 10) {
       for (let s = 0; s < s1 && i1 < p1.length && result.length < 10; s++) {
-        result.push(p1[i1++]);
+        result.push(doc1 ? p1[i1++] : '?A');
       }
       for (let s = 0; s < s2 && i2 < p2.length && result.length < 10; s++) {
-        result.push(p2[i2++]);
+        result.push(doc2 ? p2[i2++] : '?B');
       }
     }
     return result;
@@ -214,6 +260,7 @@ export function MixPdfShell({ t = en }: Props) {
 
   const sampleSeq = generatePreviewSequence();
   const totalPages = (doc1?.pageCount || 0) + (doc2?.pageCount || 0);
+  const bothDocsReady = !!doc1 && !!doc2;
 
   return (
     <div className="flex flex-col gap-5">
@@ -221,102 +268,188 @@ export function MixPdfShell({ t = en }: Props) {
         <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />
       )}
 
-      {/* Upload Phase */}
-      {phase === 'upload' && (!doc1 || !doc2) && (
-        <div className="flex flex-col gap-4">
-          <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
-            <DropZone
-              t={t}
-              hasFiles={!!doc1 || !!doc2}
-              onFiles={handleFilesAdded}
-              multiple={true}
-            />
-            <PrivacyLine t={t} />
-          </div>
-
-          {/* Pending 1st File Slot indicator */}
-          {doc1 && !doc2 && (
-            <div className="flex items-center justify-between rounded-xl border border-amber/30 bg-amber/5 p-4 dark:border-amber-dark/30 dark:bg-amber-dark/10">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber/20 text-amber dark:bg-amber-dark/30 dark:text-amber-dark">
-                  <FileText className="h-5 w-5" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-ink dark:text-ink-dark">{doc1.file.name}</span>
-                  <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark">
-                    {doc1.pageCount} {isTr ? 'Sayfa yüklendi · Şimdi 2. PDF dosyasını seçin' : 'Pages loaded · Now choose 2nd PDF'}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
+      {/* Upload Phase (Initial state before any files) */}
+      {phase === 'upload' && !doc1 && !doc2 && (
+        <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
+          <DropZone
+            t={t}
+            hasFiles={false}
+            onFiles={handleFilesAdded}
+            multiple={true}
+          />
+          <PrivacyLine t={t} />
         </div>
       )}
 
-      {/* Options Phase */}
-      {phase === 'options' && doc1 && doc2 && (
+      {/* Options Phase (Active whenever at least 1 document is present) */}
+      {phase === 'options' && (doc1 || doc2) && (
         <div className="phase-enter flex flex-col gap-5">
           {/* Dual Document Cards with Center Swap */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-            {/* Document 1 Card */}
-            <div className="flex items-center gap-3 rounded-xl border border-ink-faint bg-bg/50 p-3 dark:bg-bg-dark/50">
-              <div className="relative aspect-[1/1.3] w-12 shrink-0 rounded border bg-white overflow-hidden shadow-xs flex items-center justify-center">
-                {doc1.thumbnailUrl ? (
-                  <img src={doc1.thumbnailUrl} alt="Doc 1" className="h-full w-full object-contain" />
-                ) : (
-                  <FileText className="h-5 w-5 text-ink-muted" />
-                )}
+            {/* Slot 1: Document 1 OR Empty Slot 1 */}
+            {doc1 ? (
+              <div className="relative group flex items-center justify-between gap-3 rounded-xl border border-ink-faint bg-bg/50 p-3 dark:bg-bg-dark/50">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="relative aspect-[1/1.3] w-12 shrink-0 rounded border bg-white overflow-hidden shadow-xs flex items-center justify-center">
+                    {doc1.thumbnailUrl ? (
+                      <img src={doc1.thumbnailUrl} alt="Doc 1" className="h-full w-full object-contain" />
+                    ) : (
+                      <FileText className="h-5 w-5 text-ink-muted" />
+                    )}
+                  </div>
+                  <div className="flex flex-col overflow-hidden min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-600 dark:text-blue-400">
+                        1. {isTr ? 'Belge (Ön / Tek)' : 'Doc (Odd / Front)'}
+                      </span>
+                    </div>
+                    <span className="truncate text-xs font-semibold text-ink dark:text-ink-dark mt-1" title={doc1.file.name}>
+                      {doc1.file.name}
+                    </span>
+                    <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark font-mono">
+                      {doc1.pageCount} {isTr ? 'Sayfa' : 'Pages'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Remove button */}
+                <button
+                  type="button"
+                  onClick={removeDoc1}
+                  className="btn-motion p-1.5 rounded-lg hover:bg-surface text-ink-muted hover:text-danger dark:hover:bg-surface-dark transition-colors"
+                  title={isTr ? 'Belgeyi Kaldır' : 'Remove File'}
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-              <div className="flex flex-col overflow-hidden min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-600 dark:text-blue-400">
-                    1. {isTr ? 'Belge (Ön / Tek)' : 'Doc (Odd)'}
+            ) : (
+              <div
+                onClick={() => fileInputRef1.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDraggingSlot1(true);
+                }}
+                onDragLeave={() => setIsDraggingSlot1(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDraggingSlot1(false);
+                  if (e.dataTransfer.files) handleSlot1Add(e.dataTransfer.files);
+                }}
+                className={`btn-motion flex items-center justify-center gap-3 rounded-xl border-2 border-dashed p-4 cursor-pointer transition-all min-h-[78px] ${
+                  isDraggingSlot1
+                    ? 'border-amber bg-amber/10 dark:bg-amber-dark/20'
+                    : 'border-ink-faint hover:border-amber/60 hover:bg-amber/5 dark:border-ink-faint-dark dark:hover:bg-amber-dark/10'
+                }`}
+              >
+                <input
+                  ref={fileInputRef1}
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  className="hidden"
+                  onChange={(e) => e.target.files && handleSlot1Add(e.target.files)}
+                />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
+                  <Plus className="h-5 w-5" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-ink dark:text-ink-dark">
+                    + 1. {isTr ? 'PDF Belgesini Ekleyin' : 'Add 1st PDF Document'}
+                  </span>
+                  <span className="text-[10px] text-ink-muted dark:text-ink-muted-dark">
+                    {isTr ? 'Ön yüz / tek sayfalar' : 'Odd / front pages (Click or drag)'}
                   </span>
                 </div>
-                <span className="truncate text-xs font-semibold text-ink dark:text-ink-dark mt-1" title={doc1.file.name}>
-                  {doc1.file.name}
-                </span>
-                <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark font-mono">
-                  {doc1.pageCount} {isTr ? 'Sayfa' : 'Pages'}
-                </span>
               </div>
-            </div>
+            )}
 
-            {/* Swap Button */}
+            {/* Center Swap Button */}
             <div className="flex justify-center">
               <button
                 type="button"
+                disabled={!bothDocsReady}
                 onClick={swapDocs}
-                className="btn-motion group flex h-10 w-10 items-center justify-center rounded-full border border-ink-faint bg-surface shadow-xs hover:border-amber hover:bg-amber/10 dark:bg-surface-dark dark:hover:bg-amber-dark/20 text-ink dark:text-ink-dark"
+                className="btn-motion group flex h-10 w-10 items-center justify-center rounded-full border border-ink-faint bg-surface shadow-xs hover:border-amber hover:bg-amber/10 dark:bg-surface-dark dark:hover:bg-amber-dark/20 text-ink dark:text-ink-dark disabled:opacity-40 disabled:pointer-events-none"
                 title={isTr ? 'Belgelerin Sırasını Değiştir (1 ↔ 2)' : 'Swap Document Order (1 ↔ 2)'}
               >
                 <ArrowRightLeft className="h-4 w-4 transition-transform group-hover:rotate-180 duration-300" />
               </button>
             </div>
 
-            {/* Document 2 Card */}
-            <div className="flex items-center gap-3 rounded-xl border border-ink-faint bg-bg/50 p-3 dark:bg-bg-dark/50">
-              <div className="relative aspect-[1/1.3] w-12 shrink-0 rounded border bg-white overflow-hidden shadow-xs flex items-center justify-center">
-                {doc2.thumbnailUrl ? (
-                  <img src={doc2.thumbnailUrl} alt="Doc 2" className="h-full w-full object-contain" />
-                ) : (
-                  <FileText className="h-5 w-5 text-ink-muted" />
-                )}
+            {/* Slot 2: Document 2 OR Empty Slot 2 */}
+            {doc2 ? (
+              <div className="relative group flex items-center justify-between gap-3 rounded-xl border border-ink-faint bg-bg/50 p-3 dark:bg-bg-dark/50">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="relative aspect-[1/1.3] w-12 shrink-0 rounded border bg-white overflow-hidden shadow-xs flex items-center justify-center">
+                    {doc2.thumbnailUrl ? (
+                      <img src={doc2.thumbnailUrl} alt="Doc 2" className="h-full w-full object-contain" />
+                    ) : (
+                      <FileText className="h-5 w-5 text-ink-muted" />
+                    )}
+                  </div>
+                  <div className="flex flex-col overflow-hidden min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/15 text-amber-dark">
+                        2. {isTr ? 'Belge (Arka / Çift)' : 'Doc (Even / Back)'}
+                      </span>
+                    </div>
+                    <span className="truncate text-xs font-semibold text-ink dark:text-ink-dark mt-1" title={doc2.file.name}>
+                      {doc2.file.name}
+                    </span>
+                    <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark font-mono">
+                      {doc2.pageCount} {isTr ? 'Sayfa' : 'Pages'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Remove button */}
+                <button
+                  type="button"
+                  onClick={removeDoc2}
+                  className="btn-motion p-1.5 rounded-lg hover:bg-surface text-ink-muted hover:text-danger dark:hover:bg-surface-dark transition-colors"
+                  title={isTr ? 'Belgeyi Kaldır' : 'Remove File'}
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-              <div className="flex flex-col overflow-hidden min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/15 text-amber-dark">
-                    2. {isTr ? 'Belge (Arka / Çift)' : 'Doc (Even)'}
+            ) : (
+              <div
+                onClick={() => fileInputRef2.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDraggingSlot2(true);
+                }}
+                onDragLeave={() => setIsDraggingSlot2(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDraggingSlot2(false);
+                  if (e.dataTransfer.files) handleSlot2Add(e.dataTransfer.files);
+                }}
+                className={`btn-motion flex items-center justify-center gap-3 rounded-xl border-2 border-dashed p-4 cursor-pointer transition-all min-h-[78px] ${
+                  isDraggingSlot2
+                    ? 'border-amber bg-amber/10 dark:bg-amber-dark/20'
+                    : 'border-ink-faint hover:border-amber/60 hover:bg-amber/5 dark:border-ink-faint-dark dark:hover:bg-amber-dark/10'
+                }`}
+              >
+                <input
+                  ref={fileInputRef2}
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  className="hidden"
+                  onChange={(e) => e.target.files && handleSlot2Add(e.target.files)}
+                />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark shrink-0">
+                  <Plus className="h-5 w-5" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-ink dark:text-ink-dark">
+                    + 2. {isTr ? 'PDF Belgesini Ekleyin' : 'Add 2nd PDF Document'}
+                  </span>
+                  <span className="text-[10px] text-ink-muted dark:text-ink-muted-dark">
+                    {isTr ? 'Arka yüz / çift sayfalar (Tıklayın veya sürükleyin)' : 'Even / back pages (Click or drag)'}
                   </span>
                 </div>
-                <span className="truncate text-xs font-semibold text-ink dark:text-ink-dark mt-1" title={doc2.file.name}>
-                  {doc2.file.name}
-                </span>
-                <span className="text-[11px] text-ink-muted dark:text-ink-muted-dark font-mono">
-                  {doc2.pageCount} {isTr ? 'Sayfa' : 'Pages'}
-                </span>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Mixing Settings & Pattern Controls */}
@@ -398,23 +531,32 @@ export function MixPdfShell({ t = en }: Props) {
                   {isTr ? 'Oluşacak Sayfa Sıralaması Önizlemesi:' : 'Resulting Page Order Sequence:'}
                 </span>
                 <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
-                  {totalPages} {isTr ? 'Toplam Sayfa' : 'Total Pages'}
+                  {bothDocsReady
+                    ? `${totalPages} ${isTr ? 'Toplam Sayfa' : 'Total Pages'}`
+                    : isTr
+                    ? '2. PDF Bekleniyor...'
+                    : 'Awaiting 2nd PDF...'}
                 </span>
               </div>
 
               <div className="flex items-center gap-1.5 overflow-x-auto py-1 text-xs font-mono">
                 {sampleSeq.map((label, idx) => {
                   const isA = label.endsWith('A');
+                  const isMissing = label.startsWith('?');
                   return (
                     <div key={idx} className="flex items-center gap-1.5 shrink-0">
                       <span
                         className={`px-2 py-1 rounded-md font-bold text-[11px] ${
-                          isA
+                          isMissing
+                            ? 'border border-dashed border-ink-faint text-ink-muted bg-bg/40'
+                            : isA
                             ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20'
                             : 'bg-amber/20 text-amber-dark border border-amber/30 dark:text-amber-light'
                         }`}
                       >
-                        {label.replace('A', ` (${isTr ? 'Ön' : 'Odd'})`).replace('B', ` (${isTr ? 'Arka' : 'Even'})`)}
+                        {label
+                          .replace('A', ` (${isTr ? 'Ön' : 'Odd'})`)
+                          .replace('B', ` (${isTr ? 'Arka' : 'Even'})`)}
                       </span>
                       {idx < sampleSeq.length - 1 && (
                         <ArrowRight className="h-3 w-3 text-ink-muted shrink-0" />
@@ -440,14 +582,19 @@ export function MixPdfShell({ t = en }: Props) {
             </button>
             <button
               type="button"
+              disabled={!bothDocsReady}
               onClick={executeMix}
-              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778] cursor-pointer"
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             >
               <Shuffle className="h-4 w-4" />
               <span>
-                {isTr
-                  ? `PDF'leri Karıştır ve İndir (${totalPages} Sayfa)`
-                  : `Mix PDFs & Download (${totalPages} Pages)`}
+                {bothDocsReady
+                  ? isTr
+                    ? `PDF'leri Karıştır ve İndir (${totalPages} Sayfa)`
+                    : `Mix PDFs & Download (${totalPages} Pages)`
+                  : isTr
+                  ? 'Lütfen 2. PDF Belgesini Ekleyin'
+                  : 'Please Add 2nd PDF Document'}
               </span>
             </button>
           </div>
@@ -508,4 +655,5 @@ export function MixPdfShell({ t = en }: Props) {
     </div>
   );
 }
+
 
