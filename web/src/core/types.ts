@@ -136,8 +136,8 @@ export type UiToWorkerMessage =
       minSize?: number;
       pageRange?: 'all' | 'first' | number | number[];
     }
-  | { type: 'compress-start'; file: ArrayBuffer; meta: FileMeta; level: 'recommended' | 'extreme' | 'fast' }
-  | { type: 'remove-blank-start'; file: ArrayBuffer; meta: FileMeta }
+  | { type: 'remove-blank-start'; file: ArrayBuffer; meta: FileMeta; sensitivity?: 'strict' | 'normal' | 'lenient'; indicesToRemove?: number[] }
+  | { type: 'detect-blank-start'; file: ArrayBuffer; meta: FileMeta; sensitivity?: 'strict' | 'normal' | 'lenient'; requestId: number }
   | { type: 'reverse-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'bates-start'; file: ArrayBuffer; meta: FileMeta; prefix: string; suffix: string; startNumber: number; padding: number }
   | { type: 'n-up-start'; file: ArrayBuffer; meta: FileMeta; grid: 2 | 4 | 9 | 16 }
@@ -205,6 +205,7 @@ export type WorkerToUiMessage =
   | { type: 'extract-images-done'; result: ExtractImagesResult }
   | { type: 'compress-done'; result: CompressResult }
   | { type: 'remove-blank-progress'; processedPages: number; totalPages: number }
+  | { type: 'detect-blank-done'; blankIndices: number[]; totalPages: number; requestId: number }
   | { type: 'reverse-progress'; processedPages: number; totalPages: number }
   | { type: 'bates-progress'; processedPages: number; totalPages: number }
   | { type: 'n-up-progress'; processedPages: number; totalPages: number }

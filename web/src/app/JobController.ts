@@ -140,6 +140,10 @@ export class JobController {
     string,
     { resolve: (blob: Blob) => void; reject: (err: Error) => void }
   >();
+  private pendingDetectBlanks = new Map<
+    number,
+    { resolve: (indices: number[]) => void; reject: (err: Error) => void }
+  >();
 
   constructor(events: JobEvents) {
     this.events = events;
@@ -172,6 +176,18 @@ export class JobController {
     });
     void file.arrayBuffer().then((buf) => {
       this.post({ type: 'preview-page', file: buf, dpi, page, requestId }, [buf]);
+    });
+    return result;
+  }
+
+  detectBlankPages(file: File, sensitivity: 'strict' | 'normal' | 'lenient' = 'normal'): Promise<number[]> {
+    if (this.disabled) return Promise.reject(new Error('disabled'));
+    const requestId = ++JobController.nextRequestId;
+    const result = new Promise<number[]>((resolve, reject) => {
+      this.pendingDetectBlanks.set(requestId, { resolve, reject });
+    });
+    void file.arrayBuffer().then((buf) => {
+      this.post({ type: 'detect-blank-start', file: buf, meta: { fileId: file.name, name: file.name }, sensitivity, requestId }, [buf]);
     });
     return result;
   }
@@ -667,6 +683,14 @@ export class JobController {
       case 'remove-blank-progress':
         this.events.onRemoveBlankProgress?.(msg.processedPages, msg.totalPages);
         break;
+      case 'detect-blank-done': {
+        const pending = this.pendingDetectBlanks.get(msg.requestId);
+        if (pending) {
+          this.pendingDetectBlanks.delete(msg.requestId);
+          pending.resolve(msg.blankIndices);
+        }
+        break;
+      }
       case 'reverse-progress':
         this.events.onReverseProgress?.(msg.processedPages, msg.totalPages);
         break;

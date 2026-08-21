@@ -90,28 +90,31 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
   const analyzeDoc = useCallback(
     async (targetFile: File, selectedSensitivity: Sensitivity) => {
       setPhase('analyzing');
-      setProgressMsg(isTr ? 'Belge yapısı taranıyor...' : 'Scanning document structure...');
+      setProgressMsg(isTr ? 'Belge taranıyor ve boş sayfalar tespit ediliyor...' : 'Scanning document for blank pages...');
 
       try {
         const buf = await targetFile.arrayBuffer();
         const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
         const count = pdfDoc.getPageCount();
 
-        // Create initial page structures
+        const ctrl = controller.current;
+        if (!ctrl) throw new Error('Controller not ready');
+
+        // 1. Detect blank pages via multi-layer engine
+        const blankIndices = await ctrl.detectBlankPages(targetFile, selectedSensitivity);
+        const blankSet = new Set(blankIndices);
+
+        // 2. Create page structures with blank status
         const initialPages: PageInfo[] = Array.from({ length: count }, (_, i) => ({
           pageIndex: i,
           pageNum: i + 1,
-          isBlank: false,
-          markedForRemoval: false,
+          isBlank: blankSet.has(i),
+          markedForRemoval: blankSet.has(i),
           thumbnailUrl: null,
         }));
         setPages(initialPages);
 
-        // Fetch thumbnails and run blank detection via worker
-        const ctrl = controller.current;
-        if (!ctrl) throw new Error('Controller not ready');
-
-        // Load thumbnails for all pages (with low DPI for high speed)
+        // 3. Load thumbnails for all pages (with low DPI for high speed)
         const updated = [...initialPages];
         for (let i = 0; i < count; i++) {
           try {
@@ -122,15 +125,6 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
           }
         }
 
-        // Run engine blank detection in worker
-        // We'll post a quick one-shot or run inline
-        // In the worker, we will run the actual detection
-        // For visual preview tagging, let's load detection results
-        const dummyDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
-        
-        // Mark pages:
-        // We can do a fast local check or ask worker
-        // Let's set phase to options so the user immediately sees the pages
         setPages(updated);
         setPhase('options');
       } catch (err: any) {
@@ -144,6 +138,24 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
     },
     [isTr]
   );
+
+  const handleSensitivityChange = async (newSensitivity: Sensitivity) => {
+    setSensitivity(newSensitivity);
+    if (!file || !controller.current) return;
+    try {
+      const blankIndices = await controller.current.detectBlankPages(file, newSensitivity);
+      const blankSet = new Set(blankIndices);
+      setPages((prev) =>
+        prev.map((p) => ({
+          ...p,
+          isBlank: blankSet.has(p.pageIndex),
+          markedForRemoval: blankSet.has(p.pageIndex),
+        }))
+      );
+    } catch (err) {
+      console.error('Sensitivity change re-detection error:', err);
+    }
+  };
 
   const addFiles = useCallback(
     async (incoming: File[]) => {
@@ -261,8 +273,8 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
                 </div>
                 <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
                   {isTr
-                    ? `${pages.length} Sayfa Toplam · ${removedCount} Sayfa Seçildi`
-                    : `${pages.length} Total Pages · ${removedCount} Marked for Removal`}
+                    ? `${pages.length} Sayfadan ${removedCount} Boş Sayfa Tespit Edildi`
+                    : `${pages.length} Total Pages · ${removedCount} Blank Pages Detected`}
                 </span>
               </div>
             </div>
@@ -274,7 +286,7 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
                 onClick={selectAll}
                 className="btn-motion px-3 py-1.5 rounded-lg border border-ink-faint bg-bg hover:bg-surface dark:bg-bg-dark text-xs font-medium text-ink dark:text-ink-dark"
               >
-                {isTr ? 'Tümünü İşaretle' : 'Mark All'}
+                {isTr ? 'Tümünü Seç (Sil)' : 'Select All (Remove)'}
               </button>
               <button
                 type="button"
@@ -306,7 +318,7 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
                   <button
                     key={s}
                     type="button"
-                    onClick={() => setSensitivity(s)}
+                    onClick={() => handleSensitivityChange(s)}
                     className={`px-2 py-1 rounded font-medium transition-all ${
                       sensitivity === s
                         ? 'bg-amber text-[#1D1108] font-bold shadow-xs dark:bg-amber-dark dark:text-white'
@@ -331,7 +343,7 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
                   onClick={() => togglePage(p.pageIndex)}
                   className={`btn-motion group relative flex flex-col rounded-xl border p-2 text-left transition-all duration-200 cursor-pointer overflow-hidden ${
                     isMarked
-                      ? 'border-danger/60 bg-danger/5 ring-2 ring-danger/40 dark:bg-danger/10'
+                      ? 'border-danger/70 bg-danger/10 ring-2 ring-danger/40 dark:bg-danger/15'
                       : 'border-ink-faint bg-surface hover:border-amber/50 dark:bg-surface-dark dark:border-ink-faint-dark'
                   }`}
                 >
@@ -389,17 +401,18 @@ export function RemoveBlankPagesShell({ t = en }: Props) {
             <button
               type="button"
               onClick={executeRemoval}
-              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778]"
+              disabled={removedCount === 0}
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             >
               <Trash2 className="h-4 w-4" />
               <span>
                 {removedCount > 0
                   ? isTr
-                    ? `Seçilen ${removedCount} Sayfayı Sil ve İndir`
-                    : `Remove ${removedCount} Selected Pages & Download`
+                    ? `Seçilen ${removedCount} Boş Sayfayı Sil ve İndir`
+                    : `Remove ${removedCount} Blank Pages & Download`
                   : isTr
-                  ? 'Tüm Boş Sayfaları Otomatik Temizle ve İndir'
-                  : 'Auto-Remove All Blank Pages & Download'}
+                  ? 'Silinecek Boş Sayfa Yok'
+                  : 'No Blank Pages to Remove'}
               </span>
             </button>
           </div>

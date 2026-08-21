@@ -68,8 +68,8 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'compress-start') await compressRun(msg.file, msg.meta, msg.level);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type === 'grayscale-start') await grayscaleRun(msg.file, msg.meta);
-      else if (msg.type === 'resize-start') await resizeRun(msg.file, msg.meta, msg.pageSize, msg.margin);
       else if (msg.type === 'remove-blank-start') await removeBlankRun(msg.file, msg.meta, msg.sensitivity, msg.indicesToRemove);
+      else if (msg.type === 'detect-blank-start') await detectBlankOnlyRun(msg.file, msg.meta, msg.sensitivity, msg.requestId);
       else if (msg.type === 'reverse-start') await reverseRun(msg.file, msg.meta);
       else if (msg.type === 'bates-start') await batesRun(msg.file, msg.meta, msg.prefix, msg.suffix, msg.startNumber, msg.padding);
       else if (msg.type === 'n-up-start') await nUpRun(msg.file, msg.meta, msg.grid);
@@ -930,6 +930,38 @@ async function removeBlankRun(
     if (cancelled && e instanceof Error && e.message === 'Cancelled') {
       return; // Handled silently
     }
+    post({
+      type: 'fatal',
+      message: e instanceof Error ? e.message : String(e),
+    });
+  }
+}
+
+async function detectBlankOnlyRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  sensitivity?: 'strict' | 'normal' | 'lenient',
+  requestId?: number
+) {
+  try {
+    let doc;
+    try {
+      doc = await engine.open(file);
+    } catch (e) {
+      post({ type: 'fatal', message: 'Could not open PDF to detect blank pages' });
+      return;
+    }
+    const count = engine.pageCount(doc);
+    const blankIndices = await engine.detectBlankPages(doc, undefined, sensitivity || 'normal');
+    engine.close(doc);
+
+    post({
+      type: 'detect-blank-done',
+      blankIndices,
+      totalPages: count,
+      requestId: requestId ?? 0,
+    });
+  } catch (e) {
     post({
       type: 'fatal',
       message: e instanceof Error ? e.message : String(e),
