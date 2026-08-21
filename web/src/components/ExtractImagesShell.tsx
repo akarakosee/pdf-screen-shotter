@@ -515,6 +515,13 @@ export function ExtractImagesShell({ t = en }: Props) {
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
             errorMsg={errorMsg}
+            customHeadline={
+              result && result.output
+                ? (isTr
+                    ? `${result.extractedImages} adet görsel başarıyla ayıklandı.`
+                    : `${result.extractedImages} image${result.extractedImages === 1 ? '' : 's'} successfully extracted.`)
+                : null
+            }
             t={t}
             result={
               result && result.output

@@ -17,13 +17,14 @@ interface Props {
   onDownload: () => void;
   onConvertMore: () => void;
   errorMsg?: string | null;
+  customHeadline?: string | null;
 }
 
-export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConvertMore, errorMsg }: Props) {
+export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConvertMore, errorMsg, customHeadline }: Props) {
   const isError = !!errorMsg || (result && result.succeeded === 0);
   
-  let headline = errorMsg || '';
-  if (!errorMsg && result) {
+  let headline = errorMsg || customHeadline || '';
+  if (!errorMsg && !customHeadline && result) {
     const failedPages = result.failed?.length ?? 0;
     if (result.cancelled) {
       headline = fmt(t.afterCancel, { n: result.succeeded });
