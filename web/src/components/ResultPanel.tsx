@@ -24,7 +24,7 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
   
   let headline = errorMsg || '';
   if (!errorMsg && result) {
-    const failedPages = result.failed.length;
+    const failedPages = result.failed?.length ?? 0;
     if (result.cancelled) {
       headline = fmt(t.afterCancel, { n: result.succeeded });
     } else if (failedPages > 0 || skipped.length > 0) {

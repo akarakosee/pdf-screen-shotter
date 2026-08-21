@@ -516,7 +516,19 @@ export function ExtractImagesShell({ t = en }: Props) {
           <ResultPanel
             errorMsg={errorMsg}
             t={t}
-            result={result}
+            result={
+              result && result.output
+                ? {
+                    totalPages: result.totalPages,
+                    succeeded: result.extractedImages,
+                    failed: [],
+                    durationMs: result.durationMs,
+                    output: result.output,
+                    outputName: result.outputName,
+                    cancelled: result.cancelled,
+                  }
+                : null
+            }
             skipped={[]}
             crossLink={null}
             onDownload={() => {
