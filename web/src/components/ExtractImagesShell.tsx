@@ -133,6 +133,55 @@ export function ExtractImagesShell({ t = en }: Props) {
     };
   }, [file, previewPageNum, totalPages, phase]);
 
+  const validateCustomPagesInput = (input: string, maxPages: number): { isValid: boolean; errorMsg?: string } => {
+    const trimmed = input.trim();
+    if (!trimmed) {
+      return { isValid: false };
+    }
+
+    const parts = trimmed.split(',').map(p => p.trim()).filter(Boolean);
+    if (parts.length === 0) {
+      return { isValid: false };
+    }
+
+    for (const part of parts) {
+      if (part.includes('-')) {
+        const match = part.match(/^(\d+)\s*-\s*(\d+)$/);
+        if (!match) {
+          return { isValid: false, errorMsg: isTr ? 'Geçersiz aralık formatı.' : 'Invalid range format.' };
+        }
+        const start = parseInt(match[1], 10);
+        const end = parseInt(endStrSafe(match[2]), 10);
+        if (start < 1 || end > maxPages || start > end) {
+          return {
+            isValid: false,
+            errorMsg: isTr ? `Sayfa numaraları 1 ile ${maxPages} arasında olmalıdır.` : `Page numbers must be between 1 and ${maxPages}.`
+          };
+        }
+      } else {
+        const match = part.match(/^(\d+)$/);
+        if (!match) {
+          return { isValid: false, errorMsg: isTr ? 'Geçersiz sayfa formatı.' : 'Invalid page format.' };
+        }
+        const num = parseInt(match[1], 10);
+        if (num < 1 || num > maxPages) {
+          return {
+            isValid: false,
+            errorMsg: isTr ? `Sayfa numaraları 1 ile ${maxPages} arasında olmalıdır.` : `Page numbers must be between 1 and ${maxPages}.`
+          };
+        }
+      }
+    }
+
+    return { isValid: true };
+  };
+
+  const endStrSafe = (val: string) => val;
+
+  const customValidation = validateCustomPagesInput(customPagesInput, totalPages);
+  const hasCustomError = pageScope === 'custom' && customPagesInput.trim().length > 0 && !customValidation.isValid;
+  const isExecuteDisabled = pageScope === 'custom' && (!customPagesInput.trim() || !customValidation.isValid);
+
   const parsePageRange = (str: string, max: number): number[] => {
     const pages = new Set<number>();
     const parts = str.split(',').map(s => s.trim()).filter(Boolean);
@@ -157,7 +206,7 @@ export function ExtractImagesShell({ t = en }: Props) {
   };
 
   const handleRun = () => {
-    if (!file) return;
+    if (!file || isExecuteDisabled) return;
     setPhase('processing');
 
     let effectiveRange: 'all' | number | number[] = 'all';
@@ -308,14 +357,23 @@ export function ExtractImagesShell({ t = en }: Props) {
 
                 {/* Custom Page Range Input Box */}
                 {pageScope === 'custom' && (
-                  <div className="pt-1">
+                  <div className="pt-1 flex flex-col gap-1">
                     <input
                       type="text"
                       value={customPagesInput}
                       onChange={(e) => setCustomPagesInput(e.target.value)}
                       placeholder={isTr ? `Sayfa aralığı (örn: 1-2, 4) (Maks: ${totalPages})` : `Pages (e.g. 1-2, 4) (Max: ${totalPages})`}
-                      className="w-full h-10 px-3 rounded-xl border border-amber/50 bg-bg dark:bg-bg-dark text-xs text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-amber dark:focus:ring-amber-dark transition-all placeholder:text-ink-muted/50"
+                      className={`w-full h-10 px-3 rounded-xl border text-xs transition-all ${
+                        hasCustomError
+                          ? 'border-red-500 ring-2 ring-red-500/20 bg-red-500/5 text-red-600 dark:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder:text-red-400/50'
+                          : 'border-amber/50 bg-bg dark:bg-bg-dark text-ink dark:text-ink-dark focus:outline-none focus:ring-2 focus:ring-amber dark:focus:ring-amber-dark placeholder:text-ink-muted/50'
+                      }`}
                     />
+                    {hasCustomError && (
+                      <span className="text-[11px] text-red-500 font-medium animate-in fade-in flex items-center gap-1 pl-1">
+                        {customValidation.errorMsg}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
@@ -430,7 +488,8 @@ export function ExtractImagesShell({ t = en }: Props) {
             <button
               type="button"
               onClick={handleRun}
-              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778]"
+              disabled={isExecuteDisabled}
+              className="btn-motion inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-6 text-sm font-medium text-[#1D1108] shadow-[0_14px_32px_-12px_rgba(232,182,95,0.5)] hover:brightness-[0.97] dark:from-amber-dark dark:to-[#F0C778] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none disabled:shadow-none"
             >
               <Sparkles className="h-4 w-4" />
               <span>
