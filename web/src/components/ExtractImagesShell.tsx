@@ -31,7 +31,7 @@ export function ExtractImagesShell({ t = en }: Props) {
   // Interactive Options State
   const [selectedFormat, setSelectedFormat] = useState<FormatOption>('original');
   const [filterTinyIcons, setFilterTinyIcons] = useState(false);
-  const [pageScope, setPageScope] = useState<'all' | 'current' | 'custom'>('all');
+  const [pageScope, setPageScope] = useState<'all' | 'custom'>('all');
   const [customPagesInput, setCustomPagesInput] = useState<string>('');
 
   // Live Preview State
@@ -161,9 +161,7 @@ export function ExtractImagesShell({ t = en }: Props) {
     setPhase('processing');
 
     let effectiveRange: 'all' | number | number[] = 'all';
-    if (pageScope === 'current') {
-      effectiveRange = previewPageNum;
-    } else if (pageScope === 'custom') {
+    if (pageScope === 'custom') {
       const parsed = parsePageRange(customPagesInput, totalPages);
       effectiveRange = parsed.length > 0 ? parsed : 'all';
     }
@@ -283,11 +281,11 @@ export function ExtractImagesShell({ t = en }: Props) {
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
                   {isTr ? 'Sayfa Kapsamı' : 'Page Scope'}
                 </label>
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setPageScope('all')}
-                    className={`btn-motion flex items-center justify-center h-10 px-2 rounded-xl border text-[11px] font-semibold transition-all duration-200 cursor-pointer text-center ${
+                    className={`btn-motion flex items-center justify-center h-10 px-3 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer text-center ${
                       pageScope === 'all'
                         ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark text-ink dark:text-ink-dark'
                         : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark text-ink-muted dark:text-ink-muted-dark'
@@ -297,26 +295,14 @@ export function ExtractImagesShell({ t = en }: Props) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setPageScope('current')}
-                    className={`btn-motion flex items-center justify-center h-10 px-2 rounded-xl border text-[11px] font-semibold transition-all duration-200 cursor-pointer text-center ${
-                      pageScope === 'current'
-                        ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark text-ink dark:text-ink-dark'
-                        : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark text-ink-muted dark:text-ink-muted-dark'
-                    }`}
-                    title={isTr ? `Sağdaki önizleme sayfası (Sayfa ${previewPageNum})` : `Previewed page (${previewPageNum})`}
-                  >
-                    {isTr ? `Sayfa ${previewPageNum}` : `Page ${previewPageNum}`}
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => setPageScope('custom')}
-                    className={`btn-motion flex items-center justify-center h-10 px-2 rounded-xl border text-[11px] font-semibold transition-all duration-200 cursor-pointer text-center ${
+                    className={`btn-motion flex items-center justify-center h-10 px-3 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer text-center ${
                       pageScope === 'custom'
                         ? 'border-amber bg-amber/10 dark:border-amber-dark dark:bg-amber-dark/15 ring-2 ring-amber dark:ring-amber-dark text-ink dark:text-ink-dark'
                         : 'border-ink-faint bg-surface hover:bg-bg dark:bg-surface-dark dark:border-ink-faint-dark dark:hover:bg-bg-dark text-ink-muted dark:text-ink-muted-dark'
                     }`}
                   >
-                    {isTr ? `Özel Sayfa` : `Custom Range`}
+                    {isTr ? `Özel Sayfa Seçimi` : `Custom Pages`}
                   </button>
                 </div>
 
