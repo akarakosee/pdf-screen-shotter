@@ -150,7 +150,15 @@ export type UiToWorkerMessage =
   | { type: 'pdf-to-svg-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'split-by-size-start'; file: ArrayBuffer; meta: FileMeta; maxSizeMB: number }
   | { type: 'extract-by-keyword-start'; file: ArrayBuffer; meta: FileMeta; keyword: string; caseSensitive: boolean }
-  | { type: 'mix-pdf-start'; files: ArrayBuffer[]; meta: FileMeta[] }
+  | {
+      type: 'mix-pdf-start';
+      files: ArrayBuffer[];
+      meta: FileMeta[];
+      reverseDoc1?: boolean;
+      reverseDoc2?: boolean;
+      step1?: number;
+      step2?: number;
+    }
   | {
       type: 'remove-annotations-start';
       file: ArrayBuffer;

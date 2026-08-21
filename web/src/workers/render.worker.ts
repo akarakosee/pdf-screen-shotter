@@ -83,6 +83,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'auto-redact-start') await autoRedactRun(msg.file, msg.meta);
       else if (msg.type === 'smart-markdown-start') await smartMarkdownRun(msg.file, msg.meta);
       else if (msg.type === 'contrast-enhancer-start') await contrastEnhancerRun(msg.file, msg.meta, msg.brightness, msg.contrast);
+      else if (msg.type === 'mix-pdf-start') await mixPdfRun(msg.files, msg.meta, msg.reverseDoc1, msg.reverseDoc2, msg.step1, msg.step2);
       else if (msg.type === 'demo-render') await demoRenderHandler(msg.file, msg.dpi, msg.maxPages);
 
       else if (msg.type === 'extract-attachments-start') await extractAttachmentsRun(msg.file, msg.meta);
@@ -1555,7 +1556,14 @@ async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: s
 }
 
 
-async function mixPdfRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> {
+async function mixPdfRun(
+  files: ArrayBuffer[],
+  meta: FileMeta[],
+  reverseDoc1: boolean = false,
+  reverseDoc2: boolean = false,
+  step1: number = 1,
+  step2: number = 1
+): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
   let outputName: string | undefined;
@@ -1567,24 +1575,36 @@ async function mixPdfRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> 
     
     const count1 = doc1.getPageCount();
     const count2 = doc2.getPageCount();
-    const maxCount = Math.max(count1, count2);
     const totalPages = count1 + count2;
+
+    // Prepare page index arrays
+    const pages1 = Array.from({ length: count1 }, (_, i) => i);
+    if (reverseDoc1) pages1.reverse();
+
+    const pages2 = Array.from({ length: count2 }, (_, i) => i);
+    if (reverseDoc2) pages2.reverse();
     
     const outDoc = await pdfLib.PDFDocument.create();
     
     let processed = 0;
-    
-    for (let i = 0; i < maxCount; i++) {
+    let idx1 = 0;
+    let idx2 = 0;
+    const s1 = Math.max(1, step1 || 1);
+    const s2 = Math.max(1, step2 || 1);
+
+    while (idx1 < pages1.length || idx2 < pages2.length) {
       if (cancelled) break;
       
-      if (i < count1) {
-        const [p1] = await outDoc.copyPages(doc1, [i]);
+      // Copy s1 pages from doc1
+      for (let s = 0; s < s1 && idx1 < pages1.length; s++) {
+        const [p1] = await outDoc.copyPages(doc1, [pages1[idx1++]]);
         outDoc.addPage(p1);
         processed++;
       }
-      
-      if (i < count2) {
-        const [p2] = await outDoc.copyPages(doc2, [i]);
+
+      // Copy s2 pages from doc2
+      for (let s = 0; s < s2 && idx2 < pages2.length; s++) {
+        const [p2] = await outDoc.copyPages(doc2, [pages2[idx2++]]);
         outDoc.addPage(p2);
         processed++;
       }
@@ -1599,8 +1619,8 @@ async function mixPdfRun(files: ArrayBuffer[], meta: FileMeta[]): Promise<void> 
     
     if (!cancelled) {
       const bytes = await outDoc.save();
-      output = new Blob([bytes], { type: 'application/pdf' });
-      outputName = `${sanitizeBaseName(meta[0].name)}-mixed.pdf`;
+      output = new Blob([bytes as unknown as Uint8Array], { type: 'application/pdf' });
+      outputName = `${sanitizeBaseName(meta[0].name)}_mixed.pdf`;
     }
   } catch (e: any) {
     console.error('[worker] mixPdfRun failed:', e);

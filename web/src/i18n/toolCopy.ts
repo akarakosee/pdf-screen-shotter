@@ -1997,10 +1997,10 @@ export const pdfFormsCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const mixpdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Alternate & Mix PDF",
+    title: "Mix PDF",
     description: "Interleave and alternate pages from two PDF files into one sequential document online for free. Perfect for double-sided scanner scans.",
     keywords: "mix pdf, alternate pdf pages, interleave pdf, merge odd and even pages, combine duplex scans",
-    h1: "Alternate & Mix PDF",
+    h1: "Mix PDF",
     tagline: "Combine odd and even page scans automatically. Interleave two separate PDF documents into a perfect sequential flow.",
     howToName: "How to alternate and mix PDF pages",
     howItWorks: "How it works",
@@ -2017,10 +2017,10 @@ export const mixpdfCopy: Record<"en" | "tr", ToolCopy> = {
     crossLink: { href: "/merge-pdf", label: "Want to append files end-to-end instead? Try Merge PDF." }
   },
   tr: {
-    title: "PDF Sayfalarını Karıştır (Tek/Çift)",
+    title: "Mix PDF",
     description: "İki ayrı PDF dosyasındaki sayfaları tek-çift (1, 2, 3, 4...) sırasıyla otomatik harmanlayıp birleştirin. Çift taraflı taramalar için idealdir.",
-    keywords: "pdf sayfalarını karıştır, tek çift sayfa birleştirme, interleave pdf, arkalı önlü tarama birleştirme, pdf harmanlama",
-    h1: "PDF Sayfalarını Karıştır (Tek/Çift)",
+    keywords: "mix pdf, pdf sayfalarını karıştır, tek çift sayfa birleştirme, interleave pdf, arkalı önlü tarama birleştirme, pdf harmanlama",
+    h1: "Mix PDF",
     tagline: "Tek taraflı tarayıcılarla taranmış ön ve arka sayfaları tek tıkla 1, 2, 3, 4 sırasıyla harmanlayıp kusursuz tek dosya yapın.",
     howToName: "Ön ve arka yüz taranmış PDF sayfaları nasıl sırayla birleştirilir?",
     howItWorks: "Nasıl çalışır?",

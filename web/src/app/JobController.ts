@@ -533,12 +533,32 @@ export class JobController {
     this.post({ type: 'pdf-a-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runMixPdf(file1: File, file2: File): Promise<void> {
+  async runMixPdf(
+    file1: File,
+    file2: File,
+    options?: {
+      reverseDoc1?: boolean;
+      reverseDoc2?: boolean;
+      step1?: number;
+      step2?: number;
+    }
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf1 = await file1.arrayBuffer();
     const buf2 = await file2.arrayBuffer();
-    this.post({ type: 'mix-pdf-start', files: [buf1, buf2], meta: [{ fileId: file1.name, name: file1.name }, { fileId: file2.name, name: file2.name }] }, [buf1, buf2]);
+    this.post(
+      {
+        type: 'mix-pdf-start',
+        files: [buf1, buf2],
+        meta: [
+          { fileId: file1.name, name: file1.name },
+          { fileId: file2.name, name: file2.name },
+        ],
+        ...options,
+      },
+      [buf1, buf2]
+    );
   }
 
   async runExtractByKeyword(file: File, keyword: string, caseSensitive: boolean): Promise<void> {
