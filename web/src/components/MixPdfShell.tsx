@@ -58,14 +58,20 @@ export function MixPdfShell({ t = en }: Props) {
   const [isDraggingSlot1, setIsDraggingSlot1] = useState(false);
   const [isDraggingSlot2, setIsDraggingSlot2] = useState(false);
 
-  const controller = useRef<JobController | null>(null);
+  const doc1Ref = useRef<DocInfo | null>(null);
+  const doc2Ref = useRef<DocInfo | null>(null);
+  doc1Ref.current = doc1;
+  doc2Ref.current = doc2;
+
   const isTr = t.lang === 'tr';
+  const isTrRef = useRef(isTr);
+  isTrRef.current = isTr;
 
   useEffect(() => {
     controller.current = new JobController({
       onMixPdfProgress: (processed, total) => {
         setProgress({
-          message: isTr
+          message: isTrRef.current
             ? `Sayfalar harmanlanıyor: ${processed} / ${total}...`
             : `Mixing pages: ${processed} of ${total}...`,
           percentage: total > 0 ? (processed / total) * 100 : 50,
@@ -75,18 +81,18 @@ export function MixPdfShell({ t = en }: Props) {
         if (res.output) {
           setOutput({
             blob: res.output,
-            name: res.outputName || `${doc1?.file.name.replace(/\.pdf$/i, '')}_mixed.pdf`,
-            totalPages: (doc1?.pageCount || 0) + (doc2?.pageCount || 0),
+            name: res.outputName || `${doc1Ref.current?.file.name.replace(/\.pdf$/i, '')}_mixed.pdf`,
+            totalPages: (doc1Ref.current?.pageCount || 0) + (doc2Ref.current?.pageCount || 0),
           });
           setPhase('done');
         } else {
-          setErrorMsg(isTr ? 'Harmanlama işlemi tamamlanamadı.' : 'Failed to mix PDF documents.');
+          setErrorMsg(isTrRef.current ? 'Harmanlama işlemi tamamlanamadı.' : 'Failed to mix PDF documents.');
           setPhase('options');
         }
         setIsProcessing(false);
       },
       onFatal: (message) => {
-        setToast({ kind: 'error', message: message || (isTr ? 'Hata oluştu' : 'An error occurred') });
+        setToast({ kind: 'error', message: message || (isTrRef.current ? 'Hata oluştu' : 'An error occurred') });
         setIsProcessing(false);
         setPhase('options');
       },
@@ -95,24 +101,60 @@ export function MixPdfShell({ t = en }: Props) {
     return () => {
       controller.current?.dispose();
     };
-  }, [doc1, doc2, isTr]);
+  }, []);
+
+  // Async non-blocking thumbnail loading for Doc 1
+  useEffect(() => {
+    if (doc1 && !doc1.thumbnailUrl && controller.current) {
+      let isMounted = true;
+      controller.current
+        .previewPage(doc1.file, 1, 90)
+        .then((blob) => {
+          if (isMounted) {
+            const url = URL.createObjectURL(blob);
+            setDoc1((prev) => (prev ? { ...prev, thumbnailUrl: url } : null));
+          }
+        })
+        .catch((e) => {
+          console.warn('Thumbnail generation failed for doc1:', e);
+        });
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [doc1?.file]);
+
+  // Async non-blocking thumbnail loading for Doc 2
+  useEffect(() => {
+    if (doc2 && !doc2.thumbnailUrl && controller.current) {
+      let isMounted = true;
+      controller.current
+        .previewPage(doc2.file, 1, 90)
+        .then((blob) => {
+          if (isMounted) {
+            const url = URL.createObjectURL(blob);
+            setDoc2((prev) => (prev ? { ...prev, thumbnailUrl: url } : null));
+          }
+        })
+        .catch((e) => {
+          console.warn('Thumbnail generation failed for doc2:', e);
+        });
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [doc2?.file]);
 
   const loadDocInfo = async (file: File): Promise<DocInfo> => {
-    const buf = await file.arrayBuffer();
-    const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
-    const pageCount = pdfDoc.getPageCount();
-
-    let thumbnailUrl: string | null = null;
     try {
-      if (controller.current) {
-        const blob = await controller.current.previewPage(file, 1, 90);
-        thumbnailUrl = URL.createObjectURL(blob);
-      }
+      const buf = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      const pageCount = pdfDoc.getPageCount();
+      return { file, pageCount, thumbnailUrl: null };
     } catch (e) {
-      console.error('Failed to create thumbnail:', e);
+      console.warn('Error reading PDF page count:', e);
+      return { file, pageCount: 1, thumbnailUrl: null };
     }
-
-    return { file, pageCount, thumbnailUrl };
   };
 
   const handleFilesAdded = useCallback(
