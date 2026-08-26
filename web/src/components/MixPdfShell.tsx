@@ -58,6 +58,7 @@ export function MixPdfShell({ t = en }: Props) {
   const [isDraggingSlot1, setIsDraggingSlot1] = useState(false);
   const [isDraggingSlot2, setIsDraggingSlot2] = useState(false);
 
+  const controller = useRef<JobController | null>(null);
   const doc1Ref = useRef<DocInfo | null>(null);
   const doc2Ref = useRef<DocInfo | null>(null);
   doc1Ref.current = doc1;
