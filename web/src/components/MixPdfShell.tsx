@@ -541,12 +541,18 @@ export function MixPdfShell({ t = en }: Props) {
                   {isTr ? 'Ters Tarama Düzeltmeleri:' : 'Scanner Reversal Fixes:'}
                 </label>
 
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink dark:text-ink-dark select-none p-2 rounded-lg border border-ink-faint bg-bg/50 dark:bg-bg-dark/50 hover:bg-bg">
+                <label
+                  className={`flex items-center gap-2.5 cursor-pointer text-xs font-medium select-none p-2.5 rounded-lg border transition-all ${
+                    reverseDoc2
+                      ? 'border-amber bg-amber/15 text-ink dark:border-amber-dark dark:bg-amber-dark/20 dark:text-ink-dark shadow-xs'
+                      : 'border-ink-faint bg-bg/40 text-ink hover:border-amber/60 hover:bg-amber/10 dark:border-ink-faint-dark dark:bg-bg-dark/40 dark:text-ink-dark dark:hover:border-amber-dark/60 dark:hover:bg-amber-dark/15'
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={reverseDoc2}
                     onChange={(e) => setReverseDoc2(e.target.checked)}
-                    className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark"
+                    className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark dark:bg-surface-dark"
                   />
                   <span>
                     {isTr
@@ -555,12 +561,18 @@ export function MixPdfShell({ t = en }: Props) {
                   </span>
                 </label>
 
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-ink dark:text-ink-dark select-none p-2 rounded-lg border border-ink-faint bg-bg/50 dark:bg-bg-dark/50 hover:bg-bg">
+                <label
+                  className={`flex items-center gap-2.5 cursor-pointer text-xs font-medium select-none p-2.5 rounded-lg border transition-all ${
+                    reverseDoc1
+                      ? 'border-amber bg-amber/15 text-ink dark:border-amber-dark dark:bg-amber-dark/20 dark:text-ink-dark shadow-xs'
+                      : 'border-ink-faint bg-bg/40 text-ink hover:border-amber/60 hover:bg-amber/10 dark:border-ink-faint-dark dark:bg-bg-dark/40 dark:text-ink-dark dark:hover:border-amber-dark/60 dark:hover:bg-amber-dark/15'
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={reverseDoc1}
                     onChange={(e) => setReverseDoc1(e.target.checked)}
-                    className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark"
+                    className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark dark:bg-surface-dark"
                   />
                   <span>
                     {isTr
