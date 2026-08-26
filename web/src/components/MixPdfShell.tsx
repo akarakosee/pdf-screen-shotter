@@ -291,10 +291,14 @@ export function MixPdfShell({ t = en }: Props) {
 
     while ((i1 < p1.length || i2 < p2.length) && result.length < 10) {
       for (let s = 0; s < s1 && i1 < p1.length && result.length < 10; s++) {
-        result.push(doc1 ? p1[i1++] : '?A');
+        const val = doc1 ? p1[i1] : '?A';
+        i1++;
+        result.push(val);
       }
       for (let s = 0; s < s2 && i2 < p2.length && result.length < 10; s++) {
-        result.push(doc2 ? p2[i2++] : '?B');
+        const val = doc2 ? p2[i2] : '?B';
+        i2++;
+        result.push(val);
       }
     }
     return result;
@@ -311,7 +315,7 @@ export function MixPdfShell({ t = en }: Props) {
       )}
 
       {/* Upload Phase (Initial state before any files) */}
-      {phase === 'upload' && !doc1 && !doc2 && (
+      {phase !== 'processing' && phase !== 'done' && !doc1 && !doc2 && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone
             t={t}
@@ -324,7 +328,7 @@ export function MixPdfShell({ t = en }: Props) {
       )}
 
       {/* Options Phase (Active whenever at least 1 document is present) */}
-      {phase === 'options' && (doc1 || doc2) && (
+      {phase !== 'processing' && phase !== 'done' && (doc1 || doc2) && (
         <div className="phase-enter flex flex-col gap-5">
           {/* Dual Document Cards with Center Swap */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
