@@ -106,6 +106,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'scan-to-pdf-start') await scanToPdfRun(msg.files, msg.meta);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type === 'split-half-start') await splitHalfRun(msg.file, msg.meta, msg.splitDirection, msg.readingOrder, msg.skipFirstPage);
+      else if (msg.type === 'extract-by-keyword-start') await extractByKeywordRun(msg.file, msg.meta, msg.keyword, msg.caseSensitive, msg.matchWholeWord);
       else if (msg.type.endsWith('-start')) {
         // Fallback for unimplemented tools to prevent UI hanging during testing
         const doneEvent = msg.type.replace('-start', '-done') as any;
@@ -1521,8 +1522,15 @@ async function splitBySizeRun(file: ArrayBuffer, meta: FileMeta, maxSizeMB: numb
 }
 
 
-async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: string, caseSensitive: boolean): Promise<void> {
+async function extractByKeywordRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  keyword: string,
+  caseSensitive: boolean = false,
+  matchWholeWord: boolean = false
+): Promise<void> {
   const started = Date.now();
+  const pdfLib = await import('pdf-lib');
   let output: Blob | undefined;
   let outputName: string | undefined;
   let doc;
@@ -1532,26 +1540,41 @@ async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: s
     await engine.init();
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
-    const searchKw = caseSensitive ? keyword : keyword.toLowerCase();
+    const rawKw = keyword.trim();
+    const searchKw = caseSensitive ? rawKw : rawKw.toLocaleLowerCase('tr');
     const indicesToKeep: number[] = [];
     
     post({ type: 'extract-by-keyword-progress', phase: 'extracting', processed: 0, total: count });
     
-    // We cannot use the batch extractText because we want progress events
     for (let i = 0; i < count; i++) {
       if (cancelled) break;
-      const texts = await engine.extractText({ handle: (doc as any).handle }); 
-      // extractText gets all pages at once, so we'll just use it directly, 
-      // but if we call it once we don't get progress.
-      // MuPdfEngine.ts extractText is fast though.
       
-      const stext = (doc as any).handle.loadPage(i).toStructuredText('preserve-whitespace');
-      const text = stext.asText();
-      stext.destroy();
+      const p = (doc as any).handle.loadPage(i);
+      let pageText = '';
+      try {
+        const stext = p.toStructuredText('preserve-whitespace');
+        try {
+          pageText = stext.asText() || '';
+        } finally {
+          stext.destroy();
+        }
+      } finally {
+        p.destroy();
+      }
       
-      const t = caseSensitive ? text : text.toLowerCase();
-      if (t.includes(searchKw)) {
-        indicesToKeep.push(i + 1);
+      const normalizedPageText = caseSensitive ? pageText : pageText.toLocaleLowerCase('tr');
+      
+      let isMatch = false;
+      if (matchWholeWord) {
+        const escaped = searchKw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(?:^|\\s|[^\\p{L}\\p{N}])${escaped}(?:$|\\s|[^\\p{L}\\p{N}])`, caseSensitive ? 'u' : 'iu');
+        isMatch = regex.test(normalizedPageText);
+      } else {
+        isMatch = normalizedPageText.includes(searchKw);
+      }
+      
+      if (isMatch) {
+        indicesToKeep.push(i);
       }
       
       post({ type: 'extract-by-keyword-progress', phase: 'extracting', processed: i + 1, total: count });
@@ -1561,10 +1584,19 @@ async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: s
     if (!cancelled) {
       if (indicesToKeep.length > 0) {
         post({ type: 'extract-by-keyword-progress', phase: 'splitting', processed: 0, total: indicesToKeep.length });
-        const bytes = await engine.split(doc, indicesToKeep);
-        output = new Blob([bytes], { type: 'application/pdf' });
-        outputName = `${sanitizeBaseName(meta.name)}-extracted.pdf`;
+        
+        const srcDoc = await pdfLib.PDFDocument.load(file, { ignoreEncryption: true });
+        const outDoc = await pdfLib.PDFDocument.create();
+        const copiedPages = await outDoc.copyPages(srcDoc, indicesToKeep);
+        for (const cp of copiedPages) {
+          outDoc.addPage(cp);
+        }
+        
+        const bytes = await outDoc.save();
+        output = new Blob([bytes as unknown as Uint8Array], { type: 'application/pdf' });
+        outputName = `${sanitizeBaseName(meta.name)}_${sanitizeBaseName(rawKw)}_extracted.pdf`;
         pagesKept = indicesToKeep.length;
+        
         post({ type: 'extract-by-keyword-progress', phase: 'splitting', processed: indicesToKeep.length, total: indicesToKeep.length });
       } else {
         throw new Error('NO_MATCHES');
@@ -1583,7 +1615,6 @@ async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: s
   
   post({
     type: 'extract-by-keyword-done',
-    pagesKept,
     result: {
       totalPages: 0,
       succeeded: output ? 1 : 0,
@@ -1593,6 +1624,7 @@ async function extractByKeywordRun(file: ArrayBuffer, meta: FileMeta, keyword: s
       output,
       outputName,
     },
+    pagesKept,
   });
 }
 

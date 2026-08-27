@@ -561,11 +561,26 @@ export class JobController {
     );
   }
 
-  async runExtractByKeyword(file: File, keyword: string, caseSensitive: boolean): Promise<void> {
+  async runExtractByKeyword(
+    file: File,
+    keyword: string,
+    caseSensitive: boolean = false,
+    matchWholeWord: boolean = false
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'extract-by-keyword-start', file: buf, meta: { fileId: file.name, name: file.name }, keyword, caseSensitive }, [buf]);
+    this.post(
+      {
+        type: 'extract-by-keyword-start',
+        file: buf,
+        meta: { fileId: file.name, name: file.name },
+        keyword,
+        caseSensitive,
+        matchWholeWord,
+      },
+      [buf]
+    );
   }
 
   async runSplitBySize(file: File, maxSizeMB: number): Promise<void> {

@@ -156,7 +156,7 @@ export type UiToWorkerMessage =
   | { type: 'add-margins-start'; file: ArrayBuffer; meta: FileMeta; marginPt: number }
   | { type: 'pdf-to-svg-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'split-by-size-start'; file: ArrayBuffer; meta: FileMeta; maxSizeMB: number }
-  | { type: 'extract-by-keyword-start'; file: ArrayBuffer; meta: FileMeta; keyword: string; caseSensitive: boolean }
+  | { type: 'extract-by-keyword-start'; file: ArrayBuffer; meta: FileMeta; keyword: string; caseSensitive: boolean; matchWholeWord?: boolean }
   | {
       type: 'mix-pdf-start';
       files: ArrayBuffer[];
