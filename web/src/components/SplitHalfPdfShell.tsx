@@ -47,9 +47,18 @@ export function SplitHalfPdfShell({ t = en }: Props) {
   const fileRef = useRef<File | null>(null);
   fileRef.current = file;
 
+  const pageCountRef = useRef(pageCount);
+  pageCountRef.current = pageCount;
+
+  const skipFirstPageRef = useRef(skipFirstPage);
+  skipFirstPageRef.current = skipFirstPage;
+
   const isTr = t.lang === 'tr';
   const isTrRef = useRef(isTr);
   isTrRef.current = isTr;
+
+  const tRef = useRef(t);
+  tRef.current = t;
 
   useEffect(() => {
     controller.current = new JobController({
@@ -58,10 +67,12 @@ export function SplitHalfPdfShell({ t = en }: Props) {
       },
       onSplitHalfDone: (result) => {
         if (result.output) {
-          const calcPages = skipFirstPage ? (pageCount - 1) * 2 + 1 : pageCount * 2;
+          const count = pageCountRef.current;
+          const calcPages = skipFirstPageRef.current ? Math.max(1, (count - 1) * 2 + 1) : count * 2;
+          const name = result.outputName || `${fileRef.current?.name.replace(/\.pdf$/i, '')}_split_half.pdf`;
           setOutput({
             blob: result.output,
-            name: result.outputName || `${fileRef.current?.name.replace(/\.pdf$/i, '')}_split_half.pdf`,
+            name,
             totalPages: calcPages,
           });
           setPhase('done');
@@ -71,7 +82,7 @@ export function SplitHalfPdfShell({ t = en }: Props) {
         }
       },
       onFileError: (_, msg) => {
-        setToast({ kind: 'error', message: msg === 'encrypted' ? t.encryptedFile : t.corruptFile });
+        setToast({ kind: 'error', message: msg === 'encrypted' ? tRef.current.encryptedFile : tRef.current.corruptFile });
         setPhase('upload');
       },
       onFatal: (msg) => {
@@ -83,7 +94,7 @@ export function SplitHalfPdfShell({ t = en }: Props) {
     return () => {
       controller.current?.dispose();
     };
-  }, [pageCount, skipFirstPage, t.corruptFile, t.encryptedFile]);
+  }, []);
 
   // Load thumbnail when file changes
   useEffect(() => {
