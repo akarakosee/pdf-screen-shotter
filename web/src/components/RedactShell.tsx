@@ -11,6 +11,7 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ShieldAlert, Trash2, ChevronLeft, ChevronRight, X, AlertTriangle } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 
 type Phase = 'upload' | 'editor' | 'processing' | 'done';
 
@@ -362,15 +363,7 @@ export function RedactShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="flex min-h-[40vh] flex-col items-center justify-center space-y-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-ink dark:text-ink-dark">Applying Redactions...</h3>
-            <p className="text-sm text-ink-muted dark:text-ink-muted-dark mt-1">Drawing blackout boxes...</p>
-          </div>
-        </div>
+        <ProgressPanel label={t.lang === 'tr' ? 'Karartma alanları kalıcı olarak uygulanıyor...' : 'Applying Redactions...'} />
       )}
 
       {phase === 'done' && (

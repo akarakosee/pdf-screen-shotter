@@ -11,6 +11,7 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { Crop, Check, Download, RefreshCw } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -369,13 +370,7 @@ export function CropShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="animate-in fade-in zoom-in-95 flex flex-col items-center justify-center py-20 duration-500">
-          <RefreshCw className="h-10 w-10 animate-spin text-amber" />
-          <h2 className="mt-6 text-xl font-semibold">{t.converting || 'Processing...'}</h2>
-          <p className="mt-2 text-sm text-ink-muted">
-            {t.lang === 'tr' ? 'PDF kırpılıyor...' : 'Cropping PDF...'}
-          </p>
-        </div>
+        <ProgressPanel label={t.lang === 'tr' ? 'PDF kırpılıyor...' : 'Cropping PDF...'} />
       )}
 
       {phase === 'done' && (

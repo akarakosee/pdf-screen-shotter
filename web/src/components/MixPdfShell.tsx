@@ -22,6 +22,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -47,6 +48,7 @@ export function MixPdfShell({ t = en }: Props) {
   const [reverseDoc2, setReverseDoc2] = useState(false);
   const [reverseDoc1, setReverseDoc1] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
   const [progress, setProgress] = useState<{ message: string; percentage: number } | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -260,6 +262,13 @@ export function MixPdfShell({ t = en }: Props) {
       setPhase('options');
     }
   };
+
+  const cancel = useCallback(() => {
+    setCancelling(true);
+    controller.current?.cancel();
+    setPhase('options');
+    setCancelling(false);
+  }, []);
 
   const reset = useCallback(() => {
     if (doc1?.thumbnailUrl) URL.revokeObjectURL(doc1.thumbnailUrl);
@@ -662,18 +671,14 @@ export function MixPdfShell({ t = en }: Props) {
 
       {/* Processing Phase */}
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{progress?.message || (isTr ? 'Sayfalar harmanlanıyor...' : 'Mixing pages...')}</span>
-            <span className="font-mono">{Math.round(progress?.percentage || 0)}%</span>
-          </div>
-          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
-            <div
-              className="h-full bg-amber transition-all duration-300 dark:bg-amber-dark"
-              style={{ width: `${progress?.percentage || 0}%` }}
-            />
-          </div>
-        </div>
+        <ProgressPanel
+          cancelling={cancelling}
+          label={progress?.message || (isTr ? 'Sayfalar harmanlanıyor...' : 'Mixing pages...')}
+          progressPercent={progress?.percentage || 0}
+          cancelLabel={t.cancel || (isTr ? 'İptal' : 'Cancel')}
+          cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
+          onCancel={cancel}
+        />
       )}
 
       {/* Done Phase */}

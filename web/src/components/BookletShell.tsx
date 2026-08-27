@@ -11,6 +11,7 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { BookOpen, Check, Download, RefreshCw } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -192,17 +193,7 @@ export function BookletShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="animate-in fade-in zoom-in-95 flex min-h-[300px] flex-col items-center justify-center space-y-6 rounded-2xl border  bg-white p-12 text-center shadow-sm duration-500 dark: dark:bg-zinc-900/50">
-          <RefreshCw className="h-10 w-10 animate-spin text-amber-500" />
-          <div className="space-y-2">
-            <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
-              Creating Booklet...
-            </h3>
-            <p className="text-sm text-ink-muted dark:text-ink-muted-dark">
-              Imposing pages and generating print-ready layout
-            </p>
-          </div>
-        </div>
+        <ProgressPanel label={t.lang === 'tr' ? 'Kitapçık düzeni oluşturuluyor...' : 'Creating Booklet...'} />
       )}
 
       {phase === 'done' && (

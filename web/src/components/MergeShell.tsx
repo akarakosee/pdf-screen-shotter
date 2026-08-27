@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Plus, Check, Download, RefreshCw } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
 import { reasonText } from '../app/fileErrors';
@@ -494,44 +495,20 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3" aria-live="polite">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>
-              {mergeProgress
-                ? fmt(t.progressFile, { i: mergeProgress.fileIndex, n: mergeProgress.totalFiles })
-                : t.converting}
-            </span>
-            <span className="font-mono">
-              {mergeProgress
-                ? Math.round((mergeProgress.fileIndex / mergeProgress.totalFiles) * 100)
-                : 0}
-              %
-            </span>
-          </div>
-          <div
-            role="progressbar"
-            aria-valuenow={
-              mergeProgress ? Math.round((mergeProgress.fileIndex / mergeProgress.totalFiles) * 100) : 0
-            }
-            aria-valuemin={0}
-            aria-valuemax={100}
-            className="h-1 overflow-hidden rounded-lg bg-surface dark:bg-surface-dark border"
-          >
-            <div
-              className="progress-fill h-full w-full"
-              style={{
-                transform: `scaleX(${
-                  mergeProgress ? mergeProgress.fileIndex / mergeProgress.totalFiles : 0
-                })`,
-              }}
-            />
-          </div>
-          <div>
-            <Button variant="secondary" onClick={cancel} disabled={cancelling}>
-              {cancelling ? t.cancelling : t.cancel}
-            </Button>
-          </div>
-        </div>
+        <ProgressPanel
+          cancelling={cancelling}
+          label={
+            mergeProgress
+              ? fmt(t.progressFile, { i: mergeProgress.fileIndex, n: mergeProgress.totalFiles })
+              : t.converting
+          }
+          progressPercent={
+            mergeProgress ? (mergeProgress.fileIndex / mergeProgress.totalFiles) * 100 : 0
+          }
+          cancelLabel={t.cancel}
+          cancellingLabel={t.cancelling}
+          onCancel={cancel}
+        />
       )}
 
       {phase === 'done' && (

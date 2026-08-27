@@ -7,6 +7,7 @@ import { triggerDownload } from '../app/download';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 import { FileUp, FileText, Sun } from 'lucide-react';
 
@@ -87,14 +88,7 @@ export function SmartMarkdownShell({ t = en }: Props) {
       
 
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{t.lang === 'tr' ? 'PDF yapay zeka ile akıllı Markdown (.md) biçimine dönüştürülüyor...' : 'Converting PDF to Smart Markdown...'}</span>
-          </div>
-          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
-            <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
-          </div>
-        </div>
+        <ProgressPanel label={t.lang === 'tr' ? 'PDF yapay zeka ile akıllı Markdown (.md) biçimine dönüştürülüyor...' : 'Converting PDF to Smart Markdown...'} />
       )}
 
       {phase === 'done' && (output || errorMsg) && (

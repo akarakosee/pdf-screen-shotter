@@ -5,6 +5,7 @@ import { triggerDownload } from '../app/download';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 import { Camera, StopCircle, Aperture, X } from 'lucide-react';
 
@@ -130,14 +131,7 @@ export function ScanToPdfShell({ t = en }: { t?: Strings }) {
       )}
 
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>Generating PDF...</span>
-          </div>
-          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
-            <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
-          </div>
-        </div>
+        <ProgressPanel label={t.converting || 'Generating PDF...'} />
       )}
 
       {phase === 'done' && (output || errorMsg) && (

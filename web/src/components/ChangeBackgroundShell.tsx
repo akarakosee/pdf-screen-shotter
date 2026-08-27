@@ -7,6 +7,7 @@ import { triggerDownload } from '../app/download';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 import { Palette, FileText, ChevronLeft, ChevronRight, Sparkles, Check } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
@@ -415,14 +416,7 @@ export function ChangeBackgroundShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{isTr ? 'Arka plan rengi PDF sayfalarına işleniyor...' : 'Applying background color tint to PDF pages...'}</span>
-          </div>
-          <div className="h-1 overflow-hidden rounded-lg bg-surface border dark:bg-surface-dark">
-            <div className="h-full w-full origin-left animate-fake-progress progress-fill" />
-          </div>
-        </div>
+        <ProgressPanel label={isTr ? 'Arka plan rengi PDF sayfalarına işleniyor...' : 'Applying background color tint to PDF pages...'} />
       )}
 
       {phase === 'done' && (output || errorMsg) && (

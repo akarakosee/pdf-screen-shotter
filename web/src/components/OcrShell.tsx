@@ -10,6 +10,7 @@ import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { ScanText, Download, RefreshCw, Copy } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import Tesseract from 'tesseract.js';
 
 type Phase = 'upload' | 'processing' | 'done';
@@ -156,47 +157,10 @@ export function OcrShell({ t = en }: Props) {
       )}
 
       {phase === 'processing' && (
-        <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-6">
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
-            <ScanText className="h-10 w-10 text-blue-600 dark:text-blue-500 animate-pulse" />
-            <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
-              <circle
-                className="text-blue-200 dark:text-blue-900/50"
-                strokeWidth="4"
-                stroke="currentColor"
-                fill="transparent"
-                r="46"
-                cx="50"
-                cy="50"
-              />
-              <circle
-                className="text-blue-600 dark:text-blue-500 transition-all duration-300 ease-out"
-                strokeWidth="4"
-                strokeDasharray={46 * 2 * Math.PI}
-                strokeDashoffset={46 * 2 * Math.PI - (progressPct / 100) * 46 * 2 * Math.PI}
-                strokeLinecap="round"
-                stroke="currentColor"
-                fill="transparent"
-                r="46"
-                cx="50"
-                cy="50"
-              />
-            </svg>
-          </div>
-          <div className="text-center space-y-2">
-            <h3 className="text-xl font-medium text-ink dark:text-ink-dark">
-              Extracting Text via AI...
-            </h3>
-            <p className="text-sm font-mono text-ink-muted dark:text-ink-muted-dark w-full min-h-[40px]">
-              {progressMsg || 'Processing...'}
-            </p>
-            <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-4 bg-bg dark:bg-bg-dark p-2 rounded-md border border-zinc-100 dark:">
-              {t.lang === 'tr' 
-                ? 'İlk kullanımda yapay zeka dil modellerinin tarayıcınıza indirilmesi birkaç saniye sürebilir. Bu işlem sadece bir kere yapılır.' 
-                : 'The first time you use this, the AI language models must be downloaded to your browser cache. This is a one-time process.'}
-            </p>
-          </div>
-        </div>
+        <ProgressPanel
+          label={progressMsg || (t.lang === 'tr' ? 'Yapay zeka ile metin taranıyor...' : 'Extracting text via AI...')}
+          progressPercent={progressPct}
+        />
       )}
 
       {phase === 'done' && (

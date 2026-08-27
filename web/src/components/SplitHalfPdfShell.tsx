@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { JobController } from '../app/JobController';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -38,6 +39,7 @@ export function SplitHalfPdfShell({ t = en }: Props) {
   const [splitDirection, setSplitDirection] = useState<SplitDirection>('vertical');
   const [readingOrder, setReadingOrder] = useState<ReadingOrder>('ltr');
   const [skipFirstPage, setSkipFirstPage] = useState<boolean>(false);
+  const [cancelling, setCancelling] = useState<boolean>(false);
   const [progress, setProgress] = useState<{ processed: number; total: number } | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -160,6 +162,13 @@ export function SplitHalfPdfShell({ t = en }: Props) {
       setPhase('options');
     }
   };
+
+  const cancel = useCallback(() => {
+    setCancelling(true);
+    controller.current?.cancel();
+    setPhase('options');
+    setCancelling(false);
+  }, []);
 
   const reset = useCallback(() => {
     if (thumbnailUrl) URL.revokeObjectURL(thumbnailUrl);
@@ -390,26 +399,18 @@ export function SplitHalfPdfShell({ t = en }: Props) {
 
       {/* Processing Phase */}
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>
-              {isTr
-                ? `Sayfalar ikiye bölünüyor: ${progress?.processed || 0} / ${progress?.total || pageCount}...`
-                : `Splitting pages: ${progress?.processed || 0} of ${progress?.total || pageCount}...`}
-            </span>
-            <span className="font-mono">
-              {progress && progress.total > 0 ? Math.round((progress.processed / progress.total) * 100) : 50}%
-            </span>
-          </div>
-          <div className="h-1 overflow-hidden rounded-lg border bg-surface dark:bg-surface-dark">
-            <div
-              className="h-full bg-amber transition-all duration-300 dark:bg-amber-dark"
-              style={{
-                width: `${progress && progress.total > 0 ? (progress.processed / progress.total) * 100 : 50}%`,
-              }}
-            />
-          </div>
-        </div>
+        <ProgressPanel
+          cancelling={cancelling}
+          label={
+            isTr
+              ? `Sayfalar ikiye bölünüyor: ${progress?.processed || 0} / ${progress?.total || pageCount}...`
+              : `Splitting pages: ${progress?.processed || 0} of ${progress?.total || pageCount}...`
+          }
+          progressPercent={progress && progress.total > 0 ? (progress.processed / progress.total) * 100 : 50}
+          cancelLabel={t.cancel || (isTr ? 'İptal' : 'Cancel')}
+          cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
+          onCancel={cancel}
+        />
       )}
 
       {/* Done Phase */}
