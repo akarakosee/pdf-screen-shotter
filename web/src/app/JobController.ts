@@ -589,11 +589,26 @@ export class JobController {
     this.post({ type: 'add-margins-start', file: buf, meta: { fileId: file.name, name: file.name }, marginPt }, [buf]);
   }
 
-  async runSplitHalf(file: File): Promise<void> {
+  async runSplitHalf(
+    file: File,
+    options?: {
+      splitDirection?: 'vertical' | 'horizontal';
+      readingOrder?: 'ltr' | 'rtl';
+      skipFirstPage?: boolean;
+    }
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'split-half-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+    this.post(
+      {
+        type: 'split-half-start',
+        file: buf,
+        meta: { fileId: file.name, name: file.name },
+        ...options,
+      },
+      [buf]
+    );
   }
 
   async runExtractImages(file: File, options?: { format?: 'original' | 'png' | 'jpg'; minSize?: number; pageRange?: 'all' | 'first' | number | number[] }): Promise<void> {

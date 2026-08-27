@@ -145,7 +145,14 @@ export type UiToWorkerMessage =
   | { type: 'repair-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'grayscale-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'resize-start'; file: ArrayBuffer; meta: FileMeta; pageSize: 'A4' | 'Letter' | 'Fit'; margin: number }
-  | { type: 'split-half-start'; file: ArrayBuffer; meta: FileMeta }
+  | {
+      type: 'split-half-start';
+      file: ArrayBuffer;
+      meta: FileMeta;
+      splitDirection?: 'vertical' | 'horizontal';
+      readingOrder?: 'ltr' | 'rtl';
+      skipFirstPage?: boolean;
+    }
   | { type: 'add-margins-start'; file: ArrayBuffer; meta: FileMeta; marginPt: number }
   | { type: 'pdf-to-svg-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'split-by-size-start'; file: ArrayBuffer; meta: FileMeta; maxSizeMB: number }

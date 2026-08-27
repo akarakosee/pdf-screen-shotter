@@ -105,6 +105,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'audio-reader-start') await audioReaderRun(msg.file, msg.meta);
       else if (msg.type === 'scan-to-pdf-start') await scanToPdfRun(msg.files, msg.meta);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
+      else if (msg.type === 'split-half-start') await splitHalfRun(msg.file, msg.meta, msg.splitDirection, msg.readingOrder, msg.skipFirstPage);
       else if (msg.type.endsWith('-start')) {
         // Fallback for unimplemented tools to prevent UI hanging during testing
         const doneEvent = msg.type.replace('-start', '-done') as any;
@@ -1227,7 +1228,13 @@ async function pdfARun(file: ArrayBuffer, meta: FileMeta) {
 
 
 
-async function splitHalfRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+async function splitHalfRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  splitDirection: 'vertical' | 'horizontal' = 'vertical',
+  readingOrder: 'ltr' | 'rtl' = 'ltr',
+  skipFirstPage: boolean = false
+): Promise<void> {
   const started = Date.now();
   const pdfLib = await import('pdf-lib');
   let output: Blob | undefined;
@@ -1241,20 +1248,54 @@ async function splitHalfRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     
     for (let i = 0; i < pageCount; i++) {
       if (cancelled) break;
-      
-      const [leftPage] = await outDoc.copyPages(srcDoc, [i]);
-      const [rightPage] = await outDoc.copyPages(srcDoc, [i]);
-      
-      const { width, height } = leftPage.getSize();
-      const halfWidth = width / 2;
-      
-      // Left half
-      leftPage.setCropBox(0, 0, halfWidth, height);
-      outDoc.addPage(leftPage);
-      
-      // Right half
-      rightPage.setCropBox(halfWidth, 0, halfWidth, height);
-      outDoc.addPage(rightPage);
+
+      const srcPage = srcDoc.getPage(i);
+      const { width, height } = srcPage.getSize();
+      const embedded = await outDoc.embedPage(srcPage);
+
+      // If skipFirstPage is enabled and this is the first page (cover), copy it as is
+      if (skipFirstPage && i === 0) {
+        const coverPage = outDoc.addPage([width, height]);
+        coverPage.drawPage(embedded, { x: 0, y: 0, width, height });
+      } else if (splitDirection === 'horizontal') {
+        // Horizontal cut: Split into Top Half and Bottom Half
+        const halfHeight = height / 2;
+
+        if (readingOrder === 'rtl') {
+          // Bottom half first, then top half
+          const bottomPage = outDoc.addPage([width, halfHeight]);
+          bottomPage.drawPage(embedded, { x: 0, y: 0, width, height });
+
+          const topPage = outDoc.addPage([width, halfHeight]);
+          topPage.drawPage(embedded, { x: 0, y: -halfHeight, width, height });
+        } else {
+          // Top half first (standard), then bottom half
+          const topPage = outDoc.addPage([width, halfHeight]);
+          topPage.drawPage(embedded, { x: 0, y: -halfHeight, width, height });
+
+          const bottomPage = outDoc.addPage([width, halfHeight]);
+          bottomPage.drawPage(embedded, { x: 0, y: 0, width, height });
+        }
+      } else {
+        // Vertical cut (standard book spread): Split into Left Half and Right Half
+        const halfWidth = width / 2;
+
+        if (readingOrder === 'rtl') {
+          // Right half first (RTL languages / Manga), then left half
+          const rightPage = outDoc.addPage([halfWidth, height]);
+          rightPage.drawPage(embedded, { x: -halfWidth, y: 0, width, height });
+
+          const leftPage = outDoc.addPage([halfWidth, height]);
+          leftPage.drawPage(embedded, { x: 0, y: 0, width, height });
+        } else {
+          // Left half first (Standard LTR), then right half
+          const leftPage = outDoc.addPage([halfWidth, height]);
+          leftPage.drawPage(embedded, { x: 0, y: 0, width, height });
+
+          const rightPage = outDoc.addPage([halfWidth, height]);
+          rightPage.drawPage(embedded, { x: -halfWidth, y: 0, width, height });
+        }
+      }
       
       post({
         type: 'split-half-progress',
@@ -1267,8 +1308,8 @@ async function splitHalfRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
     
     if (!cancelled) {
       const bytes = await outDoc.save();
-      output = new Blob([bytes], { type: 'application/pdf' });
-      outputName = `${sanitizeBaseName(meta.name)}-split-half.pdf`;
+      output = new Blob([bytes as unknown as Uint8Array], { type: 'application/pdf' });
+      outputName = `${sanitizeBaseName(meta.name)}_split_half.pdf`;
     }
   } catch (e) {
     console.error('[worker] splitHalfRun failed:', e);
