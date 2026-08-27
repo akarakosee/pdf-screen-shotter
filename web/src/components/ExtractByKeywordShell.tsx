@@ -9,8 +9,9 @@ import { en } from '../i18n/en';
 import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
+import { ProgressPanel } from './ProgressPanel';
 import { ResultPanel } from './ResultPanel';
-import { Search, FileText, Sparkles, Filter, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Search, FileText } from 'lucide-react';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -26,6 +27,7 @@ export function ExtractByKeywordShell({ t = en }: Props) {
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
 
   const [keyword, setKeyword] = useState<string>('');
+  const [cancelling, setCancelling] = useState(false);
 
   const [progress, setProgress] = useState<{ message: string; percentage?: number } | null>(null);
   const [result, setResult] = useState<{ res: ExportResult; pagesKept: number } | null>(null);
@@ -60,13 +62,16 @@ export function ExtractByKeywordShell({ t = en }: Props) {
       },
       onExtractByKeywordDone: (res, pagesKept) => {
         setResult({ res, pagesKept });
+        setCancelling(false);
         setPhase('done');
       },
       onFatal: (message) => {
+        setCancelling(false);
         setToast({ kind: 'error', message: message || (isTrRef.current ? 'Hata oluştu' : 'An error occurred') });
         setPhase('options');
       },
       onFileError: (_, message) => {
+        setCancelling(false);
         setToast({
           kind: 'error',
           message:
@@ -136,6 +141,13 @@ export function ExtractByKeywordShell({ t = en }: Props) {
     });
     controller.current?.runExtractByKeyword(file, keyword.trim());
   }, [file, isTr, keyword]);
+
+  const cancel = useCallback(() => {
+    setCancelling(true);
+    controller.current?.cancel();
+    setPhase('options');
+    setCancelling(false);
+  }, []);
 
   const reset = useCallback(() => {
     if (thumbnailUrl) URL.revokeObjectURL(thumbnailUrl);
@@ -244,20 +256,14 @@ export function ExtractByKeywordShell({ t = en }: Props) {
 
       {/* Processing Phase */}
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-3">
-          <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span className="font-medium text-ink dark:text-ink-dark">{progress?.message || (isTr ? 'Taranıyor...' : 'Searching document...')}</span>
-            <span className="font-mono font-bold text-amber dark:text-amber-dark">{Math.round(progress?.percentage || 15)}%</span>
-          </div>
-          <div className="h-1.5 overflow-hidden rounded-lg border bg-surface dark:bg-surface-dark">
-            <div
-              className="h-full bg-gradient-to-r from-amber to-[#F0C778] transition-all duration-300 ease-out dark:from-amber-dark dark:to-[#F0C778]"
-              style={{
-                width: `${Math.max(15, progress?.percentage || 15)}%`,
-              }}
-            />
-          </div>
-        </div>
+        <ProgressPanel
+          cancelling={cancelling}
+          label={progress?.message || (isTr ? 'İşleniyor...' : 'Processing...')}
+          progressPercent={progress?.percentage || 0}
+          cancelLabel={t.cancel || (isTr ? 'İptal' : 'Cancel')}
+          cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
+          onCancel={cancel}
+        />
       )}
 
       {/* Done Phase */}
