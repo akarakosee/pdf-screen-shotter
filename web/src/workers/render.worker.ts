@@ -1522,6 +1522,21 @@ async function splitBySizeRun(file: ArrayBuffer, meta: FileMeta, maxSizeMB: numb
 }
 
 
+function normalizeUniversalKeyword(str: string): string {
+  return str
+    .replace(/İ/g, 'i')
+    .replace(/I/g, 'ı')
+    .toLowerCase()
+    .replace(/ı/g, 'i')
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
 async function extractByKeywordRun(
   file: ArrayBuffer,
   meta: FileMeta,
@@ -1541,7 +1556,7 @@ async function extractByKeywordRun(
     doc = await engine.open(file);
     const count = engine.pageCount(doc);
     const rawKw = keyword.trim();
-    const searchKw = caseSensitive ? rawKw : rawKw.toLocaleLowerCase('tr');
+    const searchKw = caseSensitive ? rawKw : normalizeUniversalKeyword(rawKw);
     const indicesToKeep: number[] = [];
     
     post({ type: 'extract-by-keyword-progress', phase: 'extracting', processed: 0, total: count });
@@ -1562,12 +1577,12 @@ async function extractByKeywordRun(
         p.destroy();
       }
       
-      const normalizedPageText = caseSensitive ? pageText : pageText.toLocaleLowerCase('tr');
+      const normalizedPageText = caseSensitive ? pageText : normalizeUniversalKeyword(pageText);
       
       let isMatch = false;
       if (matchWholeWord) {
         const escaped = searchKw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?:^|\\s|[^\\p{L}\\p{N}])${escaped}(?:$|\\s|[^\\p{L}\\p{N}])`, caseSensitive ? 'u' : 'iu');
+        const regex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9])${escaped}(?:$|\\s|[^a-zA-Z0-9])`, caseSensitive ? '' : 'i');
         isMatch = regex.test(normalizedPageText);
       } else {
         isMatch = normalizedPageText.includes(searchKw);
