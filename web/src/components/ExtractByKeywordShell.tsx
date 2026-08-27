@@ -151,10 +151,6 @@ export function ExtractByKeywordShell({ t = en }: Props) {
     setPhase('upload');
   }, [thumbnailUrl]);
 
-  const quickSuggestions = isTr
-    ? ['FATURA', 'GİZLİ', 'VERGİ', 'SÖZLEŞME', 'RAPOR', 'INVOICE']
-    : ['INVOICE', 'CONFIDENTIAL', 'TAX', 'CONTRACT', 'REPORT', 'PAYMENT'];
-
   return (
     <div className="w-full flex flex-col gap-5">
       {toast && <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />}
@@ -212,7 +208,7 @@ export function ExtractByKeywordShell({ t = en }: Props) {
                 <input
                   type="text"
                   value={keyword}
-                  placeholder={isTr ? 'Örn: FATURA, GİZLİ, VERGİ, SÖZLEŞME...' : 'e.g. Invoice, Confidential, Tax...'}
+                  placeholder={isTr ? 'Örn: Fatura, Sözleşme, Rapor, Confidential...' : 'e.g. Invoice, Contract, Report, Confidential...'}
                   onChange={(e) => setKeyword(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && keyword.trim()) processFile();
@@ -222,27 +218,6 @@ export function ExtractByKeywordShell({ t = en }: Props) {
                 />
                 <Search className="absolute left-3.5 h-4 w-4 text-ink-muted" />
               </div>
-            </div>
-
-            {/* Quick Suggestion Chips */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                {isTr ? 'Hızlı Örnekler:' : 'Quick Suggestions:'}
-              </span>
-              {quickSuggestions.map((sug) => (
-                <button
-                  key={sug}
-                  type="button"
-                  onClick={() => setKeyword(sug)}
-                  className={`btn-motion px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
-                    keyword === sug
-                      ? 'border-amber bg-amber/15 text-amber-dark font-bold'
-                      : 'border-ink-faint bg-bg/40 text-ink-muted hover:border-amber/50 hover:text-ink dark:bg-bg-dark/40 dark:text-ink-muted-dark dark:hover:text-ink-dark'
-                  }`}
-                >
-                  {sug}
-                </button>
-              ))}
             </div>
 
             {/* Matching Options */}
