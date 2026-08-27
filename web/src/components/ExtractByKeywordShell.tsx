@@ -46,11 +46,12 @@ export function ExtractByKeywordShell({ t = en }: Props) {
     controller.current = new JobController({
       onExtractByKeywordProgress: (actionPhase, processed, total) => {
         if (actionPhase === 'extracting') {
+          const pct = total > 0 ? Math.max(15, Math.round((processed / total) * 90)) : 50;
           setProgress({
             message: isTrRef.current
               ? `Sayfalar taranıyor: ${processed} / ${total}...`
               : `Searching page ${processed} of ${total}...`,
-            percentage: total > 0 ? (processed / total) * 100 : 50,
+            percentage: pct,
           });
         } else {
           setProgress({
@@ -317,14 +318,14 @@ export function ExtractByKeywordShell({ t = en }: Props) {
       {phase === 'processing' && (
         <div className="phase-enter flex flex-col gap-3">
           <div className="flex items-baseline justify-between text-xs text-ink-muted dark:text-ink-muted-dark">
-            <span>{progress?.message || (isTr ? 'İşleniyor...' : 'Searching document...')}</span>
-            <span className="font-mono">{Math.round(progress?.percentage || 50)}%</span>
+            <span className="font-medium text-ink dark:text-ink-dark">{progress?.message || (isTr ? 'Taranıyor...' : 'Searching document...')}</span>
+            <span className="font-mono font-bold text-amber dark:text-amber-dark">{Math.round(progress?.percentage || 15)}%</span>
           </div>
-          <div className="h-1 overflow-hidden rounded-lg border bg-surface dark:bg-surface-dark">
+          <div className="h-1.5 overflow-hidden rounded-lg border bg-surface dark:bg-surface-dark">
             <div
-              className="h-full bg-amber transition-all duration-300 dark:bg-amber-dark"
+              className="h-full bg-gradient-to-r from-amber to-[#F0C778] transition-all duration-300 ease-out dark:from-amber-dark dark:to-[#F0C778]"
               style={{
-                width: `${progress?.percentage || 50}%`,
+                width: `${Math.max(15, progress?.percentage || 15)}%`,
               }}
             />
           </div>

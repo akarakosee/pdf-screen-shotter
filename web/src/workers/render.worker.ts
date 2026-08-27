@@ -1578,7 +1578,9 @@ async function extractByKeywordRun(
       }
       
       post({ type: 'extract-by-keyword-progress', phase: 'extracting', processed: i + 1, total: count });
-      await new Promise(r => setTimeout(r, 0));
+      // Smooth dynamic pacing for fluid UX progress feedback
+      const pacingMs = Math.max(10, Math.min(60, Math.floor(450 / Math.max(1, count))));
+      await new Promise(r => setTimeout(r, pacingMs));
     }
     
     if (!cancelled) {
@@ -1598,6 +1600,7 @@ async function extractByKeywordRun(
         pagesKept = indicesToKeep.length;
         
         post({ type: 'extract-by-keyword-progress', phase: 'splitting', processed: indicesToKeep.length, total: indicesToKeep.length });
+        await new Promise(r => setTimeout(r, 80));
       } else {
         throw new Error('NO_MATCHES');
       }
