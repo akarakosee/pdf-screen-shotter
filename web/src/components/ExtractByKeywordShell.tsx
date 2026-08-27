@@ -26,8 +26,6 @@ export function ExtractByKeywordShell({ t = en }: Props) {
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
 
   const [keyword, setKeyword] = useState<string>('');
-  const [caseSensitive, setCaseSensitive] = useState<boolean>(false);
-  const [matchWholeWord, setMatchWholeWord] = useState<boolean>(false);
 
   const [progress, setProgress] = useState<{ message: string; percentage?: number } | null>(null);
   const [result, setResult] = useState<{ res: ExportResult; pagesKept: number } | null>(null);
@@ -134,10 +132,10 @@ export function ExtractByKeywordShell({ t = en }: Props) {
     setPhase('processing');
     setProgress({
       message: isTr ? 'Tarama başlatılıyor...' : 'Starting search...',
-      percentage: 0,
+      percentage: 15,
     });
-    controller.current?.runExtractByKeyword(file, keyword.trim(), caseSensitive, matchWholeWord);
-  }, [caseSensitive, file, isTr, keyword, matchWholeWord]);
+    controller.current?.runExtractByKeyword(file, keyword.trim());
+  }, [file, isTr, keyword]);
 
   const reset = useCallback(() => {
     if (thumbnailUrl) URL.revokeObjectURL(thumbnailUrl);
@@ -218,51 +216,6 @@ export function ExtractByKeywordShell({ t = en }: Props) {
                 />
                 <Search className="absolute left-3.5 h-4 w-4 text-ink-muted" />
               </div>
-            </div>
-
-            {/* Matching Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-ink-faint dark:border-ink-faint-dark">
-              <label
-                className={`flex items-center gap-2.5 cursor-pointer text-xs font-medium select-none p-3 rounded-lg border transition-all ${
-                  caseSensitive
-                    ? 'border-amber bg-amber/15 text-ink dark:border-amber-dark dark:bg-amber-dark/20 dark:text-ink-dark'
-                    : 'border-ink-faint bg-bg/40 text-ink hover:border-amber/60 hover:bg-amber/10 dark:border-ink-faint-dark dark:bg-bg-dark/40 dark:text-ink-dark dark:hover:border-amber-dark/60 dark:hover:bg-amber-dark/15'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={caseSensitive}
-                  onChange={(e) => setCaseSensitive(e.target.checked)}
-                  className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark dark:bg-surface-dark"
-                />
-                <div className="flex flex-col">
-                  <span className="font-semibold">{isTr ? 'Büyük / Küçük Harfe Duyarlı' : 'Case Sensitive Match'}</span>
-                  <span className="text-[10px] text-ink-muted dark:text-ink-muted-dark">
-                    {isTr ? 'Yalnızca birebir aynı harf boyutunu arar' : 'Exact letter casing only'}
-                  </span>
-                </div>
-              </label>
-
-              <label
-                className={`flex items-center gap-2.5 cursor-pointer text-xs font-medium select-none p-3 rounded-lg border transition-all ${
-                  matchWholeWord
-                    ? 'border-amber bg-amber/15 text-ink dark:border-amber-dark dark:bg-amber-dark/20 dark:text-ink-dark'
-                    : 'border-ink-faint bg-bg/40 text-ink hover:border-amber/60 hover:bg-amber/10 dark:border-ink-faint-dark dark:bg-bg-dark/40 dark:text-ink-dark dark:hover:border-amber-dark/60 dark:hover:bg-amber-dark/15'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={matchWholeWord}
-                  onChange={(e) => setMatchWholeWord(e.target.checked)}
-                  className="h-4 w-4 rounded border-ink-faint text-amber focus:ring-amber dark:border-ink-faint-dark dark:bg-surface-dark"
-                />
-                <div className="flex flex-col">
-                  <span className="font-semibold">{isTr ? 'Tam Kelime Eşleşmesi' : 'Whole Word Only'}</span>
-                  <span className="text-[10px] text-ink-muted dark:text-ink-muted-dark">
-                    {isTr ? 'Kelimelerin içindeki ekleri eşleştirmez' : 'Exclude substrings / partial words'}
-                  </span>
-                </div>
-              </label>
             </div>
 
             {/* Action Buttons */}

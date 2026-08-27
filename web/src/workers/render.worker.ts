@@ -1577,16 +1577,8 @@ async function extractByKeywordRun(
         p.destroy();
       }
       
-      const normalizedPageText = caseSensitive ? pageText : normalizeUniversalKeyword(pageText);
-      
-      let isMatch = false;
-      if (matchWholeWord) {
-        const escaped = searchKw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?:^|\\s|[^a-zA-Z0-9])${escaped}(?:$|\\s|[^a-zA-Z0-9])`, caseSensitive ? '' : 'i');
-        isMatch = regex.test(normalizedPageText);
-      } else {
-        isMatch = normalizedPageText.includes(searchKw);
-      }
+      const normalizedPageText = normalizeUniversalKeyword(pageText);
+      const isMatch = normalizedPageText.includes(searchKw);
       
       if (isMatch) {
         indicesToKeep.push(i);
