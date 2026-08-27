@@ -45,7 +45,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   }
   // Reset on arrival (not when the queued run starts) so a cancel sent while
   // earlier messages are still processing isn't lost.
-  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start') cancelled = false;
+  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start' || msg.type === 'split-half-start' || msg.type === 'split-by-size-start' || msg.type === 'extract-by-keyword-start') cancelled = false;
   queue = queue.then(async () => {
     try {
       await ready;
@@ -106,6 +106,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'scan-to-pdf-start') await scanToPdfRun(msg.files, msg.meta);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
       else if (msg.type === 'split-half-start') await splitHalfRun(msg.file, msg.meta, msg.splitDirection, msg.readingOrder, msg.skipFirstPage);
+      else if (msg.type === 'split-by-size-start') await splitBySizeRun(msg.file, msg.meta, msg.maxSizeMB);
       else if (msg.type === 'extract-by-keyword-start') await extractByKeywordRun(msg.file, msg.meta, msg.keyword, msg.caseSensitive, msg.matchWholeWord);
       else if (msg.type.endsWith('-start')) {
         // Fallback for unimplemented tools to prevent UI hanging during testing
@@ -1456,47 +1457,72 @@ async function splitBySizeRun(file: ArrayBuffer, meta: FileMeta, maxSizeMB: numb
   const started = Date.now();
   let output: Blob | undefined;
   let outputName: string | undefined;
-  const maxSize = maxSizeMB * 1024 * 1024;
+  const maxSize = Math.max(0.1 * 1024 * 1024, maxSizeMB * 1024 * 1024);
   
   try {
     const pdfLib = await import('pdf-lib');
     const srcDoc = await pdfLib.PDFDocument.load(file, { ignoreEncryption: true });
     const pageCount = srcDoc.getPageCount();
-    const fileSize = file.byteLength;
-    const avgPageSize = fileSize / pageCount;
-    
-    // Estimate how many pages fit into maxSizeMB. Add 10% overhead for fonts/metadata safety.
-    const pagesPerChunk = Math.max(1, Math.floor(maxSize / (avgPageSize * 1.1)));
     
     const JSZip = (await import('jszip')).default;
     const zip = new JSZip();
     let partNum = 1;
+    let totalParts = 0;
+
+    let currentDoc = await pdfLib.PDFDocument.create();
+    let currentDocPages: number[] = [];
+    let currentDocBytes: Uint8Array | null = null;
     
-    for (let i = 0; i < pageCount; i += pagesPerChunk) {
+    for (let pageIdx = 0; pageIdx < pageCount; pageIdx++) {
       if (cancelled) break;
       
-      const outDoc = await pdfLib.PDFDocument.create();
-      const end = Math.min(i + pagesPerChunk, pageCount);
-      const indices = Array.from({ length: end - i }, (_, k) => i + k);
-      const copied = await outDoc.copyPages(srcDoc, indices);
-      copied.forEach(p => outDoc.addPage(p));
+      // Copy page into currentDoc
+      const [copiedPage] = await currentDoc.copyPages(srcDoc, [pageIdx]);
+      currentDoc.addPage(copiedPage);
+      currentDocPages.push(pageIdx);
       
-      const bytes = await outDoc.save();
-      zip.file(`${sanitizeBaseName(meta.name)}_part${partNum}.pdf`, bytes);
-      partNum++;
+      const savedBytes = await currentDoc.save();
+      
+      // If adding this page exceeds maxSize AND we already had pages in currentDoc
+      if (savedBytes.byteLength > maxSize && currentDocPages.length > 1) {
+        // Finalize previous pages into part
+        const finalizedDoc = await pdfLib.PDFDocument.create();
+        const prevPagesIndices = currentDocPages.slice(0, -1);
+        const prevPages = await finalizedDoc.copyPages(srcDoc, prevPagesIndices);
+        prevPages.forEach(p => finalizedDoc.addPage(p));
+        const finalBytes = await finalizedDoc.save();
+        
+        zip.file(`${sanitizeBaseName(meta.name)}_part${partNum}.pdf`, finalBytes);
+        partNum++;
+        totalParts++;
+        
+        // Start new doc with current page
+        currentDoc = await pdfLib.PDFDocument.create();
+        const [singlePage] = await currentDoc.copyPages(srcDoc, [pageIdx]);
+        currentDoc.addPage(singlePage);
+        currentDocPages = [pageIdx];
+        currentDocBytes = await currentDoc.save();
+      } else {
+        currentDocBytes = savedBytes;
+      }
       
       post({
         type: 'split-by-size-progress',
-        processedPages: end,
+        processedPages: pageIdx + 1,
         totalPages: pageCount,
       });
       await new Promise(r => setTimeout(r, 0));
     }
     
-    if (!cancelled) {
+    if (!cancelled && currentDocPages.length > 0 && currentDocBytes) {
+      zip.file(`${sanitizeBaseName(meta.name)}_part${partNum}.pdf`, currentDocBytes);
+      totalParts++;
+    }
+    
+    if (!cancelled && totalParts > 0) {
       const zipBytes = await zip.generateAsync({ type: 'uint8array' });
       output = new Blob([zipBytes], { type: 'application/zip' });
-      outputName = `${sanitizeBaseName(meta.name)}-split-parts.zip`;
+      outputName = `${sanitizeBaseName(meta.name)}-split-by-size.zip`;
     }
   } catch (e) {
     console.error('[worker] splitBySizeRun failed:', e);
