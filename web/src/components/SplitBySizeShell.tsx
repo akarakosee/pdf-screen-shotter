@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
@@ -35,54 +35,70 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [maxSizeMB, setMaxSizeMB] = useState<number>(5); // Default to 5MB parts
   const isTr = t.lang === 'tr';
+  const isTrRef = useRef(isTr);
+  isTrRef.current = isTr;
 
-  const controllerRef = useRef<JobController | null>(null);
-  const controller = useCallback((): JobController => {
-    if (!controllerRef.current) {
-      controllerRef.current = new JobController({
-        onSplitBySizeProgress: (processed, total) => {
-          setProgress({
-            message: isTr
-              ? `Sayfalar işleniyor: ${processed} / ${total}...`
-              : `Processing ${processed} of ${total} pages...`,
-            percentage: (processed / total) * 100,
-          });
-        },
-        onSplitBySizeDone: (res) => {
-          setResult(res);
-          setCancelling(false);
-          setPhase('done');
-        },
-        onFatal: (message) => {
-          setCancelling(false);
-          setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
-          setErrorMsg(null);
-          setPhase('upload');
-        },
-        onUnavailable: () => {
-          setUnavailable(true);
-        },
-      });
-    }
-    return controllerRef.current;
-  }, [t, isTr]);
+  const tRef = useRef(t);
+  tRef.current = t;
+
+  const controller = useRef<JobController | null>(null);
+
+  useEffect(() => {
+    controller.current = new JobController({
+      onSplitBySizeProgress: (processed, total) => {
+        const pct = total > 0 ? Math.max(10, Math.round((processed / total) * 100)) : 50;
+        setProgress({
+          message: isTrRef.current
+            ? `Sayfalar işleniyor: ${processed} / ${total}...`
+            : `Processing ${processed} of ${total} pages...`,
+          percentage: pct,
+        });
+      },
+      onSplitBySizeDone: (res) => {
+        setResult(res);
+        setCancelling(false);
+        setPhase('done');
+      },
+      onFatal: (message) => {
+        setCancelling(false);
+        setToast({ kind: 'error', message: message || (isTrRef.current ? 'Hata oluştu' : 'An error occurred') });
+        setErrorMsg(null);
+        setPhase('options');
+      },
+      onFileError: (_, message) => {
+        setCancelling(false);
+        setToast({
+          kind: 'error',
+          message: isTrRef.current ? 'Dosya işlenemedi veya bozuk.' : 'Could not process file.',
+        });
+        setPhase('options');
+      },
+      onUnavailable: () => {
+        setUnavailable(true);
+      },
+    });
+
+    return () => {
+      controller.current?.dispose();
+    };
+  }, []);
 
   const cancel = useCallback(() => {
     setCancelling(true);
-    controller().cancel();
+    controller.current?.cancel();
     setErrorMsg(null);
     setPhase('options');
     setCancelling(false);
-  }, [controller]);
+  }, []);
 
   const reset = useCallback(() => {
     setResult(null);
     setProgress(null);
     setErrorMsg(null);
-    setPhase('upload');
     setFile(null);
     setPageCount(0);
-  }, [controller]);
+    setPhase('upload');
+  }, []);
 
   const addFiles = useCallback(
     async (files: File[]) => {
@@ -92,7 +108,7 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
       if (err) {
         setToast({
           kind: 'error',
-          message: err === 'empty-file' ? t.emptyFile || 'File is empty' : t.notPdf || 'Not a PDF file',
+          message: err === 'empty-file' ? tRef.current.emptyFile || 'File is empty' : tRef.current.notPdf || 'Not a PDF file',
         });
         return;
       }
@@ -108,16 +124,20 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
       setFile(f);
       setPhase('options');
     },
-    [t.emptyFile, t.notPdf]
+    []
   );
 
   const processFile = useCallback(() => {
     if (!file) return;
     setPhase('processing');
-    controller().runSplitBySize(file, maxSizeMB);
-  }, [file, maxSizeMB, controller]);
+    setProgress({
+      message: isTr ? 'Sayfalar taranıyor ve parçalara bölünüyor...' : 'Starting split process...',
+      percentage: 10,
+    });
+    controller.current?.runSplitBySize(file, maxSizeMB);
+  }, [file, isTr, maxSizeMB]);
 
-  const preload = useCallback(() => controller().preload(), [controller]);
+  const preload = useCallback(() => controller.current?.preload(), []);
 
   const fileSizeMB = file ? (file.size / (1024 * 1024)).toFixed(2) : '0';
   const estParts = file ? Math.max(1, Math.ceil(parseFloat(fileSizeMB) / maxSizeMB)) : 1;
