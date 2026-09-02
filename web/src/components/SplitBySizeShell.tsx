@@ -1,7 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
+import { PDFDocument } from 'pdf-lib';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
-import type { ExportResult, ProgressData } from '../core/types';
+import { validatePdfFile } from '../app/validators';
+import type { ExportResult } from '../core/types';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { DropZone } from './DropZone';
@@ -9,7 +11,7 @@ import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
 import { ProgressPanel } from './ProgressPanel';
 import { ResultPanel } from './ResultPanel';
-import { FileDown } from 'lucide-react';
+import { FileDown, Layers, Sparkles } from 'lucide-react';
 import { Button } from './ui/Button';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -30,6 +32,7 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
+  const [pageCount, setPageCount] = useState<number>(0);
   const [maxSizeMB, setMaxSizeMB] = useState<number>(5); // Default to 5MB parts
   const isTr = t.lang === 'tr';
 
@@ -78,20 +81,34 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
     setErrorMsg(null);
     setPhase('upload');
     setFile(null);
+    setPageCount(0);
   }, [controller]);
 
   const addFiles = useCallback(
-    (files: File[]) => {
+    async (files: File[]) => {
       if (files.length === 0) return;
       const f = files[0];
-      if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-        setToast({ kind: 'error', message: t.notPdf || 'Not a PDF file' });
+      const err = validatePdfFile(f);
+      if (err) {
+        setToast({
+          kind: 'error',
+          message: err === 'empty' ? t.emptyFile || 'File is empty' : t.notPdf || 'Not a PDF file',
+        });
         return;
       }
+
+      try {
+        const buf = await f.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+        setPageCount(pdfDoc.getPageCount());
+      } catch (e) {
+        setPageCount(1);
+      }
+
       setFile(f);
       setPhase('options');
     },
-    [t]
+    [t.emptyFile, t.notPdf]
   );
 
   const processFile = useCallback(() => {
@@ -103,6 +120,7 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const preload = useCallback(() => controller().preload(), [controller]);
 
   const fileSizeMB = file ? (file.size / (1024 * 1024)).toFixed(2) : '0';
+  const estParts = file ? Math.max(1, Math.ceil(parseFloat(fileSizeMB) / maxSizeMB)) : 1;
 
   if (!wasmOk) {
     return (
@@ -139,72 +157,99 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'options' && file && (
-        <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <div className="flex min-h-[380px] flex-col overflow-hidden rounded-2xl border bg-surface shadow-sm dark:bg-surface-dark">
-            <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-amber/10 text-amber-dark dark:bg-amber-dark/20">
-                <FileDown className="h-8 w-8" />
+        <div className="phase-enter flex flex-col gap-5">
+          {/* Document Summary Card */}
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
+            <div className="relative aspect-[1/1.3] w-24 shrink-0 rounded-xl border border-ink-faint bg-white overflow-hidden shadow-xs flex items-center justify-center mx-auto md:mx-0">
+              <FileDown className="h-8 w-8 text-amber-dark dark:text-amber" />
+            </div>
+
+            <div className="flex flex-col gap-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber/15 text-amber-dark font-semibold">
+                  {isTr ? 'Büyük Doküman' : 'Large Document'}
+                </span>
+                {pageCount > 0 && (
+                  <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
+                    {pageCount} {isTr ? 'Sayfa' : 'Pages'}
+                  </span>
+                )}
+                <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
+                  · {fileSizeMB} MB
+                </span>
               </div>
-              <h2 className="text-xl font-semibold tracking-tight text-ink dark:text-ink-dark">
-                {isTr ? 'Boyuta Göre Böl' : 'Split By Size'}
-              </h2>
-              <p className="mt-2 max-w-[440px] text-sm text-ink-muted dark:text-ink-muted-dark">
+              <h3 className="truncate text-sm font-semibold text-ink dark:text-ink-dark mt-1" title={file.name}>
+                {file.name}
+              </h3>
+              <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
                 {isTr
-                  ? `Seçilen belge (${fileSizeMB} MB), belirlediğiniz maksimum dosya boyutunu aşmayacak şekilde otomatik parçalara bölünür.`
-                  : `Your document (${fileSizeMB} MB) will be automatically split into individual chunks not exceeding your specified limit.`}
+                  ? `Dosya, her biri en fazla ${maxSizeMB} MB olacak parçalara bölünerek ZIP olarak paketlenecektir.`
+                  : `Document will be divided into files under ${maxSizeMB} MB and packaged into a ZIP.`}
               </p>
-              
-              <div className="mt-8 flex w-full max-w-[340px] flex-col gap-4 text-left">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-ink dark:text-ink-dark">
-                      {isTr ? 'Maksimum Parça Boyutu (MB)' : 'Maximum Part Size (MB)'}
-                    </label>
-                    <span className="text-xs font-mono text-ink-muted">{maxSizeMB} MB</span>
-                  </div>
+            </div>
+          </div>
 
-                  {/* Preset quick buttons */}
-                  <div className="grid grid-cols-4 gap-1.5 mb-1">
-                    {[1, 2, 5, 10].map((size) => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => setMaxSizeMB(size)}
-                        className={`rounded-lg border px-2 py-1.5 text-xs font-medium transition-all ${
-                          maxSizeMB === size
-                            ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
-                            : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
-                        }`}
-                      >
-                        {size} MB
-                      </button>
-                    ))}
-                  </div>
+          {/* Configuration Card */}
+          <div className="rounded-2xl border bg-surface p-6 shadow-sm dark:bg-surface-dark">
+            <div className="max-w-md mx-auto flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-ink dark:text-ink-dark flex items-center gap-1.5">
+                    <Layers className="h-4 w-4 text-amber-dark dark:text-amber" />
+                    {isTr ? 'Maksimum Parça Boyutu (MB)' : 'Maximum Part Size (MB)'}
+                  </label>
+                  <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-surface-2 dark:bg-surface-2-dark text-ink dark:text-ink-dark">
+                    {maxSizeMB} MB
+                  </span>
+                </div>
 
+                {/* Preset quick buttons */}
+                <div className="grid grid-cols-4 gap-2 mt-1">
+                  {[1, 5, 10, 25].map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => setMaxSizeMB(size)}
+                      className={`rounded-xl border py-2.5 text-xs font-medium transition-all ${
+                        maxSizeMB === size
+                          ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                          : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                      }`}
+                    >
+                      {size} MB
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-3 flex items-center gap-3">
                   <input
                     type="number"
                     min={1}
                     max={200}
                     value={maxSizeMB}
                     onChange={(e) => setMaxSizeMB(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="h-11 rounded-lg border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark"
+                    className="h-11 flex-1 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
                   />
-                  <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                    {isTr
-                      ? `Her parça maksimum ${maxSizeMB} MB olacak şekilde ZIP arşivi olarak indirilir.`
-                      : `Each generated part will be kept under ${maxSizeMB} MB inside a ZIP download.`}
-                  </p>
+                  <div className="text-xs px-3 py-2.5 rounded-xl border bg-amber/10 border-amber/20 text-amber-dark font-medium whitespace-nowrap">
+                    {isTr ? `Tahmini ~${estParts} parça` : `Estimated ~${estParts} parts`}
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="flex flex-col-reverse justify-between gap-3 border-t bg-bg/50 p-4 sm:flex-row sm:items-center dark:bg-bg-dark/50">
-              <Button variant="ghost" onClick={reset} className="w-full sm:w-auto">
-                {t.cancel || (isTr ? 'İptal' : 'Cancel')}
-              </Button>
-              <Button onClick={processFile} className="w-full sm:w-auto">
-                {isTr ? `Belgeyi Böl (${maxSizeMB} MB Sınırı)` : `Split PDF (${maxSizeMB} MB Limit)`}
-              </Button>
+                <p className="text-xs text-ink-muted dark:text-ink-muted-dark mt-1">
+                  {isTr
+                    ? 'E-posta (Gmail/Outlook) ve resmi kurum portalları için genellikle 10 MB veya 25 MB sınırı önerilir.'
+                    : 'A 10 MB or 25 MB limit is recommended for email attachments (Gmail/Outlook) and portal uploads.'}
+                </p>
+              </div>
+
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-4 border-t border-ink-faint dark:border-ink-faint-dark">
+                <Button variant="ghost" onClick={reset} className="w-full sm:w-auto">
+                  {t.cancel || (isTr ? 'İptal' : 'Cancel')}
+                </Button>
+                <Button onClick={processFile} className="w-full sm:w-auto">
+                  {isTr ? `PDF'i Böl (Maks ${maxSizeMB} MB)` : `Split PDF (Max ${maxSizeMB} MB)`}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -226,6 +271,13 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
           errorMsg={errorMsg}
           t={t}
           result={result}
+          customHeadline={
+            result?.output
+              ? isTr
+                ? `Belgeniz ${maxSizeMB} MB sınırını aşmayacak şekilde başarıyla parçalandı!`
+                : `Document successfully split into parts under ${maxSizeMB} MB!`
+              : null
+          }
           skipped={[]}
           crossLink={null}
           onDownload={() => {

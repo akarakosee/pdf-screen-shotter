@@ -2125,8 +2125,8 @@ export const extractbykeywordCopy = {
 export const splitbysizeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
     title: "Split PDF by File Size",
-    description: "Split large PDF files into smaller chunks based on maximum megabyte (MB) size limits online for free.",
-    keywords: "split pdf by size, split pdf by mb, split pdf for email attachment, chunk large pdf, divide pdf by size limit",
+    description: "Divide massive PDF documents into multiple smaller files that stay strictly under your specified MB limit (e.g. 10MB or 25MB) online for free.",
+    keywords: "split pdf by size, split pdf by mb, split pdf for email attachment, chunk large pdf, divide pdf by size limit, break down massive pdf",
     h1: "Split PDF by File Size",
     tagline: "Divide massive PDF documents into multiple smaller files that stay strictly under your specified MB limit (e.g. 10MB or 25MB).",
     howToName: "How to split a PDF by MB size limit",
@@ -2134,32 +2134,34 @@ export const splitbysizeCopy: Record<"en" | "tr", ToolCopy> = {
     faqTitle: "Frequently asked questions",
     steps: [
       { name: "Upload Massive PDF", text: "Select the large PDF document you need to break down." },
-      { name: "Set MB Limit", text: "Enter your target maximum size per file (e.g., 20 MB for email attachment limits)." },
-      { name: "Download Chunks", text: "Download your collection of smaller PDF files, each strictly within the size budget." }
+      { name: "Set MB Size Limit", text: "Choose a preset (e.g., 5MB, 10MB, 25MB) or enter your target maximum megabyte limit." },
+      { name: "Download Chunks", text: "Download your ZIP collection of smaller PDF files, each strictly within your size budget." }
     ],
     faq: [
-      { q: "Why split by size instead of page count?", a: "Email providers (like Gmail or Outlook) and government portals enforce hard file-size limits (e.g. 25MB). This tool ensures each piece can be sent safely." },
-      { q: "Are pages torn or split in half?", a: "No, files are split cleanly at whole page boundaries." }
+      { q: "Why split by file size instead of page count?", a: "Email services (like Gmail or Outlook) and government/corporate portals enforce strict file size limits (such as 10MB or 25MB). Splitting by MB guarantees each piece uploads and sends smoothly." },
+      { q: "Are individual pages split or truncated?", a: "No. The tool accurately divides documents at full page boundaries so no visual content or formatting is lost." },
+      { q: "What format are the split parts delivered in?", a: "All divided PDF parts are neatly packaged and downloaded together as a single ZIP archive." }
     ],
     crossLink: { href: "/compress-pdf", label: "Want to shrink the file without splitting? Try Compress PDF." }
   },
   tr: {
-    title: "PDF'i Boyuta Göre Böl (MB Sınırı)",
-    description: "Büyük PDF dosyalarınızı e-posta veya yükleme sınırlarına uygun olarak belirlediğiniz MB boyutunda parçalara bölün.",
-    keywords: "pdf mb ye göre bölme, boyuta göre pdf parçalama, eposta için pdf bölme, büyük pdf parçalara ayır",
-    h1: "PDF'i Boyuta Göre Böl (MB Sınırı)",
-    tagline: "E-posta veya portal sınırlarına takılan büyük PDF'leri istediğiniz maksimum boyuta (örn: 10MB, 25MB) göre otomatik parçalayın.",
+    title: "PDF'i Dosya Boyutuna Göre Böl (MB Sınırı)",
+    description: "Büyük PDF belgelerini belirlediğiniz MB sınırının (örn: 10MB veya 25MB) altında kalacak şekilde ücretsiz ve güvenli olarak parçalara ayırın.",
+    keywords: "pdf mb ye göre bölme, boyuta göre pdf parçalama, eposta için pdf bölme, büyük pdf parçalara ayır, dosya boyutuna göre pdf böl",
+    h1: "PDF'i Dosya Boyutuna Göre Böl (MB Sınırı)",
+    tagline: "Büyük PDF belgelerini belirlediğiniz MB sınırının (örn: 10MB veya 25MB) altında kalacak şekilde otomatik olarak daha küçük dosyalara bölün.",
     howToName: "PDF dosyası megabayt (MB) sınırına göre nasıl bölünür?",
     howItWorks: "Nasıl çalışır?",
     faqTitle: "Sık Sorulan Sorular",
     steps: [
-      { name: "Büyük Belgeyi Yükleyin", text: "Parçalamak istediğiniz büyük PDF dosyasını seçin." },
-      { name: "Maksimum Boyutu Girin", text: "Her bir parçanın en fazla kaç MB olacağını (örn: 15 MB) belirleyin." },
-      { name: "Parçaları İndirin", text: "Belirlediğiniz MB sınırını aşmayan parçalanmış PDF dosyalarınızı indirin." }
+      { name: "Büyük Belgenizi Yükleyin", text: "Boyutunu küçülterek parçalamak istediğiniz büyük PDF dosyasını seçin." },
+      { name: "Maksimum MB Sınırını Belirleyin", text: "Hazır butonlardan (örn: 5MB, 10MB, 25MB) seçin veya istediğiniz maksimum MB değerini girin." },
+      { name: "Parçaları İndirin", text: "Belirlediğiniz MB sınırını aşmayan tüm PDF parçalarını tek bir ZIP arşivi olarak indirin." }
     ],
     faq: [
-      { q: "Neden sayfa sayısı yerine boyuta göre bölmeliyim?", a: "Gmail, Outlook veya resmi yükleme portalları 'en fazla 25 MB' gibi katı dosya boyutu sınırları koyar. Bu araç her parçanın sınırı aşmamasını garanti eder." },
-      { q: "Sayfalar bozulur mu?", a: "Hayır. Bölme işlemi tam sayfa sınırlarından yapılır, hiçbir sayfa ortadan kesilmez." }
+      { q: "Neden sayfa sayısı yerine dosya boyutuna göre bölmeliyim?", a: "Gmail, Outlook veya kurumsal başvuru portalları 'en fazla 10 MB' veya 'en fazla 25 MB' gibi katı dosya boyutu limitleri uygular. Boyuta göre bölme, her parçanın bu sınırlara tam uymasını sağlar." },
+      { q: "Sayfalar ortadan kesilir veya bozulur mu?", a: "Hayır. Bölme işlemi tam sayfa sınırlarından yapılır; metinler, tablolar ve sayfa bütünlüğü %100 korunur." },
+      { q: "Bölünen dosyalar nasıl teslim edilir?", a: "Oluşturulan tüm PDF parçaları numaralandırılarak tek bir ZIP arşivi içerisinde bilgisayarınıza iner." }
     ],
     crossLink: { href: "/tr/compress-pdf", label: "Bölmek yerine dosyayı küçültmek istiyorsanız PDF Küçült aracını deneyin." }
   },
