@@ -88,11 +88,11 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
     async (files: File[]) => {
       if (files.length === 0) return;
       const f = files[0];
-      const err = validatePdfFile(f);
+      const err = await validatePdfFile(f);
       if (err) {
         setToast({
           kind: 'error',
-          message: err === 'empty' ? t.emptyFile || 'File is empty' : t.notPdf || 'Not a PDF file',
+          message: err === 'empty-file' ? t.emptyFile || 'File is empty' : t.notPdf || 'Not a PDF file',
         });
         return;
       }
