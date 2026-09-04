@@ -85,11 +85,22 @@ export class MuPdfEngine implements PdfEngine {
   }
 
   async renderSvgPage(doc: PdfDoc, page: number): Promise<Uint8Array> {
+    const m = this.require();
     const p = (doc as MuPdfDoc).handle.loadPage(page - 1);
+    const buf = new m.Buffer();
     try {
-      const svgStr = (p as any).toSVG();
-      return new TextEncoder().encode(svgStr);
+      const writer = new m.DocumentWriter(buf, 'svg', '');
+      try {
+        const dev = writer.beginPage(p.getBounds());
+        p.run(dev, m.Matrix.identity);
+        writer.endPage();
+        writer.close();
+        return buf.asUint8Array().slice();
+      } finally {
+        writer.destroy();
+      }
     } finally {
+      buf.destroy();
       p.destroy();
     }
   }
