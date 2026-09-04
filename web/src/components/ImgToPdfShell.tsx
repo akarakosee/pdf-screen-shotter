@@ -252,8 +252,10 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
         }
         return true;
       });
-      if (next.length === 0) setErrorMsg(null);
-    setPhase('upload');
+      if (next.length === 0) {
+        setErrorMessage(null);
+        setPhase('upload');
+      }
       return next;
     });
   };
@@ -298,7 +300,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
     items.forEach((item) => URL.revokeObjectURL(item.previewUrl));
     setItems([]);
     setResultBlob(null);
-    setErrorMsg(null);
+    setErrorMessage(null);
     setPhase('upload');
     setFrozen(false);
   };
@@ -329,7 +331,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'grid' && (
         <div className="flex flex-col gap-8">
           {/* Options Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-ink-muted/20 bg-surface p-4 shadow-sm dark:border-ink-muted-dark/20 dark:bg-surface-dark">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-surface p-4 shadow-sm dark:border-border-dark dark:bg-surface-dark">
             <div className="flex flex-wrap items-center gap-6">
               {/* Page Size */}
               <div className="flex flex-col gap-1">
@@ -337,7 +339,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                 <select
                   value={pageSize}
                   onChange={(e) => setPageSize(e.target.value as PageSizePreset)}
-                  className="rounded-lg border border-ink-muted/20 bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-ink-muted-dark/20 dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
+                  className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-border-dark dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
                 >
                   <option value="fit">{t.imgToPdfFit}</option>
                   <option value="a4">{t.imgToPdfA4}</option>
@@ -352,7 +354,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                   <select
                     value={orientation}
                     onChange={(e) => setOrientation(e.target.value as Orientation)}
-                    className="rounded-lg border border-ink-muted/20 bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-ink-muted-dark/20 dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
+                    className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-border-dark dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
                   >
                     <option value="auto">{t.imgToPdfAuto}</option>
                     <option value="portrait">{t.imgToPdfPortrait}</option>
@@ -367,7 +369,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                 <select
                   value={marginPt}
                   onChange={(e) => setMarginPt(Number(e.target.value))}
-                  className="rounded-lg border border-ink-muted/20 bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-ink-muted-dark/20 dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
+                  className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-ink outline-none transition-colors focus:border-amber dark:border-border-dark dark:bg-surface-dark dark:text-ink-dark dark:focus:border-amber-dark"
                 >
                   <option value={0}>{t.imgToPdfNoMargin}</option>
                   <option value={20}>{t.imgToPdfSmallMargin}</option>
@@ -380,7 +382,7 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
             <div className="flex items-center gap-3">
               <label
                 htmlFor="add-more-input"
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-ink-muted/20 bg-surface px-4 py-2 text-xs font-semibold text-ink shadow-sm transition-all hover:border-amber/50 dark:border-ink-muted-dark/20 dark:bg-surface-dark dark:text-ink-dark dark:hover:border-amber-dark/50"
+                className="btn-motion inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-surface px-4 py-2 text-xs font-semibold text-ink shadow-sm transition-all hover:border-amber hover:text-amber dark:border-border-dark dark:bg-surface-dark dark:text-ink-dark dark:hover:border-amber-dark dark:hover:text-amber-dark"
               >
                 <Plus className="h-4 w-4 text-amber dark:text-amber-dark" />
                 {t.imgToPdfAdd}
@@ -388,19 +390,24 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                   id="add-more-input"
                   type="file"
                   multiple
-                  accept=".jpg,.jpeg,.png,.webp"
+                  accept=".jpg,.jpeg,.png,.webp,image/png,image/jpeg,image/webp"
                   onChange={(e) => handleFiles(e.target.files ? [...e.target.files] : [])}
                   className="sr-only"
                 />
               </label>
 
-              <Button onClick={handleConvert} disabled={items.length === 0}>
+              <button
+                type="button"
+                onClick={handleConvert}
+                disabled={items.length === 0}
+                className="btn-motion inline-flex min-h-10 items-center justify-center rounded-lg bg-gradient-to-r from-amber to-[#F0C778] px-5 text-xs font-semibold text-[#1D1108] shadow-[0_10px_25px_-8px_rgba(232,182,95,0.5)] hover:brightness-[0.97] disabled:pointer-events-none disabled:opacity-50 dark:from-amber-dark dark:to-[#F0C778]"
+              >
                 {t.imgToPdfExport}
-              </Button>
+              </button>
             </div>
           </div>
 
-          {/* Grid (4 columns on desktop, anti-slop) */}
+          {/* Grid */}
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -436,29 +443,29 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
 
       {phase === 'processing' && (
         <ProgressPanel
-          progress={75}
-          statusText="Building PDF document from images..."
+          progressPercent={75}
+          label="Building PDF document from images..."
         />
       )}
 
-      {phase === 'done' && (
-        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+      {phase === 'done' && resultBlob && (
+        <div className="phase-enter flex flex-col items-center justify-center w-full mx-auto">
           <ResultPanel
-            errorMsg={errorMsg}
+            errorMsg={errorMessage}
             t={t}
             result={{
-              totalPages: 1,
-              succeeded: 1,
+              totalPages: items.length,
+              succeeded: items.length,
               failed: [],
-              durationMs: 0,
-              output: output?.blob,
-              outputName: output?.name,
-              cancelled: false
+              durationMs,
+              output: resultBlob,
+              outputName: resultName,
+              cancelled: false,
             }}
             skipped={[]}
             crossLink={null}
-            onDownload={() => { if (output?.blob) triggerDownload(output?.blob, output?.name); }}
-            onConvertMore={reset}
+            onDownload={handleDownload}
+            onConvertMore={handleReset}
           />
         </div>
       )}

@@ -981,42 +981,44 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const pngToPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "PNG to PDF",
-    description: "Convert PNG images with transparency to PDF documents online for free. Fast, high quality, and 100% private.",
-    keywords: "png to pdf, convert png to pdf, png image to pdf document, high quality png to pdf online",
+    title: "PNG to PDF - Convert PNG Images to PDF Online Free",
+    description: "Convert PNG images, screenshots, and transparent graphics into a single clean PDF document online for free. Fast, high quality, and 100% private.",
+    keywords: "png to pdf, convert png to pdf, png image to pdf document, combine png to pdf, png to pdf converter free, transparent png to pdf",
     h1: "PNG to PDF",
-    tagline: "Turn your transparent PNG graphics, screenshots, or drawings into crisp PDF documents in seconds — free, unlimited, and 100% private.",
+    tagline: "Convert PNG images, screenshots, and transparent graphics into high-quality PDF documents with custom page sizes and margins — free, unlimited, and 100% private.",
     howToName: "How to convert PNG to PDF",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
     steps: [
-      { name: "Select PNG Files", text: "Drag and drop the PNG images you want to turn into a PDF." },
-      { name: "Configure Layout", text: "Arrange page order, select margins, and choose orientation." },
-      { name: "Download PDF", text: "Click convert to download your newly generated PDF file." }
+      { name: "Add PNG Images", text: "Drag and drop or select one or multiple PNG files." },
+      { name: "Arrange & Customize", text: "Reorder images with drag-and-drop, pick page size (Fit, A4, Letter), orientation, and margins." },
+      { name: "Convert & Download", text: "Click Convert to PDF to generate and download your document instantly." }
     ],
     faq: [
-      { q: "What happens to transparent backgrounds?", a: "Transparent areas in PNGs are rendered on clean white PDF pages by default." },
-      { q: "Can I combine PNG and JPG images together?", a: "Yes! Our image converter supports mixed image formats in the same document." }
+      { q: "What happens to transparent backgrounds in PNG files?", a: "Transparent areas in PNG graphics are cleanly composited onto pure white PDF pages without artifacts or distortion." },
+      { q: "Can I combine multiple PNG and other image files into one PDF?", a: "Yes! You can add multiple PNG, JPG, and WebP images, reorder them easily, and merge them into a single multipage PDF." },
+      { q: "Can I choose the page size and margin for the output PDF?", a: "Yes, you can choose between 'Fit Image Size' (keeps exact image dimensions), 'A4', or 'Letter', plus adjust margins (0pt, 20pt, 40pt)." }
     ],
-    crossLink: { href: "/pdf-to-png", label: "Need to extract PDF pages as PNG? Try PDF to PNG." }
+    crossLink: { href: "/pdf-to-png", label: "Need to convert PDF pages to PNG? Try PDF to PNG." }
   },
   tr: {
-    title: "PNG'den PDF'e Çevirme",
-    description: "PNG formatındaki görsellerinizi, logolarınızı ve ekran görüntülerinizi ücretsiz PDF belgesine dönüştürün.",
-    keywords: "png pdf yapma, png to pdf çevirici, png yi pdf yapma, şeffaf png pdf yap",
+    title: "PNG'den PDF'e Çevirme - Ücretsiz PNG'yi PDF Yapma",
+    description: "PNG formatındaki görsellerinizi, logolarınızı, ekran görüntülerinizi ve şeffaf çizimlerinizi saniyeler içinde kaliteli bir PDF belgesine dönüştürün. Ücretsiz, sınırsız ve gizli.",
+    keywords: "png pdf yapma, png to pdf çevirici, png yi pdf yapma, şeffaf png pdf yap, pngleri birleştir pdf yap, resimleri pdf yapma",
     h1: "PNG'den PDF'e Çevirme",
-    tagline: "Ekran görüntülerinizi, grafiklerinizi veya çizimlerinizi saniyeler içinde yüksek kaliteli bir PDF belgesine dönüştürün — ücretsiz, sınırsız ve tamamen gizli.",
+    tagline: "PNG formatındaki görsellerinizi, ekran görüntülerinizi ve şeffaf grafiklerinizi sayfa boyutu ve kenar boşluklarını özelleştirerek kaliteli bir PDF belgesine dönüştürün — ücretsiz, sınırsız ve tamamen gizli.",
     howToName: "PNG görseli PDF'e nasıl dönüştürülür?",
     howItWorks: "Nasıl çalışır?",
     faqTitle: "Sık Sorulan Sorular",
     steps: [
-      { name: "PNG Görsellerini Seçin", text: "Dönüştürmek istediğiniz PNG dosyalarını ekrana bırakın." },
-      { name: "Sayfa Düzenini Seçin", text: "Sayfaların sırasını ve kenar boşluklarını isteğinize göre ayarlayın." },
-      { name: "PDF'i İndirin", text: "Dönüştür butonuna basarak tertemiz PDF dosyanızı cihazınıza kaydedin." }
+      { name: "PNG Dosyalarını Ekleyin", text: "Dönüştürmek istediğiniz bir veya birden fazla PNG görselini sürükleyip bırakın." },
+      { name: "Sıralayın ve Özelleştirin", text: "Görselleri sürükleyerek sıralayın; sayfa boyutunu (Tam Boyut, A4, Letter), yönünü ve kenar boşluklarını seçin." },
+      { name: "PDF Olarak İndirin", text: "PDF'e Dönüştür butonuna basarak tek tıkla yüksek çözünürlüklü PDF belgenizi indirin." }
     ],
     faq: [
-      { q: "Şeffaf (transparent) alanlar ne olur?", a: "PNG'deki saydam alanlar PDF'te otomatik olarak temiz beyaz arka plan üzerine oturtulur." },
-      { q: "PNG ve JPG resimleri aynı anda ekleyebilir miyim?", a: "Evet! Farklı formatlardaki fotoğrafları aynı anda yükleyip tek bir PDF'te toplayabilirsiniz." }
+      { q: "PNG görsellerindeki saydam / şeffaf alanlara ne olur?", a: "PNG dosyalarındaki saydam (transparan) alanlar PDF belgesinde otomatik olarak tertemiz beyaz arka plan üzerine net şekilde işlenir." },
+      { q: "Birden fazla PNG görselini tek bir PDF belgesinde toplayabilir miyim?", a: "Evet! İstediğiniz sayıda PNG, JPG veya WebP görseli yükleyip sırasını düzenleyerek çok sayfalı tek bir PDF oluşturabilirsiniz." },
+      { q: "Sayfa boyutunu ve kenar boşluğunu seçebilir miyim?", a: "Evet; 'Görsel Boyutu (Fit)', 'A4' veya 'Letter' sayfa boyutlarını seçebilir ve kenar boşluklarını (0pt, 20pt, 40pt) kolayca ayarlayabilirsiniz." }
     ],
     crossLink: { href: "/tr/pdf-to-png", label: "PDF sayfalarını kaliteli PNG formatında kaydetmek için PDF'ten PNG'ye aracını kullanın." }
   },
