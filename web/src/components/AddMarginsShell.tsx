@@ -11,7 +11,7 @@ import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
 import { ProgressPanel } from './ProgressPanel';
 import { ResultPanel } from './ResultPanel';
-import { Maximize, Layers, BookOpen, Sliders } from 'lucide-react';
+import { Maximize, Layers, BookOpen, Sliders, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/Button';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -53,6 +53,13 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
   const [bottomMm, setBottomMm] = useState<number>(10);
   const [leftMm, setLeftMm] = useState<number>(20);
 
+  // Preview states
+  const [thumbUrl, setThumbUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewPageNum, setPreviewPageNum] = useState<number>(1);
+  const [isPreviewLoading, setIsPreviewLoading] = useState<boolean>(false);
+  const cacheRef = useRef<Map<number, string>>(new Map());
+
   const controller = useRef<JobController | null>(null);
 
   useEffect(() => {
@@ -92,6 +99,7 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
 
     return () => {
       controller.current?.dispose();
+      cacheRef.current.forEach((u) => URL.revokeObjectURL(u));
     };
   }, []);
 
@@ -104,6 +112,11 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
   }, []);
 
   const reset = useCallback(() => {
+    cacheRef.current.forEach((u) => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
+    setThumbUrl(null);
+    setPreviewUrl(null);
+    setPreviewPageNum(1);
     setResult(null);
     setProgress(null);
     setErrorMsg(null);
@@ -124,17 +137,73 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
       return;
     }
 
+    let count = 1;
     try {
       const buf = await f.arrayBuffer();
       const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
-      setPageCount(pdfDoc.getPageCount());
+      count = Math.max(1, pdfDoc.getPageCount());
+      setPageCount(count);
     } catch (e) {
       setPageCount(1);
     }
 
     setFile(f);
+    setPreviewPageNum(1);
+    cacheRef.current.forEach((u) => URL.revokeObjectURL(u));
+    cacheRef.current = new Map();
     setPhase('options');
   }, []);
+
+  // Real page preview with prefetching
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+
+    const cached = cacheRef.current.get(previewPageNum);
+    if (cached) {
+      setPreviewUrl(cached);
+      setIsPreviewLoading(false);
+      if (previewPageNum === 1 && !thumbUrl) {
+        setThumbUrl(cached);
+      }
+    } else {
+      setIsPreviewLoading(true);
+      controller.current
+        ?.previewPage(file, previewPageNum, 160)
+        .then((blob) => {
+          if (!active) return;
+          const u = URL.createObjectURL(blob);
+          cacheRef.current.set(previewPageNum, u);
+          setPreviewUrl(u);
+          if (previewPageNum === 1) {
+            setThumbUrl(u);
+          }
+        })
+        .catch((err) => {
+          console.error('Preview error:', err);
+          if (previewPageNum > 1 && active) setPreviewPageNum((p) => Math.max(1, p - 1));
+        })
+        .finally(() => {
+          if (active) setIsPreviewLoading(false);
+        });
+    }
+
+    for (const neighbour of [previewPageNum - 1, previewPageNum + 1]) {
+      if (neighbour < 1 || neighbour > pageCount || cacheRef.current.has(neighbour)) continue;
+      controller.current
+        ?.previewPage(file, neighbour, 160)
+        .then((blob) => {
+          if (!cacheRef.current.has(neighbour)) {
+            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [file, previewPageNum, pageCount, phase, thumbUrl]);
 
   const processFile = useCallback(() => {
     if (!file) return;
@@ -213,14 +282,20 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
 
       {phase === 'options' && file && (
         <div className="phase-enter flex flex-col gap-5">
-          {/* Document Summary Card */}
-          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-            <div className="relative aspect-[1/1.3] w-24 shrink-0 rounded-xl border border-ink-faint bg-white overflow-hidden shadow-xs flex items-center justify-center mx-auto md:mx-0">
-              <Maximize className="h-8 w-8 text-amber-dark dark:text-amber" />
+          {/* Compact Document Summary Bar */}
+          <div className="flex items-center gap-3.5 rounded-2xl border bg-surface p-3.5 sm:p-4 dark:bg-surface-dark min-w-0 shadow-xs">
+            <div className="relative h-12 w-9 sm:h-14 sm:w-11 shrink-0 rounded-lg border border-ink-faint bg-white dark:bg-surface-2-dark overflow-hidden shadow-xs flex items-center justify-center">
+              {thumbUrl ? (
+                <img src={thumbUrl} alt={file.name} className="w-full h-full object-contain" />
+              ) : isPreviewLoading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-amber border-t-transparent" />
+              ) : (
+                <Maximize className="h-5 w-5 text-amber-dark dark:text-amber" />
+              )}
             </div>
 
-            <div className="flex flex-col gap-1 min-w-0">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber/15 text-amber-dark font-semibold">
                   {isTr ? 'Kenar Boşluğu' : 'Page Margins'}
                 </span>
@@ -233,19 +308,14 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
                   · {formattedFileSize}
                 </span>
               </div>
-              <h3 className="truncate text-sm font-semibold text-ink dark:text-ink-dark mt-1" title={file.name}>
+              <div className="truncate text-sm font-semibold text-ink dark:text-ink-dark mt-0.5" title={file.name}>
                 {file.name}
-              </h3>
-              <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                {isTr
-                  ? 'Sayfa içeriği orantılı olarak korunur ve kenarlara beyaz pay eklenir.'
-                  : 'Page content is scaled proportionally inside clean white margin boundaries.'}
-              </p>
+              </div>
             </div>
           </div>
 
-          {/* Configuration Card with Live Miniature Preview */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 rounded-2xl border bg-surface p-6 shadow-sm dark:bg-surface-dark items-start">
+          {/* Configuration Card with Live Dynamic Page Preview */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 rounded-2xl border bg-surface p-6 shadow-sm dark:bg-surface-dark items-start">
             <div className="flex flex-col gap-6">
               {/* Mode Tabs */}
               <div className="flex flex-col gap-2">
@@ -444,44 +514,93 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
               </div>
             </div>
 
-            {/* Live Interactive Visual Preview */}
-            <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-ink-faint bg-bg/40 dark:bg-bg-dark/40">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted mb-3">
-                {isTr ? 'Canlı Sayfa Önizlemesi' : 'Live Margin Preview'}
-              </span>
+            {/* Live Dynamic PDF Page Preview */}
+            <div className="flex flex-col items-center justify-center p-4 rounded-2xl border border-dashed border-ink-faint bg-bg/50 dark:bg-bg-dark/50 relative overflow-hidden min-h-[440px] select-none">
+              <div className="w-full flex items-center justify-between mb-3 px-1">
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark flex items-center gap-1.5">
+                  <Maximize className="h-3.5 w-3.5 text-amber-dark dark:text-amber" />
+                  {isTr ? 'Canlı Sayfa Önizlemesi' : 'Live Margin Preview'}
+                </span>
+                <span className="text-[11px] font-mono text-amber-dark dark:text-amber font-semibold bg-amber/10 px-2 py-0.5 rounded">
+                  {mode === 'uniform'
+                    ? `${uniformMm} mm`
+                    : mode === 'gutter'
+                    ? `+${gutterMm} mm ${isTr ? 'Sol' : 'Left'}`
+                    : `${topMm}/${rightMm}/${bottomMm}/${leftMm} mm`}
+                </span>
+              </div>
 
               {/* A4 Sheet Container */}
-              <div className="relative w-40 aspect-[1/1.414] bg-white border border-border shadow-md rounded-md overflow-hidden flex items-center justify-center p-1">
+              <div className="relative w-full max-w-[220px] aspect-[1/1.414] bg-white border border-border shadow-md rounded-md overflow-hidden flex items-center justify-center p-1.5">
+                {isPreviewLoading && !previewUrl && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-20">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-amber border-t-transparent" />
+                  </div>
+                )}
+
                 {/* Content boundary representing page margins */}
                 <div
-                  className="w-full h-full border border-dashed border-amber bg-amber/5 rounded-xs flex flex-col justify-between p-1.5 transition-all duration-300"
+                  className="w-full h-full flex items-center justify-center transition-all duration-200 border border-dashed border-amber/60 bg-amber/[0.04] rounded-xs overflow-hidden"
                   style={{
-                    paddingTop: `${Math.min(24, Math.max(4, activeTopMm * 0.5))}px`,
-                    paddingRight: `${Math.min(24, Math.max(4, activeRightMm * 0.5))}px`,
-                    paddingBottom: `${Math.min(24, Math.max(4, activeBottomMm * 0.5))}px`,
-                    paddingLeft: `${Math.min(24, Math.max(4, activeLeftMm * 0.5))}px`,
+                    paddingTop: `${Math.min(32, Math.max(2, activeTopMm * 0.7))}px`,
+                    paddingRight: `${Math.min(32, Math.max(2, activeRightMm * 0.7))}px`,
+                    paddingBottom: `${Math.min(32, Math.max(2, activeBottomMm * 0.7))}px`,
+                    paddingLeft: `${Math.min(32, Math.max(2, activeLeftMm * 0.7))}px`,
                   }}
                 >
-                  <div className="w-full h-1.5 bg-ink/20 rounded-xs" />
-                  <div className="space-y-1 my-auto">
-                    <div className="w-3/4 h-1 bg-ink/15 rounded-xs" />
-                    <div className="w-full h-1 bg-ink/15 rounded-xs" />
-                    <div className="w-2/3 h-1 bg-ink/15 rounded-xs" />
-                  </div>
-                  <div className="w-1/2 h-1 bg-ink/20 rounded-xs self-end" />
+                  {previewUrl ? (
+                    <img
+                      key={previewPageNum}
+                      src={previewUrl}
+                      alt={`Page ${previewPageNum}`}
+                      className="w-full h-full object-contain rounded-xs shadow-xs bg-white border border-ink-faint/30 animate-in fade-in zoom-in-95 duration-200"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-ink-muted text-xs p-2">
+                      <Maximize className="h-6 w-6 text-amber/40 mb-1" />
+                      <span>{isTr ? `Sayfa ${previewPageNum}` : `Page ${previewPageNum}`}</span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Gutter indicator */}
-                {activeLeftMm > 15 && (
-                  <div className="absolute left-1 top-0 bottom-0 flex flex-col justify-around py-3">
-                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
-                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
-                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
+                {/* Gutter punch-hole indicator if gutter / left margin >= 15mm */}
+                {activeLeftMm >= 15 && (
+                  <div className="absolute left-1 top-0 bottom-0 flex flex-col justify-around py-3 pointer-events-none">
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/50 bg-bg/80 shadow-xs" />
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/50 bg-bg/80 shadow-xs" />
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/50 bg-bg/80 shadow-xs" />
                   </div>
                 )}
               </div>
 
-              <div className="mt-3 text-[10px] font-mono text-ink-muted text-center">
+              {/* Page Navigation Chevrons */}
+              <div className="flex items-center gap-2 mt-4 bg-surface/90 dark:bg-surface-dark/90 px-3 py-1 rounded-full shadow-sm backdrop-blur-md border border-ink-faint dark:border-ink-faint-dark z-10 transition-all duration-200">
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum((p) => Math.max(1, p - 1))}
+                  disabled={previewPageNum <= 1}
+                  aria-label={isTr ? 'Önceki Sayfa' : 'Previous Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-mono min-w-[4.5rem] text-center font-medium select-none text-ink dark:text-ink-dark">
+                  {isTr
+                    ? `Sayfa ${previewPageNum} / ${pageCount}`
+                    : `Page ${previewPageNum} of ${pageCount}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPreviewPageNum((p) => Math.min(pageCount, p + 1))}
+                  disabled={previewPageNum >= pageCount}
+                  aria-label={isTr ? 'Sonraki Sayfa' : 'Next Page'}
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-bg dark:hover:bg-bg-dark text-ink dark:text-ink-dark transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="mt-2 text-[10px] font-mono text-ink-muted dark:text-ink-muted-dark text-center">
                 {isTr
                   ? `Sol: ${activeLeftMm}mm · Sağ: ${activeRightMm}mm\nÜst: ${activeTopMm}mm · Alt: ${activeBottomMm}mm`
                   : `L: ${activeLeftMm}mm · R: ${activeRightMm}mm\nT: ${activeTopMm}mm · B: ${activeBottomMm}mm`}

@@ -34,6 +34,8 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState<number>(0);
   const [maxSizeMB, setMaxSizeMB] = useState<number>(5); // Default to 5MB parts
+  const [thumbUrl, setThumbUrl] = useState<string | null>(null);
+  const [isThumbLoading, setIsThumbLoading] = useState<boolean>(false);
   const isTr = t.lang === 'tr';
   const isTrRef = useRef(isTr);
   isTrRef.current = isTr;
@@ -92,13 +94,15 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
   }, []);
 
   const reset = useCallback(() => {
+    if (thumbUrl) URL.revokeObjectURL(thumbUrl);
+    setThumbUrl(null);
     setResult(null);
     setProgress(null);
     setErrorMsg(null);
     setFile(null);
     setPageCount(0);
     setPhase('upload');
-  }, []);
+  }, [thumbUrl]);
 
   const addFiles = useCallback(
     async (files: File[]) => {
@@ -126,6 +130,30 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
     },
     []
   );
+
+  // First page thumbnail rendering
+  useEffect(() => {
+    if (!file || phase !== 'options') return;
+    let active = true;
+    setIsThumbLoading(true);
+
+    controller.current
+      ?.previewPage(file, 1, 140)
+      .then((blob) => {
+        if (!active) return;
+        setThumbUrl(URL.createObjectURL(blob));
+      })
+      .catch((err) => {
+        console.error('Thumbnail preview error:', err);
+      })
+      .finally(() => {
+        if (active) setIsThumbLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [file, phase]);
 
   const processFile = useCallback(() => {
     if (!file) return;
@@ -185,8 +213,14 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
         <div className="phase-enter flex flex-col gap-5">
           {/* Document Summary Card */}
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
-            <div className="relative aspect-[1/1.3] w-24 shrink-0 rounded-xl border border-ink-faint bg-white overflow-hidden shadow-xs flex items-center justify-center mx-auto md:mx-0">
-              <FileDown className="h-8 w-8 text-amber-dark dark:text-amber" />
+            <div className="relative aspect-[1/1.3] w-20 shrink-0 rounded-xl border border-ink-faint bg-white dark:bg-surface-2-dark overflow-hidden shadow-xs flex items-center justify-center mx-auto md:mx-0">
+              {thumbUrl ? (
+                <img src={thumbUrl} alt={file.name} className="w-full h-full object-contain" />
+              ) : isThumbLoading ? (
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber border-t-transparent" />
+              ) : (
+                <FileDown className="h-8 w-8 text-amber-dark dark:text-amber" />
+              )}
             </div>
 
             <div className="flex flex-col gap-1 min-w-0">
