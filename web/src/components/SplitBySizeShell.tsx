@@ -139,8 +139,13 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
 
   const preload = useCallback(() => controller.current?.preload(), []);
 
-  const fileSizeMB = file ? (file.size / (1024 * 1024)).toFixed(2) : '0';
-  const estParts = file ? Math.max(1, Math.ceil(parseFloat(fileSizeMB) / maxSizeMB)) : 1;
+  const formattedFileSize = file
+    ? file.size >= 1024 * 1024
+      ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+      : `${(file.size / 1024).toFixed(1)} KB`
+    : '0 KB';
+  const fileSizeMBNum = file ? file.size / (1024 * 1024) : 0;
+  const estParts = file ? Math.max(1, Math.ceil(fileSizeMBNum / maxSizeMB)) : 1;
 
   if (!wasmOk) {
     return (
@@ -187,7 +192,9 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
             <div className="flex flex-col gap-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber/15 text-amber-dark font-semibold">
-                  {isTr ? 'Büyük Doküman' : 'Large Document'}
+                  {file.size >= 5 * 1024 * 1024
+                    ? (isTr ? 'Büyük Doküman' : 'Large Document')
+                    : (isTr ? 'Belge Detayı' : 'Document Details')}
                 </span>
                 {pageCount > 0 && (
                   <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
@@ -195,7 +202,7 @@ export function SplitBySizeShell({ t = en, desktopAppUrl }: Props) {
                   </span>
                 )}
                 <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
-                  · {fileSizeMB} MB
+                  · {formattedFileSize}
                 </span>
               </div>
               <h3 className="truncate text-sm font-semibold text-ink dark:text-ink-dark mt-1" title={file.name}>
