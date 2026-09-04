@@ -100,7 +100,7 @@ export function PagePreview({ t, file, pageCount, getPage, backgroundColor = 'wh
     backgroundColor === 'transparent'
       ? 'bg-transparency-grid border-border'
       : backgroundColor === 'black'
-      ? 'bg-black border-zinc-800'
+      ? 'bg-black border-zinc-700/80 shadow-md'
       : 'bg-white border-border';
 
   return (

@@ -137,14 +137,18 @@ export function OptionsPanel({
               onClick={() => onBackgroundColor(opt)}
               className={`btn-motion flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border px-2 text-xs transition-colors duration-[120ms] ${
                 backgroundColor === opt
-                  ? 'border-accent bg-accent/10 font-medium text-accent dark:text-accent'
-                  : 'bg-surface text-ink-muted hover:bg-bg dark:bg-surface-dark dark:text-ink-muted-dark dark:hover:bg-bg-dark'
+                  ? 'border-amber bg-amber/10 font-semibold text-amber dark:border-amber-dark dark:bg-amber-dark/20 dark:text-amber-dark shadow-xs'
+                  : 'border-border bg-surface text-ink-muted hover:bg-bg hover:text-ink dark:border-border-dark dark:bg-surface-dark dark:text-ink-muted-dark dark:hover:bg-bg-dark dark:hover:text-ink-dark'
               }`}
             >
               <span
                 aria-hidden="true"
                 className={`h-3.5 w-3.5 shrink-0 rounded-full border ${
-                  opt === 'white' ? 'bg-white' : opt === 'black' ? 'bg-black' : ''
+                  opt === 'white'
+                    ? 'border-zinc-300 bg-white dark:border-zinc-500'
+                    : opt === 'black'
+                    ? 'border-zinc-400 bg-black dark:border-zinc-400'
+                    : 'border-zinc-300 dark:border-zinc-500'
                 }`}
                 style={
                   opt === 'transparent'
