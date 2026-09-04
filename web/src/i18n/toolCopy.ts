@@ -36,7 +36,7 @@ const rangeEn: QA = {
 };
 const brokenEn: QA = {
   q: "What happens with password-protected or damaged PDFs?",
-  a: "They are skipped with a clear message, and the rest of your files continue converting. Password-protected files cannot be opened yet; support for entering a password is planned.",
+  a: 'Password-protected PDF files cannot be processed by other tools until their password is removed. You can first use our free "Unlock PDF" tool on this website to remove the password with 100% privacy, and then freely use your unlocked file across any of our tools. Corrupted or unreadable PDF files are safely skipped with a clear error message.',
 };
 
 const stepsEn = (fmt: string): Step[] => [
@@ -46,43 +46,43 @@ const stepsEn = (fmt: string): Step[] => [
   },
   {
     name: "Choose resolution and pages",
-    text: "Pick a DPI preset (150 is recommended) and, if you need it, a page range like 1-5,8.",
+    text: "Pick a DPI preset (150 is recommended for web/screen, 300 for print) and set an optional page range.",
   },
   {
     name: "Convert and download",
-    text: `Press Convert and download your ${fmt} file, or a ZIP when there are several pages.`,
+    text: `Press Convert to download your ${fmt} file, or a ZIP archive when converting multiple pages.`,
   },
 ];
 
 const privacyTr: QA = {
   q: "PDF dosyalarım bir sunucuya yükleniyor mu?",
-  a: "Hayır. Dönüşüm, WebAssembly kullanılarak tamamen tarayıcının içinde çalışır. Dosyaların cihazında okunur ve görüntüler yine cihazına kaydedilir — hiçbir kopya bir yere iletilmez. Kaynak kodu açıktır; bu iddia doğrulanabilir.",
+  a: "Hayır. Dönüşüm, WebAssembly kullanılarak tamamen tarayıcının içinde çalışır. Dosyalarınız cihazınızda okunur ve çıktılar yine cihazınıza kaydedilir — hiçbir kopya bir yere iletilmez.",
 };
 const limitsTr: QA = {
   q: "Dosya boyutu veya sayfa sınırı var mı?",
-  a: "Sabit bir sınır yok. İşi kendi cihazın yaptığı için yüzlerce sayfalık belgeler bile sayfa sayfa, bellek sorunu yaşanmadan dönüştürülür. Çok büyük işler yalnızca daha uzun sürer.",
+  a: "Sabit bir sınır yok. İşi kendi cihazınız yaptığı için yüzlerce sayfalık belgeler bile bellek sorunu yaşanmadan işlenir. Çok büyük işler yalnızca daha uzun sürer.",
 };
 const rangeTr: QA = {
   q: "Yalnızca bazı sayfaları dönüştürebilir miyim?",
-  a: "Evet. Sayfalar alanına 1-5,8,11-13 gibi bir aralık yaz. Tek sayfalar ve aralıklar virgülle ayrılarak birlikte kullanılabilir.",
+  a: "Evet. Sayfalar alanına '1-5, 8, 11-13' gibi sayfa numaraları girerek tek sayfaları veya aralıkları dönüştürebilirsiniz.",
 };
 const brokenTr: QA = {
   q: "Şifreli veya hasarlı PDF dosyalarında ne olur?",
-  a: "Bu dosyalar açık bir mesajla atlanır ve kalan dosyaların dönüşümü sürer. Şifreli dosyalar şimdilik açılamıyor; şifre girme desteği planlanıyor.",
+  a: 'Şifre korumalı PDF dosyaları, parolaları kaldırılmadan diğer araçlarımızda doğrudan işlenemez. Belgelerinizi kullanmadan önce sitemizdeki ücretsiz "PDF Şifre Kaldır" (Unlock PDF) aracını kullanarak parolanızı çözebilir, ardından kilidi açılan dosyanızı tüm araçlarımızda güvenle işleyebilirsiniz. Hasarlı veya açılamayan dosyalar ise net bir uyarı mesajıyla güvenli şekilde atlanır.',
 };
 
 const stepsTr = (fmt: string): Step[] => [
   {
-    name: "PDF dosyanı ekle",
-    text: "Bir veya birden çok PDF dosyasını sayfaya bırak ya da tıklayıp seç.",
+    name: "PDF Belgenizi Ekleyin",
+    text: "Dönüştürmek istediğiniz bir veya birden fazla PDF dosyasını yükleyin.",
   },
   {
-    name: "Çözünürlük ve sayfaları seç",
-    text: "Bir DPI ön ayarı seç (önerilen 150) ve gerekiyorsa 1-5,8 gibi bir sayfa aralığı gir.",
+    name: "Çözünürlük ve Sayfa Ayarı",
+    text: "İhtiyacınıza göre DPI kalitesini (Web için 150 DPI, Baskı için 300 DPI) ve sayfa aralığını belirleyin.",
   },
   {
-    name: "Dönüştür ve indir",
-    text: `Dönüştür düğmesine bas; tek sayfada ${fmt} dosyasını, birden çok sayfada ZIP arşivini indir.`,
+    name: "Dönüştürün ve İndirin",
+    text: `Dönüştür butonuna tıklayarak tek sayfayı doğrudan .${fmt.toLowerCase()}, çoklu sayfaları ise .zip arşivi olarak indirin.`,
   },
 ];
 
@@ -113,17 +113,17 @@ export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
         },
       ],
       faq: [
-        privacyEn,
         {
-          q: "Which resolution should I choose?",
+          q: "Which resolution should I choose for PNG?",
           a: "150 DPI is ideal for most uses (presentations, documents, web viewing). Choose 300 DPI for high-quality printing, and 100 DPI when you want smaller files for quick sharing.",
         },
-        rangeEn,
-        limitsEn,
-        brokenEn,
         {
-          q: "How do I get the results?",
-          a: "A single converted page downloads directly as a PNG file. Multiple pages are packed into one clean ZIP archive, named after your document.",
+          q: "Can I convert only specific pages to PNG?",
+          a: "Yes. Enter custom page numbers or ranges (such as 1-5, 8, 11-13) in the Pages field to convert only the pages you need.",
+        },
+        {
+          q: "How are the converted PNG files delivered?",
+          a: "A single converted page downloads directly as a PNG file. When converting multiple pages, all PNG images are neatly packed into one ZIP archive, named after your document.",
         },
       ],
       crossLink: {
@@ -156,16 +156,16 @@ export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
         },
       ],
       faq: [
-        privacyTr,
         {
-          q: "Hangi çözünürlüğü seçmeliyim?",
+          q: "PNG için hangi çözünürlüğü seçmeliyim?",
           a: "150 DPI çoğu kullanım için idealdir (sunumlar, web ve belgeler). Yüksek kaliteli baskı için 300 DPI, küçük dosya boyutu ve hızlı paylaşım için 100 DPI seçebilirsiniz.",
         },
-        rangeTr,
-        limitsTr,
-        brokenTr,
         {
-          q: "Sonuçları nasıl alırım?",
+          q: "Yalnızca belirli sayfaları PNG'ye dönüştürebilir miyim?",
+          a: "Evet. Sayfalar alanına '1-5, 8, 11-13' gibi sayfa numaraları veya aralıklar girerek sadece ihtiyacınız olan sayfaları dönüştürebilirsiniz.",
+        },
+        {
+          q: "Dönüştürülen PNG dosyaları nasıl indirilir?",
           a: "Tek sayfalık çıktılar doğrudan .png dosyası olarak iner. Çok sayfalı belgeler ise her sayfa ayrı bir PNG olacak şekilde tek bir ZIP arşivinde toplanır.",
         },
       ],
@@ -178,27 +178,27 @@ export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
   },
   jpg: {
     en: {
-      title: "PDF to JPG — convert in your browser, files never uploaded",
+      title: "PDF to JPG — Convert PDF to Compressed JPG Images",
       description:
-        "Convert PDF pages to JPG images, free and without limits. Everything runs in your browser — your files never leave your device.",
+        "Convert PDF pages to optimized JPG images, free and without limits. Everything runs in your browser — your files never leave your device.",
       h1: "PDF to JPG",
       tagline:
-        "Convert PDF pages to JPG images — free, no limits, and your files stay on your device.",
+        "Convert PDF pages into lightweight JPG images — free, unlimited, and 100% private.",
       howToName: "How to convert PDF to JPG in your browser",
       howItWorks: "How it works",
       faqTitle: "Frequently asked questions",
       steps: stepsEn("JPG"),
       faq: [
-        privacyEn,
         {
           q: "When is JPG better than PNG?",
           a: "JPG files are much smaller for photographs and scanned pages, which makes them easier to email or upload. For text, diagrams, or anything that needs sharp edges and lossless quality, PNG is the better choice.",
         },
-        rangeEn,
-        limitsEn,
-        brokenEn,
         {
-          q: "How do I get the results?",
+          q: "Can I convert specific page ranges to JPG?",
+          a: "Yes. Enter a page range like 1-5, 8 in the Pages field to convert only selected pages.",
+        },
+        {
+          q: "How are multi-page JPG files downloaded?",
           a: "A single converted page downloads directly as a JPG file. Multiple pages are packed into one ZIP archive, named after your document.",
         },
       ],
@@ -208,28 +208,28 @@ export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
       },
     },
     tr: {
-      title: "PDF'i JPG'ye çevir — tarayıcında, dosyalar yüklenmeden",
+      title: "PDF'i JPG'ye Çevirme — Hızlı & Optimize Görseller",
       description:
-        "PDF sayfalarını ücretsiz ve sınırsız biçimde JPG görüntülerine dönüştür. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
+        "PDF sayfalarını optimize edilmiş JPG görsellerine dönüştürün. Dosyalarınız sunucuya yüklenmeden %100 tarayıcınızda işlenir.",
       h1: "PDF'ten JPG'ye",
       tagline:
-        "PDF sayfalarını JPG görüntülerine dönüştür — ücretsiz, sınırsız ve dosyaların cihazında kalır.",
+        "PDF sayfalarını hafif ve paylaşımı kolay JPG görsellerine dönüştürün — ücretsiz, sınırsız ve gizli.",
       howToName: "Tarayıcıda PDF'ten JPG'ye dönüştürme",
       howItWorks: "Nasıl çalışır",
-      faqTitle: "Sık sorulan sorular",
+      faqTitle: "Sıkça Sorulan Sorular",
       steps: stepsTr("JPG"),
       faq: [
-        privacyTr,
         {
           q: "JPG ne zaman PNG'den daha iyidir?",
-          a: "Fotoğraflar ve taranmış sayfalarda JPG dosyaları çok daha küçüktür; e-postayla göndermesi ve yüklemesi kolaylaşır. Metin, şema ya da keskin kenar ve kayıpsız kalite gerektiren içerikte ise PNG daha doğru seçimdir.",
+          a: "Fotoğraflar ve taranmış sayfalarda JPG dosyaları çok daha küçüktür; e-postayla göndermesi ve yüklemesi kolaylaşır. Keskin metinler, şemalar ya da kayıpsız kalite gerektiren içeriklerde ise PNG daha doğru seçimdir.",
         },
-        rangeTr,
-        limitsTr,
-        brokenTr,
         {
-          q: "Sonuçları nasıl alırım?",
-          a: "Tek sayfa doğrudan JPG dosyası olarak iner. Birden çok sayfa, belgenin adını taşıyan tek bir ZIP arşivinde toplanır.",
+          q: "Sadece belirli sayfaları JPG yapabilir miyim?",
+          a: "Evet. Sayfalar alanına '1-5, 8' gibi aralıklar girerek sadece istediğiniz sayfaları JPG olarak dışa aktarabilirsiniz.",
+        },
+        {
+          q: "Çıktıları nasıl alırım?",
+          a: "Tek sayfa doğrudan JPG dosyası olarak iner. Birden çok sayfa ise belgenin adını taşıyan tek bir ZIP arşivinde toplanır.",
         },
       ],
       crossLink: {

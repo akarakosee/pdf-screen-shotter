@@ -8,7 +8,17 @@ interface Props {
 
 const { lang, toolFaq = [] } = Astro.props;
 const { title, items } = globalFaqCopy[lang];
-const allFaq = [...toolFaq, ...items];
+
+// Deduplicate questions to guarantee no overlapping or repeated entries across tools
+const seenQuestions = new Set<string>();
+const allFaq: { q: string; a: string }[] = [];
+for (const item of [...toolFaq, ...items]) {
+  const norm = item.q.trim().toLowerCase();
+  if (!seenQuestions.has(norm)) {
+    seenQuestions.add(norm);
+    allFaq.push(item);
+  }
+}
 ---
 
 <section class="reveal mt-10 mx-auto max-w-[640px] px-4 pb-16" data-reveal>

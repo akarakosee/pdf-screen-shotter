@@ -35,7 +35,15 @@ const p = Astro.props;
 
 import { globalFaqCopy } from '../i18n/globalFaq';
 
-const allFaqs = [...(p.faq || []), ...globalFaqCopy[p.lang].items];
+const seenSchemaFaq = new Set<string>();
+const allFaqs: QA[] = [];
+for (const f of [...(p.faq || []), ...globalFaqCopy[p.lang].items]) {
+  const norm = f.q.trim().toLowerCase();
+  if (!seenSchemaFaq.has(norm)) {
+    seenSchemaFaq.add(norm);
+    allFaqs.push(f);
+  }
+}
 
 const schema = {
   '@context': 'https://schema.org',

@@ -9,7 +9,7 @@ export const globalFaqCopy: Record<'en' | 'tr', { title: string; items: QA[] }> 
     items: [
       {
         q: 'Why do my PDFs load or process slowly?',
-        a: 'Since there is no server involved, all processing speed depends entirely on your computer and browser\'s hardware. Large files may take longer on older devices or if your browser is under heavy load.',
+        a: "Since there is no server involved, all processing speed depends entirely on your computer and browser's hardware. Large files may take longer on older devices or if your browser is under heavy load.",
       },
       {
         q: 'Is there a file size or page limit?',
@@ -17,7 +17,7 @@ export const globalFaqCopy: Record<'en' | 'tr', { title: string; items: QA[] }> 
       },
       {
         q: 'What happens with password-protected or damaged PDFs?',
-        a: 'They are skipped with a clear message. Password-protected files cannot be opened yet; support for entering a password is planned.',
+        a: 'Password-protected PDF files cannot be processed by other tools until their password is removed. You can first use our free "Unlock PDF" tool on this website to remove the password with 100% privacy, and then freely use your unlocked file across any of our tools. Corrupted or unreadable PDF files are safely skipped with a clear error message.',
       },
       {
         q: 'Do I need an internet connection to use the tools?',
@@ -34,7 +34,7 @@ export const globalFaqCopy: Record<'en' | 'tr', { title: string; items: QA[] }> 
     ],
   },
   tr: {
-    title: 'Sık sorulan sorular',
+    title: 'Sıkça Sorulan Sorular',
     items: [
       {
         q: 'PDF dosyalarım neden yavaş yükleniyor veya yavaş işleniyor?',
@@ -42,11 +42,11 @@ export const globalFaqCopy: Record<'en' | 'tr', { title: string; items: QA[] }> 
       },
       {
         q: 'Dosya boyutu veya sayfa sınırı var mı?',
-        a: 'Sabit bir sınır yok. İşi kendi cihazın yaptığı için yüzlerce sayfalık belgeler bile bellek sorunu yaşanmadan işlenir. Çok büyük işler yalnızca daha uzun sürer.',
+        a: 'Sabit bir sınır yok. İşi kendi cihazınız yaptığı için yüzlerce sayfalık belgeler bile bellek sorunu yaşanmadan işlenir. Çok büyük işler yalnızca daha uzun sürer.',
       },
       {
         q: 'Şifreli veya hasarlı PDF dosyalarında ne olur?',
-        a: 'Bu dosyalar açık bir mesajla atlanır. Şifreli dosyalar şimdilik açılamıyor; şifre girme desteği planlanıyor.',
+        a: 'Şifre korumalı PDF dosyaları, parolaları kaldırılmadan diğer araçlarımızda doğrudan işlenemez. Belgelerinizi kullanmadan önce sitemizdeki ücretsiz "PDF Şifre Kaldır" (Unlock PDF) aracını kullanarak parolanızı çözebilir, ardından kilidi açılan dosyanızı tüm araçlarımızda güvenle işleyebilirsiniz. Hasarlı veya açılamayan dosyalar ise net bir uyarı mesajıyla güvenli şekilde atlanır.',
       },
       {
         q: 'Araçları kullanmak için internet bağlantısına ihtiyacım var mı?',
