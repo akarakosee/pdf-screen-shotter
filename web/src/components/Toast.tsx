@@ -6,11 +6,31 @@ export interface ToastData {
   message: string;
 }
 
-export function Toast({ kind, message, onClose }: ToastData & { onClose: () => void }) {
+export interface ToastProps {
+  toast?: ToastData | null;
+  data?: ToastData | null;
+  kind?: 'info' | 'error';
+  message?: string;
+  onClear?: () => void;
+  onDismiss?: () => void;
+  onClose?: () => void;
+}
+
+export function Toast(props: ToastProps) {
+  const toastObj = props.toast || props.data || (props.message ? { kind: props.kind || 'info', message: props.message } : null);
+  const handleClose = props.onClose || props.onClear || props.onDismiss || (() => {});
+
   useEffect(() => {
-    const id = setTimeout(onClose, 5000);
+    if (!toastObj) return;
+    const id = setTimeout(handleClose, 5000);
     return () => clearTimeout(id);
-  }, [message, onClose]);
+  }, [toastObj, handleClose]);
+
+  if (!toastObj || !toastObj.message) {
+    return null;
+  }
+
+  const { kind, message } = toastObj;
 
   return (
     <div
@@ -23,8 +43,9 @@ export function Toast({ kind, message, onClose }: ToastData & { onClose: () => v
         {message}
       </span>
       <button 
-        onClick={onClose} 
-        className="flex-shrink-0 text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark transition-colors"
+        type="button"
+        onClick={handleClose} 
+        className="flex-shrink-0 text-ink-muted hover:text-ink dark:text-ink-muted-dark dark:hover:text-ink-dark transition-colors cursor-pointer"
         aria-label="Close"
       >
         <X className="h-4 w-4" />
