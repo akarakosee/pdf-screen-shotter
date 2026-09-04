@@ -97,14 +97,6 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
             </Button>
           </div>
         )}
-
-        {crossLink && !isError && (
-          <p className="text-xs text-ink-muted dark:text-ink-muted-dark pt-1">
-            <a href={crossLink.href} className="underline underline-offset-2 hover:text-ink dark:hover:text-ink-dark">
-              {crossLink.label}
-            </a>
-          </p>
-        )}
       </div>
     </div>
   );
