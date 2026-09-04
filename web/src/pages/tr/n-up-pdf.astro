@@ -7,17 +7,6 @@ import { tr } from '../../i18n/tr';
 const copy = nupCopy.tr;
 ---
 
-<ToolPage
-  lang="tr"
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
-  faqTitle={copy.faqTitle}
-  faq={copy.faq}
->
+<ToolPage lang="tr" {...copy}>
   <NUpShell client:load t={tr} />
 </ToolPage>

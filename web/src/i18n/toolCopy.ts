@@ -22,23 +22,6 @@ export interface ToolCopy {
   crossLink?: { href: string; label: string };
 }
 
-const privacyEn: QA = {
-  q: "Are my PDF files uploaded to a server?",
-  a: "No. The conversion runs entirely inside your browser using WebAssembly. Your files are read locally and the images are saved back to your device — no copy is transmitted anywhere. The source code is public, so this can be verified.",
-};
-const limitsEn: QA = {
-  q: "Is there a file size or page limit?",
-  a: "No fixed limits. Because your own device does the work, even documents with hundreds of pages convert page by page without running out of memory. Very large jobs simply take longer.",
-};
-const rangeEn: QA = {
-  q: "Can I convert only some pages?",
-  a: "Yes. Enter a page range like 1-5,8,11-13 in the Pages field. Single pages and ranges can be combined, separated by commas.",
-};
-const brokenEn: QA = {
-  q: "What happens with password-protected or damaged PDFs?",
-  a: 'Password-protected PDF files cannot be processed by other tools until their password is removed. You can first use our free "Unlock PDF" tool on this website to remove the password with 100% privacy, and then freely use your unlocked file across any of our tools. Corrupted or unreadable PDF files are safely skipped with a clear error message.',
-};
-
 const stepsEn = (fmt: string): Step[] => [
   {
     name: "Add your PDF",
@@ -53,23 +36,6 @@ const stepsEn = (fmt: string): Step[] => [
     text: `Press Convert to download your ${fmt} file, or a ZIP archive when converting multiple pages.`,
   },
 ];
-
-const privacyTr: QA = {
-  q: "PDF dosyalarım bir sunucuya yükleniyor mu?",
-  a: "Hayır. Dönüşüm, WebAssembly kullanılarak tamamen tarayıcının içinde çalışır. Dosyalarınız cihazınızda okunur ve çıktılar yine cihazınıza kaydedilir — hiçbir kopya bir yere iletilmez.",
-};
-const limitsTr: QA = {
-  q: "Dosya boyutu veya sayfa sınırı var mı?",
-  a: "Sabit bir sınır yok. İşi kendi cihazınız yaptığı için yüzlerce sayfalık belgeler bile bellek sorunu yaşanmadan işlenir. Çok büyük işler yalnızca daha uzun sürer.",
-};
-const rangeTr: QA = {
-  q: "Yalnızca bazı sayfaları dönüştürebilir miyim?",
-  a: "Evet. Sayfalar alanına '1-5, 8, 11-13' gibi sayfa numaraları girerek tek sayfaları veya aralıkları dönüştürebilirsiniz.",
-};
-const brokenTr: QA = {
-  q: "Şifreli veya hasarlı PDF dosyalarında ne olur?",
-  a: 'Şifre korumalı PDF dosyaları, parolaları kaldırılmadan diğer araçlarımızda doğrudan işlenemez. Belgelerinizi kullanmadan önce sitemizdeki ücretsiz "PDF Şifre Kaldır" (Unlock PDF) aracını kullanarak parolanızı çözebilir, ardından kilidi açılan dosyanızı tüm araçlarımızda güvenle işleyebilirsiniz. Hasarlı veya açılamayan dosyalar ise net bir uyarı mesajıyla güvenli şekilde atlanır.',
-};
 
 const stepsTr = (fmt: string): Step[] => [
   {
