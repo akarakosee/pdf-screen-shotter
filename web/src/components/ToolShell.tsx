@@ -424,7 +424,7 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
     <div
       ref={regionRef}
       className="flex flex-col gap-5"
-      style={regionMinHeight != null ? { minHeight: regionMinHeight } : undefined}
+      style={phase === 'processing' && regionMinHeight != null ? { minHeight: regionMinHeight } : undefined}
     >
       {phase === 'upload' && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">

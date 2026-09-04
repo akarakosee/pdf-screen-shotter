@@ -45,7 +45,7 @@ export function ResultPanel({ t, result, skipped, crossLink, onDownload, onConve
   return (
     <div
       role="status"
-      className="phase-enter flex flex-col justify-center gap-5 w-full max-w-[800px] min-h-[380px] mx-auto rounded-2xl border border-amber/30 bg-surface p-8 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]"
+      className="phase-enter flex flex-col justify-center gap-5 w-full max-w-[720px] mx-auto rounded-2xl border border-amber/30 bg-surface p-6 sm:p-7 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]"
     >
       <div className="flex flex-col items-center justify-center text-center gap-4 py-2">
         <div className={`flex h-12 w-12 items-center justify-center rounded-full ${isError ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'}`}>
