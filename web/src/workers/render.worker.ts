@@ -50,7 +50,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
     try {
       await ready;
       if (msg.type === 'preview-page')
-        await previewPage(msg.file, msg.dpi ?? PREVIEW_DPI, msg.page, msg.requestId);
+        await previewPage(msg.file, msg.dpi ?? PREVIEW_DPI, msg.page, msg.requestId, msg.backgroundColor);
       else if (msg.type === 'inspect') await inspect(msg.fileId, msg.file);
       else if (msg.type === 'start')
         await run(
@@ -178,6 +178,7 @@ async function previewPage(
   dpi: number,
   page: number,
   requestId: string,
+  backgroundColor: 'white' | 'black' | 'transparent' = 'white',
 ): Promise<void> {
   let doc;
   try {
@@ -193,7 +194,7 @@ async function previewPage(
     return;
   }
   try {
-    const out = await engine.renderPage(doc, page, dpi, 'png');
+    const out = await engine.renderPage(doc, page, dpi, 'png', 0.8, backgroundColor);
     post({
       type: 'preview-page-done',
       requestId,

@@ -309,6 +309,25 @@
       0 4px 0 rgba(255, 255, 255, 0.03);
   }
 
+  .bg-transparency-grid {
+    background-image: conic-gradient(
+      #e2e8f0 90deg,
+      #ffffff 90deg 180deg,
+      #e2e8f0 180deg 270deg,
+      #ffffff 270deg
+    );
+    background-size: 16px 16px;
+  }
+  .dark .bg-transparency-grid {
+    background-image: conic-gradient(
+      #334155 90deg,
+      #1e293b 90deg 180deg,
+      #334155 180deg 270deg,
+      #1e293b 270deg
+    );
+    background-size: 16px 16px;
+  }
+
   /* Progress fill: compositor-friendly scaleX; the completed portion softens
      from teal into a faint amber tail (element-level fill, not a page gradient). */
   .progress-fill {

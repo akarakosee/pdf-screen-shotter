@@ -123,7 +123,7 @@ export type UiToWorkerMessage =
       jpgQuality?: number;
       deliveryMethod?: 'zip' | 'individual';
     }
-  | { type: 'preview-page'; file: ArrayBuffer; dpi: number; page: number; requestId: string } // ADR-007: filmstrip thumbnails
+  | { type: 'preview-page'; file: ArrayBuffer; dpi: number; page: number; requestId: string; backgroundColor?: 'white' | 'black' | 'transparent' } // ADR-007: filmstrip thumbnails
   | { type: 'inspect'; fileId: string; file: ArrayBuffer } // ADR-003: page count, no render
   | { type: 'merge-start'; files: ArrayBuffer[]; meta: FileMeta[] } // ADR-008: combine N PDFs into one
   | { type: 'split-start'; file: ArrayBuffer; meta: FileMeta; selectedPages: number[]; mode: 'extract' | 'burst' }

@@ -15,22 +15,27 @@ interface Props {
   file: File;
   pageCount: number;
   getPage: (page: number) => Promise<Blob>;
+  backgroundColor?: 'white' | 'black' | 'transparent';
 }
 
 type LoadState = 'loading' | 'error' | 'ready';
 
-export function PagePreview({ t, file, pageCount, getPage }: Props) {
+export function PagePreview({ t, file, pageCount, getPage, backgroundColor = 'white' }: Props) {
   const [page, setPage] = useState(1);
   const [state, setState] = useState<LoadState>('loading');
   const [url, setUrl] = useState<string | null>(null);
-  const cacheRef = useRef(new Map<number, string>());
+  const cacheRef = useRef(new Map<string, string>());
   const getPageRef = useRef(getPage);
   getPageRef.current = getPage;
 
-  // New file → drop the whole cache (URLs belong to the previous file).
+  // New file or background color change → drop the whole cache (URLs belong to previous file/background).
   useEffect(() => {
     cacheRef.current.forEach((u) => URL.revokeObjectURL(u));
     cacheRef.current = new Map();
+  }, [file, backgroundColor]);
+
+  // Reset page when file changes
+  useEffect(() => {
     setPage(1);
   }, [file]);
 
@@ -44,7 +49,8 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
   // neighbours so Previous/Next after the first view is instant.
   useEffect(() => {
     let cancelled = false;
-    const cached = cacheRef.current.get(page);
+    const cacheKey = `${page}_${backgroundColor}`;
+    const cached = cacheRef.current.get(cacheKey);
     if (cached) {
       setUrl(cached);
       setState('ready');
@@ -56,7 +62,7 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
         .then((blob) => {
           if (cancelled) return;
           const u = URL.createObjectURL(blob);
-          cacheRef.current.set(page, u);
+          cacheRef.current.set(cacheKey, u);
           setUrl(u);
           setState('ready');
         })
@@ -66,12 +72,13 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
     }
 
     for (const neighbour of [page - 1, page + 1]) {
-      if (neighbour < 1 || neighbour > pageCount || cacheRef.current.has(neighbour)) continue;
+      const neighbourKey = `${neighbour}_${backgroundColor}`;
+      if (neighbour < 1 || neighbour > pageCount || cacheRef.current.has(neighbourKey)) continue;
       getPageRef
         .current(neighbour)
         .then((blob) => {
-          if (!cacheRef.current.has(neighbour)) {
-            cacheRef.current.set(neighbour, URL.createObjectURL(blob));
+          if (!cacheRef.current.has(neighbourKey)) {
+            cacheRef.current.set(neighbourKey, URL.createObjectURL(blob));
           }
         })
         .catch(() => {
@@ -84,10 +91,17 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageCount]);
+  }, [page, pageCount, backgroundColor, getPage]);
 
   const goPrev = () => setPage((p) => Math.max(1, p - 1));
   const goNext = () => setPage((p) => Math.min(pageCount, p + 1));
+
+  const bgClasses =
+    backgroundColor === 'transparent'
+      ? 'bg-transparency-grid border-border'
+      : backgroundColor === 'black'
+      ? 'bg-black border-zinc-800'
+      : 'bg-white border-border';
 
   return (
     <div
@@ -101,10 +115,10 @@ export function PagePreview({ t, file, pageCount, getPage }: Props) {
       <div className="flex flex-1 min-h-0 w-full items-center justify-center p-[5px]">
         {state === 'ready' && url ? (
           <img
-            key={page}
+            key={`${page}_${backgroundColor}`}
             src={url}
             alt={fmt(t.pageThumbnailAlt, { n: page })}
-            className="paper-page pop-in max-h-80 w-auto max-w-full border object-contain"
+            className={`paper-page pop-in max-h-80 w-auto max-w-full border object-contain ${bgClasses}`}
           />
         ) : state === 'error' ? (
           <p

@@ -168,14 +168,19 @@ export class JobController {
    * stay small and fast regardless of what resolution will actually be
    * exported. Correlated by requestId so many concurrent page requests
    * (scrolling the filmstrip, multiple queued files) resolve independently. */
-  previewPage(file: File, page: number, dpi: number = PREVIEW_DPI): Promise<Blob> {
+  previewPage(
+    file: File,
+    page: number,
+    dpi: number = PREVIEW_DPI,
+    backgroundColor: 'white' | 'black' | 'transparent' = 'white',
+  ): Promise<Blob> {
     if (this.disabled) return Promise.reject(new Error('disabled'));
     const requestId = `p${++JobController.nextRequestId}`;
     const result = new Promise<Blob>((resolve, reject) => {
       this.pendingPreviewPages.set(requestId, { resolve, reject });
     });
     void file.arrayBuffer().then((buf) => {
-      this.post({ type: 'preview-page', file: buf, dpi, page, requestId }, [buf]);
+      this.post({ type: 'preview-page', file: buf, dpi, page, requestId, backgroundColor }, [buf]);
     });
     return result;
   }

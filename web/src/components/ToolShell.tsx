@@ -523,7 +523,15 @@ export function ToolShell({ format, t = en, crossLink = null, desktopAppUrl }: P
                   t={t}
                   file={activeFile}
                   pageCount={activeChip.pageCount}
-                  getPage={(page) => controller().previewPage(activeFile, page)}
+                  backgroundColor={activeConfig.backgroundColor}
+                  getPage={(page) =>
+                    controller().previewPage(
+                      activeFile,
+                      page,
+                      PREVIEW_DPI,
+                      activeConfig.backgroundColor,
+                    )
+                  }
                 />
               ) : (
                 <div className="flex flex-1 items-center justify-center px-3 pb-2">
