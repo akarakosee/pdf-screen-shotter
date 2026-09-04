@@ -203,7 +203,7 @@ export function PdfToSvgShell({ t = en, desktopAppUrl }: Props) {
       )}
 
       {phase === 'options' && file && (
-        <div className="phase-enter max-w-xl mx-auto w-full flex flex-col gap-4">
+        <div className="phase-enter w-full flex flex-col gap-4">
           <div className="rounded-2xl border bg-surface p-5 sm:p-6 shadow-sm dark:bg-surface-dark flex flex-col gap-5">
             {/* File Info & Format Conversion Header */}
             <div className="flex items-center gap-4">
