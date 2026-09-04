@@ -45,7 +45,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   }
   // Reset on arrival (not when the queued run starts) so a cancel sent while
   // earlier messages are still processing isn't lost.
-  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start' || msg.type === 'split-half-start' || msg.type === 'split-by-size-start' || msg.type === 'extract-by-keyword-start') cancelled = false;
+  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start' || msg.type === 'split-half-start' || msg.type === 'split-by-size-start' || msg.type === 'extract-by-keyword-start' || msg.type === 'add-margins-start') cancelled = false;
   queue = queue.then(async () => {
     try {
       await ready;
@@ -108,6 +108,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'split-half-start') await splitHalfRun(msg.file, msg.meta, msg.splitDirection, msg.readingOrder, msg.skipFirstPage);
       else if (msg.type === 'split-by-size-start') await splitBySizeRun(msg.file, msg.meta, msg.maxSizeMB);
       else if (msg.type === 'extract-by-keyword-start') await extractByKeywordRun(msg.file, msg.meta, msg.keyword, msg.caseSensitive, msg.matchWholeWord);
+      else if (msg.type === 'add-margins-start') await addMarginsRun(msg.file, msg.meta, (msg as any).margins ?? (msg as any).marginPt ?? 36);
       else if (msg.type.endsWith('-start')) {
         // Fallback for unimplemented tools to prevent UI hanging during testing
         const doneEvent = msg.type.replace('-start', '-done') as any;
@@ -1337,11 +1338,29 @@ async function splitHalfRun(
 }
 
 
-async function addMarginsRun(file: ArrayBuffer, meta: FileMeta, marginPt: number): Promise<void> {
+async function addMarginsRun(
+  file: ArrayBuffer,
+  meta: FileMeta,
+  margins: number | { top?: number; right?: number; bottom?: number; left?: number }
+): Promise<void> {
   const started = Date.now();
   const pdfLib = await import('pdf-lib');
   let output: Blob | undefined;
   let outputName: string | undefined;
+
+  let topPt = 0;
+  let rightPt = 0;
+  let bottomPt = 0;
+  let leftPt = 0;
+
+  if (typeof margins === 'number') {
+    topPt = rightPt = bottomPt = leftPt = margins;
+  } else if (margins && typeof margins === 'object') {
+    topPt = Number(margins.top) || 0;
+    rightPt = Number(margins.right) || 0;
+    bottomPt = Number(margins.bottom) || 0;
+    leftPt = Number(margins.left) || 0;
+  }
   
   try {
     const doc = await pdfLib.PDFDocument.load(file, { ignoreEncryption: true });
@@ -1352,8 +1371,8 @@ async function addMarginsRun(file: ArrayBuffer, meta: FileMeta, marginPt: number
       const page = pages[i];
       const { width, height } = page.getSize();
       
-      page.setSize(width + marginPt * 2, height + marginPt * 2);
-      page.translateContent(marginPt, marginPt);
+      page.setSize(width + leftPt + rightPt, height + topPt + bottomPt);
+      page.translateContent(leftPt, bottomPt);
       
       post({
         type: 'add-margins-progress',

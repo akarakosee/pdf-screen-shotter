@@ -153,7 +153,7 @@ export type UiToWorkerMessage =
       readingOrder?: 'ltr' | 'rtl';
       skipFirstPage?: boolean;
     }
-  | { type: 'add-margins-start'; file: ArrayBuffer; meta: FileMeta; marginPt: number }
+  | { type: 'add-margins-start'; file: ArrayBuffer; meta: FileMeta; margins?: number | { top: number; right: number; bottom: number; left: number }; marginPt?: number }
   | { type: 'pdf-to-svg-start'; file: ArrayBuffer; meta: FileMeta }
   | { type: 'split-by-size-start'; file: ArrayBuffer; meta: FileMeta; maxSizeMB: number }
   | { type: 'extract-by-keyword-start'; file: ArrayBuffer; meta: FileMeta; keyword: string; caseSensitive: boolean; matchWholeWord?: boolean }

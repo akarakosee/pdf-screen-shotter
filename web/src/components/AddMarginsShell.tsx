@@ -1,7 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PDFDocument } from 'pdf-lib';
 import { JobController } from '../app/JobController';
 import { triggerDownload } from '../app/download';
-import type { ExportResult, ProgressData } from '../core/types';
+import { validatePdfFile } from '../app/validators';
+import type { ExportResult } from '../core/types';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
 import { DropZone } from './DropZone';
@@ -9,15 +11,19 @@ import { PrivacyLine } from './PrivacyLine';
 import { Toast, type ToastData } from './Toast';
 import { ProgressPanel } from './ProgressPanel';
 import { ResultPanel } from './ResultPanel';
-import { Maximize } from 'lucide-react';
+import { Maximize, Layers, BookOpen, Sliders } from 'lucide-react';
 import { Button } from './ui/Button';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
+type MarginMode = 'uniform' | 'gutter' | 'custom';
 
 interface Props {
   t?: Strings;
   desktopAppUrl?: string;
 }
+
+// 1 mm = 2.83465 pt
+const MM_TO_PT = 2.83465;
 
 export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
   const [wasmOk, setWasmOk] = useState(true);
@@ -30,70 +36,146 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
-  const [marginPt, setMarginPt] = useState<number>(36); // 36 points = 0.5 inch
+  const [pageCount, setPageCount] = useState<number>(0);
+  const isTr = t.lang === 'tr';
+  const isTrRef = useRef(isTr);
+  isTrRef.current = isTr;
 
-  const controllerRef = useRef<JobController | null>(null);
-  const controller = useCallback((): JobController => {
-    if (!controllerRef.current) {
-      controllerRef.current = new JobController({
-        onAddMarginsProgress: (processed, total) => {
-           setProgress({ message: `Padding page ${processed} of ${total}...`, percentage: (processed / total) * 100 });
-        },
-        onAddMarginsDone: (res) => {
-          setResult(res);
-          setCancelling(false);
-          setPhase('done');
-        },
-        onFatal: (message) => {
-          setCancelling(false);
-          setToast({ kind: 'error', message: message || t.corruptFile || 'An error occurred' });
-          setErrorMsg(null);
-    setPhase('upload');
-        },
-        onUnavailable: () => {
-          setUnavailable(true);
-        }
-      });
-    }
-    return controllerRef.current;
-  }, [t]);
+  const tRef = useRef(t);
+  tRef.current = t;
+
+  // Margin states in millimeters
+  const [mode, setMode] = useState<MarginMode>('uniform');
+  const [uniformMm, setUniformMm] = useState<number>(10);
+  const [gutterMm, setGutterMm] = useState<number>(20);
+  const [topMm, setTopMm] = useState<number>(10);
+  const [rightMm, setRightMm] = useState<number>(10);
+  const [bottomMm, setBottomMm] = useState<number>(10);
+  const [leftMm, setLeftMm] = useState<number>(20);
+
+  const controller = useRef<JobController | null>(null);
+
+  useEffect(() => {
+    controller.current = new JobController({
+      onAddMarginsProgress: (processed, total) => {
+        const pct = total > 0 ? Math.max(10, Math.round((processed / total) * 100)) : 50;
+        setProgress({
+          message: isTrRef.current
+            ? `Sayfalara boşluk ekleniyor: ${processed} / ${total}...`
+            : `Adding margins to page ${processed} of ${total}...`,
+          percentage: pct,
+        });
+      },
+      onAddMarginsDone: (res) => {
+        setResult(res);
+        setCancelling(false);
+        setPhase('done');
+      },
+      onFatal: (message) => {
+        setCancelling(false);
+        setToast({ kind: 'error', message: message || (isTrRef.current ? 'Hata oluştu' : 'An error occurred') });
+        setErrorMsg(null);
+        setPhase('options');
+      },
+      onFileError: (_, message) => {
+        setCancelling(false);
+        setToast({
+          kind: 'error',
+          message: isTrRef.current ? 'Dosya işlenemedi veya bozuk.' : 'Could not process file.',
+        });
+        setPhase('options');
+      },
+      onUnavailable: () => {
+        setUnavailable(true);
+      },
+    });
+
+    return () => {
+      controller.current?.dispose();
+    };
+  }, []);
 
   const cancel = useCallback(() => {
     setCancelling(true);
-    controller().cancel();
+    controller.current?.cancel();
     setErrorMsg(null);
-    setPhase('upload');
-  }, [controller]);
+    setPhase('options');
+    setCancelling(false);
+  }, []);
 
   const reset = useCallback(() => {
     setResult(null);
     setProgress(null);
     setErrorMsg(null);
-    setPhase('upload');
     setFile(null);
-  }, [controller]);
+    setPageCount(0);
+    setPhase('upload');
+  }, []);
 
-  const addFiles = useCallback(
-    (files: File[]) => {
-      if (files.length === 0) return;
-      const f = files[0];
-      if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-        setToast({ kind: 'error', message: t.notPdf || 'Not a PDF file' });
-        return;
-      }
-      setFile(f);
-      setPhase('options');
-    },
-    [t]
-  );
+  const addFiles = useCallback(async (files: File[]) => {
+    if (files.length === 0) return;
+    const f = files[0];
+    const err = await validatePdfFile(f);
+    if (err) {
+      setToast({
+        kind: 'error',
+        message: err === 'empty-file' ? tRef.current.emptyFile || 'File is empty' : tRef.current.notPdf || 'Not a PDF file',
+      });
+      return;
+    }
+
+    try {
+      const buf = await f.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true });
+      setPageCount(pdfDoc.getPageCount());
+    } catch (e) {
+      setPageCount(1);
+    }
+
+    setFile(f);
+    setPhase('options');
+  }, []);
 
   const processFile = useCallback(() => {
     if (!file) return;
     setPhase('processing');
-    controller().runAddMargins(file, marginPt);
-  }, [file, marginPt, controller]);
+    setProgress({
+      message: isTr ? 'Sayfalara kenar boşlukları ekleniyor...' : 'Applying margins...',
+      percentage: 10,
+    });
 
-  const preload = useCallback(() => controller().preload(), [controller]);
+    let marginsPt: { top: number; right: number; bottom: number; left: number };
+    if (mode === 'uniform') {
+      const pt = Math.max(0, uniformMm) * MM_TO_PT;
+      marginsPt = { top: pt, right: pt, bottom: pt, left: pt };
+    } else if (mode === 'gutter') {
+      const gPt = Math.max(0, gutterMm) * MM_TO_PT;
+      marginsPt = { top: 0, right: 0, bottom: 0, left: gPt };
+    } else {
+      marginsPt = {
+        top: Math.max(0, topMm) * MM_TO_PT,
+        right: Math.max(0, rightMm) * MM_TO_PT,
+        bottom: Math.max(0, bottomMm) * MM_TO_PT,
+        left: Math.max(0, leftMm) * MM_TO_PT,
+      };
+    }
+
+    controller.current?.runAddMargins(file, marginsPt);
+  }, [file, isTr, mode, uniformMm, gutterMm, topMm, rightMm, bottomMm, leftMm]);
+
+  const preload = useCallback(() => controller.current?.preload(), []);
+
+  const formattedFileSize = file
+    ? file.size >= 1024 * 1024
+      ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+      : `${(file.size / 1024).toFixed(1)} KB`
+    : '0 KB';
+
+  // Preview margins calculation (in px for miniature visual preview)
+  const activeLeftMm = mode === 'uniform' ? uniformMm : mode === 'gutter' ? gutterMm : leftMm;
+  const activeRightMm = mode === 'uniform' ? uniformMm : mode === 'gutter' ? 0 : rightMm;
+  const activeTopMm = mode === 'uniform' ? uniformMm : mode === 'gutter' ? 0 : topMm;
+  const activeBottomMm = mode === 'uniform' ? uniformMm : mode === 'gutter' ? 0 : bottomMm;
 
   if (!wasmOk) {
     return (
@@ -124,54 +206,286 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
     <div className="w-full flex flex-col gap-5">
       {phase === 'upload' && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
-          <DropZone t={t} hasFiles={false} onFiles={addFiles} onPreload={preload} />
+          <DropZone t={t} hasFiles={false} onFiles={addFiles} multiple={false} onPreload={preload} />
           <PrivacyLine t={t} />
         </div>
       )}
 
       {phase === 'options' && file && (
-        <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <div className="flex min-h-[380px] flex-col overflow-hidden rounded-2xl border bg-surface shadow-sm dark:bg-surface-dark">
-            <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-blue-500 dark:bg-blue-500/10 dark:text-blue-400">
-                <Maximize className="h-8 w-8" />
+        <div className="phase-enter flex flex-col gap-5">
+          {/* Document Summary Card */}
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border bg-surface p-4 dark:bg-surface-dark">
+            <div className="relative aspect-[1/1.3] w-24 shrink-0 rounded-xl border border-ink-faint bg-white overflow-hidden shadow-xs flex items-center justify-center mx-auto md:mx-0">
+              <Maximize className="h-8 w-8 text-amber-dark dark:text-amber" />
+            </div>
+
+            <div className="flex flex-col gap-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber/15 text-amber-dark font-semibold">
+                  {isTr ? 'Kenar Boşluğu' : 'Page Margins'}
+                </span>
+                {pageCount > 0 && (
+                  <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
+                    {pageCount} {isTr ? 'Sayfa' : 'Pages'}
+                  </span>
+                )}
+                <span className="text-xs font-mono text-ink-muted dark:text-ink-muted-dark">
+                  · {formattedFileSize}
+                </span>
               </div>
-              <h2 className="text-xl font-semibold tracking-tight text-ink dark:text-ink-dark">
-                {t.lang === 'tr' ? 'Kenar Boşluğu Ekle' : 'Add Margins'}
-              </h2>
-              <p className="mt-2 max-w-[400px] text-sm text-ink-muted dark:text-ink-muted-dark">
-                {t.lang === 'tr'
-                  ? 'Sayfalarınızın etrafına eklenecek boşluğu belirleyin (point cinsinden).'
-                  : 'Choose the margin size (in points) to add around your pages.'}
+              <h3 className="truncate text-sm font-semibold text-ink dark:text-ink-dark mt-1" title={file.name}>
+                {file.name}
+              </h3>
+              <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                {isTr
+                  ? 'Sayfa içeriği orantılı olarak korunur ve kenarlara beyaz pay eklenir.'
+                  : 'Page content is scaled proportionally inside clean white margin boundaries.'}
               </p>
-              
-              <div className="mt-8 flex w-full max-w-[300px] flex-col gap-4 text-left">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-ink dark:text-ink-dark">
-                    {t.lang === 'tr' ? 'Kenar Boşluğu (pt)' : 'Margin Size (pt)'}
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={500}
-                    value={marginPt}
-                    onChange={(e) => setMarginPt(Math.max(0, parseInt(e.target.value) || 0))}
-                    className="h-11 rounded-lg border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-accent dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark"
-                  />
-                  <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                    {t.lang === 'tr' ? 'Örn: 36pt = 0.5 inç, 72pt = 1 inç' : 'Hint: 36pt = 0.5 inch, 72pt = 1 inch'}
-                  </p>
+            </div>
+          </div>
+
+          {/* Configuration Card with Live Miniature Preview */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 rounded-2xl border bg-surface p-6 shadow-sm dark:bg-surface-dark items-start">
+            <div className="flex flex-col gap-6">
+              {/* Mode Tabs */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-ink dark:text-ink-dark">
+                  {isTr ? 'Boşluk Ekleme Modu' : 'Margin Type'}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setMode('uniform')}
+                    className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-3 text-xs font-medium transition-all ${
+                      mode === 'uniform'
+                        ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                        : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                    }`}
+                  >
+                    <Layers className="h-3.5 w-3.5" />
+                    {isTr ? 'Eşit (Tüm Kenarlar)' : 'Uniform (All Sides)'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('gutter')}
+                    className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-3 text-xs font-medium transition-all ${
+                      mode === 'gutter'
+                        ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                        : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                    }`}
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    {isTr ? 'Cilt / Delgeç Payı' : 'Binding Gutter'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('custom')}
+                    className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 px-3 text-xs font-medium transition-all ${
+                      mode === 'custom'
+                        ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                        : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                    }`}
+                  >
+                    <Sliders className="h-3.5 w-3.5" />
+                    {isTr ? 'Özel / Yönlü' : 'Custom Margins'}
+                  </button>
                 </div>
+              </div>
+
+              {/* Mode-specific Controls */}
+              {mode === 'uniform' && (
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
+                      {isTr ? 'Hızlı Seçimler (Tüm Kenarlar)' : 'Quick Presets (All Sides)'}
+                    </label>
+                    <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-surface-2 dark:bg-surface-2-dark text-ink dark:text-ink-dark">
+                      {uniformMm} mm
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { mm: 5, label: isTr ? '5 mm (Dar)' : '5 mm (Thin)' },
+                      { mm: 10, label: isTr ? '10 mm (Normal)' : '10 mm (Normal)' },
+                      { mm: 20, label: isTr ? '20 mm (Geniş)' : '20 mm (Wide)' },
+                      { mm: 30, label: isTr ? '30 mm (Ekstra)' : '30 mm (Extra)' },
+                    ].map((p) => (
+                      <button
+                        key={p.mm}
+                        type="button"
+                        onClick={() => setUniformMm(p.mm)}
+                        className={`rounded-xl border py-2 text-xs font-medium transition-all ${
+                          uniformMm === p.mm
+                            ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                            : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-3">
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={uniformMm}
+                      onChange={(e) => setUniformMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-11 flex-1 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                    <span className="text-xs text-ink-muted font-medium">mm (milimetre)</span>
+                  </div>
+                </div>
+              )}
+
+              {mode === 'gutter' && (
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-medium text-ink-muted dark:text-ink-muted-dark">
+                      {isTr ? 'Ciltleme & Delgeç Seçenekleri (Sol Kenar)' : 'Binding Presets (Left Gutter)'}
+                    </label>
+                    <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-surface-2 dark:bg-surface-2-dark text-ink dark:text-ink-dark">
+                      {gutterMm} mm
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { mm: 10, label: isTr ? '10 mm' : '10 mm' },
+                      { mm: 15, label: isTr ? '15 mm (Spiral)' : '15 mm (Spiral)' },
+                      { mm: 20, label: isTr ? '20 mm (Klasör)' : '20 mm (Ring Binder)' },
+                      { mm: 30, label: isTr ? '30 mm (Tez/Kitap)' : '30 mm (Thesis)' },
+                    ].map((p) => (
+                      <button
+                        key={p.mm}
+                        type="button"
+                        onClick={() => setGutterMm(p.mm)}
+                        className={`rounded-xl border py-2 text-xs font-medium transition-all ${
+                          gutterMm === p.mm
+                            ? 'border-amber bg-amber/15 text-amber-dark font-semibold shadow-xs'
+                            : 'border-ink-faint bg-surface hover:bg-surface-2 text-ink-muted dark:bg-surface-dark'
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-3">
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={gutterMm}
+                      onChange={(e) => setGutterMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-11 flex-1 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                    <span className="text-xs text-ink-muted font-medium">mm (Sol Kenar)</span>
+                  </div>
+                </div>
+              )}
+
+              {mode === 'custom' && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-ink-muted">{isTr ? 'Üst (Top)' : 'Top'}</label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={topMm}
+                      onChange={(e) => setTopMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-10 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-ink-muted">{isTr ? 'Sağ (Right)' : 'Right'}</label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={rightMm}
+                      onChange={(e) => setRightMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-10 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-ink-muted">{isTr ? 'Alt (Bottom)' : 'Bottom'}</label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={bottomMm}
+                      onChange={(e) => setBottomMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-10 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-ink-muted">{isTr ? 'Sol (Left)' : 'Left'}</label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={150}
+                      value={leftMm}
+                      onChange={(e) => setLeftMm(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="h-10 rounded-xl border bg-bg px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-amber dark:bg-bg-dark dark:border-border-dark dark:text-ink-dark font-mono"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-4 border-t border-ink-faint dark:border-ink-faint-dark">
+                <Button variant="ghost" onClick={reset} className="w-full sm:w-auto">
+                  {t.cancel || (isTr ? 'İptal' : 'Cancel')}
+                </Button>
+                <Button onClick={processFile} className="w-full sm:w-auto">
+                  {isTr ? 'Kenar Boşluklarını Ekle' : 'Add Margins to PDF'}
+                </Button>
               </div>
             </div>
 
-            <div className="flex flex-col-reverse justify-between gap-3 border-t bg-bg/50 p-4 sm:flex-row sm:items-center dark:bg-bg-dark/50">
-              <Button variant="ghost" onClick={reset} className="w-full sm:w-auto">
-                {t.cancel || 'Cancel'}
-              </Button>
-              <Button onClick={processFile} className="w-full sm:w-auto">
-                {t.lang === 'tr' ? 'Boşluk Ekle' : 'Add Margins'}
-              </Button>
+            {/* Live Interactive Visual Preview */}
+            <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-ink-faint bg-bg/40 dark:bg-bg-dark/40">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted mb-3">
+                {isTr ? 'Canlı Sayfa Önizlemesi' : 'Live Margin Preview'}
+              </span>
+
+              {/* A4 Sheet Container */}
+              <div className="relative w-40 aspect-[1/1.414] bg-white border border-border shadow-md rounded-md overflow-hidden flex items-center justify-center p-1">
+                {/* Content boundary representing page margins */}
+                <div
+                  className="w-full h-full border border-dashed border-amber bg-amber/5 rounded-xs flex flex-col justify-between p-1.5 transition-all duration-300"
+                  style={{
+                    paddingTop: `${Math.min(24, Math.max(4, activeTopMm * 0.5))}px`,
+                    paddingRight: `${Math.min(24, Math.max(4, activeRightMm * 0.5))}px`,
+                    paddingBottom: `${Math.min(24, Math.max(4, activeBottomMm * 0.5))}px`,
+                    paddingLeft: `${Math.min(24, Math.max(4, activeLeftMm * 0.5))}px`,
+                  }}
+                >
+                  <div className="w-full h-1.5 bg-ink/20 rounded-xs" />
+                  <div className="space-y-1 my-auto">
+                    <div className="w-3/4 h-1 bg-ink/15 rounded-xs" />
+                    <div className="w-full h-1 bg-ink/15 rounded-xs" />
+                    <div className="w-2/3 h-1 bg-ink/15 rounded-xs" />
+                  </div>
+                  <div className="w-1/2 h-1 bg-ink/20 rounded-xs self-end" />
+                </div>
+
+                {/* Gutter indicator */}
+                {activeLeftMm > 15 && (
+                  <div className="absolute left-1 top-0 bottom-0 flex flex-col justify-around py-3">
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
+                    <div className="w-1.5 h-1.5 rounded-full border border-ink-muted/40 bg-ink-muted/20" />
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-3 text-[10px] font-mono text-ink-muted text-center">
+                {isTr
+                  ? `Sol: ${activeLeftMm}mm · Sağ: ${activeRightMm}mm\nÜst: ${activeTopMm}mm · Alt: ${activeBottomMm}mm`
+                  : `L: ${activeLeftMm}mm · R: ${activeRightMm}mm\nT: ${activeTopMm}mm · B: ${activeBottomMm}mm`}
+              </div>
             </div>
           </div>
         </div>
@@ -180,29 +494,36 @@ export function AddMarginsShell({ t = en, desktopAppUrl }: Props) {
       {phase === 'processing' && (
         <ProgressPanel
           cancelling={cancelling}
-          label={progress?.message || (t.lang === 'tr' ? 'İşleniyor...' : 'Processing...')}
+          label={progress?.message || (isTr ? 'Sayfalara kenar boşlukları ekleniyor...' : 'Applying margins...')}
           progressPercent={progress?.percentage || 0}
-          cancelLabel={t.cancel || 'Cancel'}
-          cancellingLabel={t.lang === 'tr' ? 'İptal ediliyor...' : 'Cancelling...'}
+          cancelLabel={t.cancel || (isTr ? 'İptal' : 'Cancel')}
+          cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
           onCancel={cancel}
         />
       )}
 
       {phase === 'done' && (result || errorMsg) && (
         <ResultPanel
-            errorMsg={errorMsg}
+          errorMsg={errorMsg}
           t={t}
           result={result}
+          customHeadline={
+            result?.output
+              ? isTr
+                ? 'Kenar boşlukları tüm sayfalara başarıyla eklendi!'
+                : 'Margins successfully added to all pages!'
+              : null
+          }
           skipped={[]}
           crossLink={null}
-                    onDownload={() => {
-            if (result.output) triggerDownload(result.output, result.outputName || 'padded.pdf');
+          onDownload={() => {
+            if (result?.output) triggerDownload(result.output, result.outputName || 'padded.pdf');
           }}
           onConvertMore={reset}
         />
       )}
 
-      {toast && <Toast toast={toast} onClear={() => setToast(null)} />}
+      {toast && <Toast kind={toast.kind} message={toast.message} onClose={() => setToast(null)} />}
     </div>
   );
 }

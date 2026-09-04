@@ -597,11 +597,23 @@ export class JobController {
     this.post({ type: 'pdf-to-svg-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
-  async runAddMargins(file: File, marginPt: number): Promise<void> {
+  async runAddMargins(
+    file: File,
+    margins: number | { top: number; right: number; bottom: number; left: number }
+  ): Promise<void> {
     if (this.disabled || this.running) return;
     this.running = true;
     const buf = await file.arrayBuffer();
-    this.post({ type: 'add-margins-start', file: buf, meta: { fileId: file.name, name: file.name }, marginPt }, [buf]);
+    this.post(
+      {
+        type: 'add-margins-start',
+        file: buf,
+        meta: { fileId: file.name, name: file.name },
+        margins,
+        marginPt: typeof margins === 'number' ? margins : margins.left || 0,
+      },
+      [buf]
+    );
   }
 
   async runSplitHalf(
