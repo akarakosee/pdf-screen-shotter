@@ -45,7 +45,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
   }
   // Reset on arrival (not when the queued run starts) so a cancel sent while
   // earlier messages are still processing isn't lost.
-  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start' || msg.type === 'split-half-start' || msg.type === 'split-by-size-start' || msg.type === 'extract-by-keyword-start' || msg.type === 'add-margins-start') cancelled = false;
+  if (msg.type === 'start' || msg.type === 'merge-start' || msg.type === 'split-start' || msg.type === 'organize-start' || msg.type === 'extract-images-start' || msg.type === 'compress-start' || msg.type === 'remove-annotations-start' || msg.type === 'pdf-to-webp-start' || msg.type === 'auto-crop-start' || msg.type === 'extract-toc-start' || msg.type === 'overlay-pdf-start' || msg.type === 'change-bg-start' || msg.type === 'auto-redact-start' || msg.type === 'smart-markdown-start' || msg.type === 'contrast-enhancer-start' || msg.type === 'split-half-start' || msg.type === 'split-by-size-start' || msg.type === 'extract-by-keyword-start' || msg.type === 'add-margins-start' || msg.type === 'pdf-to-svg-start') cancelled = false;
   queue = queue.then(async () => {
     try {
       await ready;
@@ -102,6 +102,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'split-bookmarks-start') await splitBookmarksRun(msg.file, msg.meta);
       else if (msg.type === 'pdf-to-html-start') await pdfToHtmlRun(msg.file, msg.meta);
       else if (msg.type === 'pdf-to-json-start') await pdfToJsonRun(msg.file, msg.meta);
+      else if (msg.type === 'pdf-to-svg-start') await pdfToSvgRun(msg.file, msg.meta);
       else if (msg.type === 'audio-reader-start') await audioReaderRun(msg.file, msg.meta);
       else if (msg.type === 'scan-to-pdf-start') await scanToPdfRun(msg.files, msg.meta);
       else if (msg.type === 'repair-start') await repairRun(msg.file, msg.meta);
@@ -1416,35 +1417,46 @@ async function pdfToSvgRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   let output: Blob | undefined;
   let outputName: string | undefined;
   let doc;
+  let count = 0;
   
   try {
     await engine.init();
     doc = await engine.open(file);
-    const count = engine.pageCount(doc);
+    count = engine.pageCount(doc);
     
-    // We will save svgs as individual files, but we need to zip them
-    const JSZip = (await import('jszip')).default;
-    const zip = new JSZip();
-    
-    for (let i = 0; i < count; i++) {
-      if (cancelled) break;
-      if (engine.renderSvgPage) {
-        const bytes = await engine.renderSvgPage(doc, i + 1);
-        zip.file(`page_${i + 1}.svg`, bytes);
-      }
-      
+    if (count === 1 && engine.renderSvgPage) {
+      const bytes = await engine.renderSvgPage(doc, 1);
+      output = new Blob([bytes as BlobPart], { type: 'image/svg+xml' });
+      outputName = `${sanitizeBaseName(meta.name)}.svg`;
       post({
         type: 'pdf-to-svg-progress',
-        processedPages: i + 1,
-        totalPages: count,
+        processedPages: 1,
+        totalPages: 1,
       });
-      await new Promise(r => setTimeout(r, 0));
-    }
-    
-    if (!cancelled) {
-      const zipBytes = await zip.generateAsync({ type: 'uint8array' });
-      output = new Blob([zipBytes], { type: 'application/zip' });
-      outputName = `${sanitizeBaseName(meta.name)}-svgs.zip`;
+    } else {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      
+      for (let i = 0; i < count; i++) {
+        if (cancelled) break;
+        if (engine.renderSvgPage) {
+          const bytes = await engine.renderSvgPage(doc, i + 1);
+          zip.file(`page_${i + 1}.svg`, bytes);
+        }
+        
+        post({
+          type: 'pdf-to-svg-progress',
+          processedPages: i + 1,
+          totalPages: count,
+        });
+        await new Promise(r => setTimeout(r, 0));
+      }
+      
+      if (!cancelled) {
+        const zipBytes = await zip.generateAsync({ type: 'uint8array' });
+        output = new Blob([zipBytes], { type: 'application/zip' });
+        outputName = `${sanitizeBaseName(meta.name)}-svgs.zip`;
+      }
     }
   } catch (e) {
     console.error('[worker] pdfToSvgRun failed:', e);
@@ -1460,8 +1472,8 @@ async function pdfToSvgRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
   post({
     type: 'pdf-to-svg-done',
     result: {
-      totalPages: 0,
-      succeeded: output ? 1 : 0,
+      totalPages: count,
+      succeeded: output ? count : 0,
       failed: [],
       durationMs: Date.now() - started,
       cancelled,
