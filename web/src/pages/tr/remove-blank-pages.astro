@@ -1,21 +1,10 @@
 ---
 import ToolPage from '../../layouts/ToolPage.astro';
 import { RemoveBlankPagesShell } from '../../components/RemoveBlankPagesShell';
-import { removeblankpagesCopy } from '../../i18n/toolCopy';
+import { removeBlankCopy } from '../../i18n/toolCopy';
 import { tr } from '../../i18n/tr';
-
-const copy = removeblankpagesCopy.tr;
 ---
 
-<ToolPage
-  lang="tr"
-  title={copy.title}
-  description={copy.description}
-  h1={copy.h1}
-  tagline={copy.tagline}
-  howToName={copy.howToName}
-  howItWorks={copy.howItWorks}
-  steps={copy.steps}
->
+<ToolPage lang="tr" badgeLabel="TEMİZLE · BOŞ SAYFALARI SİL" {...removeBlankCopy.tr}>
   <RemoveBlankPagesShell client:load t={tr} />
 </ToolPage>

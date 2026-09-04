@@ -1,11 +1,9 @@
 ---
 import ToolPage from '../layouts/ToolPage.astro';
-import { scanToPdfCopy } from '../i18n/toolCopy';
+import { scanCopy } from '../i18n/toolCopy';
 import { ScanToPdfShell } from '../components/ScanToPdfShell';
-
-const copy = scanToPdfCopy.en;
 ---
 
-<ToolPage lang="en" badgeLabel="CONVERTER · CAMERA" {...copy}>
+<ToolPage lang="en" badgeLabel="CONVERTER · CAMERA" {...scanCopy.en}>
   <ScanToPdfShell client:load />
 </ToolPage>

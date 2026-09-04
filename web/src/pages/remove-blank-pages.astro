@@ -1,10 +1,10 @@
 ---
 import { RemoveBlankPagesShell } from '../components/RemoveBlankPagesShell';
 import ToolPage from '../layouts/ToolPage.astro';
-import { removeblankpagesCopy } from '../i18n/toolCopy';
+import { removeBlankCopy } from '../i18n/toolCopy';
 import { en } from '../i18n/en';
 ---
 
-<ToolPage lang="en" badgeLabel="UTILITY · CLEAN" {...removeblankpagesCopy.en}>
+<ToolPage lang="en" badgeLabel="UTILITY · CLEAN" {...removeBlankCopy.en}>
   <RemoveBlankPagesShell client:load t={en} />
 </ToolPage>
