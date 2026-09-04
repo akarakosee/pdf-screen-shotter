@@ -89,28 +89,41 @@ const stepsTr = (fmt: string): Step[] => [
 export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
   png: {
     en: {
-      title: "PDF to PNG — convert in your browser, files never uploaded",
+      title: "PDF to PNG — Convert PDF to High-Quality PNG Images",
       description:
-        "Convert PDF pages to PNG images, free and without limits. Everything runs in your browser — your files never leave your device.",
+        "Convert PDF pages into crystal-clear, lossless PNG images online for free. 100% private in-browser processing, no file uploads.",
       h1: "PDF to PNG",
       tagline:
-        "Convert PDF pages to PNG images — free, no limits, and your files stay on your device.",
+        "Convert PDF pages into high-resolution PNG images with pixel-perfect clarity — free, unlimited, and 100% private.",
       howToName: "How to convert PDF to PNG in your browser",
       howItWorks: "How it works",
       faqTitle: "Frequently asked questions",
-      steps: stepsEn("PNG"),
+      steps: [
+        {
+          name: "Add your PDF",
+          text: "Drop one or more PDF files on the page, or click to browse.",
+        },
+        {
+          name: "Choose resolution and pages",
+          text: "Pick a DPI preset (150 is recommended for web/screen, 300 for print) and set an optional page range.",
+        },
+        {
+          name: "Convert and download",
+          text: "Press Convert to download your PNG file, or a ZIP archive when converting multiple pages.",
+        },
+      ],
       faq: [
         privacyEn,
         {
           q: "Which resolution should I choose?",
-          a: "150 DPI is right for most uses — presentations, documents, and screens. Choose 300 DPI for printing, and 100 DPI when you want smaller files for quick sharing.",
+          a: "150 DPI is ideal for most uses (presentations, documents, web viewing). Choose 300 DPI for high-quality printing, and 100 DPI when you want smaller files for quick sharing.",
         },
         rangeEn,
         limitsEn,
         brokenEn,
         {
           q: "How do I get the results?",
-          a: "A single converted page downloads directly as a PNG file. Multiple pages are packed into one ZIP archive, named after your document.",
+          a: "A single converted page downloads directly as a PNG file. Multiple pages are packed into one clean ZIP archive, named after your document.",
         },
       ],
       crossLink: {
@@ -119,34 +132,47 @@ export const toolCopy: Record<"png" | "jpg", Record<"en" | "tr", ToolCopy>> = {
       },
     },
     tr: {
-      title: "PDF'i PNG'ye çevir — tarayıcında, dosyalar yüklenmeden",
+      title: "PDF'i PNG'ye Çevirme — Ücretsiz & Kayıpsız Görsel",
       description:
-        "PDF sayfalarını ücretsiz ve sınırsız biçimde PNG görüntülerine dönüştür. Her şey tarayıcında çalışır — dosyaların cihazından çıkmaz.",
+        "PDF sayfalarını yüksek çözünürlüklü ve kayıpsız PNG görsellerine dönüştürün. Dosyalarınız sunucuya yüklenmeden %100 tarayıcınızda işlenir.",
       h1: "PDF'ten PNG'ye",
       tagline:
-        "PDF sayfalarını PNG görüntülerine dönüştür — ücretsiz, sınırsız ve dosyaların cihazında kalır.",
+        "PDF sayfalarını kristal netliğinde kayıpsız PNG görsellerine dönüştürün — ücretsiz, sınırsız ve tamamen gizli.",
       howToName: "Tarayıcıda PDF'ten PNG'ye dönüştürme",
       howItWorks: "Nasıl çalışır",
-      faqTitle: "Sık sorulan sorular",
-      steps: stepsTr("PNG"),
+      faqTitle: "Sıkça Sorulan Sorular",
+      steps: [
+        {
+          name: "PDF Belgenizi Ekleyin",
+          text: "Dönüştürmek istediğiniz bir veya birden fazla PDF dosyasını yükleyin.",
+        },
+        {
+          name: "Çözünürlük ve Sayfa Ayarı",
+          text: "İhtiyacınıza göre DPI kalitesini (Web için 150 DPI, Baskı için 300 DPI) ve sayfa aralığını belirleyin.",
+        },
+        {
+          name: "PNG Olarak İndirin",
+          text: "Dönüştür butonuna tıklayarak tek sayfayı doğrudan .png, çoklu sayfaları ise .zip arşivi olarak indirin.",
+        },
+      ],
       faq: [
         privacyTr,
         {
           q: "Hangi çözünürlüğü seçmeliyim?",
-          a: "150 DPI çoğu kullanım için doğrudur — sunumlar, belgeler ve ekranlar. Baskı için 300 DPI, hızlı paylaşım için daha küçük dosyalar istiyorsan 100 DPI seç.",
+          a: "150 DPI çoğu kullanım için idealdir (sunumlar, web ve belgeler). Yüksek kaliteli baskı için 300 DPI, küçük dosya boyutu ve hızlı paylaşım için 100 DPI seçebilirsiniz.",
         },
         rangeTr,
         limitsTr,
         brokenTr,
         {
           q: "Sonuçları nasıl alırım?",
-          a: "Tek sayfa doğrudan PNG dosyası olarak iner. Birden çok sayfa, belgenin adını taşıyan tek bir ZIP arşivinde toplanır.",
+          a: "Tek sayfalık çıktılar doğrudan .png dosyası olarak iner. Çok sayfalı belgeler ise her sayfa ayrı bir PNG olacak şekilde tek bir ZIP arşivinde toplanır.",
         },
       ],
       crossLink: {
         href: "/tr/png-to-pdf",
         label:
-          "Elinde PNG görseller veya şemalar mı var? Görselleri PDF belgesine dönüştür.",
+          "Elinizde PNG resimler mi var? PNG'leri PDF belgesine dönüştürmek için tıklayın.",
       },
     },
   },
