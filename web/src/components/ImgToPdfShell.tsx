@@ -139,10 +139,11 @@ function SortableImgItem({
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            onRemove();
+            if (total > 1) onRemove();
           }}
-          className="flex h-7 w-7 items-center justify-center rounded-lg text-danger/80 transition-colors hover:bg-danger/10 hover:text-danger"
-          title={t.removeFile.replace('{name}', item.file.name)}
+          disabled={total <= 1}
+          className="flex h-7 w-7 items-center justify-center rounded-lg text-danger/80 transition-colors hover:bg-danger/10 hover:text-danger disabled:pointer-events-none disabled:opacity-20"
+          title={total <= 1 ? undefined : t.removeFile.replace('{name}', item.file.name)}
         >
           <Trash2 className="h-3.5 w-3.5" />
         </button>
