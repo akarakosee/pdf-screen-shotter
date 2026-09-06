@@ -62,8 +62,11 @@ export const tr: Strings = {
   addFile: 'PDF ekle',
   moveFileUp: "{name} dosyasını yukarı taşı",
   moveFileDown: "{name} dosyasını aşağı taşı",
+  moveFileLeft: "{name} görselini sola taşı",
+  moveFileRight: "{name} görselini sağa taşı",
   mergeOrderHint: 'Dosyalar aşağıda gösterilen sırayla birleştirilir.',
   mergeMinFiles: 'Birleştirmek için en az 2 geçerli PDF dosyası ekle.',
+  mergeAction: 'PDF Birleştir',
   mergeResultSummary: '{n} dosya tek bir PDF\'te birleştirildi ({pages} sayfa).',
   mergeDownload: "Birleştirilmiş PDF'i indir",
   mergeDone: 'Birleştirme tamamlandı.',
@@ -107,4 +110,5 @@ export const tr: Strings = {
 
   // Status & Errors
   adSpace: 'Reklam alanı',
+  pdfNotEncrypted: "Bu PDF belgesi şifreli veya parolalı değil. Kilit açma işlemi yalnızca parolalı PDF'ler içindir.",
 };

@@ -48,13 +48,20 @@ export function OcrShell({ t = en }: Props) {
   const addFile = async (files: File[]) => {
     if (!files.length) return;
     const f = files[0];
+    if (!f) return;
     
     // We allow images and PDFs
-    if (f.type === 'application/pdf') {
-      const v = await validatePdfFile(f);
-      if (!v.ok) { setToast({ kind: 'error', message: v.reason || 'Invalid PDF' }); return; }
+    if (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')) {
+      const rej = await validatePdfFile(f);
+      if (rej) {
+        setToast({ kind: 'error', message: rej === 'empty-file' ? t.emptyFile : t.notPdf });
+        return;
+      }
     } else if (!f.type.startsWith('image/')) {
-      setToast({ kind: 'error', message: 'Only PDF and images are supported.' });
+      setToast({
+        kind: 'error',
+        message: t.lang === 'tr' ? 'Yalnızca PDF ve resim dosyaları desteklenir.' : 'Only PDF and images are supported.',
+      });
       return;
     }
 
@@ -131,7 +138,7 @@ export function OcrShell({ t = en }: Props) {
   const handleCopy = () => {
     if (!extractedText) return;
     navigator.clipboard.writeText(extractedText).then(() => {
-      setToast({ kind: 'success', message: t.lang === 'tr' ? 'Panoya kopyalandı!' : 'Copied to clipboard!' });
+      setToast({ kind: 'info', message: t.lang === 'tr' ? 'Panoya kopyalandı!' : 'Copied to clipboard!' });
     });
   };
 

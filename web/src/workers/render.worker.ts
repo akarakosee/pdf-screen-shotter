@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 // Cancel is cooperative (flag checked per page); pages already written to the
 // ZIP stream are preserved so a partial ZIP stays downloadable.
 
-import { PDFDocument, degrees, PageSizes, PDFName, PDFDict, PDFArray, rgb } from 'pdf-lib';
+import { PDFDocument, degrees, PageSizes, PDFName, PDFDict, PDFArray, PDFRawStream, PDFNumber, rgb } from 'pdf-lib';
 import type {
   ExportResult,
   FileMeta,
@@ -674,48 +674,224 @@ async function extractImagesRun(
 async function compressRun(
   file: ArrayBuffer,
   meta: FileMeta,
-  level: 'recommended' | 'extreme' | 'fast'
+  level: 'recommended' | 'extreme' | 'fast' = 'recommended'
 ): Promise<void> {
   const started = Date.now();
   let output: Blob | undefined;
   let outputName: string | undefined;
-  let originalSize = file.byteLength;
+  const originalSize = file.byteLength;
   let compressedSize = 0;
-  let doc: Awaited<ReturnType<typeof engine.open>> | undefined;
 
   try {
-    doc = await engine.open(file);
-    let bytes = await engine.compress(doc, level);
-    if (bytes.byteLength >= originalSize) {
-      bytes = new Uint8Array(file);
+    const q = level === 'extreme' ? 35 : level === 'recommended' ? 65 : 85;
+    const maxDim = level === 'extreme' ? 1200 : level === 'recommended' ? 1800 : 2400;
+
+    let currentBytes = new Uint8Array(file);
+
+    // 1. First pass: Recompress embedded raster images via pdf-lib & MuPdf image extraction
+    try {
+      const pdfDoc = await PDFDocument.load(file, { ignoreEncryption: true });
+      const objects = pdfDoc.context.enumerateIndirectObjects();
+
+      let muDocForImages: Awaited<ReturnType<typeof engine.open>> | undefined;
+      try {
+        muDocForImages = await engine.open(file);
+      } catch {
+        // If MuPdf open fails, fallback to createImageBitmap
+      }
+
+      let modifiedAny = false;
+
+      for (const [ref, obj] of objects) {
+        if (cancelled) break;
+        if (obj instanceof PDFRawStream) {
+          const dict = obj.dict;
+          if (dict.get(PDFName.of('Subtype')) === PDFName.of('Image')) {
+            const rawLength = obj.contents ? obj.contents.length : 0;
+            if (rawLength < 1024) continue; // Skip tiny icons/masks
+
+            let recompressedJpg: Uint8Array | null = null;
+            let imgW = 0;
+            let imgH = 0;
+
+            // Attempt A: Use MuPDF to load image object (handles all color spaces, CMYK/RGB/Gray)
+            if (muDocForImages) {
+              try {
+                const handle = (muDocForImages as any).handle;
+                const pdfHandle = handle.asPDF();
+                if (pdfHandle) {
+                  const muObj = pdfHandle.newIndirect(ref.objectNumber, 0);
+                  const muImg = handle.loadImage(muObj);
+                  const pix = muImg.toPixmap();
+                  imgW = pix.getWidth();
+                  imgH = pix.getHeight();
+
+                  // Check if downscaling with OffscreenCanvas is needed
+                  if (
+                    typeof OffscreenCanvas !== 'undefined' &&
+                    typeof createImageBitmap !== 'undefined' &&
+                    (imgW > maxDim || imgH > maxDim)
+                  ) {
+                    try {
+                      const tempJpg = pix.asJPEG(90);
+                      const blob = new Blob([tempJpg as BlobPart], { type: 'image/jpeg' });
+                      const bmp = await createImageBitmap(blob);
+                      const ratio = Math.min(maxDim / bmp.width, maxDim / bmp.height);
+                      const targetW = Math.max(1, Math.round(bmp.width * ratio));
+                      const targetH = Math.max(1, Math.round(bmp.height * ratio));
+
+                      const canvas = new OffscreenCanvas(targetW, targetH);
+                      const ctx = canvas.getContext('2d');
+                      if (ctx) {
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, targetW, targetH);
+                        ctx.drawImage(bmp, 0, 0, targetW, targetH);
+                        const cBlob = await canvas.convertToBlob({
+                          type: 'image/jpeg',
+                          quality: q / 100,
+                        });
+                        const cBuf = await cBlob.arrayBuffer();
+                        recompressedJpg = new Uint8Array(cBuf);
+                        imgW = targetW;
+                        imgH = targetH;
+                      }
+                      bmp.close();
+                    } catch {
+                      // Fallback to direct MuPDF JPEG encoding
+                      recompressedJpg = pix.asJPEG(q);
+                    }
+                  } else {
+                    recompressedJpg = pix.asJPEG(q);
+                  }
+
+                  pix.destroy();
+                  muImg.destroy();
+                }
+              } catch {
+                // Ignore individual image load failure
+              }
+            }
+
+            // Attempt B: If MuPDF didn't produce a recompressed JPG, try createImageBitmap
+            if (
+              !recompressedJpg &&
+              typeof OffscreenCanvas !== 'undefined' &&
+              typeof createImageBitmap !== 'undefined'
+            ) {
+              try {
+                const blob = new Blob([obj.contents as BlobPart]);
+                const bmp = await createImageBitmap(blob).catch(() => null);
+                if (bmp) {
+                  let targetW = bmp.width;
+                  let targetH = bmp.height;
+                  if (targetW > maxDim || targetH > maxDim) {
+                    const ratio = Math.min(maxDim / targetW, maxDim / targetH);
+                    targetW = Math.max(1, Math.round(targetW * ratio));
+                    targetH = Math.max(1, Math.round(targetH * ratio));
+                  }
+
+                  const canvas = new OffscreenCanvas(targetW, targetH);
+                  const ctx = canvas.getContext('2d');
+                  if (ctx) {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, targetW, targetH);
+                    ctx.drawImage(bmp, 0, 0, targetW, targetH);
+                    const cBlob = await canvas.convertToBlob({
+                      type: 'image/jpeg',
+                      quality: q / 100,
+                    });
+                    const cBuf = await cBlob.arrayBuffer();
+                    recompressedJpg = new Uint8Array(cBuf);
+                    imgW = targetW;
+                    imgH = targetH;
+                  }
+                  bmp.close();
+                }
+              } catch {
+                // Ignore
+              }
+            }
+
+            // If we got a smaller recompressed JPEG stream, replace it in the PDF
+            if (recompressedJpg && recompressedJpg.length < rawLength) {
+              obj.contents = recompressedJpg;
+              dict.set(PDFName.of('Filter'), PDFName.of('DCTDecode'));
+              dict.set(PDFName.of('ColorSpace'), PDFName.of('DeviceRGB'));
+              dict.set(PDFName.of('BitsPerComponent'), PDFNumber.of(8));
+              dict.set(PDFName.of('Width'), PDFNumber.of(imgW));
+              dict.set(PDFName.of('Height'), PDFNumber.of(imgH));
+              dict.set(PDFName.of('Length'), PDFNumber.of(recompressedJpg.length));
+              dict.delete(PDFName.of('DecodeParms'));
+              modifiedAny = true;
+            }
+          }
+        }
+      }
+
+      if (muDocForImages) {
+        engine.close(muDocForImages);
+      }
+
+      if (modifiedAny && !cancelled) {
+        currentBytes = await pdfDoc.save({ useObjectStreams: true });
+      }
+    } catch (err) {
+      console.warn('[worker] pdf-lib image recompression step skipped:', err);
     }
-    compressedSize = bytes.byteLength;
-    if (!cancelled) {
-      output = new Blob([bytes as BlobPart], { type: 'application/pdf' });
-      outputName = `${sanitizeBaseName(meta.name)}-compressed.pdf`;
+
+    if (cancelled) return;
+
+    // 2. Second pass: MuPDF deduplication, garbage collection & stream compression
+    let doc: Awaited<ReturnType<typeof engine.open>> | undefined;
+    try {
+      const arrayBuffer =
+        currentBytes.byteOffset === 0 && currentBytes.byteLength === currentBytes.buffer.byteLength
+          ? currentBytes.buffer
+          : currentBytes.buffer.slice(
+              currentBytes.byteOffset,
+              currentBytes.byteOffset + currentBytes.byteLength
+            );
+      doc = await engine.open(arrayBuffer);
+      const mupdfCompressed = await engine.compress(doc, level);
+      if (mupdfCompressed && mupdfCompressed.byteLength > 0 && mupdfCompressed.byteLength < currentBytes.byteLength) {
+        currentBytes = mupdfCompressed;
+      }
+    } catch (mupdfErr) {
+      console.warn('[worker] mupdf compression step fallback:', mupdfErr);
+    } finally {
+      if (doc) engine.close(doc);
     }
+
+    if (cancelled) return;
+
+    // Ensure we never return a file larger than original
+    if (currentBytes.byteLength >= originalSize) {
+      currentBytes = new Uint8Array(file);
+    }
+
+    compressedSize = currentBytes.byteLength;
+    output = new Blob([currentBytes as BlobPart], { type: 'application/pdf' });
+    outputName = `${sanitizeBaseName(meta.name)}-compressed.pdf`;
+
+    post({
+      type: 'compress-done',
+      result: {
+        originalSize,
+        compressedSize,
+        durationMs: Date.now() - started,
+        cancelled: false,
+        output,
+        outputName,
+      },
+    });
   } catch (e) {
-    console.error('[worker] compressRun failed:', e);
+    console.error('[worker] compressRun fatal error:', e);
     post({
       type: 'file-error',
       fileId: meta.fileId,
       message: e instanceof EncryptedError ? 'encrypted' : 'corrupt',
     });
-  } finally {
-    if (doc) engine.close(doc);
   }
-
-  post({
-    type: 'compress-done',
-    result: {
-      originalSize,
-      compressedSize,
-      durationMs: Date.now() - started,
-      cancelled,
-      output,
-      outputName,
-    },
-  });
 }
 
 async function repairRun(

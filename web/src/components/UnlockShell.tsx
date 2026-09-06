@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 import { decryptPDF } from '@pdfsmaller/pdf-decrypt';
+import { PDFDocument } from 'pdf-lib';
+import { validatePdfFile } from '../app/validators';
 import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { Button } from './ui/Button';
@@ -27,16 +29,54 @@ export function UnlockShell({ t = en }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string } | null>(null);
 
-  const addFile = useCallback((incoming: File[]) => {
-    if (incoming.length === 0) return;
-    const f = incoming[0];
-    if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-      setToast({ kind: 'error', message: t.notPdf });
-      return;
-    }
-    setFile(f);
-    setPhase('options');
-  }, [t]);
+  const addFile = useCallback(
+    async (incoming: File[]) => {
+      if (incoming.length === 0) return;
+      const f = incoming[0];
+      if (!f) return;
+
+      const rej = await validatePdfFile(f);
+      if (rej) {
+        setToast({ kind: 'error', message: rej === 'empty-file' ? t.emptyFile : t.notPdf });
+        return;
+      }
+
+      try {
+        const arrayBuffer = await f.arrayBuffer();
+        let isEncrypted = false;
+        try {
+          const doc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+          isEncrypted = doc.isEncrypted;
+        } catch (err: any) {
+          const msg = (err?.message || '').toLowerCase();
+          if (msg.includes('encrypted') || msg.includes('password')) {
+            isEncrypted = true;
+          }
+        }
+
+        if (!isEncrypted) {
+          setToast({
+            kind: 'error',
+            message:
+              t.pdfNotEncrypted ||
+              (t.lang === 'tr'
+                ? "Bu PDF belgesi şifreli veya parolalı değil. Kilit açma işlemi yalnızca parolalı PDF'ler içindir."
+                : 'This PDF document is not password-protected. Unlock is only for encrypted PDF files.'),
+          });
+          return;
+        }
+
+        setFile(f);
+        setPassword('');
+        setShowPassword(false);
+        setPhase('options');
+      } catch (err) {
+        console.error(err);
+        setToast({ kind: 'error', message: t.corruptFile || 'Failed to read PDF file.' });
+      }
+    },
+    [t],
+  );
 
   const unlockPdf = async () => {
     if (!file || !password) return;

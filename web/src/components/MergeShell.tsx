@@ -116,8 +116,10 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
     filesRef.current.delete(id);
     setChips((cs) => {
       const next = cs.filter((c) => c.id !== id);
-      if (!next.some((c) => c.status === 'valid')) setErrorMsg(null);
-    setPhase('upload');
+      if (next.length === 0) {
+        setErrorMsg(null);
+        setPhase('upload');
+      }
       return next;
     });
   }, []);
@@ -488,7 +490,7 @@ export function MergeShell({ t = en, desktopAppUrl }: Props) {
           {!canMerge && <p className="text-xs text-danger">{t.mergeMinFiles}</p>}
           <div className="flex justify-end">
             <Button onClick={merge} disabled={!canMerge}>
-              {t.convert}
+              {t.mergeAction || t.convert}
             </Button>
           </div>
         </div>

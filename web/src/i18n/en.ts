@@ -61,8 +61,11 @@ export const en = {
   addFile: 'Add PDF',
   moveFileUp: 'Move {name} up',
   moveFileDown: 'Move {name} down',
+  moveFileLeft: 'Move {name} left',
+  moveFileRight: 'Move {name} right',
   mergeOrderHint: 'Files are merged in the order shown below.',
   mergeMinFiles: 'Add at least 2 valid PDF files to merge.',
+  mergeAction: 'Merge PDF',
   mergeResultSummary: 'Merged {n} files into one PDF ({pages} pages).',
   mergeDownload: 'Download merged PDF',
   mergeDone: 'Merge complete.',
@@ -106,6 +109,7 @@ export const en = {
   filePages: '{n} pages',
   desktopAppLink: 'Get the desktop app',
   adSpace: 'Ad space',
+  pdfNotEncrypted: 'This PDF document is not password-protected. Unlock is only for encrypted PDF files.',
 } as const;
 
 export type Strings = { [K in keyof typeof en]: string };

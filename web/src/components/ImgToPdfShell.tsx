@@ -16,7 +16,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ArrowUp, ArrowDown, Trash2, Plus, Download, RefreshCw, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Trash2, Plus, Download, RefreshCw, Check } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
 import { validateImageFile } from '../app/validators';
 import { buildPdfFromImages, type ImgToPdfOptions, type PageSizePreset, type Orientation } from '../engine/imgToPdf';
@@ -38,8 +38,8 @@ interface SortableImgItemProps {
   index: number;
   total: number;
   frozen: boolean;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
+  onMoveLeft: () => void;
+  onMoveRight: () => void;
   onRemove: () => void;
   t: Strings;
 }
@@ -49,8 +49,8 @@ function SortableImgItem({
   index,
   total,
   frozen,
-  onMoveUp,
-  onMoveDown,
+  onMoveLeft,
+  onMoveRight,
   onRemove,
   t,
 }: SortableImgItemProps) {
@@ -113,25 +113,25 @@ function SortableImgItem({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onMoveUp();
+              onMoveLeft();
             }}
             disabled={index === 0}
             className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-surface-2 hover:text-ink disabled:opacity-30 dark:text-ink-muted-dark dark:hover:bg-surface-2-dark dark:hover:text-ink-dark"
-            title={t.moveFileUp.replace('{name}', item.file.name)}
+            title={(t.moveFileLeft || t.moveFileUp).replace('{name}', item.file.name)}
           >
-            <ArrowUp className="h-3.5 w-3.5" />
+            <ArrowLeft className="h-3.5 w-3.5" />
           </button>
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onMoveDown();
+              onMoveRight();
             }}
             disabled={index === total - 1}
             className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-surface-2 hover:text-ink disabled:opacity-30 dark:text-ink-muted-dark dark:hover:bg-surface-2-dark dark:hover:text-ink-dark"
-            title={t.moveFileDown.replace('{name}', item.file.name)}
+            title={(t.moveFileRight || t.moveFileDown).replace('{name}', item.file.name)}
           >
-            <ArrowDown className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
 
@@ -426,8 +426,8 @@ export function ImgToPdfShell({ t = en, desktopAppUrl }: Props) {
                     index={idx}
                     total={items.length}
                     frozen={frozen}
-                    onMoveUp={() => handleMoveUp(idx)}
-                    onMoveDown={() => handleMoveDown(idx)}
+                    onMoveLeft={() => handleMoveUp(idx)}
+                    onMoveRight={() => handleMoveDown(idx)}
                     onRemove={() => handleRemove(item.id)}
                     t={t}
                   />

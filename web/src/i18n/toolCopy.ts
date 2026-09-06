@@ -238,14 +238,14 @@ const mergeStepsTr: Step[] = [
 ];
 export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Merge PDF",
+    title: "Merge PDF — Combine Multiple PDF Files Online Free",
     description:
-      "Combine multiple PDF files into one document instantly. 100% free, no file size limits, and processed securely in your browser.",
+      "Combine multiple PDF files into one clean document in your browser. Fast, unlimited, no file size limits, and 100% private with no server uploads.",
     keywords:
       "merge pdf, combine pdf, join pdf, bind pdf together, merge multiple pdfs, combine pdf files online, free pdf merger",
     h1: "Merge PDF",
     tagline:
-      "Combine multiple PDFs into a single document — free, unlimited, and 100% private.",
+      "Combine multiple PDF files into a single document in seconds — free, unlimited, and 100% private.",
     howToName: "How to merge PDF files",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
@@ -260,12 +260,14 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
       },
       {
         name: "Combine & Download",
-        text: "Click merge to download your perfectly combined, single PDF document securely.",
+        text: "Click Merge PDF to download your perfectly combined, single PDF document securely.",
       },
     ],
     faq: [
       { q: "Is there a limit to how many files I can merge?", a: "No! Since the files are processed directly on your computer (not on a server), you can merge as many large PDF files as your device can handle." },
-      { q: "Will the quality of my PDF decrease?", a: "Not at all. Your documents are stitched together without any compression, keeping the original quality 100% intact." }
+      { q: "Will the quality of my PDF decrease?", a: "Not at all. Your documents are stitched together without lossy recompression, keeping vector text, links, and image quality 100% intact." },
+      { q: "Are my files uploaded or stored on any server?", a: "Never. All processing happens entirely inside your local web browser. Your private documents never leave your computer." },
+      { q: "Can I reorder the files before merging?", a: "Yes, you can easily drag and drop files or use the up/down arrows on each file to set your desired page sequence." }
     ],
     crossLink: {
       href: "/compress-pdf",
@@ -273,23 +275,24 @@ export const mergeCopy: Record<"en" | "tr", ToolCopy> = {
     },
   },
   tr: {
-    title: "PDF Birleştir",
-    description: "Birden fazla PDF dosyasını tek bir belgede birleştirin. Sınır yok, yükleme yok. Tamamen cihazınızda çalışan güvenli PDF birleştirici.",
+    title: "PDF Birleştirme — Ücretsiz & Sınırsız PDF Birleştirici",
+    description: "Birden fazla PDF dosyasını tek bir belgede anında birleştirin. Boyut ve sayfa sınırı yok, tamamen tarayıcınızda çalışan %100 gizli PDF birleştirme aracı.",
     keywords: "pdf birleştirme, pdf birleştirici, iki pdf birleştirme, toplu pdf birleştirme, pdf sayfalarını birleştir, online pdf birleştir, pdf birleştirme programı",
     h1: "PDF Birleştir",
-    tagline: "Parça parça olan belgelerinizi tek bir dosyada toplayın — ücretsiz, sınırsız ve tamamen gizli.",
+    tagline: "Birden fazla PDF dosyasını dilediğiniz sırayla tek bir düzenli belge haline getirin — ücretsiz, sınırsız ve tamamen gizli.",
     howToName: "İki veya daha fazla PDF nasıl birleştirilir?",
     howItWorks: "Nasıl çalışır?",
     faqTitle: "Sık Sorulan Sorular",
     steps: [
       { name: "PDF'lerinizi Yükleyin", text: "Birleştirmek istediğiniz tüm PDF belgelerini ekrana sürükleyip bırakın." },
-      { name: "Sıralamayı Ayarlayın", text: "Yüklediğiniz belgeleri fareyle sürükleyerek (aşağı-yukarı) istediğiniz sıraya sokun." },
-      { name: "Birleştir ve İndir", text: "Tek tıkla tüm belgeleri saniyeler içinde bütün bir PDF dosyası olarak indirin." }
+      { name: "Sıralamayı Ayarlayın", text: "Yüklediğiniz belgeleri fareyle sürükleyerek veya ok butonlarıyla istediğiniz sıraya sokun." },
+      { name: "Birleştir ve İndir", text: "PDF Birleştir butonuna basarak tek tıkla tüm belgeleri saniyeler içinde tek bir PDF dosyası olarak indirin." }
     ],
     faq: [
       { q: "Boyut veya dosya sayısı sınırı var mı?", a: "Kesinlikle hayır. Herhangi bir sunucu kullanmadığımız için dilediğiniz kadar büyük dosyayı, istediğiniz sayıda PDF ile birleştirebilirsiniz." },
-      { q: "Sayfaların kalitesi veya çözünürlüğü düşer mi?", a: "Hayır. Belgeleriniz sadece arka planda birbirine dikilir, kalite veya çözünürlük kaybına uğramadan orijinal netliğinde birleştirilir." },
-      { q: "Birleştirdiğim dosyaları başkaları görebilir mi?", a: "Hayır, birleştirme işlemi sadece sizin bilgisayarınızın RAM'inde gerçekleşir. Dosyalarınız hiçbir bulut sunucusuna gönderilmez." }
+      { q: "Sayfaların kalitesi veya çözünürlüğü düşer mi?", a: "Hayır. Belgeleriniz sayfa yapısı, vektörel netliği ve içeriği bozulmadan orijinal kalitesinde tek bir dosyaya dikilir." },
+      { q: "Birleştirdiğim dosyaları başkaları görebilir mi?", a: "Hayır, birleştirme işlemi sadece sizin bilgisayarınızın RAM'inde gerçekleşir. Dosyalarınız hiçbir sunucuya yüklenmez." },
+      { q: "Dosyaların sırasını değiştirebilir miyim?", a: "Evet. Belgelerin yanındaki yukarı/aşağı ok butonlarını kullanarak veya kartları sürükleyip bırakarak sayfa dizilimini kolayca belirleyebilirsiniz." }
     ],
     crossLink: { href: "/tr/compress-pdf", label: "Birleştirdiğiniz belge çok mu büyük oldu? PDF Küçültme aracını deneyin." }
   },
@@ -563,16 +566,17 @@ export const pdfaCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const extractCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "Extract Text from PDF — locally, files never uploaded",
+    title: "Extract Text from PDF — Free & Instant TXT Export",
     description:
-      "Extract all readable text from your PDF into a TXT file directly in your browser. No servers involved.",
+      "Extract all readable text from your PDF into a clean TXT file directly in your browser. 100% private, no file uploads or size limits.",
     keywords:
       "extract text from pdf, pdf to text, pdf to txt, read pdf text, pdf metin çıkar, pdf yazıları al",
     h1: "Extract Text from PDF",
     tagline:
-      "Pull all readable text from your PDF into a TXT file — free, unlimited, and 100% private.",
+      "Pull all readable text from your PDF into a clean TXT file in seconds — free, unlimited, and 100% private.",
     howToName: "How to extract text from a PDF file in your browser",
     howItWorks: "How it works",
+    faqTitle: "Frequently asked questions",
     steps: [
       {
         name: "Add your PDF",
@@ -587,39 +591,48 @@ export const extractCopy: Record<"en" | "tr", ToolCopy> = {
         text: "Download the extracted text securely as a simple and clean .txt file.",
       },
     ],
+    faq: [
+      { q: "Can I extract text from scanned documents?", a: "Extract Text works on digital PDFs with selectable text. If your PDF is a scanned image or photo of paper, use our OCR PDF tool instead." },
+      { q: "Is there a limit on how many pages I can extract?", a: "No limits at all. The extraction happens directly inside your web browser, so even huge documents can be processed with zero upload delays." }
+    ],
     crossLink: {
-      href: "/protect-pdf",
-      label: "Need to secure your file? Protect PDF.",
+      href: "/ocr-pdf",
+      label: "Have a scanned PDF or photo? Use OCR PDF to extract text from images.",
     },
   },
   tr: {
-    title: "PDF'ten Metin Çıkar — yazıları kopyala, cihazında kalsın",
+    title: "PDF'ten Metin Çıkar — Ücretsiz & Hızlı TXT Dışa Aktarma",
     description:
-      "PDF dosyanızdaki tüm yazıları TXT dosyası olarak dışa aktarın. Sunucusuz, doğrudan tarayıcınızın içinde çalışır.",
+      "PDF dosyanızdaki tüm okunabilir yazıları TXT dosyası olarak dışa aktarın. Sunucusuz, tamamen tarayıcınızın içinde güvenle çalışır.",
     keywords:
-      "pdf metin çıkar, pdf yazıları al, pdf to txt, pdf	en metin kopyala, extract text from pdf",
+      "pdf metin çıkar, pdf yazıları al, pdf to txt, pdf metin kopyala, extract text from pdf",
     h1: "PDF'ten Metin Çıkar",
     tagline:
-      "PDF'teki tüm metinleri çıkarıp TXT dosyası olarak kaydedin — ücretsiz ve yerel — ücretsiz, sınırsız ve tamamen gizli.",
+      "PDF belgenizdeki tüm okunabilir metinleri saniyeler içinde temiz bir TXT dosyasına aktarın — ücretsiz, sınırsız ve tamamen gizli.",
     howToName: "Tarayıcıda PDF dosyasından metin nasıl çıkarılır",
     howItWorks: "Nasıl çalışır",
+    faqTitle: "Sık Sorulan Sorular",
     steps: [
       {
-        name: "PDF dosyanı ekle",
+        name: "PDF Dosyanızı Ekleyin",
         text: "Okunabilir metinlerini çıkarmak istediğiniz PDF belgesini sayfaya bırakın.",
       },
       {
-        name: "Metni çıkar",
-        text: "Tüm sayfaları yerel olarak tarıyor ve okunabilen her kelimeyi anında alıyoruz.",
+        name: "Metinleri Ayıklayın",
+        text: "Tüm sayfalar yerel olarak taranır ve okunabilen her kelime anında metne dönüştürülür.",
       },
       {
-        name: "TXT indir",
-        text: "Çıkarılan metni basit ve temiz bir .txt dosyası olarak güvenle indirin.",
+        name: "TXT Olarak İndirin",
+        text: "Çıkarılan metni temiz bir .txt dosyası olarak tek tıkla bilgisayarınıza indirin.",
       },
     ],
+    faq: [
+      { q: "Taranmış resimlerden de metin çıkarabilir miyim?", a: "Bu araç doğrudan dijital metin katmanı içeren PDF'ler içindir. Eğer belgeniz taranmış bir evrak fotoğrafıysa OCR PDF aracımızı kullanmalısınız." },
+      { q: "Sayfa sınırı var mı?", a: "Hiçbir sınır yoktur. İşlem doğrudan tarayıcınızın RAM belleğinde çalıştığı için yüzlerce sayfalık kitap ve raporları bile anında TXT yapabilirsiniz." }
+    ],
     crossLink: {
-      href: "/tr/protect-pdf",
-      label: "Dosyanı şifrelemek mi istiyorsun? PDF Şifrele.",
+      href: "/tr/ocr-pdf",
+      label: "Taranmış fotoğraf veya evrak mı? Resimden yazı çıkarmak için OCR PDF aracını deneyin.",
     },
   },
 };
@@ -939,7 +952,7 @@ export const removeCopy: Record<"en" | "tr", ToolCopy> = {
 };
 export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
   en: {
-    title: "JPG to PDF",
+    title: "JPG to PDF — Convert JPG Images to PDF Online Free",
     description: "Convert JPG, JPEG, PNG, and WebP images into a single PDF file instantly. Free image to PDF converter with no limits.",
     keywords: "jpg to pdf, convert image to pdf, jpeg to pdf, photos to pdf, merge images into pdf, pictures to pdf online",
     h1: "JPG to PDF",
@@ -954,12 +967,13 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     ],
     faq: [
       { q: "Is there a limit on how many images I can convert?", a: "No. Since conversion runs locally in your browser, you can merge dozens of photos without hitting server size caps." },
-      { q: "Will the image resolution be reduced?", a: "No, images are embedded in their full original resolution unless you choose a compression option." }
+      { q: "Will the image resolution be reduced?", a: "No, images are embedded in their full original resolution unless you choose a compression option." },
+      { q: "Can I choose custom margins and page sizes like A4 or Letter?", a: "Yes, you can easily choose between 'Fit Image Size', 'A4', or 'Letter', and select no margin, small margin, or large margin." }
     ],
     crossLink: { href: "/pdf-to-jpg", label: "Need to convert PDF pages back to images? Use PDF to JPG." }
   },
   tr: {
-    title: "JPG'den PDF'e Çevirme",
+    title: "JPG'den PDF'e Çevirme — Ücretsiz Fotoğrafları PDF Yapma",
     description: "JPG, JPEG ve PNG fotoğraflarınızı tek bir PDF dosyasına dönüştürün. Ücretsiz, sınırsız ve programsız fotoğraf PDF yapma aracı.",
     keywords: "jpg pdf yapma, fotoğrafları pdf yapma, resimleri tek pdf yap, jpg to pdf dönüştürücü, resimden pdf oluştur",
     h1: "JPG'den PDF'e Çevirme",
@@ -974,7 +988,8 @@ export const imgToPdfCopy: Record<"en" | "tr", ToolCopy> = {
     ],
     faq: [
       { q: "Kaç tane fotoğraf ekleyebilirim?", a: "Herhangi bir sınır yoktur. İşlem kendi bilgisayarınızda çalıştığı için onlarca fotoğrafı tek seferde birleştirebilirsiniz." },
-      { q: "Fotoğrafların netliği bozulur mu?", a: "Hayır. Fotoğraflar orijinal netlik ve çözünürlükleri korunarak PDF sayfalarına yerleştirilir." }
+      { q: "Fotoğrafların netliği bozulur mu?", a: "Hayır. Fotoğraflar orijinal netlik ve çözünürlükleri korunarak PDF sayfalarına yerleştirilir." },
+      { q: "A4 veya Letter gibi sayfa boyutları seçebilir miyim?", a: "Evet. Görselin tam boyutunu koruyabilir veya A4 / Letter formatlarını seçip kenar boşluğu (marjin) ekleyebilirsiniz." }
     ],
     crossLink: { href: "/tr/pdf-to-jpg", label: "PDF sayfalarını tekrar fotoğrafa dönüştürmek için PDF to JPG aracını kullanın." }
   },

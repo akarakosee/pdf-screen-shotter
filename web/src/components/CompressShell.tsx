@@ -10,7 +10,7 @@ import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { ProgressPanel } from './ProgressPanel';
 import { Toast, type ToastData } from './Toast';
-import { Minimize2, Download, Check, RefreshCw } from 'lucide-react';
+import { Minimize2, Check, Sparkles, Zap, ShieldCheck } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
@@ -23,7 +23,7 @@ interface Props {
 export function CompressShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
-  const [level, setLevel] = useState<CompressLevel>('extreme');
+  const [level, setLevel] = useState<CompressLevel>('recommended');
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<CompressResult | null>(null);
@@ -160,42 +160,134 @@ export function CompressShell({ t = en }: Props) {
 
       {/* Options Phase */}
       {phase === 'options' && file && (
-        <div className="phase-enter flex flex-col gap-4">
-          <div className="flex flex-col gap-4 rounded-2xl border border-amber/30 bg-surface p-5 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
-                  <Minimize2 className="h-5 w-5" />
+        <div className="phase-enter flex flex-col gap-5">
+          {/* File Header Card */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-amber/30 bg-surface p-5 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
+                <Minimize2 className="h-6 w-6" />
+              </div>
+              <div className="flex flex-col overflow-hidden min-w-0 flex-1">
+                <div className="overflow-x-auto whitespace-nowrap scrollbar-thin text-sm font-semibold pr-2 text-ink dark:text-ink-dark" title={file.name}>
+                  {file.name}
                 </div>
-                <div className="flex flex-col overflow-hidden min-w-0 flex-1">
-                  <div className="overflow-x-auto whitespace-nowrap scrollbar-thin text-sm font-medium pr-2" title={file.name}>{file.name}</div>
-                  <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                    {formatSize(file.size)} • {isTr ? 'Akıllı tekilleştirme ile sıkıştırmaya hazır' : 'Ready for smart deduplication & optimization'}
+                <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                  {formatSize(file.size)} • {isTr ? 'Sıkıştırma ve optimizasyona hazır' : 'Ready for compression & optimization'}
+                </span>
+              </div>
+            </div>
+
+            <Button variant="ghost" onClick={handleReset} className="shrink-0 text-xs">
+              {isTr ? 'Farklı Dosya Seç' : 'Change file'}
+            </Button>
+          </div>
+
+          {/* Compression Level Selector Cards */}
+          <div className="flex flex-col gap-3">
+            <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
+              {isTr ? 'Sıkıştırma Seviyesi Seçin' : 'Select Compression Level'}
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Extreme */}
+              <div
+                onClick={() => setLevel('extreme')}
+                className={`relative cursor-pointer rounded-xl border p-4 transition-all flex flex-col justify-between gap-3 ${
+                  level === 'extreme'
+                    ? 'border-amber bg-amber/5 ring-1 ring-amber dark:border-amber-dark dark:bg-amber-dark/10 dark:ring-amber-dark'
+                    : 'border-ink-muted/20 bg-surface hover:border-amber/40 dark:border-ink-muted-dark/20 dark:bg-surface-dark'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-amber dark:text-amber-dark" />
+                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                      {isTr ? 'Aşırı Sıkıştırma' : 'Extreme Compression'}
+                    </span>
+                  </div>
+                  <span className="rounded-md bg-amber/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-dark dark:text-amber">
+                    {isTr ? 'Maksimum Alan' : 'Max Savings'}
                   </span>
                 </div>
+                <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                  {isTr
+                    ? 'En küçük dosya boyutu, güçlü görsel optimizasyonu.'
+                    : 'Maximum file size reduction, medium image quality.'}
+                </p>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0">
-                <Button variant="ghost" onClick={handleReset}>
-                  {isTr ? 'Değiştir' : 'Change file'}
-                </Button>
-                <Button variant="primary" onClick={handleStartCompression}>
-                  <Minimize2 className="mr-2 h-4 w-4" />
-                  {isTr ? 'PDF Sıkıştır' : 'Compress PDF'}
-                </Button>
+              {/* Recommended */}
+              <div
+                onClick={() => setLevel('recommended')}
+                className={`relative cursor-pointer rounded-xl border p-4 transition-all flex flex-col justify-between gap-3 ${
+                  level === 'recommended'
+                    ? 'border-amber bg-amber/5 ring-1 ring-amber dark:border-amber-dark dark:bg-amber-dark/10 dark:ring-amber-dark'
+                    : 'border-ink-muted/20 bg-surface hover:border-amber/40 dark:border-ink-muted-dark/20 dark:bg-surface-dark'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-amber dark:text-amber-dark" />
+                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                      {isTr ? 'Önerilen Sıkıştırma' : 'Recommended'}
+                    </span>
+                  </div>
+                  <span className="rounded-md bg-amber/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-dark dark:text-amber">
+                    {isTr ? 'En İyi Denge' : 'Best Balance'}
+                  </span>
+                </div>
+                <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                  {isTr
+                    ? 'İyi kalite ve yüksek sıkıştırma (web ve e-posta için ideal).'
+                    : 'Good quality and high compression (ideal for web & email).'}
+                </p>
+              </div>
+
+              {/* Low / High Quality */}
+              <div
+                onClick={() => setLevel('fast')}
+                className={`relative cursor-pointer rounded-xl border p-4 transition-all flex flex-col justify-between gap-3 ${
+                  level === 'fast'
+                    ? 'border-amber bg-amber/5 ring-1 ring-amber dark:border-amber-dark dark:bg-amber-dark/10 dark:ring-amber-dark'
+                    : 'border-ink-muted/20 bg-surface hover:border-amber/40 dark:border-ink-muted-dark/20 dark:bg-surface-dark'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-amber dark:text-amber-dark" />
+                    <span className="text-sm font-semibold text-ink dark:text-ink-dark">
+                      {isTr ? 'Düşük Sıkıştırma' : 'Low Compression'}
+                    </span>
+                  </div>
+                  <span className="rounded-md bg-amber/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-dark dark:text-amber">
+                    {isTr ? 'Yüksek Kalite' : 'High Quality'}
+                  </span>
+                </div>
+                <p className="text-xs text-ink-muted dark:text-ink-muted-dark">
+                  {isTr
+                    ? 'Orijinal görsel netliği korunur, hafif sıkıştırma uygulanır.'
+                    : 'Highest image clarity preserved, light compression applied.'}
+                </p>
               </div>
             </div>
           </div>
+
+          {/* Action Button */}
+          <div className="flex items-center justify-end gap-3 pt-2">
+            <Button variant="primary" onClick={handleStartCompression} className="min-w-[180px] flex items-center justify-center gap-2">
+              <Minimize2 className="h-4 w-4" />
+              {isTr ? 'PDF Sıkıştır' : 'Compress PDF'}
+            </Button>
+          </div>
+
           <PrivacyLine t={t} />
         </div>
       )}
 
       {/* Processing Phase */}
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-4 rounded-2xl border border-ink-muted/20 dark:border-ink-muted-dark/20 bg-surface p-5 dark:border-ink-muted/20 dark:border-ink-muted-dark/20-dark dark:bg-surface-dark">
+        <div className="phase-enter flex flex-col gap-4 rounded-2xl border border-ink-muted/20 dark:border-ink-muted-dark/20 bg-surface p-5 dark:bg-surface-dark">
           <ProgressPanel
             label={isTr ? 'PDF sıkıştırılıyor ve optimize ediliyor...' : 'Compressing and optimizing PDF...'}
-            progressPercent={100}
             onCancel={handleCancel}
             cancelling={cancelling}
             cancelLabel={isTr ? 'İptal' : 'Cancel'}
@@ -212,17 +304,28 @@ export function CompressShell({ t = en }: Props) {
             t={t}
             result={{
               totalPages: 1,
-              succeeded: 1,
+              succeeded: result?.output ? 1 : 0,
               failed: [],
-              durationMs: 0,
+              durationMs: result?.durationMs ?? 0,
               output: result?.output,
               outputName: result?.outputName,
-              cancelled: false
+              cancelled: false,
             }}
+            customHeadline={
+              result
+                ? savedPercent > 0
+                  ? isTr
+                    ? `Orijinal: ${formatSize(result.originalSize)} → Sıkıştırılmış: ${formatSize(result.compressedSize)} (%${savedPercent} küçültüldü)`
+                    : `Original: ${formatSize(result.originalSize)} → Compressed: ${formatSize(result.compressedSize)} (${savedPercent}% saved)`
+                  : isTr
+                  ? `PDF zaten maksimum seviyede optimize edilmiş durumda (${formatSize(result.compressedSize)}).`
+                  : `PDF is already optimally compressed (${formatSize(result.compressedSize)}).`
+                : null
+            }
             skipped={[]}
             crossLink={null}
-            onDownload={() => { if (result?.output) triggerDownload(result?.output, result?.outputName); }}
-            onConvertMore={reset}
+            onDownload={handleDownload}
+            onConvertMore={handleReset}
           />
         </div>
       )}
