@@ -197,13 +197,6 @@ export function SanitizeShell({ t = en }: Props) {
             errorMsg={errorMsg}
             t={t}
             result={result}
-            customHeadline={
-              result && result.succeeded > 0
-                ? isTr
-                  ? 'Yazar adları, oluşturma tarihi, gömülü dosyalar ve gizli meta veriler temizlendi.'
-                  : 'Author info, creation dates, embedded files, and hidden metadata were scrubbed.'
-                : null
-            }
             skipped={[]}
             crossLink={null}
             onDownload={handleDownload}
