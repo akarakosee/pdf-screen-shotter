@@ -10,7 +10,8 @@ import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { ProgressPanel } from './ProgressPanel';
 import { Toast, type ToastData } from './Toast';
-import { FileText, ArrowRight, Download, Check, RefreshCw } from 'lucide-react';
+import { FileText } from 'lucide-react';
+import { ResultPanel } from './ResultPanel';
 
 type Phase = 'upload' | 'options' | 'processing' | 'done';
 
@@ -23,9 +24,19 @@ export function CompressShell({ t = en }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [result, setResult] = useState<CompressResult | null>(null);
+  const [progressPct, setProgressPct] = useState(0);
   const [cancelling, setCancelling] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [wasmOk, setWasmOk] = useState(true);
+
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   const isTr = t.tagline ? t.tagline.includes('gizli') : false;
 
@@ -34,6 +45,7 @@ export function CompressShell({ t = en }: Props) {
     if (!controllerRef.current) {
       controllerRef.current = new JobController({
         onFileError: (fileId, message) => {
+          clearTimer();
           setToast({
             kind: 'error',
             message: message === 'encrypted' ? t.passwordProtected : t.corruptFile,
@@ -41,11 +53,14 @@ export function CompressShell({ t = en }: Props) {
           setPhase('upload');
         },
         onCompressDone: (res) => {
+          clearTimer();
+          setProgressPct(100);
           setResult(res);
           setCancelling(false);
           setPhase('done');
         },
         onFatal: () => {
+          clearTimer();
           setCancelling(false);
           setToast({ kind: 'error', message: t.corruptFile });
           setPhase('upload');
@@ -58,7 +73,10 @@ export function CompressShell({ t = en }: Props) {
 
   useEffect(() => {
     if (typeof WebAssembly === 'undefined' || typeof Worker === 'undefined') setWasmOk(false);
-    return () => controllerRef.current?.dispose();
+    return () => {
+      clearTimer();
+      controllerRef.current?.dispose();
+    };
   }, []);
 
   const handleDrop = useCallback(
@@ -87,6 +105,17 @@ export function CompressShell({ t = en }: Props) {
   const handleStartCompression = () => {
     if (!file || phase === 'processing') return;
     setPhase('processing');
+    setProgressPct(15);
+    clearTimer();
+    timerRef.current = setInterval(() => {
+      setProgressPct((prev) => {
+        if (prev < 40) return prev + 12;
+        if (prev < 75) return prev + 7;
+        if (prev < 90) return prev + 3;
+        if (prev < 96) return prev + 1;
+        return prev;
+      });
+    }, 120);
     controller().compressStart(file, 'compress-' + Date.now(), 'recommended');
   };
 
@@ -104,8 +133,10 @@ export function CompressShell({ t = en }: Props) {
   };
 
   const handleReset = () => {
+    clearTimer();
     setFile(null);
     setResult(null);
+    setProgressPct(0);
     setPhase('upload');
   };
 
@@ -185,83 +216,42 @@ export function CompressShell({ t = en }: Props) {
         </div>
       )}
 
-      {/* Processing Phase */}
+      {/* Processing Phase - Standard frameless progress panel with percentage */}
       {phase === 'processing' && (
-        <div className="phase-enter flex flex-col gap-4 rounded-2xl border border-ink-muted/20 dark:border-ink-muted-dark/20 bg-surface p-6 dark:bg-surface-dark">
-          <ProgressPanel
-            label={isTr ? 'PDF sıkıştırılıyor ve optimize ediliyor...' : 'Compressing and optimizing PDF...'}
-            onCancel={handleCancel}
-            cancelling={cancelling}
-            cancelLabel={isTr ? 'İptal' : 'Cancel'}
-            cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
-          />
-        </div>
+        <ProgressPanel
+          label={t.converting || (isTr ? 'PDF sıkıştırılıyor...' : 'Compressing PDF...')}
+          progressPercent={progressPct}
+          onCancel={handleCancel}
+          cancelling={cancelling}
+          cancelLabel={isTr ? 'İptal' : 'Cancel'}
+          cancellingLabel={isTr ? 'İptal ediliyor...' : 'Cancelling...'}
+        />
       )}
 
-      {/* Done Phase */}
-      {phase === 'done' && result && (
-        <div className="phase-enter flex flex-col items-center justify-center gap-6 w-full max-w-[620px] mx-auto rounded-2xl border border-amber/30 bg-surface p-6 sm:p-8 shadow-[0_0_20px_rgba(232,182,95,0.12)] dark:border-amber-dark/30 dark:bg-surface-dark">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success">
-            <Check className="h-7 w-7" />
-          </div>
-
-          <div className="flex flex-col items-center text-center gap-1">
-            <h3 className="text-lg font-semibold text-ink dark:text-ink-dark">
-              {isTr ? 'PDF Başarıyla Sıkıştırıldı!' : 'PDF Successfully Compressed!'}
-            </h3>
-            <p className="text-xs text-ink-muted dark:text-ink-muted-dark truncate max-w-sm" title={result.outputName}>
-              {result.outputName}
-            </p>
-          </div>
-
-          {/* Size Comparison Block with Arrow */}
-          <div className="flex items-center justify-center gap-4 sm:gap-8 w-full rounded-xl border border-ink-muted/15 bg-bg/50 dark:bg-bg-dark/50 p-4 sm:p-5">
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
-                {isTr ? 'Önceki Boyut' : 'Original Size'}
-              </span>
-              <span className="font-mono text-base sm:text-lg font-bold text-ink-muted line-through dark:text-ink-muted-dark">
-                {formatSize(result.originalSize)}
-              </span>
-            </div>
-
-            <div className="flex flex-col items-center justify-center px-1 text-amber dark:text-amber-dark">
-              <ArrowRight className="h-6 w-6 sm:h-7 sm:w-7 stroke-[2.5]" />
-            </div>
-
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-ink-muted dark:text-ink-muted-dark">
-                {isTr ? 'Yeni Boyut' : 'Compressed Size'}
-              </span>
-              <span className="font-mono text-base sm:text-lg font-bold text-success dark:text-success-dark">
-                {formatSize(result.compressedSize)}
-              </span>
-            </div>
-
-            {savedPercent > 0 && (
-              <div className="hidden sm:flex items-center justify-center rounded-lg bg-success/15 px-2.5 py-1 text-xs font-bold text-success dark:text-success-dark">
-                -{savedPercent}%
-              </div>
-            )}
-          </div>
-
-          {savedPercent > 0 && (
-            <div className="sm:hidden flex items-center justify-center rounded-lg bg-success/15 px-3 py-1 text-xs font-bold text-success dark:text-success-dark">
-              {isTr ? `%${savedPercent} Küçültüldü` : `${savedPercent}% Reduced`}
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 w-full pt-2">
-            <Button variant="ghost" onClick={handleReset} className="flex items-center gap-2">
-              <RefreshCw className="h-4 w-4" />
-              {isTr ? 'Başka PDF Sıkıştır' : 'Compress Another'}
-            </Button>
-            <Button variant="primary" onClick={handleDownload} className="flex items-center gap-2 px-6">
-              <Download className="h-4 w-4" />
-              {isTr ? 'Sıkıştırılmış PDF\'i İndir' : 'Download PDF'}
-            </Button>
-          </div>
+      {/* Done Phase - Standard GoSecurePDF ResultPanel */}
+      {phase === 'done' && (
+        <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
+          <ResultPanel
+            t={t}
+            result={{
+              totalPages: 1,
+              succeeded: result?.output ? 1 : 0,
+              failed: [],
+              durationMs: result?.durationMs ?? 0,
+              output: result?.output,
+              outputName: result?.outputName,
+              cancelled: false,
+            }}
+            customHeadline={
+              result && result.originalSize > 0
+                ? `${formatSize(result.originalSize)} → ${formatSize(result.compressedSize)} (${isTr ? `%${savedPercent} küçültüldü` : `${savedPercent}% saved`})`
+                : null
+            }
+            skipped={[]}
+            crossLink={null}
+            onDownload={handleDownload}
+            onConvertMore={handleReset}
+          />
         </div>
       )}
     </div>
