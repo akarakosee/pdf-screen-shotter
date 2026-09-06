@@ -105,6 +105,7 @@ export interface JobEvents {
   onExtractHiddenTextProgress?: (processedPages: number, totalPages: number) => void;
   onExtractHiddenTextDone?: (result: ExportResult) => void;
   onWipeBookmarksDone?: (result: ExportResult) => void;
+  onSanitizeDone?: (result: ExportResult) => void;
   onExtractTablesProgress?: (processedPages: number, totalPages: number) => void;
   onExtractTablesDone?: (result: ExportResult) => void;
   onPdfToJsonProgress?: (processedPages: number, totalPages: number) => void;
@@ -487,6 +488,13 @@ export class JobController {
     this.running = true;
     const buf = await file.arrayBuffer();
     this.post({ type: 'wipe-bookmarks-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
+  }
+
+  async runSanitize(file: File): Promise<void> {
+    if (this.disabled || this.running) return;
+    this.running = true;
+    const buf = await file.arrayBuffer();
+    this.post({ type: 'sanitize-start', file: buf, meta: { fileId: file.name, name: file.name } }, [buf]);
   }
 
   async runExtractTables(file: File): Promise<void> {
@@ -970,6 +978,10 @@ export class JobController {
       case 'wipe-bookmarks-done':
         this.running = false;
         this.events.onWipeBookmarksDone?.(msg.result);
+        break;
+      case 'sanitize-done':
+        this.running = false;
+        this.events.onSanitizeDone?.(msg.result);
         break;
       case 'extract-tables-progress':
         this.events.onExtractTablesProgress?.(msg.processedPages, msg.totalPages);

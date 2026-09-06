@@ -97,6 +97,7 @@ self.onmessage = (ev: MessageEvent<UiToWorkerMessage>) => {
       else if (msg.type === 'remove-images-start') await removeImagesRun(msg.file, msg.meta);
       else if (msg.type === 'remove-text-start') await removeTextRun(msg.file, msg.meta);
       else if (msg.type === 'wipe-bookmarks-start') await wipeBookmarksRun(msg.file, msg.meta);
+      else if (msg.type === 'sanitize-start') await sanitizeRun(msg.file, msg.meta);
       else if (msg.type === 'viewer-prefs-start') await viewerPrefsRun(msg.file, msg.meta, msg.prefs);
       else if (msg.type === 'split-blank-start') await splitBlankRun(msg.file, msg.meta);
       else if (msg.type === 'split-bookmarks-start') await splitBookmarksRun(msg.file, msg.meta);
@@ -3989,6 +3990,72 @@ async function wipeBookmarksRun(file: ArrayBuffer, meta: FileMeta): Promise<void
     post({
       type: 'wipe-bookmarks-done',
       result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false }
+    });
+  }
+}
+async function sanitizeRun(file: ArrayBuffer, meta: FileMeta): Promise<void> {
+  try {
+    const doc = await PDFDocument.load(file, { ignoreEncryption: true, updateMetadata: false });
+    const catalog = doc.catalog;
+
+    // 1. Wipe standard info dictionary
+    doc.setTitle('');
+    doc.setAuthor('');
+    doc.setSubject('');
+    doc.setKeywords([]);
+    doc.setProducer('');
+    doc.setCreator('');
+    doc.setCreationDate(new Date(0));
+    doc.setModificationDate(new Date(0));
+
+    // Clear any extra custom keys in Info dict
+    const infoRef = doc.getInfoDict?.() || doc.context.lookup((doc.context as any).trailerInfo?.Info);
+    if (infoRef && typeof (infoRef as any).entries === 'function') {
+      const keysToDelete: PDFName[] = [];
+      for (const [key] of (infoRef as any).entries()) {
+        keysToDelete.push(key);
+      }
+      for (const key of keysToDelete) {
+        (infoRef as any).delete(key);
+      }
+    }
+
+    // 2. Delete /Metadata (XML XMP stream) from catalog
+    catalog.delete(PDFName.of('Metadata'));
+
+    // 3. Delete /PieceInfo (private app editing history) from catalog & pages
+    catalog.delete(PDFName.of('PieceInfo'));
+    doc.getPages().forEach((p) => {
+      p.node.delete(PDFName.of('PieceInfo'));
+      p.node.delete(PDFName.of('Thumb')); // thumbnails
+      p.node.delete(PDFName.of('AA')); // additional actions on page
+    });
+
+    // 4. Delete /Names (JavaScript scripts, EmbeddedFiles attachments) & actions from Catalog
+    catalog.delete(PDFName.of('Names'));
+    catalog.delete(PDFName.of('OpenAction'));
+    catalog.delete(PDFName.of('AA')); // additional actions on catalog
+    catalog.delete(PDFName.of('AF')); // Associated files (PDF/A-3 attachments)
+    catalog.delete(PDFName.of('EmbeddedFiles'));
+
+    const bytes = await doc.save({ useObjectStreams: false });
+    post({
+      type: 'sanitize-done',
+      result: {
+        totalPages: doc.getPageCount(),
+        succeeded: doc.getPageCount(),
+        failed: [],
+        durationMs: 0,
+        output: new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }),
+        outputName: `${sanitizeBaseName(meta.name)}-sanitized.pdf`,
+        cancelled: false,
+      },
+    });
+  } catch (err) {
+    console.error('sanitizeRun error:', err);
+    post({
+      type: 'sanitize-done',
+      result: { totalPages: 1, succeeded: 0, failed: [], durationMs: 0, output: new Blob([]), outputName: '', cancelled: false },
     });
   }
 }
