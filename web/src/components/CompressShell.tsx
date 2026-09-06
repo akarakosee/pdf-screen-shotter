@@ -10,10 +10,9 @@ import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { ProgressPanel } from './ProgressPanel';
 import { Toast, type ToastData } from './Toast';
-import { FileText } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
 
-type Phase = 'upload' | 'options' | 'processing' | 'done';
+type Phase = 'upload' | 'processing' | 'done';
 
 interface Props {
   t?: Strings;
@@ -93,31 +92,26 @@ export function CompressShell({ t = en }: Props) {
       }
       setFile(f);
       setResult(null);
-      setPhase('options');
+      setPhase('processing');
+      setProgressPct(15);
+      clearTimer();
+      timerRef.current = setInterval(() => {
+        setProgressPct((prev) => {
+          if (prev < 40) return prev + 12;
+          if (prev < 75) return prev + 7;
+          if (prev < 90) return prev + 3;
+          if (prev < 96) return prev + 1;
+          return prev;
+        });
+      }, 120);
+      controller().compressStart(f, 'compress-' + Date.now(), 'recommended');
     },
-    [t]
+    [t, controller]
   );
 
   const preload = useCallback(() => {
     controller();
   }, [controller]);
-
-  const handleStartCompression = () => {
-    if (!file || phase === 'processing') return;
-    setPhase('processing');
-    setProgressPct(15);
-    clearTimer();
-    timerRef.current = setInterval(() => {
-      setProgressPct((prev) => {
-        if (prev < 40) return prev + 12;
-        if (prev < 75) return prev + 7;
-        if (prev < 90) return prev + 3;
-        if (prev < 96) return prev + 1;
-        return prev;
-      });
-    }, 120);
-    controller().compressStart(file, 'compress-' + Date.now(), 'recommended');
-  };
 
   const handleCancel = () => {
     if (!cancelling) {
@@ -180,38 +174,6 @@ export function CompressShell({ t = en }: Props) {
       {phase === 'upload' && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={handleDrop} onPreload={preload} multiple={false} />
-          <PrivacyLine t={t} />
-        </div>
-      )}
-
-      {/* Options Phase */}
-      {phase === 'options' && file && (
-        <div className="phase-enter flex flex-col gap-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-amber/30 bg-surface p-5 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)]">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
-                <FileText className="h-6 w-6" />
-              </div>
-              <div className="flex flex-col overflow-hidden min-w-0 flex-1">
-                <div className="overflow-x-auto whitespace-nowrap scrollbar-thin text-sm font-semibold pr-2 text-ink dark:text-ink-dark" title={file.name}>
-                  {file.name}
-                </div>
-                <span className="text-xs text-ink-muted dark:text-ink-muted-dark font-mono">
-                  {formatSize(file.size)}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 shrink-0">
-              <Button variant="ghost" onClick={handleReset} className="text-xs">
-                {isTr ? 'Değiştir' : 'Change file'}
-              </Button>
-              <Button variant="primary" onClick={handleStartCompression} className="min-w-[150px] flex items-center justify-center gap-2">
-                {isTr ? 'PDF Sıkıştır' : 'Compress PDF'}
-              </Button>
-            </div>
-          </div>
-
           <PrivacyLine t={t} />
         </div>
       )}
