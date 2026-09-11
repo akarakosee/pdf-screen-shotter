@@ -1,13 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DropZone } from './DropZone';
 import { PrivacyLine } from './PrivacyLine';
 import { Button } from './ui/Button';
 import { Toast, type ToastData } from './Toast';
 import { triggerDownload } from '../app/download';
-import { flattenPdf, type FlattenPdfOptions } from '../engine/flattenPdf';
+import { validatePdfFile } from '../app/validators';
+import { flattenPdf } from '../engine/flattenPdf';
 import type { Strings } from '../i18n/en';
 import { en } from '../i18n/en';
-import { Layers, CheckSquare, Square, Check, Download, RefreshCw } from 'lucide-react';
+import { Layers, CheckSquare, Square } from 'lucide-react';
 import { ResultPanel } from './ResultPanel';
 import { ProgressPanel } from './ProgressPanel';
 
@@ -20,32 +21,65 @@ interface Props {
 export function FlattenShell({ t = en }: Props) {
   const [phase, setPhase] = useState<Phase>('upload');
   const [file, setFile] = useState<File | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [output, setOutput] = useState<{ blob: Blob; name: string; hadForm: boolean } | null>(null);
   const [removeAnnotations, setRemoveAnnotations] = useState(true);
+  const [progressPct, setProgressPct] = useState(0);
 
-  const addFile = useCallback((incoming: File[]) => {
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const isTr = t.tagline ? t.tagline.includes('gizli') : (t.lang === 'tr');
+
+  useEffect(() => {
+    return () => clearTimer();
+  }, []);
+
+  const addFile = useCallback(async (incoming: File[]) => {
     if (incoming.length === 0) return;
     const f = incoming[0];
-    if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-      setToast({ kind: 'error', message: t.notPdf });
+    const rejection = await validatePdfFile(f);
+    if (rejection) {
+      setToast({ kind: 'error', message: rejection === 'empty-file' ? t.emptyFile : t.notPdf });
       return;
     }
     setFile(f);
+    setOutput(null);
+    setErrorMsg(null);
     setPhase('options');
   }, [t]);
 
   const handleFlatten = async () => {
-    if (!file) return;
-    setIsProcessing(true);
+    if (!file || phase === 'processing') return;
     setPhase('processing');
+    setProgressPct(15);
+    clearTimer();
+    timerRef.current = setInterval(() => {
+      setProgressPct((prev) => {
+        if (prev < 40) return prev + 12;
+        if (prev < 75) return prev + 7;
+        if (prev < 90) return prev + 3;
+        if (prev < 96) return prev + 1;
+        return prev;
+      });
+    }, 120);
 
     try {
-      await new Promise((r) => setTimeout(r, 50));
+      // Yield to paint the progress animation smoothly
+      await new Promise((r) => setTimeout(r, 450));
 
       const res = await flattenPdf(file, { removeAnnotations });
+
+      clearTimer();
+      setProgressPct(100);
+      await new Promise((r) => setTimeout(r, 200));
 
       setOutput({
         blob: res.output,
@@ -54,28 +88,38 @@ export function FlattenShell({ t = en }: Props) {
       });
       setPhase('done');
     } catch (err: any) {
+      clearTimer();
       console.error('Flatten PDF failed:', err);
-      setToast({
-        kind: 'error',
-        message: err?.message === 'ENCRYPTED_PDF_UNSUPPORTED'
-          ? (t.lang === 'tr' ? 'Şifreli PDF dosyaları desteklenmiyor.' : 'Encrypted PDF files are not supported.')
-          : (t.lang === 'tr' ? 'PDF düzleştirilemedi, dosya bozuk olabilir.' : 'Failed to flatten PDF, file may be corrupted.'),
-      });
+      if (err?.message === 'ENCRYPTED_PDF_UNSUPPORTED' || err?.message?.includes('encrypted') || err?.message?.includes('password')) {
+        setToast({ kind: 'error', message: isTr ? 'Bu belge şifreli. Önce kilidini açmalısınız.' : 'This document is encrypted. Please unlock it first.' });
+      } else {
+        setToast({ kind: 'error', message: isTr ? 'PDF düzleştirilemedi, dosya bozuk olabilir.' : 'Failed to flatten PDF, file may be corrupted.' });
+      }
       setPhase('options');
-    } finally {
-      setIsProcessing(false);
     }
   };
 
   const reset = useCallback(() => {
+    clearTimer();
     setFile(null);
     setOutput(null);
     setErrorMsg(null);
+    setProgressPct(0);
     setPhase('upload');
   }, []);
 
   return (
     <div className="flex flex-col gap-5">
+      {/* Toast notification */}
+      {toast && (
+        <Toast
+          kind={toast.kind}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
+      {/* Upload Phase */}
       {phase === 'upload' && (
         <div className="space-y-3 rounded-2xl border bg-surface p-2 shadow-sm sm:p-3 dark:bg-surface-dark">
           <DropZone t={t} hasFiles={false} onFiles={addFile} multiple={false} />
@@ -83,9 +127,10 @@ export function FlattenShell({ t = en }: Props) {
         </div>
       )}
 
+      {/* Options Phase */}
       {phase === 'options' && file && (
         <div className="phase-enter flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-2xl border border-amber/30 bg-surface p-4 shadow-[0_0_15px_rgba(232,182,95,0.15)] dark:border-amber-dark/30 dark:bg-surface-dark dark:shadow-[0_0_15px_rgba(232,182,95,0.25)] min-w-0 flex-1">
+          <div className="flex items-center gap-3 rounded-2xl border bg-surface p-4 dark:bg-surface-dark min-w-0 flex-1">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber/10 text-amber dark:bg-amber-dark/20 dark:text-amber-dark">
               <Layers className="h-5 w-5" />
             </div>
@@ -114,10 +159,10 @@ export function FlattenShell({ t = en }: Props) {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-medium">
-                  {t.lang === 'tr' ? 'Açıklama ve notları da düzleştir' : 'Flatten annotations and notes'}
+                  {isTr ? 'Açıklama ve notları da düzleştir' : 'Flatten annotations and notes'}
                 </span>
                 <span className="text-xs text-ink-muted dark:text-ink-muted-dark">
-                  {t.lang === 'tr'
+                  {isTr
                     ? 'Form alanlarına ek olarak yorum ve çizimleri de sabit katman haline getirir.'
                     : 'In addition to form fields, converts comments and highlights into static content.'}
                 </span>
@@ -125,32 +170,40 @@ export function FlattenShell({ t = en }: Props) {
             </label>
           </div>
 
-          <div className="flex justify-end mt-2">
-            <Button onClick={handleFlatten} disabled={isProcessing}>
-              {t.lang === 'tr' ? 'PDF\'i Düzleştir' : 'Flatten PDF'}
+          <div className="flex justify-between items-center mt-2">
+            <Button variant="ghost" onClick={reset} className="text-xs">
+              {isTr ? 'Değiştir' : 'Change file'}
+            </Button>
+            <Button onClick={handleFlatten}>
+              {isTr ? 'PDF\'i Düzleştir' : 'Flatten PDF'}
             </Button>
           </div>
         </div>
       )}
 
+      {/* Processing Phase - Standard frameless progress panel with percentage */}
       {phase === 'processing' && (
-        <ProgressPanel label={t.converting || 'Processing...'} />
+        <ProgressPanel
+          label={t.converting || (isTr ? 'PDF formları ve katmanları düzleştiriliyor...' : 'Flattening form fields and layers...')}
+          progressPercent={progressPct}
+        />
       )}
 
-      {phase === 'done' && (
+      {/* Done Phase - Standard GoSecurePDF ResultPanel */}
+      {phase === 'done' && (output || errorMsg) && (
         <div className="animate-in fade-in slide-in-from-bottom-8 flex flex-col items-center justify-center py-8 duration-700 w-full mx-auto">
           <ResultPanel
             errorMsg={errorMsg}
             t={t}
-            result={{
+            result={output ? {
               totalPages: 1,
               succeeded: 1,
               failed: [],
               durationMs: 0,
-              output: output?.blob,
-              outputName: output?.name,
+              output: output.blob,
+              outputName: output.name,
               cancelled: false
-            }}
+            } : null}
             skipped={[]}
             crossLink={null}
             onDownload={() => { if (output) triggerDownload(output.blob, output.name); }}
@@ -158,8 +211,6 @@ export function FlattenShell({ t = en }: Props) {
           />
         </div>
       )}
-
-      <Toast toast={toast} onClear={() => setToast(null)} />
     </div>
   );
 }
