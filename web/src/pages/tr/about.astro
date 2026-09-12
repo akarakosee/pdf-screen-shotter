@@ -3,32 +3,44 @@ import Prose from '../../layouts/Prose.astro';
 ---
 
 <Prose
-  title="Hakkında — dosyalarınızı hiç görmeyen PDF araçları"
-  description="Bu site neden var, nasıl çalışıyor ve dosyalarınız neden cihazınızdan çıkmıyor."
-  h1="Hakkında"
+  title="Hakkımızda | GoSecurePDF"
+  description="GoSecurePDF'in hikayesi ve internetteki en güvenli PDF araçlarını sunma misyonumuz hakkında bilgi edinin."
+  h1="Hakkımızda"
   lang="tr"
 >
   <p>
-    Bu site, tek bir belirleyici özelliği olan bir PDF araç setidir: her araç tamamen
-    tarayıcında çalışır. Yükleme adımı, işlem sunucusu ve hesap yoktur. Profesyonel PDF
-    yazılımlarını çalıştıran motorun aynısı, WebAssembly aracılığıyla kendi cihazında
-    çalışır.
+    GoSecurePDF, çok yaygın olan basit bir rahatsızlıktan doğdu: <strong>Neden basit bir PDF belgesini düzenlemek için gizliliğimizden ödün vermek zorundayız?</strong>
+  </p>
+
+  <h2>Geleneksel Çevrimiçi PDF Araçlarının Sorunu</h2>
+  <p>
+    İki banka dekontunu birleştirmek, şifreli bir maaş bordrosunu açmak veya imzalı bir sözleşmeyi e-posta ile göndermek için sıkıştırmak istediğinizde, internette yüzlerce ücretsiz PDF dönüştürücü bulabilirsiniz. Ancak bu sitelerin neredeyse tamamı <strong>dosyanızı kendi sunucularına (cloud) yüklemenizi</strong> şart koşar.
   </p>
   <p>
-    Proje, PDF'leri görüntüye dönüştüren küçük bir masaüstü uygulaması olarak başladı.
-    Masaüstü uygulama hâlâ kullanılabilir ve aynı render motorunu kullanır; buradan
-    aldığın çıktı onunla birebir aynıdır — bu, her değişiklikte piksel piksel otomatik
-    olarak test edilir.
+    "Yükle" butonuna bastığınız anda en hassas kişisel ve finansal verileriniz uzak bir sunucuya gönderilir. Bu belgeleri ne kadar süre sakladıklarını, kimlerin erişimi olduğunu veya sunucularının hackerlara karşı ne kadar güvenli olduğunu asla bilemezsiniz. Sağlık raporları, şirket sözleşmeleri ve finansal veriler için bu sistem çok büyük bir güvenlik riski oluşturur.
   </p>
-  <h2>Yerel işleme neden önemli</h2>
+
+  <h2>GoSecurePDF Çözümü</h2>
   <p>
-    Çoğu çevrimiçi PDF aracı belgeni bir sunucuya gönderir, orada işler ve sonucu geri
-    yollar. Bu model; sözleşme, fatura, sağlık kaydı — dönüştürdüğün her ne ise — bir
-    şirkete emanet etmeni gerektirir. Yerel işleme bu soruyu tümüyle ortadan kaldırır:
-    hiçbir şey iletilmediği için kimseye emanet edilecek bir şey de yoktur.
+    GoSecurePDF'i tek bir temel ilke üzerine kurduk: <strong>Sitedeki her bir araç tamamen sizin tarayıcınızın (bilgisayarınızın) içinde çalışır.</strong>
   </p>
-  <h2>İletişim</h2>
   <p>
-    Soru ve hata bildirimleri için <a href="/tr/contact">iletişim sayfasına</a> bak.
+    En yeni <strong>WebAssembly (WASM)</strong> teknolojisini kullanarak, profesyonel masaüstü PDF işleme motorlarını doğrudan web tarayıcınızda çalışacak şekilde yeniden tasarladık. Dosya yükleme aşaması yoktur, bulut işleme sunucusu yoktur ve üye olmanıza gerek yoktur.
+  </p>
+  <p>
+    Sitemizde bir PDF'i sıkıştırdığınızda veya birleştirdiğinizde, matematiksel işlemler kendi cihazınızın işlemcisi (CPU) tarafından yapılır. Dosyalarınız bilgisayarınızın dışına kesinlikle çıkmaz.
+  </p>
+
+  <h2>Hızlı, Ücretsiz ve Gizli</h2>
+  <p>
+    Milyonlarca dosyayı işlemek için devasa ve pahalı bulut sunucularına para ödemek zorunda olmadığımız için; bu güçlü araçları size günlük kullanım sınırları veya dosya boyutu limitleri olmadan <strong>tamamen ücretsiz</strong> sunabiliyoruz.
+  </p>
+  <p>
+    Misyonumuz, premium masaüstü programlarından beklediğiniz kaliteyi, gizliliğinizden asla ödün vermeden doğrudan web ortamında sizlere sunmaktır.
+  </p>
+
+  <h2>Bize Ulaşın</h2>
+  <p>
+    Araçlarımızı geliştirmek için sürekli çalışıyoruz. Geri bildirimleriniz, hata bildirimleri veya işbirlikleri için <a href="/tr/contact">İletişim</a> sayfamızdan bizimle bağlantı kurabilirsiniz.
   </p>
 </Prose>

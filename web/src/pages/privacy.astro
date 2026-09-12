@@ -3,53 +3,41 @@ import Prose from '../layouts/Prose.astro';
 ---
 
 <Prose
-  title="Privacy Policy"
-  description="What data this site does and does not collect. Your PDF files are processed on your device and never uploaded."
+  title="Privacy Policy | GoSecurePDF"
+  description="Learn why GoSecurePDF is the most secure and private way to edit PDF files online."
   h1="Privacy Policy"
 >
-  <p>Last updated: 21 July 2026</p>
+  <p>Last updated: September 12, 2026</p>
 
-  <h2>Your files</h2>
+  <h2>Your Files Stay on Your Device</h2>
   <p>
-    PDF files you use with the tools on this site are processed entirely on your device, in
-    your browser. They are never uploaded, transmitted, stored, or seen by us or by any
-    third party. This is not a policy choice that could quietly change — the site has no
-    server capable of receiving files.
+    The core philosophy of GoSecurePDF is absolute data privacy. When you use our tools to compress, edit, or merge your PDF files, <strong>your documents are never uploaded to any cloud server</strong>.
   </p>
-  <div class="prose-accent">
-    <p class="mb-2">Verify it yourself:</p>
-    <p class="text-sm">
-      Open your browser's DevTools → Network tab while converting a file. You will see zero
-      requests carrying file data.
-    </p>
-  </div>
-
-  <h2>Analytics</h2>
   <p>
-    We use Cloudflare Web Analytics to understand aggregate traffic (page views, country,
-    browser type). It is cookie-free and does not track you across sites. We see counts,
-    not people.
+    We utilize a modern browser technology called <strong>WebAssembly (WASM)</strong>. This allows the PDF processing engine to run entirely within the memory (RAM) of your own local device. Because we do not own or operate any file-processing servers, it is physically impossible for us to access, view, store, or share your documents.
+  </p>
+  <p>
+    <em>Verify it yourself:</em> You can open your browser's Developer Tools (Network tab), disconnect from the internet after the page loads, and process your highly confidential files completely offline.
   </p>
 
-  <h2>Error reporting</h2>
+  <h2>Analytics & Telemetry</h2>
   <p>
-    If a tool crashes, a technical error report (error type and stack trace) may be sent to
-    our error-tracking service. These reports never include your files, file names, file
-    contents, or any page data.
+    We use <strong>Vercel Web Analytics</strong> and <strong>Vercel Speed Insights</strong> to monitor the health, performance, and general aggregate traffic of our website. These tools help us understand which pages are popular and if users are experiencing slow load times.
+  </p>
+  <p>
+    These analytics are privacy-friendly, entirely cookie-free, and do not track your activity across other websites. We strictly see anonymized aggregate metrics (e.g., page views, rough geographic regions) and never personal identifiable information.
   </p>
 
   <h2>Advertising</h2>
   <p>
-    The site may show ads to cover its costs. If Google AdSense is enabled, Google may use
-    cookies as described in its own policies, and you will be asked for consent where the
-    law requires it. Ads never appear inside the tool working area, and ad scripts have no
-    access to your files.
+    To keep GoSecurePDF free for everyone, we may display advertisements. Ad networks (such as Google AdSense) may use cookies to serve ads based on your prior visits to this or other websites, as governed by their respective privacy policies. You will be prompted to manage your consent regarding these cookies where required by local law (such as GDPR).
+  </p>
+  <p>
+    Advertisements are strictly confined to their designated banner slots. Ad scripts have absolutely zero access to the files you process in our tools.
   </p>
 
-  <h2>Your rights</h2>
+  <h2>Your Privacy Rights</h2>
   <p>
-    Because we do not collect personal data about you, there is normally nothing for us to
-    access, correct, or delete. If you believe otherwise, or have any privacy question,
-    contact us — see the <a href="/contact">contact page</a>.
+    Because we process your documents locally and do not collect personal user profiles, we do not hold any personal data for you to request access to, correct, or delete. If you have further questions about our strict privacy practices, please visit our <a href="/contact">contact page</a>.
   </p>
 </Prose>
