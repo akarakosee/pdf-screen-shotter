@@ -63,6 +63,17 @@ const t = {
             </a>
           ))
         }
+        <a
+          href={lang === 'tr' ? '/tr/blog' : '/blog'}
+          aria-current={normalizedPath.includes('/blog') ? 'page' : undefined}
+          class={`flex h-11 items-center rounded-lg px-2 text-xs font-bold hover:text-ink dark:hover:text-ink-dark ${
+            normalizedPath.includes('/blog')
+              ? 'text-amber dark:text-amber-dark'
+              : 'text-ink-muted dark:text-ink-muted-dark'
+          }`}
+        >
+          {lang === 'tr' ? 'Rehber' : 'Guides'}
+        </a>
       </nav>
     </div>
 

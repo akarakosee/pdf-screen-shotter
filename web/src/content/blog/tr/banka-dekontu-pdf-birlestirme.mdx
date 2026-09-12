@@ -1,0 +1,33 @@
+---
+title: "Banka Dekontu PDF Birleştirme: En Güvenli Yöntem"
+description: "Vize başvurusu, vergi işlemleri veya kredi başvurusu için banka dekontlarınızı ve hesap dökümlerinizi gizlilikten ödün vermeden güvenle tek bir PDF yapın."
+pubDate: 2026-09-12
+tags: ["pdf birleştirme", "banka dekontu", "gizlilik"]
+---
+import { MergeShell } from '../../../components/MergeShell';
+import { tr } from '../../../i18n/tr';
+
+Vize başvurusu, kredi talebi veya resmi muhasebe işlemleri yaparken kurumlar sizden genellikle son 3 veya 6 aylık banka hesap dökümlerinizi **tek bir PDF dosyası** olarak göndermenizi ister.
+
+En büyük sorun nedir? **Gizlilik.** Banka dekontlarınız hesap numaralarınız, ev adresiniz, tüm harcama geçmişiniz ve bakiye bilgileriniz gibi son derece hassas veriler içerir. Bu dosyaları asla internette karşınıza çıkan rastgele sunucu tabanlı sitelere yüklememelisiniz.
+
+İşte tam da bu yüzden, dosyalarınızı internete yüklemeden cihazınızın içinde birleştiren tamamen güvenli bir sistem kurduk.
+
+## Banka Dökümlerinizi Hemen Burada Birleştirin
+
+Herhangi bir program indirmenize veya kayıt olmanıza gerek yok. Tarayıcınızın içindeki bu aracı kullanarak dökümlerinizi saniyeler içinde birleştirebilirsiniz. **Dosyalarınız asla sunucularımıza yüklenmez.** Tüm işlem bilgisayarınızın kendi belleğinde (offline olarak) gerçekleşir.
+
+<div class="my-8 rounded-xl border border-border bg-bg p-6 shadow-sm dark:border-border-dark dark:bg-bg-dark">
+  <MergeShell client:only="react" t={tr} />
+</div>
+
+### Nasıl Kullanılır?
+1. **Dosyaları Yükleyin:** Aydan aya indirdiğiniz tüm banka dökümü PDF'lerini yukarıdaki alana sürükleyip bırakın.
+2. **Sıraya Koyun:** Dosyalar kronolojik sıraya göre değilse, kutuları sürükleyerek ayları doğru sıraya dizin.
+3. **Birleştirin:** "Birleştir" butonuna tıklayın. Tarayıcınız PDF'leri anında bir araya getirecektir.
+4. **İndirin:** Oluşan tek ve düzenli dosyayı güvenle bilgisayarınıza kaydedin.
+
+### Bu İşlem Neden Güvenli?
+Klasik online PDF siteleri, dosyalarınızı kendi bulut sunucularına (cloud) yükler, orada birleştirir ve size geri gönderir. Bu durumda tüm finansal verileriniz 3. şahıs sunucularından geçmiş olur.
+
+Bizim geliştirdiğimiz bu teknoloji ise WebAssembly kullanarak doğrudan **tarayıcınızın içinde** çalışır. Sayfayı yükledikten sonra internet bağlantınızı kesseniz bile aracımız kusursuzca çalışmaya devam eder. Banka verileriniz yalnızca sizin ekranınızda kalır.
