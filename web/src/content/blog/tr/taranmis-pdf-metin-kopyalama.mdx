@@ -1,0 +1,28 @@
+---
+title: "Taranmış PDF'den Yazı Kopyalama (Ücretsiz & Çevrimdışı)"
+description: "Fotoğraf gibi olan veya kopyalanmayan PDF dosyalarından yazıları nasıl çekip alabileceğinizi öğrenin."
+pubDate: 2026-09-12
+tags: ["pdf yazı kopyalama", "taranmış pdf metin kopyalama", "pdf'den text alma"]
+---
+import { ExtractShell } from '../../../components/ExtractShell';
+import { tr } from '../../../i18n/tr';
+
+Bazen bir PDF belgesindeki bir paragrafı veya adresi kopyalamak istersiniz ama farenizle metni seçemezsiniz çünkü belge aslında tarayıcıyla çekilmiş bir fotoğraftır. Bazen de seçersiniz ama Word'e yapıştırdığınızda anlamsız, bozuk karakterler (, #, *) ortaya çıkar.
+
+Bu rehberde, kopyalanamayan PDF dosyalarının içindeki gizli metinleri veya bozuk fontları nasıl temiz bir "Text" dosyası olarak alabileceğinizi anlatacağız.
+
+## PDF'inizin İçindeki Metinleri Şuradan Çıkarın
+
+Gizli ve özel şirket sözleşmelerinizi rastgele online sitelere yüklemeyin. Kendi tarayıcınızın içinde çalışan bu araçla dosyalarınızı cihazınızdan dışarı çıkarmadan metinleri kopyalayabilirsiniz.
+
+<div class="my-8 rounded-xl border border-border bg-bg p-6 shadow-sm dark:border-border-dark dark:bg-bg-dark">
+  <ExtractShell client:only="react" t={tr} />
+</div>
+
+### Kopyalayınca Yazılar Neden Bozuluyor?
+Bir PDF'den yazıyı kopyaladığınızda bozuk çıkmasının temel sebebi **Unicode haritalaması olmayan fontlardır**. Yani PDF programı o karakterin ekranda nasıl çizileceğini biliyordur, ama onun aslında "A" harfi olduğunu bilmiyordur. 
+
+Geliştirdiğimiz bu çıkarma (extract) aracı, belgenin temel kodlarına inerek ekranda yazanları doğru haritalarla yeniden eşleştirir ve size %100 temiz bir metin sunar.
+
+### İnternet Bağlantısı Gerektirmez
+Yukarıdaki araca PDF'inizi bıraktığınız an sistem dosyayı bilgisayarınızın RAM'inde analiz eder. İşlemi başlatmadan önce internetinizi bile kesebilirsiniz; araç kusursuz bir şekilde yazıları çıkaracaktır. Çünkü dosyalarınız hiçbir zaman bir bulut sunucusuna gönderilmez.

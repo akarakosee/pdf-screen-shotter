@@ -1,0 +1,29 @@
+---
+title: "How to Extract Text from Scanned PDFs (For Free)"
+description: "Need to copy text from a PDF that behaves like an image? Learn how to extract and copy text securely without losing formatting."
+pubDate: 2026-09-12
+tags: ["extract text from pdf", "copy text from scanned pdf", "pdf to text"]
+---
+import { ExtractShell } from '../../../components/ExtractShell';
+
+Have you ever tried to copy a paragraph from a PDF, only to realize you can't select the text because the document is actually just a scanned image? Or maybe you *can* select the text, but when you paste it into Word, it looks like a garbled mess of weird characters.
+
+This is a common issue with older PDF standards and scanned documents. In this guide, we'll show you how to instantly extract clean, perfectly readable text from any PDF document.
+
+## Extract Clean Text Instantly
+
+Do not upload your confidential documents to random online converters. Use our secure, client-side extraction tool to pull raw text out of your PDFs directly on your own machine.
+
+<div class="my-8 rounded-xl border border-border bg-bg p-6 shadow-sm dark:border-border-dark dark:bg-bg-dark">
+  <ExtractShell client:only="react" />
+</div>
+
+### Why Does PDF Text Get Corrupted?
+When you try to copy-paste from a PDF and get strange characters, it's usually because of **Embedded Fonts without a Unicode Map**. The PDF knows how to *draw* the letter "A", but the underlying code doesn't know that the drawing actually represents the letter "A".
+
+Our extraction tool deeply analyzes the structural code of your PDF file to find the actual strings and reconstruct the text precisely as it appears on the page.
+
+### The Most Secure Way to Process Documents
+Whether you are extracting text from medical records, financial audits, or legal depositions, privacy is critical.
+
+This tool is built on modern WebAssembly technologies, meaning the PDF processing engine runs entirely within your web browser. When you drop your file into the tool above, it never leaves your computer. We guarantee 100% privacy because we literally have no servers to store your files on.

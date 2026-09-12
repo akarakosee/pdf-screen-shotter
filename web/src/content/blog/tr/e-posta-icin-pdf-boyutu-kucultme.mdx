@@ -1,0 +1,35 @@
+---
+title: "E-Posta İçin PDF Boyutu Küçültme (Ücretsiz ve Şifreli)"
+description: "PDF dosyanız mail atmak için çok mu büyük? PDF dosya boyutunu kalitesini bozmadan ve internete yüklemeden nasıl ücretsiz küçülteceğinizi öğrenin."
+pubDate: 2026-09-12
+tags: ["pdf küçültme", "pdf boyut küçültme", "pdf sıkıştırma"]
+---
+import { CompressShell } from '../../../components/CompressShell';
+import { tr } from '../../../i18n/tr';
+
+Önemli bir PDF belgesini e-posta ile göndermeye çalışırken "Dosya boyutu çok büyük" veya "Ek sınırı aşıldı" hatasıyla karşılaşmak oldukça can sıkıcıdır. Gmail, Outlook ve Hotmail gibi servisler genellikle maksimum 20-25 MB'lık eklere izin verir.
+
+Özellikle tarayıcıdan (scanner) çekilmiş belgeler veya çok sayfalı sunumlar bu limiti kolayca aşabilir. Bu rehberde belgelerinizi okunabilirliğini bozmadan nasıl e-posta boyutlarına indireceğinizi anlatacağız.
+
+## PDF'inizi Hemen Burada Küçültün (İnternetsiz Çalışır)
+
+Klasik PDF küçültme siteleri, belgelerinizi kendi sunucularına yüklemenizi ister. Kimlik fotokopisi, fatura veya şirket sözleşmesi gibi özel belgelerinizi tanımadığınız sunuculara yüklemek büyük bir güvenlik açığıdır.
+
+GoSecurePDF olarak, sıkıştırma işlemini doğrudan **sizin tarayıcınızın içinde** yapıyoruz. Dosyanız bilgisayarınızdan dışarı asla çıkmaz. Aşağıdaki aracı hemen deneyebilirsiniz:
+
+<div class="my-8 rounded-xl border border-border bg-bg p-6 shadow-sm dark:border-border-dark dark:bg-bg-dark">
+  <CompressShell client:only="react" t={tr} />
+</div>
+
+### PDF Dosyaları Neden Çok Yer Kaplar?
+1. **Yüksek Çözünürlüklü Görseller:** Telefonla çektiğiniz veya tarattığınız belgeler aslında devasa fotoğraflardır.
+2. **Gereksiz Arka Plan Verileri:** Bazı PDF düzenleyiciler, sildiğiniz sayfaları bile dosyanın kodlarında saklamaya devam eder.
+3. **Gömülü Yazı Tipleri:** Kullanılmayan yüzlerce font dosyası PDF'in içine hapsolmuş olabilir.
+
+### Sistemimiz Nasıl Sıkıştırıyor?
+Yukarıdaki kutuya dosyanızı bıraktığınızda sistem şunları yapar:
+- Görsellerin boyutunu gözle fark edilemeyecek ama boyutu çok düşürecek şekilde web standartlarına (DPI) indirger.
+- Metinlerin ve yazı tiplerinin kalitesine **asla** dokunmaz, böylece yazılar bulanıklaşmaz.
+- Dosyanın içindeki gereksiz kod atıklarını temizler.
+
+Herhangi bir günlük sınırımız, dosya boyutu limitimiz veya reklamlardan oluşan bekleme sürelerimiz yoktur. Sınırsızca kullanabilirsiniz!

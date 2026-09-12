@@ -1,0 +1,31 @@
+---
+title: "PDF Şifre Kaldırma: Parolayı Kalıcı Olarak Silme"
+description: "Maaş bordrosu veya banka dekontu gibi şifreli PDF'leri her seferinde parolayla açmaktan sıkıldınız mı? PDF şifresini kalıcı olarak nasıl kaldıracağınızı öğrenin."
+pubDate: 2026-09-12
+tags: ["pdf şifre kaldırma", "şifreli pdf açma", "pdf parola silme"]
+---
+import { UnlockShell } from '../../../components/UnlockShell';
+import { tr } from '../../../i18n/tr';
+
+Bankalar, e-devlet, veya insan kaynakları departmanları size belge gönderirken genellikle T.C. Kimlik numaranızla veya doğum tarihinizle açılan şifreli PDF'ler gönderirler. Bu güvenlik için harika olsa da, bu belgeyi muhasebeye iletmeniz veya arşivinize eklemeniz gerektiğinde büyük bir çileye dönüşür.
+
+Şifresini bildiğiniz bir PDF'in parolasını **kalıcı olarak silmek** ve bir daha şifre girmeden tıklayıp açmak istiyorsanız, doğru yerdesiniz.
+
+## Güvenli Şifre Kaldırma Aracı
+
+Maaş bordrosu gibi belgeler en hassas kişisel verilerinizi içerir. Bu yüzden arama motorlarında bulduğunuz rastgele "PDF Şifre Kırıcı" sitelere bu dosyaları **asla yüklemeyin**.
+
+GoSecurePDF, şifre kaldırma işlemini bilgisayarınızın kendi içinde (tarayıcınızda) yapar.
+
+<div class="my-8 rounded-xl border border-border bg-bg p-6 shadow-sm dark:border-border-dark dark:bg-bg-dark">
+  <UnlockShell client:only="react" t={tr} />
+</div>
+
+### Nasıl Yapılır?
+1. **Dosyayı Seçin:** Şifreli PDF dosyanızı yukarıdaki kutuya yükleyin.
+2. **Mevcut Şifreyi Girin:** Kilidi açabilmemiz için belgenin mevcut şifresini girmelisiniz.
+3. **Kilidi Kaldır:** Butona tıkladığınızda belge çözümlenir ve şifreleme katmanı tamamen silinir.
+4. **İndirin:** İndirdiğiniz yeni dosyayı artık hiçbir şifre sormadan doğrudan açabilirsiniz.
+
+### Bilmediğim bir şifreyi kırabilir miyim?
+Hayır. Aracımız, "Brute Force" (Kaba Kuvvet) saldırısı yapan bir hacker aracı değildir. Zaten güncel PDF dosyaları (AES-256 şifreleme ile korunur) dünyadaki en güçlü bilgisayarlar bile kullanılsa şifresi bilinmeden kırılamaz. Amacımız, şifresini bildiğiniz ama artık şifre girmekle uğraşmak istemediğiniz belgeleri özgürleştirmektir.
