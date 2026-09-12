@@ -3329,12 +3329,12 @@ export const pdfToJsonCopy = {
 
 export const audioReaderCopy = {
   en: {
-    title: "PDF Audio Reader",
-    description: "Listen to your PDF documents with natural text-to-speech audio reader online for free. Read aloud PDF papers and ebooks.",
-    keywords: "pdf audio reader, read pdf aloud, pdf text to speech, listen to pdf online, tts pdf reader",
-    h1: "PDF Audio Reader",
-    tagline: "Turn your PDF ebooks, research papers, and documents into spoken audio using browser speech synthesis — free, unlimited, and 100% private.",
-    howToName: "How to listen to a PDF with text-to-speech",
+    title: "Voice PDF Reader — Audio Reader All Free Online",
+    description: "Listen to your PDF documents with a natural text-to-speech voice PDF reader. Read aloud PDF papers, ebooks, and articles online. All free, completely private.",
+    keywords: "voice pdf, pdf reader, pdf reader free, all free, pdf audio reader, read pdf aloud, pdf text to speech, listen to pdf online, free tts pdf reader",
+    h1: "Voice PDF Reader",
+    tagline: "Turn your PDF ebooks, research papers, and documents into spoken audio using browser speech synthesis — all free, unlimited, and 100% private.",
+    howToName: "How to listen to a PDF with a voice reader",
     howItWorks: "How it works",
     faqTitle: "Frequently asked questions",
     steps: [
@@ -3349,11 +3349,11 @@ export const audioReaderCopy = {
     crossLink: { href: "/extract-text", label: "Want to read text manually? Try Extract Text." }
   },
   tr: {
-    title: "Sesli PDF Okuyucu (Metinden Sese)",
-    description: "PDF kitaplarınızı ve makalelerinizi sesli dinleyin. Doğal ses tonuyla Türkçe ve İngilizce metin okuma aracı.",
-    keywords: "sesli pdf okuma, pdf i seslendir, pdf text to speech, sesli kitap yapma, pdf dinleme programı",
-    h1: "Sesli PDF Okuyucu",
-    tagline: "Makaleleri, kitapları ve ders notlarını ekrana bakmadan sesli olarak dinleyin. Gözlerinizi dinlendirin — ücretsiz, sınırsız ve tamamen gizli.",
+    title: "Sesli PDF Okuyucu — Ücretsiz Voice PDF Reader",
+    description: "PDF belgelerinizi, kitap ve makalelerinizi doğal seslerle ücretsiz olarak dinleyin. Tamamen ücretsiz voice PDF reader ve text-to-speech (TTS) seslendirme aracı.",
+    keywords: "voice pdf, pdf reader, pdf reader free, all free, sesli pdf okuyucu, pdf seslendirme, pdf sesli dinleme, ücretsiz pdf okuyucu, pdf text to speech, pdf okutma",
+    h1: "Sesli PDF Okuyucu (Voice PDF)",
+    tagline: "Makaleleri, kitapları ve ders notlarını ekrana bakmadan, ücretsiz voice PDF reader aracımızla sesli olarak dinleyin — tümüyle bedava, sınırsız ve tamamen gizli.",
     howToName: "PDF belgesi sesli olarak nasıl dinlenir?",
     howItWorks: "Nasıl çalışır?",
     faqTitle: "Sık Sorulan Sorular",
